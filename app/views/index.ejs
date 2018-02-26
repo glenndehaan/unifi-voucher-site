@@ -11,5 +11,9 @@
         </main>
 
         <% include ./partials/footer.ejs %>
+        <script>
+            var expressConfig = {port: <%= config.application.port %>, hostname: '<%= hostname %>', baseUrl: '<%= baseUrl %>'};
+        </script>
+        <script src="/dist/<%= assets.js %>" type="application/javascript"></script>
     </body>
 </html>

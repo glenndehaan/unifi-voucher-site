@@ -11,6 +11,7 @@ const browsersupport = require('express-browsersupport');
  * Import own packages
  */
 const config = require('./config/config');
+const socket = require('./helpers/modules/Socket');
 const webRouter = require('./routers/Web');
 const apiRouter = require('./routers/Api');
 const indexController = require('./controllers/Web/IndexController');
@@ -98,6 +99,11 @@ app.disable('x-powered-by');
 const server = app.listen(config.application.port, config.application.bind, () => {
     console.log(`[NODE] App is running on: ${config.application.bind}:${config.application.port}`);
 });
+
+/**
+ * Init socket connection
+ */
+global.socket = new socket(server);
 
 /**
  * Handle nodemon shutdown
