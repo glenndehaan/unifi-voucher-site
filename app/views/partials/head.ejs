@@ -1,0 +1,24 @@
+<title><%= config.application.name %> <%= config.application.env %> | <%= pageTitle %></title>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, minimal-ui">
+
+<meta name="description" content="">
+<meta name="author" content="">
+<meta name="keywords" content="">
+
+<meta property="og:title" content="<%= config.application.name %>"/>
+<meta property="og:type" content="website"/>
+<meta property="og:url" content="<%= baseUrl %>"/>
+<meta property="og:description" content=""/>
+
+<link rel="alternate" href="<%= baseUrl %>" hreflang="en" />
+<link rel="canonical" href="<%= baseUrl %>" />
+<script type='application/ld+json'>
+    {
+        "@context": "http://schema.org",
+        "@type": "WebSite",
+        "name": "<%= config.application.name %>",
+        "url": "<%= baseUrl %>"
+    }
+</script>

@@ -1,0 +1,85 @@
+{
+  "name": "unifi-voucher-site",
+  "version": "0.0.0",
+  "description": "NPM packages for unifi-voucher-site",
+  "private": true,
+  "scripts": {
+    "start": "concurrently --kill-others 'npm run frontend' 'npm run backend:dev'",
+    "backend:start": "node ./app/server.js",
+    "backend:dev": "nodemon -L --watch ./app ./app/server.js",
+    "prebuild": "rimraf ./public/dist",
+    "build": "cross-env NODE_ENV=production webpack --config ./_scripts/webpack.config.js --progress",
+    "prefrontend": "rimraf ./public/dist",
+    "frontend": "cross-env NODE_ENV=development webpack --config ./_scripts/webpack.config.js --watch --watch-poll -d --progress",
+    "lint": "eslint -c ./package.json ./app ./public/js"
+  },
+  "engines": {
+    "node": ">=8.0.0"
+  },
+  "eslintConfig": {
+    "parserOptions": {
+      "ecmaVersion": 6,
+      "sourceType": "module"
+    },
+    "env": {
+      "browser": true,
+      "node": true
+    },
+    "rules": {
+      "no-console": 0,
+      "comma-dangle": [
+        "error",
+        "never"
+      ],
+      "indent": [
+        "error",
+        4
+      ]
+    },
+    "globals": {
+      "site": false,
+      "expressConfig": false
+    },
+    "extends": [
+      "eslint:recommended"
+    ]
+  },
+  "browserslist": [
+    "Chrome >= 52",
+    "Firefox >= 47",
+    "ie 11",
+    "last 2 Edge versions",
+    "Safari >= 8",
+    "ios_saf >= 9",
+    "last 2 and_chr versions"
+  ],
+  "author": "Glenn de Haan",
+  "license": "MIT",
+  "dependencies": {
+    "autoprefixer": "^8.0.0",
+    "babel-core": "^6.26.0",
+    "babel-loader": "^7.1.3",
+    "babel-preset-es2015": "^6.24.1",
+    "body-parser": "^1.17.2",
+    "cross-env": "^5.1.3",
+    "ejs": "^2.5.6",
+    "express": "^4.15.3",
+    "express-browsersupport": "^1.3.3",
+    "express-session": "^1.15.6",
+    "extract-text-webpack-plugin": "^3.0.2",
+    "node-sass": "^4.7.2",
+    "postcss": "^6.0.19",
+    "postcss-loader": "^2.1.1",
+    "raw-loader": "^0.5.1",
+    "rimraf": "^2.6.2",
+    "sass-loader": "^6.0.6",
+    "socket.io-client": "^2.0.4",
+    "webpack": "^3.11.0",
+    "webpack-manifest-plugin": "^1.3.2"
+  },
+  "devDependencies": {
+    "concurrently": "^3.5.1",
+    "eslint": "^4.18.1",
+    "nodemon": "^1.15.1"
+  }
+}
