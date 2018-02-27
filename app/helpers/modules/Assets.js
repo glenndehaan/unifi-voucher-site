@@ -1,3 +1,6 @@
 const fs = require("fs");
+const path = `${__dirname}/../../../public/dist`;
 
-module.exports = JSON.parse(fs.readFileSync(`${__dirname}/../../../public/dist/rev-manifest.json`));
+module.exports = () => {
+    return JSON.parse(fs.existsSync(path) ? fs.readFileSync(`${path}/rev-manifest.json`) : "{}");
+};
