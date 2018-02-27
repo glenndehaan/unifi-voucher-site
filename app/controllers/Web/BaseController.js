@@ -5,6 +5,7 @@ class BaseController {
     constructor() {
         this.baseConfig = {
             config: config,
+            protocol: '',
             hostname: '',
             baseUrl: '',
             assets: {
@@ -23,8 +24,9 @@ class BaseController {
     mergePageConfig(request, pageSpecificConfig) {
         const manifest = assets();
 
-        this.baseConfig.hostname = request.hostname;
-        this.baseConfig.baseUrl = `${request.protocol}://${request.hostname}${config.application.basePath}`;
+        this.baseConfig.hostname = request.get('host');
+        this.baseConfig.protocol = request.protocol;
+        this.baseConfig.baseUrl = `${request.protocol}://${request.get('host')}${config.application.basePath}`;
 
         this.baseConfig.assets.js = manifest["main.js"];
         this.baseConfig.assets.css = manifest["main.css"];

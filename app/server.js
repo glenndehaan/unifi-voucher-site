@@ -23,6 +23,11 @@ app.set('view engine', 'ejs');
 app.set('views', `${__dirname}/views`);
 
 /**
+ * Trust proxy
+ */
+app.enable('trust proxy');
+
+/**
  * Serve static public dir
  */
 app.use(express.static(`${__dirname}/../public`));
