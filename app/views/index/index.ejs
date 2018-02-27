@@ -1,1 +1,22 @@
-Some text here<br/>
+<div id="particles"></div>
+<div id="container">
+    <div id="center">
+        <img src="/images/unifi-icon.png" /><br/>
+        <h2><%= config.application.name %></h2>
+
+        <div id="sign-in">
+            <h3>Access Code</h3>
+            <input type="text" class="access-fields" title="number-1" maxlength="1">
+            <input type="text" class="access-fields" title="number-2" maxlength="1">
+            <input type="text" class="access-fields" title="number-3" maxlength="1">
+            <input type="text" class="access-fields" title="number-4" maxlength="1">
+        </div>
+
+        <div id="error" class="hidden">
+            <h3>Woops</h3>
+            <p>
+                We are having troubles connecting to the server... please try again later.
+            </p>
+        </div>
+    </div>
+</div>

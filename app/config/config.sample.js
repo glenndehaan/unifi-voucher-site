@@ -20,7 +20,7 @@ const config = {
         secret: "averysecretstring"
     },
     security: {
-        code: "1997"
+        code: "0000" // <- Only 4 digits
     }
 };
 

@@ -1,4 +1,4 @@
-<title><%= config.application.name %> <%= config.application.env %> | <%= pageTitle %></title>
+<title><%= pageTitle %> | <%= config.application.name %> <%= config.application.env %></title>
 
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, minimal-ui">
@@ -12,8 +12,8 @@
 <meta property="og:url" content="<%= baseUrl %>"/>
 <meta property="og:description" content=""/>
 
-<link rel="alternate" href="<%= baseUrl %>" hreflang="en" />
-<link rel="canonical" href="<%= baseUrl %>" />
+<link rel="alternate" href="<%= baseUrl %>" hreflang="en"/>
+<link rel="canonical" href="<%= baseUrl %>"/>
 <script type='application/ld+json'>
     {
         "@context": "http://schema.org",
@@ -21,6 +21,53 @@
         "name": "<%= config.application.name %>",
         "url": "<%= baseUrl %>"
     }
+
 </script>
 
-<link href="/dist/<%= assets.css %>" rel="stylesheet" type="text/css" />
+<style>
+    #preloader {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        background-color: #1875b6;
+        z-index: 100;
+    }
+
+    .loader {
+        position: absolute;
+        top: 50%;
+        left: 42%;
+
+        width: 75px;
+        height: 75px;
+        background-color: #fff;
+
+        border-radius: 100%;
+        -webkit-animation: scaleout 1.0s infinite ease-in-out;
+        animation: scaleout 1.0s infinite ease-in-out;
+    }
+
+    @-webkit-keyframes scaleout {
+        0% {
+            -webkit-transform: scale(0)
+        }
+        100% {
+            -webkit-transform: scale(1.0);
+            opacity: 0;
+        }
+    }
+
+    @keyframes scaleout {
+        0% {
+            -webkit-transform: scale(0);
+            transform: scale(0);
+        }
+        100% {
+            -webkit-transform: scale(1.0);
+            transform: scale(1.0);
+            opacity: 0;
+        }
+    }
+</style>
+
+<link href="/dist/<%= assets.css %>" rel="stylesheet" type="text/css"/>

@@ -1,9 +1,19 @@
+import mitt from 'mitt';
+import 'gsap/TweenMax';
+import 'gsap/TimelineMax';
 import settings from './settings';
 
-// Create global
+/**
+ * Create global
+ */
 window.site = {};
+site.modules = [];
+site.events = mitt();
 site.settings = settings;
 
+/**
+ * Initialize the app
+ */
 function initialize() {
     site.html = document.querySelector('html');
     site.body = document.querySelector('body');
@@ -20,13 +30,19 @@ function initializeModules() {
     for(let modulesItem = 0; modulesItem < settings.modules.length; modulesItem++) {
         const module = settings.modules[modulesItem];
 
-        const moduleClass = require(`./modules/${module.group}/${module.module}`);
+        const moduleClass = require(`./modules/${module.group}/${module.module}`).default;
         const domElements = document.querySelectorAll(module.el);
 
         if (typeof moduleClass !== 'undefined' && domElements.length > 0) {
-            new moduleClass({
-                el: domElements
-            });
+            if(module.global) {
+                site.modules[module.module] = new moduleClass({
+                    el: domElements
+                });
+            } else {
+                new moduleClass({
+                    el: domElements
+                });
+            }
         }
     }
 }

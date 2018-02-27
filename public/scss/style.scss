@@ -10,10 +10,15 @@
 // Global
 @import "global/normalize";
 @import "global/utils";
+@import "global/fonts";
+@import "global/general";
 
 //
 // Local App
 //
 
 // Components
+@import "components/preloader";
 @import "components/form";
+@import "components/container";
+@import "components/footer";

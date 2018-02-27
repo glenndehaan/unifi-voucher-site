@@ -3,3 +3,21 @@ label.invalid {
     color: #F44336;
   }
 }
+
+input {
+  padding: 10px;
+  border: 0;
+  width: 23px;
+  height: 23px;
+  text-align: center;
+  font-size: 30px;
+  color: $black;
+  font-family: "text-security-disc";
+  margin-bottom: 2px;
+  border: #FFF solid 2px;
+  border-radius: 10px;
+
+  &.error {
+    border: #F00 solid 2px;
+  }
+}

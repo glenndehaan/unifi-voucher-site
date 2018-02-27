@@ -2,8 +2,8 @@ const webpack = require('webpack');
 const path = require('path');
 const autoprefixer = require('autoprefixer');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
-const browserslist = require('../package.json').browserslist;
 const ManifestPlugin = require('webpack-manifest-plugin');
+const browsers = require('../package.json').browserslist;
 
 //Get path so every environment works
 const projectPath = path.resolve(__dirname);
@@ -46,7 +46,7 @@ const config = {
                                 context: path.resolve(__dirname, '../public'),
                                 sourceMap: 'inline',
                                 plugins: [
-                                    autoprefixer
+                                    autoprefixer({browsers})
                                 ],
                             }
                         },

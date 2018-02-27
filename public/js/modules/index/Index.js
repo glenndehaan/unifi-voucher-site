@@ -1,7 +1,5 @@
-class Index {
+export default class Index {
     constructor({el}) {
         this.el = el;
     }
 }
-
-module.exports = Index;
