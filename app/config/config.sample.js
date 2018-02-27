@@ -21,6 +21,13 @@ const config = {
     },
     security: {
         code: "0000" // <- Only 4 digits
+    },
+    unifi: {
+        ip: '192.168.1.XX',
+        port: 8443,
+        username: 'admin',
+        password: 'XXXXXXXXXXXXXXXXXXX',
+        siteID: 'default'
     }
 };
 
