@@ -1,5 +1,6 @@
 const uuidv4 = require('uuid/v4');
 const config = require('../../config/config');
+const unifi = require('./UniFi');
 
 class Socket {
     constructor(server) {
@@ -62,6 +63,47 @@ class Socket {
                     });
 
                     console.log(`[SOCKET][${socket.id}] Client auth: FAILED. Invalid UUID!`);
+                }
+            });
+
+            /**
+             * Create voucher method
+             */
+            socket.on('voucher', (data) => {
+                if(typeof this.authenticatedUsers[data.uuid] !== "undefined") {
+                    if(this.authenticatedUsers[data.uuid]) {
+                        unifi((voucher) => {
+                            if(voucher !== false) {
+                                socket.emit('voucher', {
+                                    success: true,
+                                    voucher: voucher
+                                });
+
+                                console.log(`[SOCKET][${socket.id}] Client voucher: OK. Voucher: ${voucher}!`);
+                            } else {
+                                socket.emit('voucher', {
+                                    success: false,
+                                    voucher: ''
+                                });
+
+                                console.log(`[SOCKET][${socket.id}] Client voucher: FAILED. UniFi Error!`);
+                            }
+                        });
+                    } else {
+                        socket.emit('voucher', {
+                            success: false,
+                            voucher: ''
+                        });
+
+                        console.log(`[SOCKET][${socket.id}] Client voucher: FAILED. Not authenticated!`);
+                    }
+                } else {
+                    socket.emit('voucher', {
+                        success: false,
+                        voucher: ''
+                    });
+
+                    console.log(`[SOCKET][${socket.id}] Client voucher: FAILED. Invalid UUID!`);
                 }
             });
 

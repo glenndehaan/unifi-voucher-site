@@ -9,9 +9,13 @@ export default class Socket {
 
         this.mainContainer = document.querySelector("#container");
         this.signInContainer = document.querySelector("#sign-in");
+        this.voucherContainer = document.querySelector("#voucher");
         this.errorContainer = document.querySelector("#error");
+        this.preloader = document.querySelector("#preloader");
 
         this.tl = new TimelineMax();
+
+        document.querySelector("#voucher button").addEventListener("click", () => this.requestVoucher());
 
         this.init();
     }
@@ -28,6 +32,7 @@ export default class Socket {
 
         this.socket.on('uuid', (data) => this.setUuid(data));
         this.socket.on('auth', (data) => this.auth(data));
+        this.socket.on('voucher', (data) => this.voucher(data));
     }
 
     /**
@@ -36,7 +41,7 @@ export default class Socket {
     connect() {
         console.log('[SOCKET] Connected!');
 
-        if(!this.uuid) {
+        if (!this.uuid) {
             console.log('[SOCKET] Requesting UUID!');
             this.socket.emit('uuid');
         }
@@ -47,9 +52,12 @@ export default class Socket {
                 display: "none"
             })
             .add(() => {
-                if(!this.userSignedIn) {
+                if (!this.userSignedIn) {
                     this.signInContainer.classList.remove("hidden");
+                } else {
+                    this.voucherContainer.classList.remove("hidden");
                 }
+
                 this.errorContainer.classList.add("hidden");
             })
             .to(this.mainContainer, 0.5, {
@@ -71,6 +79,7 @@ export default class Socket {
             })
             .add(() => {
                 this.signInContainer.classList.add("hidden");
+                this.voucherContainer.classList.add("hidden");
                 this.errorContainer.classList.remove("hidden");
             })
             .to(this.mainContainer, 0.5, {
@@ -92,6 +101,7 @@ export default class Socket {
             })
             .add(() => {
                 this.signInContainer.classList.add("hidden");
+                this.voucherContainer.classList.add("hidden");
                 this.errorContainer.classList.remove("hidden");
             })
             .to(this.mainContainer, 0.5, {
@@ -105,14 +115,13 @@ export default class Socket {
      */
     setUuid(data) {
         this.uuid = data.uuid;
-        console.log('this.uuid', this.uuid);
     }
 
     /**
      * Event for getting the auth result
      */
     auth(data) {
-        if(data.success) {
+        if (data.success) {
             this.userSignedIn = true;
 
             this.tl
@@ -121,7 +130,9 @@ export default class Socket {
                     display: "none"
                 })
                 .add(() => {
+                    site.modules.Signin.resetForm();
                     this.signInContainer.classList.add("hidden");
+                    this.voucherContainer.classList.remove("hidden");
                 })
                 .to(this.mainContainer, 0.5, {
                     opacity: 1,
@@ -129,6 +140,31 @@ export default class Socket {
                 });
         } else {
             site.modules.Signin.invalidCode();
+        }
+    }
+
+    /**
+     * Request a guest voucher
+     */
+    requestVoucher() {
+        if (this.userSignedIn) {
+            this.preloader.classList.remove("completed");
+
+            this.socket.emit('voucher', {
+                uuid: this.uuid
+            });
+        }
+    }
+
+    /**
+     * Process the voucher
+     *
+     * @param data
+     */
+    voucher(data) {
+        this.preloader.classList.add("completed");
+        if (data.success) {
+            this.voucherContainer.querySelector("h4").innerHTML = data.voucher;
         }
     }
 }

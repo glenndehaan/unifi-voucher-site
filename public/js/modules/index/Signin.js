@@ -57,4 +57,13 @@ export default class Signin {
             this.fields[field].value = "";
         }
     }
+
+    /**
+     * Clear the inputs
+     */
+    resetForm() {
+        for(let field = 0; field < this.fields.length; field++) {
+            this.fields[field].value = "";
+        }
+    }
 }
