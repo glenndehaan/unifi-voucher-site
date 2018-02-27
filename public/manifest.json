@@ -1,0 +1,27 @@
+{
+  "name": "UniFi Voucher",
+  "short_name": "Voucher",
+  "icons": [
+    {
+      "src": "./images/icon/logo_144x144.png",
+      "type": "image/png",
+      "sizes": "144x144"
+    },
+    {
+      "src": "./images/icon/logo_192x192.png",
+      "type": "image/png",
+      "sizes": "192x192"
+    },
+    {
+      "src": "./images/icon/logo_256x256.png",
+      "type": "image/png",
+      "sizes": "256x256"
+    }
+  ],
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "rotation": "portrait",
+  "background_color": "#1875b6",
+  "theme_color": "#1875b6"
+}

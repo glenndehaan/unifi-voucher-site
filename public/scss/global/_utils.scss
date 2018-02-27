@@ -3,21 +3,3 @@
   opacity: 0;
   display: none;
 }
-
-.visible {
-  visibility: visible;
-}
-
-/**
- * Accessibility: Positioning content offscreen
- * @see https://www.paciellogroup.com/blog/2012/05/html5-accessibility-chops-hidden-and-aria-hidden/
- * @see http://alistapart.com/article/now-you-see-me
- * @see http://accessibilitytips.com/2008/03/04/positioning-content-offscreen/
- */
-.off-screen,
-.visually-hidden {
-  position: absolute;
-  // never use the top property!
-  left: -999em;
-  margin: 0; // fix uncontrolled whitespace still being displayed
-}
