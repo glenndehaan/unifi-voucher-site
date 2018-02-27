@@ -24,7 +24,7 @@ export default class Socket {
      * Start the socket connection
      */
     init() {
-        this.socket = io.connect(`${expressConfig.protocol}://${expressConfig.hostname}`);
+        this.socket = io.connect(`//${expressConfig.hostname}`);
 
         this.socket.on('connect', () => this.connect());
         this.socket.on('disconnect', () => this.disconnect());
