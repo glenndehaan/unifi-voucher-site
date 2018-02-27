@@ -18,7 +18,7 @@ const config = {
         main: [
             projectPath + '/../public/js/main.js',
             projectPath + '/../public/scss/style.scss'
-        ],
+        ]
     },
     output: {
         path: projectPath + '/../public/dist/',
@@ -47,7 +47,7 @@ const config = {
                                 sourceMap: 'inline',
                                 plugins: [
                                     autoprefixer({browsers})
-                                ],
+                                ]
                             }
                         },
                         'sass-loader?sourceMap=true'
@@ -64,16 +64,12 @@ const config = {
         }),
         new ExtractTextPlugin({filename: 'main.[hash:6].css', allChunks: true}),
         new ManifestPlugin({
-            fileName: 'rev-manifest.json',
-        }),
+            fileName: 'rev-manifest.json'
+        })
     ],
     resolve: {
         extensions: ['.js'],
         modules: [path.join(__dirname, '../node_modules')]
-    },
-    devServer: {
-        compress: true,
-        disableHostCheck: true,
     }
 };
 
@@ -82,19 +78,16 @@ if (isProd) {
     Object.assign(config, {
         plugins: config.plugins.concat([
             new webpack.LoaderOptionsPlugin({
-                minimize: true,
+                minimize: true
             }),
             new webpack.optimize.UglifyJsPlugin({
                 drop_console: true,
                 output: {
-                    comments: false,
-                },
-                mangle: {
-                    screw_ie8: true,
+                    comments: false
                 },
                 compressor: {
                     screw_ie8: true,
-                    warnings: false,
+                    warnings: false
                 }
             })
         ])
