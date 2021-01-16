@@ -1,4 +1,5 @@
 import io from 'socket.io-client';
+import animejs from 'animejs';
 
 export default class Socket {
     constructor({el}) {
@@ -12,8 +13,6 @@ export default class Socket {
         this.voucherContainer = document.querySelector("#voucher");
         this.errorContainer = document.querySelector("#error");
         this.preloader = document.querySelector("#preloader");
-
-        this.tl = new TimelineMax();
 
         document.querySelector("#voucher button").addEventListener("click", () => this.requestVoucher());
 
@@ -46,12 +45,12 @@ export default class Socket {
             this.socket.emit('uuid');
         }
 
-        this.tl
-            .to(this.mainContainer, 0.5, {
-                opacity: 0,
-                display: "none"
-            })
-            .add(() => {
+        animejs({
+            targets: this.mainContainer,
+            duration: 250,
+            opacity: [1, 0],
+            easing: 'linear',
+            complete: () => {
                 if (!this.userSignedIn) {
                     this.signInContainer.classList.remove("hidden");
                 } else {
@@ -59,11 +58,15 @@ export default class Socket {
                 }
 
                 this.errorContainer.classList.add("hidden");
-            })
-            .to(this.mainContainer, 0.5, {
-                opacity: 1,
-                display: "block"
-            });
+
+                animejs({
+                    targets: this.mainContainer,
+                    duration: 250,
+                    opacity: [0, 1],
+                    easing: 'linear',
+                });
+            }
+        });
     }
 
     /**
@@ -72,20 +75,24 @@ export default class Socket {
     disconnect() {
         console.log('[SOCKET] Disconnected!');
 
-        this.tl
-            .to(this.mainContainer, 0.5, {
-                opacity: 0,
-                display: "none"
-            })
-            .add(() => {
+        animejs({
+            targets: this.mainContainer,
+            duration: 250,
+            opacity: [1, 0],
+            easing: 'linear',
+            complete: () => {
                 this.signInContainer.classList.add("hidden");
                 this.voucherContainer.classList.add("hidden");
                 this.errorContainer.classList.remove("hidden");
-            })
-            .to(this.mainContainer, 0.5, {
-                opacity: 1,
-                display: "block"
-            });
+
+                animejs({
+                    targets: this.mainContainer,
+                    duration: 250,
+                    opacity: [0, 1],
+                    easing: 'linear'
+                });
+            }
+        });
     }
 
     /**
@@ -94,20 +101,24 @@ export default class Socket {
     error() {
         console.log('[SOCKET] Error!');
 
-        this.tl
-            .to(this.mainContainer, 0.5, {
-                opacity: 0,
-                display: "none"
-            })
-            .add(() => {
+        animejs({
+            targets: this.mainContainer,
+            duration: 250,
+            opacity: [1, 0],
+            easing: 'linear',
+            complete: () => {
                 this.signInContainer.classList.add("hidden");
                 this.voucherContainer.classList.add("hidden");
                 this.errorContainer.classList.remove("hidden");
-            })
-            .to(this.mainContainer, 0.5, {
-                opacity: 1,
-                display: "block"
-            });
+
+                animejs({
+                    targets: this.mainContainer,
+                    duration: 250,
+                    opacity: [0, 1],
+                    easing: 'linear'
+                });
+            }
+        });
     }
 
     /**
@@ -124,20 +135,24 @@ export default class Socket {
         if (data.success) {
             this.userSignedIn = true;
 
-            this.tl
-                .to(this.mainContainer, 0.5, {
-                    opacity: 0,
-                    display: "none"
-                })
-                .add(() => {
+            animejs({
+                targets: this.mainContainer,
+                duration: 250,
+                opacity: [1, 0],
+                easing: 'linear',
+                complete: () => {
                     site.modules.Signin.resetForm();
                     this.signInContainer.classList.add("hidden");
                     this.voucherContainer.classList.remove("hidden");
-                })
-                .to(this.mainContainer, 0.5, {
-                    opacity: 1,
-                    display: "block"
-                });
+
+                    animejs({
+                        targets: this.mainContainer,
+                        duration: 250,
+                        opacity: [0, 1],
+                        easing: 'linear'
+                    });
+                }
+            });
         } else {
             site.modules.Signin.invalidCode();
         }

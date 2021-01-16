@@ -1,16 +1,16 @@
 <!DOCTYPE html>
 <html lang="en">
     <head>
-        <% include ./partials/head.ejs %>
+        <%- include('partials/head') %>
     </head>
     <body>
-        <% include ./partials/preloader.ejs %>
+        <%- include('partials/preloader') %>
 
         <main>
             <%- include(template) %>
         </main>
 
-        <% include ./partials/footer.ejs %>
+        <%- include('partials/footer') %>
         <script>
             var expressConfig = {protocol: '<%= protocol %>', hostname: '<%= hostname %>', baseUrl: '<%= baseUrl %>'};
         </script>

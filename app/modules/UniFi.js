@@ -1,5 +1,12 @@
+/**
+ * Import vendor modules
+ */
 const unifi = require('node-unifi');
-const config = require('../../config/config');
+
+/**
+ * Import own modules
+ */
+const config = require('../config/config');
 
 /**
  * Create new UniFi controller object
@@ -8,6 +15,11 @@ const config = require('../../config/config');
  */
 const controller = new unifi.Controller(config.unifi.ip, config.unifi.port);
 
+/**
+ * Exports the UniFi voucher function
+ *
+ * @param callback
+ */
 module.exports = (callback) => {
     controller.login(config.unifi.username, config.unifi.password, (err) => {
         if(err) {

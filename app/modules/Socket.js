@@ -1,8 +1,23 @@
-const uuidv4 = require('uuid/v4');
-const config = require('../../config/config');
+/**
+ * Import vendor packages
+ */
+const { v4: uuidv4 } = require('uuid');
+
+/**
+ * Import own packages
+ */
+const config = require('../config/config');
 const unifi = require('./UniFi');
 
+/**
+ * Socket
+ */
 class Socket {
+    /**
+     * Constructor
+     *
+     * @param server
+     */
     constructor(server) {
         this.io = require('socket.io')(server);
         this.authenticatedUsers = [];
@@ -125,4 +140,9 @@ class Socket {
     }
 }
 
+/**
+ * Export the socket class
+ *
+ * @type {Socket}
+ */
 module.exports = Socket;

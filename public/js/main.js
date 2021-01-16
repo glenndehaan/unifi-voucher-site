@@ -1,6 +1,4 @@
 import mitt from 'mitt';
-import 'gsap/TweenMax';
-import 'gsap/TimelineMax';
 import settings from './settings';
 
 /**

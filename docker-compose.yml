@@ -1,0 +1,13 @@
+version: '3'
+services:
+  app:
+    build: .
+    ports:
+      - "8081:3001"
+    environment:
+      UNIFI_IP: '192.168.1.1'
+      UNIFI_PORT: 8443
+      UNIFI_USERNAME: 'admin'
+      UNIFI_PASSWORD: 'password'
+      UNIFI_SITE_ID: 'default'
+      SECURITY_CODE: '0000'

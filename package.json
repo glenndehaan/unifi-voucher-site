@@ -8,9 +8,9 @@
     "backend:start": "node ./app/server.js",
     "backend:dev": "nodemon -L --watch ./app ./app/server.js",
     "prebuild": "rimraf ./public/dist",
-    "build": "cross-env NODE_ENV=production webpack --config ./_scripts/webpack.config.js --progress",
+    "build": "cross-env NODE_ENV=production webpack --mode production --config ./_scripts/webpack.config.js",
     "prefrontend": "rimraf ./public/dist",
-    "frontend": "cross-env NODE_ENV=development webpack --config ./_scripts/webpack.config.js --watch --watch-poll -d --progress",
+    "frontend": "webpack --watch --mode development --config ./_scripts/webpack.config.js",
     "lint": "eslint -c ./package.json ./app ./public/js"
   },
   "engines": {
@@ -38,9 +38,7 @@
     },
     "globals": {
       "site": false,
-      "expressConfig": false,
-      "TimelineMax": false,
-      "TweenMax": false
+      "expressConfig": false
     },
     "extends": [
       "eslint:recommended"
@@ -49,36 +47,33 @@
   "author": "Glenn de Haan",
   "license": "MIT",
   "dependencies": {
-    "autoprefixer": "^8.0.0",
-    "babel-core": "^6.26.0",
-    "babel-loader": "^7.1.3",
-    "babel-preset-es2015": "^6.24.1",
-    "body-parser": "^1.17.2",
-    "cross-env": "^5.1.3",
-    "ejs": "^2.5.6",
-    "express": "^4.15.3",
-    "express-browsersupport": "^1.3.3",
-    "express-session": "^1.15.6",
-    "extract-text-webpack-plugin": "^3.0.2",
-    "gsap": "^1.20.4",
-    "mitt": "^1.1.3",
-    "node-sass": "^4.7.2",
-    "node-unifi": "^1.2.2",
+    "@babel/core": "^7.12.10",
+    "@babel/preset-env": "^7.12.11",
+    "animejs": "^3.2.1",
+    "babel-core": "^6.26.3",
+    "babel-loader": "^8.2.2",
+    "cross-env": "^7.0.3",
+    "css-loader": "^5.0.1",
+    "ejs": "^3.1.5",
+    "express": "^4.17.1",
+    "gsap": "^3.6.0",
+    "mini-css-extract-plugin": "^1.3.4",
+    "mitt": "^2.1.0",
+    "node-sass": "^5.0.0",
+    "node-unifi": "^1.3.8",
     "particles.js": "^2.0.0",
-    "postcss": "^6.0.19",
-    "postcss-loader": "^2.1.1",
-    "raw-loader": "^0.5.1",
-    "rimraf": "^2.6.2",
-    "sass-loader": "^6.0.6",
-    "socket.io": "^2.0.4",
-    "socket.io-client": "^2.0.4",
-    "uuid": "^3.2.1",
-    "webpack": "^3.11.0",
-    "webpack-manifest-plugin": "^1.3.2"
+    "rimraf": "^3.0.2",
+    "sass-loader": "^10.1.1",
+    "socket.io": "^3.1.0",
+    "socket.io-client": "^3.1.0",
+    "uuid": "^8.3.2",
+    "webpack": "^5.14.0",
+    "webpack-cli": "^4.3.1",
+    "webpack-manifest-plugin": "^3.0.0"
   },
   "devDependencies": {
-    "concurrently": "^3.5.1",
-    "eslint": "^4.18.1",
-    "nodemon": "^1.15.1"
+    "concurrently": "^5.3.0",
+    "eslint": "^7.17.0",
+    "nodemon": "^2.0.7"
   }
 }
