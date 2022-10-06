@@ -15,14 +15,14 @@
   "author": "Glenn de Haan",
   "license": "MIT",
   "dependencies": {
-    "ejs": "^3.1.6",
-    "express": "^4.17.3",
-    "multer": "^1.4.4",
+    "ejs": "^3.1.8",
+    "express": "^4.18.1",
+    "multer": "^1.4.5-lts.1",
     "node-unifi": "^2.1.0",
-    "tailwindcss": "^3.0.23",
-    "uuid": "^8.3.2"
+    "tailwindcss": "^3.1.8",
+    "uuid": "^9.0.0"
   },
   "devDependencies": {
-    "nodemon": "^2.0.15"
+    "nodemon": "^2.0.20"
   }
 }
