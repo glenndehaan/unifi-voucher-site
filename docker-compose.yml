@@ -3,10 +3,10 @@ services:
   app:
     build: .
     ports:
-      - "8081:3001"
+      - "8081:3000"
     environment:
       UNIFI_IP: '192.168.1.1'
-      UNIFI_PORT: 8443
+      UNIFI_PORT: 443
       UNIFI_USERNAME: 'admin'
       UNIFI_PASSWORD: 'password'
       UNIFI_SITE_ID: 'default'

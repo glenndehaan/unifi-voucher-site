@@ -1,19 +1,40 @@
-FROM alpine:3.13
+#
+# Define OS
+#
+FROM alpine:3.16
+
+#
+# Basic OS management
+#
 
 # Install packages
-RUN apk add --no-cache nginx nodejs npm
+RUN apk add --no-cache nodejs npm
+
+#
+# Require app
+#
 
 # Create app directory
-WORKDIR /usr/src/app
+WORKDIR /app
 
 # Bundle app source
 COPY . .
 
+# Install dependencies
+RUN npm ci --only=production
+
 # Create production build
-RUN npm ci --only=production && npm run build
+RUN npm run build
+
+#
+# Setup app
+#
 
 # Expose app
-EXPOSE 3001
+EXPOSE 3000
+
+# Set node env
+ENV NODE_ENV=production
 
 # Run app
-CMD ["node", "/usr/src/app/app/server.js"]
+CMD ["node", "/app/server.js"]
