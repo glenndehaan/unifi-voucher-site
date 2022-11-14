@@ -83,6 +83,11 @@ app.get('/', (req, res) => {
     });
 });
 app.post('/', async (req, res) => {
+    if(typeof req.body === "undefined") {
+        res.status(400).send();
+        return;
+    }
+
     const check = req.body.password === (process.env.SECURITY_CODE || "0000");
 
     if(!check) {
