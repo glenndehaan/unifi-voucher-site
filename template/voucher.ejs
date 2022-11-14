@@ -30,7 +30,9 @@
         <div class="w-full flex flex-wrap">
             <div class="w-full md:w-1/2 flex flex-col">
                 <div class="flex justify-center md:justify-start pt-12 md:pl-12 md:-mb-24">
-                    <img class="h-20 w-20" src="/images/unifi-icon.png"/>
+                    <a href="/" title="Homepage">
+                        <img class="h-20 w-20" alt="UniFi Logo" src="/images/unifi-icon.png"/>
+                    </a>
                 </div>
 
                 <div class="flex flex-col justify-center md:justify-start my-auto pt-8 md:pt-0 px-8 md:px-24 lg:px-32">
@@ -45,6 +47,7 @@
                         </div>
 
                         <input type="hidden" id="password" name="password" value="<%= code %>"/>
+                        <input type="hidden" id="voucher-type" name="voucher-type" value="<%= type %>"/>
                         <input type="submit" value="Create Another Voucher" class="bg-black text-white font-bold text-lg hover:bg-gray-700 p-2 mt-8 cursor-pointer transition-colors dark:text-black dark:bg-gray-200 dark:hover:bg-white">
                     </form>
                 </div>

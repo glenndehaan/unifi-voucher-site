@@ -30,7 +30,9 @@
         <div class="w-full flex flex-wrap">
             <div class="w-full md:w-1/2 flex flex-col">
                 <div class="flex justify-center md:justify-start pt-12 md:pl-12 md:-mb-24">
-                    <img class="h-20 w-20" src="/images/unifi-icon.png"/>
+                    <a href="/" title="Homepage">
+                        <img class="h-20 w-20" alt="UniFi Logo" src="/images/unifi-icon.png"/>
+                    </a>
                 </div>
 
                 <div class="flex flex-col justify-center md:justify-start my-auto pt-8 md:pt-0 px-8 md:px-24 lg:px-32">
@@ -47,6 +49,22 @@
                         <div class="flex flex-col pt-4">
                             <label for="password" class="text-lg">Password</label>
                             <input type="password" id="password" name="password" placeholder="Password" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 mt-1 leading-tight focus:outline-none focus:shadow-outline dark:bg-neutral-800 dark:border-neutral-700 dark:text-gray-100" required>
+                        </div>
+
+                        <div class="flex flex-col pt-4">
+                            <label for="voucher-type" class="text-lg">Voucher Type</label>
+                            <div class="relative inline-block w-full">
+                                <select id="voucher-type" name="voucher-type" class="shadow appearance-none border rounded w-full py-2 px-3 pr-8 text-gray-700 mt-1 leading-tight focus:outline-none focus:shadow-outline dark:bg-neutral-800 dark:border-neutral-700 dark:text-gray-100" required>
+                                    <% voucher_types.forEach((type) => { %>
+                                        <option value="<%= type.raw %>"><%= type.expiration %> minutes, <%= type.usage === '1' ? 'single-use' : 'multi-use' %><%= typeof type.upload === "undefined" && typeof type.download === "undefined" && typeof type.megabytes === "undefined" ? ', no limits' : '' %><%= typeof type.upload !== "undefined" ? `, upload bandwidth limit: ${type.upload} kb/s` : '' %><%= typeof type.download !== "undefined" ? `, download bandwidth limit: ${type.download} kb/s` : '' %><%= typeof type.megabytes !== "undefined" ? `, quota limit: ${type.megabytes} mb` : '' %></option>
+                                    <% }); %>
+                                </select>
+                                <div class="absolute inset-y-0 right-0 flex items-center px-2 mt-1 pointer-events-none">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 fill-current" viewBox="0 0 20 20">
+                                        <path d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clipRule="evenodd" fillRule="evenodd"></path>
+                                    </svg>
+                                </div>
+                            </div>
                         </div>
 
                         <input type="submit" value="Create Voucher" class="bg-black text-white font-bold text-lg hover:bg-gray-700 p-2 mt-8 cursor-pointer transition-colors dark:text-black dark:bg-gray-200 dark:hover:bg-white">
