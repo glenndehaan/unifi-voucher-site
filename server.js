@@ -11,6 +11,7 @@ const app = express();
  */
 const logo = require('./modules/logo');
 const types = require('./modules/types');
+const time = require('./modules/time');
 const unifi = require('./modules/unifi');
 
 /**
@@ -29,7 +30,7 @@ logo();
  */
 console.log('[VoucherType] Loaded the following types:');
 voucherTypes.forEach((type, key) => {
-    console.log(`[VoucherType][${key}] ${type.expiration} minutes, ${type.usage === '1' ? 'single-use' : 'multi-use'}${typeof type.upload === "undefined" && typeof type.download === "undefined" && typeof type.megabytes === "undefined" ? ', no limits' : `${typeof type.upload !== "undefined" ? `, upload bandwidth limit: ${type.upload} kb/s` : ''}${typeof type.download !== "undefined" ? `, download bandwidth limit: ${type.download} kb/s` : ''}${typeof type.megabytes !== "undefined" ? `, quota limit: ${type.megabytes} mb` : ''}`}`);
+    console.log(`[VoucherType][${key}] ${time(type.expiration)}, ${type.usage === '1' ? 'single-use' : 'multi-use'}${typeof type.upload === "undefined" && typeof type.download === "undefined" && typeof type.megabytes === "undefined" ? ', no limits' : `${typeof type.upload !== "undefined" ? `, upload bandwidth limit: ${type.upload} kb/s` : ''}${typeof type.download !== "undefined" ? `, download bandwidth limit: ${type.download} kb/s` : ''}${typeof type.megabytes !== "undefined" ? `, quota limit: ${type.megabytes} mb` : ''}`}`);
 });
 
 /**
@@ -79,6 +80,7 @@ app.get('/', (req, res) => {
         banner_image: process.env.BANNER_IMAGE || `/images/bg-${random(1, 10)}.jpg`,
         app_header: timeHeader,
         sid: uuidv4(),
+        timeConvert: time,
         voucher_types: voucherTypes
     });
 });
@@ -88,10 +90,17 @@ app.post('/', async (req, res) => {
         return;
     }
 
-    const check = req.body.password === (process.env.SECURITY_CODE || "0000");
+    const passwordCheck = req.body.password === (process.env.SECURITY_CODE || "0000");
 
-    if(!check) {
+    if(!passwordCheck) {
         res.redirect(encodeURI(`/?error=Invalid password!`));
+        return;
+    }
+
+    const typeCheck = (process.env.VOUCHER_TYPES || '480,0,,,;').split(';').includes(req.body['voucher-type']);
+
+    if(!typeCheck) {
+        res.redirect(encodeURI(`/?error=Unknown type!`));
         return;
     }
 
@@ -100,6 +109,11 @@ app.post('/', async (req, res) => {
 app.get('/voucher', async (req, res) => {
     if(req.query.code !== (process.env.SECURITY_CODE || "0000")) {
         res.status(403).send();
+        return;
+    }
+
+    if(!(process.env.VOUCHER_TYPES || '480,0,,,;').split(';').includes(req.query.type)) {
+        res.status(400).send();
         return;
     }
 
