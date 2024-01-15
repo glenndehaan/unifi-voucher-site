@@ -11,14 +11,14 @@ A small UniFi Voucher Site for simple voucher creation
 - Tailwind
 
 ## Development Usage
-- Install NodeJS 16.0 or higher.
+- Install NodeJS 18.0 or higher.
 - Run `npm ci` in the root folder
 - Run `npm start` & `npm run tailwind` in the root folder
 
 Then open up your favorite browser and go to http://localhost:3000/
 
 ## Build Usage
-- Install NodeJS 16.0 or higher.
+- Install NodeJS 18.0 or higher.
 - Run `npm ci` in the root folder
 - Run `npm run build` in the root folder
 

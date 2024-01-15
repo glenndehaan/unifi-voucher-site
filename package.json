@@ -10,20 +10,20 @@
     "build": "tailwindcss -i ./css/style.css -o ./public/dist/style.css --minify"
   },
   "engines": {
-    "node": ">=16.0.0"
+    "node": ">=18.0.0"
   },
   "author": "Glenn de Haan",
   "license": "MIT",
   "dependencies": {
-    "ejs": "^3.1.8",
+    "ejs": "^3.1.9",
     "express": "^4.18.2",
     "multer": "^1.4.5-lts.1",
-    "node-unifi": "^2.2.2",
-    "tailwindcss": "^3.2.4",
+    "node-unifi": "^2.5.1",
+    "tailwindcss": "^3.4.1",
     "tailwindcss-text-fill": "^0.2.0",
-    "uuid": "^9.0.0"
+    "uuid": "^9.0.1"
   },
   "devDependencies": {
-    "nodemon": "^2.0.20"
+    "nodemon": "^3.0.2"
   }
 }

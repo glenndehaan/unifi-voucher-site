@@ -36,7 +36,7 @@ module.exports = (type) => {
          */
         controller.login(config.unifi.username, config.unifi.password).then(() => {
             controller.getSitesStats().then(() => {
-                controller.createVouchers(type.expiration, 1, type.usage === 1 ? 1 : 0, null, typeof type.upload !== "undefined" ? type.upload : null, typeof type.download !== "undefined" ? type.download : null, typeof type.megabytes !== "undefined" ? type.megabytes : null).then((voucher_data) => {
+                controller.createVouchers(type.expiration, 1, parseInt(type.usage) === 1 ? 1 : 0, null, typeof type.upload !== "undefined" ? type.upload : null, typeof type.download !== "undefined" ? type.download : null, typeof type.megabytes !== "undefined" ? type.megabytes : null).then((voucher_data) => {
                     controller.getVouchers(voucher_data[0].create_time).then((voucher_data_complete) => {
                         const voucher = `${[voucher_data_complete[0].code.slice(0, 5), '-', voucher_data_complete[0].code.slice(5)].join('')}`;
                         resolve(voucher);
