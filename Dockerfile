@@ -1,7 +1,11 @@
+#=====================================================
+# Build Stage
+#=====================================================
+
 #
 # Define OS
 #
-FROM alpine:3.19
+FROM alpine:3.19 AS app
 
 #
 # Basic OS management
@@ -17,14 +21,40 @@ RUN apk add --no-cache nodejs npm
 # Create app directory
 WORKDIR /app
 
-# Bundle app source
-COPY . .
+# Bundle package.json and package-lock.json
+COPY ./package.json ./package-lock.json ./
 
 # Install dependencies
-RUN npm ci --only=production
+RUN npm ci --only=production && npm cache clean --force
 
-# Create production build
+# Bundle application source
+COPY . .
+
+# Create a production build
 RUN npm run build
+
+#=====================================================
+# Image Stage
+#=====================================================
+
+#
+# Define OS
+#
+FROM alpine:3.19
+
+#
+# Basic OS management
+#
+
+# Install packages
+RUN apk add --no-cache dumb-init nodejs
+
+#
+# Require app
+#
+
+# Create app directory
+WORKDIR /app
 
 #
 # Setup app
@@ -37,4 +67,13 @@ EXPOSE 3000
 ENV NODE_ENV=production
 
 # Run app
-CMD ["node", "/app/server.js"]
+CMD ["dumb-init", "node", "/app/server.js"]
+
+#
+# Bundle app
+#
+
+# Bundle from build image
+COPY --from=app /app/node_modules ./node_modules
+COPY --from=app /app/public/dist ./public/dist
+COPY . .
