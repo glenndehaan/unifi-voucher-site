@@ -37,19 +37,45 @@
 
                 <div class="flex flex-col justify-center md:justify-start my-auto pt-8 md:pt-0 px-8 md:px-24 lg:px-32">
                     <p class="text-center text-3xl"><%= app_header %></p>
-                    <p class="mt-4 text-center">
-                        Voucher generated successfully!
-                    </p>
-                    <form id="voucher-forum" class="flex flex-col pt-3 md:pt-8" action="/" method="post" enctype="multipart/form-data">
+                    <% if(info) { %>
+                        <div class="bg-green-700 text-white p-3 mt-8 rounded shadow-lg flex items-center">
+                            <svg class="w-6 h-6 mr-2" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+                            </svg>
+                            <div><%= info_text %></div>
+                        </div>
+                    <% } %>
+                    <% if(error) { %>
+                        <div class="bg-red-700 text-white p-3 mt-8 rounded shadow-lg flex items-center">
+                            <svg class="w-6 h-6 mr-2" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="m9.75 9.75 4.5 4.5m0-4.5-4.5 4.5M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+                            </svg>
+                            <div><%= error_text %></div>
+                        </div>
+                    <% } %>
+                    <form id="voucher-forum" class="flex flex-col pt-3 md:pt-8" action="/voucher" method="post" enctype="multipart/form-data">
                         <div class="flex flex-col pt-4">
-                            <label for="voucher" class="text-lg">Voucher</label>
-                            <input type="text" id="voucher" name="voucher" disabled value="<%= voucher_code %>" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 text-fill-gray-700 mt-1 leading-tight focus:outline-none focus:shadow-outline dark:bg-neutral-800 dark:border-neutral-700 dark:text-gray-100 dark:text-fill-gray-100">
+                            <label for="voucher-type" class="text-lg">Voucher Type</label>
+                            <div class="relative inline-block w-full">
+                                <select id="voucher-type" name="voucher-type" class="shadow appearance-none border rounded w-full py-2 px-3 pr-8 text-gray-700 mt-1 leading-tight focus:outline-none focus:shadow-outline dark:bg-neutral-800 dark:border-neutral-700 dark:text-gray-100" required>
+                                    <% voucher_types.forEach((type) => { %>
+                                        <option value="<%= type.raw %>"><%= timeConvert(type.expiration) %>, <%= type.usage === '1' ? 'single-use' : 'multi-use' %><%= typeof type.upload === "undefined" && typeof type.download === "undefined" && typeof type.megabytes === "undefined" ? ', no limits' : '' %><%= typeof type.upload !== "undefined" ? `, upload bandwidth limit: ${type.upload} kb/s` : '' %><%= typeof type.download !== "undefined" ? `, download bandwidth limit: ${type.download} kb/s` : '' %><%= typeof type.megabytes !== "undefined" ? `, quota limit: ${type.megabytes} mb` : '' %></option>
+                                    <% }); %>
+                                </select>
+                                <div class="absolute inset-y-0 right-0 flex items-center px-2 mt-1 pointer-events-none">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 fill-current" viewBox="0 0 20 20">
+                                        <path d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clipRule="evenodd" fillRule="evenodd"></path>
+                                    </svg>
+                                </div>
+                            </div>
                         </div>
 
-                        <input type="hidden" id="password" name="password" value="<%= code %>"/>
-                        <input type="hidden" id="voucher-type" name="voucher-type" value="<%= type %>"/>
-                        <input type="submit" value="Create Another Voucher" class="bg-black text-white font-bold text-lg hover:bg-gray-700 p-2 mt-8 cursor-pointer transition-colors dark:text-black dark:bg-gray-200 dark:hover:bg-white">
+                        <input type="submit" value="Create Voucher" class="bg-black text-white font-bold text-lg hover:bg-gray-700 p-2 mt-8 cursor-pointer transition-colors dark:text-black dark:bg-gray-200 dark:hover:bg-white">
                     </form>
+
+                    <hr class="border-black dark:border-gray-200 my-4 mx-14"/>
+
+                    <a id="voucher-list" href="/vouchers" class="bg-black text-white font-bold text-lg hover:bg-gray-700 p-2 cursor-pointer transition-colors text-center dark:text-black dark:bg-gray-200 dark:hover:bg-white">All Vouchers</a>
                 </div>
 
                 <div class="text-center text-gray-400 text-sm italic pt-12 pb-12">
@@ -67,7 +93,66 @@
                 <img class="object-cover w-full h-screen hidden md:block" src="<%= banner_image %>">
             </div>
 
-            <div id="spinner" style="display: none;" class="fixed top-0 left-0 right-0 bottom-0 w-full h-screen z-50 overflow-hidden bg-gray-900 opacity-90 flex flex-col items-center justify-center">
+            <% if(vouchers_popup) { %>
+                <div class="fixed top-0 left-0 right-0 bottom-0 w-full h-screen z-50 overflow-hidden bg-gray-900 opacity-95 flex flex-col items-center justify-center">
+                    <div class="px-4 sm:px-6 lg:px-8">
+                        <div class="sm:flex sm:items-center">
+                            <div class="sm:flex-auto">
+                                <h1 class="text-base font-semibold leading-6 text-gray-100">Vouchers</h1>
+                                <p class="mt-2 text-sm text-gray-100">
+                                    A list of current available vouchers within UniFi.
+                                </p>
+                            </div>
+                            <div class="mt-4 sm:ml-16 sm:mt-0 sm:flex-none">
+                                <a href="/voucher" class="block bg-black text-white px-3 py-2 text-center text-sm font-semibold shadow-sm hover:bg-gray-700 cursor-pointer transition-colors dark:text-black dark:bg-gray-200 dark:hover:bg-white">
+                                    Close
+                                </a>
+                            </div>
+                        </div>
+                        <div class="mt-8 flow-root">
+                            <div class="-mx-4 -my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
+                                <div class="inline-block min-w-full py-2 align-middle sm:px-6 lg:px-8">
+                                    <div class="h-96">
+                                        <table class="min-w-full divide-y divide-gray-300">
+                                            <thead class="bg-gray-50">
+                                                <tr>
+                                                    <th scope="col" class="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-6">
+                                                        Code
+                                                    </th>
+                                                    <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
+                                                        Used
+                                                    </th>
+                                                    <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
+                                                        Duration
+                                                    </th>
+                                                </tr>
+                                            </thead>
+                                            <tbody class="divide-y divide-gray-200 bg-white">
+                                                <% vouchers.forEach((voucher) => { %>
+                                                    <tr>
+                                                        <td class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-6 tabular-nums">
+                                                            <%= voucher.code.slice(0, 5) %>-<%= voucher.code.slice(5) %>
+                                                        </td>
+                                                        <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
+                                                            <%= voucher.used > 0 ? `Yes (${voucher.used}x)` : 'No' %>
+                                                        </td>
+                                                        <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
+                                                            <%= Math.floor(voucher.duration / 60) %>h
+                                                        </td>
+                                                    </tr>
+                                                <% }); %>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            <% } %>
+
+            <div id="spinner-create" style="display: none;" class="fixed top-0 left-0 right-0 bottom-0 w-full h-screen z-50 overflow-hidden bg-gray-900 opacity-90 flex flex-col items-center justify-center">
                 <div class="mb-4">
                     <svg class="w-14 h-14 text-gray-200 animate-spin dark:text-gray-600 fill-cyan-400" viewBox="0 0 100 101" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <path d="M100 50.5908C100 78.2051 77.6142 100.591 50 100.591C22.3858 100.591 0 78.2051 0 50.5908C0 22.9766 22.3858 0.59082 50 0.59082C77.6142 0.59082 100 22.9766 100 50.5908ZM9.08144 50.5908C9.08144 73.1895 27.4013 91.5094 50 91.5094C72.5987 91.5094 90.9186 73.1895 90.9186 50.5908C90.9186 27.9921 72.5987 9.67226 50 9.67226C27.4013 9.67226 9.08144 27.9921 9.08144 50.5908Z" fill="currentColor"/>
@@ -75,16 +160,34 @@
                     </svg>
                 </div>
                 <h2 class="text-center text-white text-xl font-semibold">Generating Voucher...</h2>
-                <p class="w-1/3 text-center text-white">This may take a few seconds, please don't close this page.</p>
+                <p class="w-1/2 text-center text-white">This may take a few seconds, please don't close this page.</p>
+            </div>
+
+            <div id="spinner-list" style="display: none;" class="fixed top-0 left-0 right-0 bottom-0 w-full h-screen z-50 overflow-hidden bg-gray-900 opacity-90 flex flex-col items-center justify-center">
+                <div class="mb-4">
+                    <svg class="w-14 h-14 text-gray-200 animate-spin dark:text-gray-600 fill-cyan-400" viewBox="0 0 100 101" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M100 50.5908C100 78.2051 77.6142 100.591 50 100.591C22.3858 100.591 0 78.2051 0 50.5908C0 22.9766 22.3858 0.59082 50 0.59082C77.6142 0.59082 100 22.9766 100 50.5908ZM9.08144 50.5908C9.08144 73.1895 27.4013 91.5094 50 91.5094C72.5987 91.5094 90.9186 73.1895 90.9186 50.5908C90.9186 27.9921 72.5987 9.67226 50 9.67226C27.4013 9.67226 9.08144 27.9921 9.08144 50.5908Z" fill="currentColor"/>
+                        <path d="M93.9676 39.0409C96.393 38.4038 97.8624 35.9116 97.0079 33.5539C95.2932 28.8227 92.871 24.3692 89.8167 20.348C85.8452 15.1192 80.8826 10.7238 75.2124 7.41289C69.5422 4.10194 63.2754 1.94025 56.7698 1.05124C51.7666 0.367541 46.6976 0.446843 41.7345 1.27873C39.2613 1.69328 37.813 4.19778 38.4501 6.62326C39.0873 9.04874 41.5694 10.4717 44.0505 10.1071C47.8511 9.54855 51.7191 9.52689 55.5402 10.0491C60.8642 10.7766 65.9928 12.5457 70.6331 15.2552C75.2735 17.9648 79.3347 21.5619 82.5849 25.841C84.9175 28.9121 86.7997 32.2913 88.1811 35.8758C89.083 38.2158 91.5421 39.6781 93.9676 39.0409Z" fill="currentFill"/>
+                    </svg>
+                </div>
+                <h2 class="text-center text-white text-xl font-semibold">Requesting Vouchers Overview...</h2>
+                <p class="w-1/2 text-center text-white">This may take a few seconds, please don't close this page.</p>
             </div>
         </div>
 
         <script type="application/javascript">
-            var el = document.querySelector("#spinner");
-            var forum = document.querySelector("#voucher-forum");
+            var spinnerCreate = document.querySelector("#spinner-create");
+            var spinnerList = document.querySelector("#spinner-list");
 
-            forum.addEventListener("submit", function () {
-                el.style.display = "";
+            var createForum = document.querySelector("#voucher-forum");
+            var listButton = document.querySelector("#voucher-list");
+
+            createForum.addEventListener("submit", function () {
+                spinnerCreate.style.display = "";
+            });
+
+            listButton.addEventListener("click", function () {
+                spinnerList.style.display = "";
             });
         </script>
     </body>

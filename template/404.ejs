@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>Not Found | UniFi Voucher</title>
+
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, minimal-ui">
+
+        <meta name="description" content="UniFi Voucher">
+        <meta name="author" content="Glenn de Haan">
+
+        <meta property="og:title" content="Not Found | UniFi Voucher"/>
+        <meta property="og:type" content="website"/>
+        <meta property="og:description" content="UniFi Voucher"/>
+
+        <link rel="manifest" href="/manifest.json">
+        <link rel="shortcut icon" href="/images/favicon.ico">
+        <link rel="apple-touch-icon" href="/images/icon/logo_256x256.png">
+
+        <meta name="mobile-web-app-capable" content="yes">
+        <meta name="apple-mobile-web-app-capable" content="yes">
+        <meta name="theme-color" content="#1875b6">
+
+        <link rel="preload" href="<%= banner_image %>" as="image">
+        <link rel="preload" href="/images/unifi-icon.png" as="image">
+        <link rel="preload" href="/dist/style.css" as="style">
+        <link href="/dist/style.css" rel="stylesheet">
+    </head>
+    <body class="bg-white dark:bg-neutral-900 dark:text-gray-100 h-screen">
+        <div class="w-full flex flex-wrap">
+            <div class="w-full md:w-1/2 flex flex-col">
+                <div class="flex justify-center md:justify-start pt-12 md:pl-12 md:-mb-24">
+                    <a href="/" title="Homepage">
+                        <img class="h-20 w-20" alt="UniFi Logo" src="/images/unifi-icon.png"/>
+                    </a>
+                </div>
+
+                <div class="flex flex-col justify-center md:justify-start my-auto pt-8 md:pt-0 px-8 md:px-24 lg:px-32">
+                    <p class="text-center text-3xl">Not Found</p>
+
+                    <div class="text-center text-gray-400 pt-12">
+                        <p>
+                            It seems this page does not exist.<br/>
+                            <a href="/" class="underline font-semibold">Go back to the homepage</a>
+                        </p>
+                    </div>
+                </div>
+
+                <div class="text-center text-gray-400 text-sm italic pt-12 pb-12">
+                    <p>
+                        Powered by: <a href="https://glenndehaan.com" class="underline font-semibold">Glenn de Haan</a>.<br/>
+                        Want your own portal? Checkout the project on: <a href="https://github.com/glenndehaan/unifi-voucher-site" class="underline font-semibold">GitHub</a>
+                    </p>
+                    <p class="text-[10px] not-italic">
+                        SID: <%= sid %>
+                    </p>
+                </div>
+            </div>
+
+            <div class="w-1/2 shadow-2xl">
+                <img class="object-cover w-full h-screen hidden md:block" src="<%= banner_image %>">
+            </div>
+        </div>
+    </body>
+</html>
