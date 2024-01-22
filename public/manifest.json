@@ -1,12 +1,8 @@
 {
   "name": "UniFi Voucher",
   "short_name": "Voucher",
+  "description": "UniFi Voucher",
   "icons": [
-    {
-      "src": "./images/icon/logo_144x144.png",
-      "type": "image/png",
-      "sizes": "144x144"
-    },
     {
       "src": "./images/icon/logo_192x192.png",
       "type": "image/png",
@@ -16,12 +12,45 @@
       "src": "./images/icon/logo_256x256.png",
       "type": "image/png",
       "sizes": "256x256"
+    },
+    {
+      "src": "./images/icon/logo_512x512.png",
+      "type": "image/png",
+      "sizes": "512x512"
     }
   ],
-  "start_url": "./",
-  "scope": "./",
+  "screenshots": [
+    {
+      "src": "./images/screenshots/mobile_screenshot_1.png",
+      "sizes": "413x877",
+      "type": "image/png",
+      "form_factor": "narrow"
+    },
+    {
+      "src": "./images/screenshots/mobile_screenshot_2.png",
+      "sizes": "413x877",
+      "type": "image/png",
+      "form_factor": "narrow"
+    },
+    {
+      "src": "./images/screenshots/desktop_screenshot_1.png",
+      "sizes": "1280x720",
+      "type": "image/png",
+      "form_factor": "wide"
+    },
+    {
+      "src": "./images/screenshots/desktop_screenshot_2.png",
+      "sizes": "1280x720",
+      "type": "image/png",
+      "form_factor": "wide"
+    }
+  ],
+  "start_url": "/",
+  "scope": "/",
   "display": "standalone",
-  "rotation": "portrait",
-  "background_color": "#1875b6",
-  "theme_color": "#1875b6"
+  "categories": ["utilities"],
+  "background_color": "#139CDA",
+  "theme_color": "#139CDA",
+  "related_applications": [],
+  "iarc_rating_id": ""
 }
