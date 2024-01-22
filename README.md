@@ -4,7 +4,7 @@ A small UniFi Voucher Site for simple voucher creation
 
 [![Image Size](https://img.shields.io/docker/image-size/glenndehaan/unifi-voucher-site)](https://hub.docker.com/r/glenndehaan/unifi-voucher-site)
 
-![Screenshot](https://github.com/glenndehaan/unifi-voucher-site/assets/7496187/7916899b-ccbe-422b-9e7d-3fff64affd8f)
+![Screenshot](https://github.com/glenndehaan/unifi-voucher-site/assets/7496187/64f199e6-5e50-4d91-8731-1f970c1f1210)
 
 ## Structure
 - ES6 Javascript
