@@ -17,7 +17,7 @@
   "dependencies": {
     "cookie-parser": "^1.4.6",
     "ejs": "^3.1.9",
-    "express": "^4.18.2",
+    "express": "^4.18.3",
     "multer": "^1.4.5-lts.1",
     "node-unifi": "^2.5.1",
     "tailwindcss": "^3.4.1",
@@ -25,6 +25,6 @@
     "uuid": "^9.0.1"
   },
   "devDependencies": {
-    "nodemon": "^3.0.3"
+    "nodemon": "^3.1.0"
   }
 }

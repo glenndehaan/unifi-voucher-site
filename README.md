@@ -48,6 +48,8 @@ services:
       UNIFI_SITE_ID: 'default'
       # The 'password' used to log in to this voucher portal
       SECURITY_CODE: '0000'
+      # Disables the login/authentication for the portal
+      DISABLE_AUTH: 'false'
       # Voucher Types, format: expiration in minutes (required),single-use or multi-use vouchers value - '0' is for multi-use - '1' is for single-use (optional),upload speed limit in kbps (optional),download speed limit in kbps (optional),data transfer limit in MB (optional)
       # To skip a parameter just but nothing in between the comma's
       # After a voucher type add a semicolon, after the semicolon you can start a new voucher type

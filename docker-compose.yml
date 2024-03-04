@@ -11,4 +11,5 @@ services:
       UNIFI_PASSWORD: 'password'
       UNIFI_SITE_ID: 'default'
       SECURITY_CODE: '0000'
+      DISABLE_AUTH: 'false'
       VOUCHER_TYPES: '480,0,,,;'

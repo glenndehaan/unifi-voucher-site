@@ -30,6 +30,7 @@ const app = express();
  */
 const random = (min, max) => Math.floor(Math.random() * (max - min)) + min;
 const voucherTypes = types(process.env.VOUCHER_TYPES || '480,0,,,;');
+const authDisabled = (process.env.DISABLE_AUTH === 'true') || false;
 
 /**
  * Output logo
@@ -43,6 +44,11 @@ console.log('[VoucherType] Loaded the following types:');
 voucherTypes.forEach((type, key) => {
     console.log(`[VoucherType][${key}] ${time(type.expiration)}, ${type.usage === '1' ? 'single-use' : 'multi-use'}${typeof type.upload === "undefined" && typeof type.download === "undefined" && typeof type.megabytes === "undefined" ? ', no limits' : `${typeof type.upload !== "undefined" ? `, upload bandwidth limit: ${type.upload} kb/s` : ''}${typeof type.download !== "undefined" ? `, download bandwidth limit: ${type.download} kb/s` : ''}${typeof type.megabytes !== "undefined" ? `, quota limit: ${type.megabytes} mb` : ''}`}`);
 });
+
+/**
+ * Log auth status
+ */
+console.log(`[AUTH] ${authDisabled ? 'Disabled!' : 'Enabled!'}`);
 
 /**
  * Log controller
@@ -105,6 +111,12 @@ app.get('/', (req, res) => {
     res.redirect(302, '/voucher');
 });
 app.get('/login', (req, res) => {
+    // Check if authentication is disabled
+    if(authDisabled) {
+        res.redirect(302, '/voucher');
+        return;
+    }
+
     const hour = new Date().getHours();
     const timeHeader = hour < 12 ? 'Good Morning' : hour < 18 ? 'Good Afternoon' : 'Good Evening';
 
