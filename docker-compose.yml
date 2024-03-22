@@ -3,7 +3,7 @@ services:
   app:
     build: .
     ports:
-      - "8081:3000"
+      - "3000:3000"
     environment:
       UNIFI_IP: '192.168.1.1'
       UNIFI_PORT: 443
@@ -13,3 +13,5 @@ services:
       SECURITY_CODE: '0000'
       DISABLE_AUTH: 'false'
       VOUCHER_TYPES: '480,0,,,;'
+      SERVICE_WEB: 'true'
+      SERVICE_API: 'false'
