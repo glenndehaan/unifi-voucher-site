@@ -118,6 +118,8 @@ app.use((req, res, next) => {
         console.log(`[Web][${req.sid}]: ${req.originalUrl}`);
     }
 
+    console.log(`[Web][HA Debug] ${JSON.stringify(req.headers)}`);
+
     next();
 });
 
