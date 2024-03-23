@@ -1,6 +1,7 @@
 /**
  * Import base packages
  */
+const fs = require('fs');
 const os = require('os');
 const express = require('express');
 const multer = require('multer');
@@ -40,6 +41,13 @@ const authDisabled = (process.env.DISABLE_AUTH === 'true') || false;
  * Output logo
  */
 logo();
+
+/**
+ * Log external config
+ */
+if (fs.existsSync('/data/options.json')) {
+    console.log('[Options] Found at /data/options.json');
+}
 
 /**
  * Log service status
