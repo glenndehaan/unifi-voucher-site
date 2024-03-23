@@ -148,6 +148,22 @@ the different endpoints available in the API:
    request authorization header. The token must match the value of the `SECURITY_CODE` environment variable. Without
    this token, access to the endpoint will be denied.
 
+## Home Assistant Add-on
+
+For users of Home Assistant, we provide a dedicated add-on to seamlessly integrate the UniFi Voucher Site with your Home Assistant instance. This add-on simplifies the setup process and allows you to manage UniFi vouchers directly from your Home Assistant dashboard.
+
+[![Open your Home Assistant instance and show the add add-on repository dialog with a specific repository URL pre-filled.](https://my.home-assistant.io/badges/supervisor_add_addon_repository.svg)](https://my.home-assistant.io/redirect/supervisor_add_addon_repository/?repository_url=https%3A%2F%2Fgithub.com%2Fglenndehaan%2Fha-addons)
+
+### Installation
+
+To install the UniFi Voucher Site add-on for Home Assistant, follow these steps:
+
+1. Open the Supervisor panel in your Home Assistant instance.
+2. Navigate to the "Add-on Store."
+3. Add our repository to the list of repositories by clicking the three dots in the upper-right corner, then selecting "Repositories," and entering the URL of our repository: `https://github.com/glenndehaan/ha-addons`.
+4. Once the repository is added, you will find the "UniFi Voucher Site" add-on in the add-on store. Click on it.
+5. Click "Install" and wait for the installation to complete.
+
 ## License
 
 MIT
