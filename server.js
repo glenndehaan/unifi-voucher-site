@@ -133,7 +133,7 @@ app.use(express.static(`${__dirname}/public`));
  */
 app.get('/', (req, res) => {
     if(webService) {
-        res.redirect(302, '/voucher');
+        res.redirect(302, `${req.headers['x-ingress-path'] ? req.headers['x-ingress-path'] : ''}/voucher`);
     } else {
         res.status(501).send();
     }
@@ -144,7 +144,7 @@ if(webService) {
     app.get('/login', (req, res) => {
         // Check if authentication is disabled
         if (authDisabled) {
-            res.redirect(302, '/voucher');
+            res.redirect(302, `${req.headers['x-ingress-path'] ? req.headers['x-ingress-path'] : ''}/voucher`);
             return;
         }
 
@@ -152,6 +152,7 @@ if(webService) {
         const timeHeader = hour < 12 ? 'Good Morning' : hour < 18 ? 'Good Afternoon' : 'Good Evening';
 
         res.render('login', {
+            baseUrl: req.headers['x-ingress-path'] ? req.headers['x-ingress-path'] : '',
             error: req.flashMessage.type === 'error',
             error_text: req.flashMessage.message || '',
             banner_image: process.env.BANNER_IMAGE || `/images/bg-${random(1, 10)}.jpg`,
@@ -168,17 +169,18 @@ if(webService) {
         const passwordCheck = req.body.password === (process.env.SECURITY_CODE || "0000");
 
         if(!passwordCheck) {
-            res.cookie('flashMessage', JSON.stringify({type: 'error', message: 'Password Invalid!'}), {httpOnly: true, expires: new Date(Date.now() + 24 * 60 * 60 * 1000)}).redirect(302, '/login');
+            res.cookie('flashMessage', JSON.stringify({type: 'error', message: 'Password Invalid!'}), {httpOnly: true, expires: new Date(Date.now() + 24 * 60 * 60 * 1000)}).redirect(302, `${req.headers['x-ingress-path'] ? req.headers['x-ingress-path'] : ''}/login`);
             return;
         }
 
-        res.cookie('authorization', req.body.password, {httpOnly: true, expires: new Date(Date.now() + 24 * 60 * 60 * 1000)}).redirect(302, '/voucher');
+        res.cookie('authorization', req.body.password, {httpOnly: true, expires: new Date(Date.now() + 24 * 60 * 60 * 1000)}).redirect(302, `${req.headers['x-ingress-path'] ? req.headers['x-ingress-path'] : ''}/voucher`);
     });
     app.get('/voucher', [authorization.web], async (req, res) => {
         const hour = new Date().getHours();
         const timeHeader = hour < 12 ? 'Good Morning' : hour < 18 ? 'Good Afternoon' : 'Good Evening';
 
         res.render('voucher', {
+            baseUrl: req.headers['x-ingress-path'] ? req.headers['x-ingress-path'] : '',
             info: req.flashMessage.type === 'info',
             info_text: req.flashMessage.message || '',
             error: req.flashMessage.type === 'error',
@@ -200,17 +202,17 @@ if(webService) {
         const typeCheck = (process.env.VOUCHER_TYPES || '480,0,,,;').split(';').includes(req.body['voucher-type']);
 
         if(!typeCheck) {
-            res.cookie('flashMessage', JSON.stringify({type: 'error', message: 'Unknown Type!'}), {httpOnly: true, expires: new Date(Date.now() + 24 * 60 * 60 * 1000)}).redirect(302, '/voucher');
+            res.cookie('flashMessage', JSON.stringify({type: 'error', message: 'Unknown Type!'}), {httpOnly: true, expires: new Date(Date.now() + 24 * 60 * 60 * 1000)}).redirect(302, `${req.headers['x-ingress-path'] ? req.headers['x-ingress-path'] : ''}/voucher`);
             return;
         }
 
         // Create voucher code
         const voucherCode = await unifi(types(req.body['voucher-type'], true)).catch((e) => {
-            res.cookie('flashMessage', JSON.stringify({type: 'error', message: e}), {httpOnly: true, expires: new Date(Date.now() + 24 * 60 * 60 * 1000)}).redirect(302, '/voucher');
+            res.cookie('flashMessage', JSON.stringify({type: 'error', message: e}), {httpOnly: true, expires: new Date(Date.now() + 24 * 60 * 60 * 1000)}).redirect(302, `${req.headers['x-ingress-path'] ? req.headers['x-ingress-path'] : ''}/voucher`);
         });
 
         if(voucherCode) {
-            res.cookie('flashMessage', JSON.stringify({type: 'info', message: `Voucher Created: ${voucherCode}`}), {httpOnly: true, expires: new Date(Date.now() + 24 * 60 * 60 * 1000)}).redirect(302, '/voucher');
+            res.cookie('flashMessage', JSON.stringify({type: 'info', message: `Voucher Created: ${voucherCode}`}), {httpOnly: true, expires: new Date(Date.now() + 24 * 60 * 60 * 1000)}).redirect(302, `${req.headers['x-ingress-path'] ? req.headers['x-ingress-path'] : ''}/voucher`);
         }
     });
     app.get('/vouchers', [authorization.web], async (req, res) => {
@@ -218,11 +220,12 @@ if(webService) {
         const timeHeader = hour < 12 ? 'Good Morning' : hour < 18 ? 'Good Afternoon' : 'Good Evening';
 
         const vouchers = await unifi('', false).catch((e) => {
-            res.cookie('flashMessage', JSON.stringify({type: 'error', message: e}), {httpOnly: true, expires: new Date(Date.now() + 24 * 60 * 60 * 1000)}).redirect(302, '/voucher');
+            res.cookie('flashMessage', JSON.stringify({type: 'error', message: e}), {httpOnly: true, expires: new Date(Date.now() + 24 * 60 * 60 * 1000)}).redirect(302, `${req.headers['x-ingress-path'] ? req.headers['x-ingress-path'] : ''}/voucher`);
         });
 
         if (vouchers) {
             res.render('voucher', {
+                baseUrl: req.headers['x-ingress-path'] ? req.headers['x-ingress-path'] : '',
                 info: req.flashMessage.type === 'info',
                 info_text: req.flashMessage.message || '',
                 error: req.flashMessage.type === 'error',

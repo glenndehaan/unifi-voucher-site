@@ -13,25 +13,25 @@
         <meta property="og:type" content="website"/>
         <meta property="og:description" content="UniFi Voucher"/>
 
-        <link rel="manifest" href="/manifest.json">
-        <link rel="shortcut icon" href="/images/favicon.ico">
-        <link rel="apple-touch-icon" href="/images/icon/logo_256x256.png">
+        <link rel="manifest" href="<%= baseUrl %>/manifest.json">
+        <link rel="shortcut icon" href="<%= baseUrl %>/images/favicon.ico">
+        <link rel="apple-touch-icon" href="<%= baseUrl %>/images/icon/logo_256x256.png">
 
         <meta name="mobile-web-app-capable" content="yes">
         <meta name="apple-mobile-web-app-capable" content="yes">
         <meta name="theme-color" content="#139CDA">
 
-        <link rel="preload" href="<%= banner_image %>" as="image">
-        <link rel="preload" href="/images/logo.png" as="image">
-        <link rel="preload" href="/dist/style.css" as="style">
-        <link href="/dist/style.css" rel="stylesheet">
+        <link rel="preload" href="<%= baseUrl %><%= banner_image %>" as="image">
+        <link rel="preload" href="<%= baseUrl %>/images/logo.png" as="image">
+        <link rel="preload" href="<%= baseUrl %>/dist/style.css" as="style">
+        <link href="<%= baseUrl %>/dist/style.css" rel="stylesheet">
     </head>
     <body class="bg-white dark:bg-neutral-900 dark:text-gray-100 h-screen">
         <div class="w-full flex flex-wrap">
             <div class="w-full md:w-1/2 flex flex-col">
                 <div class="flex justify-center md:justify-start pt-12 md:pl-12 md:-mb-24">
-                    <a href="/" title="Homepage">
-                        <img class="h-20 w-20" alt="UniFi Logo" src="/images/logo.png"/>
+                    <a href="<%= baseUrl %>/" title="Homepage">
+                        <img class="h-20 w-20" alt="UniFi Logo" src="<%= baseUrl %>/images/logo.png"/>
                     </a>
                 </div>
 
@@ -53,7 +53,7 @@
                             <div><%= error_text %></div>
                         </div>
                     <% } %>
-                    <form id="voucher-forum" class="flex flex-col pt-3 md:pt-8" action="/voucher" method="post" enctype="multipart/form-data">
+                    <form id="voucher-forum" class="flex flex-col pt-3 md:pt-8" action="<%= baseUrl %>/voucher" method="post" enctype="multipart/form-data">
                         <div class="flex flex-col pt-4">
                             <label for="voucher-type" class="text-lg">Voucher Type</label>
                             <div class="relative inline-block w-full">
@@ -75,7 +75,7 @@
 
                     <hr class="border-black dark:border-gray-200 my-4 mx-14"/>
 
-                    <a id="voucher-list" href="/vouchers" class="bg-black text-white font-bold text-lg hover:bg-gray-700 p-2 cursor-pointer transition-colors text-center dark:text-black dark:bg-gray-200 dark:hover:bg-white">All Vouchers</a>
+                    <a id="voucher-list" href="<%= baseUrl %>/vouchers" class="bg-black text-white font-bold text-lg hover:bg-gray-700 p-2 cursor-pointer transition-colors text-center dark:text-black dark:bg-gray-200 dark:hover:bg-white">All Vouchers</a>
                 </div>
 
                 <div class="text-center text-gray-400 text-sm italic pt-12 pb-12">
@@ -90,7 +90,7 @@
             </div>
 
             <div class="w-1/2 shadow-2xl">
-                <img class="object-cover w-full h-screen hidden md:block" src="<%= banner_image %>">
+                <img class="object-cover w-full h-screen hidden md:block" src="<%= baseUrl %><%= banner_image %>">
             </div>
 
             <% if(vouchers_popup) { %>
@@ -104,7 +104,7 @@
                                 </p>
                             </div>
                             <div class="mt-4 sm:ml-16 sm:mt-0 sm:flex-none">
-                                <a href="/voucher" class="block bg-black text-white px-3 py-2 text-center text-sm font-semibold shadow-sm hover:bg-gray-700 cursor-pointer transition-colors dark:text-black dark:bg-gray-200 dark:hover:bg-white">
+                                <a href="<%= baseUrl %>/voucher" class="block bg-black text-white px-3 py-2 text-center text-sm font-semibold shadow-sm hover:bg-gray-700 cursor-pointer transition-colors dark:text-black dark:bg-gray-200 dark:hover:bg-white">
                                     Close
                                 </a>
                             </div>
