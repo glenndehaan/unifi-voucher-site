@@ -9,8 +9,8 @@ const fs = require('fs');
  * @param option
  */
 module.exports = (option) => {
-    if (fs.existsSync('/app/options.json')) {
-        return JSON.parse(fs.readFileSync('/app/options.json', 'utf-8'))[option];
+    if (fs.existsSync('/data/options.json')) {
+        return JSON.parse(fs.readFileSync('/data/options.json', 'utf-8'))[option];
     }
 
     return null;
