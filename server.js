@@ -302,6 +302,7 @@ if(apiService) {
 app.use((req, res) => {
     res.status(404);
     res.render('404', {
+        baseUrl: req.headers['x-ingress-path'] ? req.headers['x-ingress-path'] : '',
         banner_image: process.env.BANNER_IMAGE || `/images/bg-${random(1, 10)}.jpg`,
         sid: req.sid
     });
