@@ -9,6 +9,7 @@ const cookieParser = require('cookie-parser');
 /**
  * Import own modules
  */
+const config = require('./modules/config');
 const logo = require('./modules/logo');
 const types = require('./modules/types');
 const time = require('./modules/time');
@@ -30,7 +31,7 @@ const app = express();
  * Define global functions and variables
  */
 const random = (min, max) => Math.floor(Math.random() * (max - min)) + min;
-const voucherTypes = types(process.env.VOUCHER_TYPES || '480,0,,,;');
+const voucherTypes = types(config('voucher_types') || process.env.VOUCHER_TYPES || '480,0,,,;');
 const webService = (process.env.SERVICE_WEB === 'true') || true;
 const apiService = (process.env.SERVICE_API === 'true') || false;
 const authDisabled = (process.env.DISABLE_AUTH === 'true') || false;
@@ -62,7 +63,7 @@ console.log(`[Auth] ${authDisabled ? 'Disabled!' : 'Enabled!'}`);
 /**
  * Log controller
  */
-console.log(`[UniFi] Using Controller on: ${process.env.UNIFI_IP || '192.168.1.1'}:${process.env.UNIFI_PORT || 443} (Site ID: ${process.env.UNIFI_SITE_ID || 'default'})`);
+console.log(`[UniFi] Using Controller on: ${config('unifi_ip') || process.env.UNIFI_IP || '192.168.1.1'}:${config('unifi_port') || process.env.UNIFI_PORT || 443} (Site ID: ${config('unifi_site_id') || process.env.UNIFI_SITE_ID || 'default'})`);
 
 /**
  * Trust proxy
@@ -117,8 +118,6 @@ app.use((req, res, next) => {
     } else {
         console.log(`[Web][${req.sid}]: ${req.originalUrl}`);
     }
-
-    console.log(`[Web][HA Debug] ${JSON.stringify(req.headers)}`);
 
     next();
 });

@@ -6,13 +6,18 @@ const unifi = require('node-unifi');
 /**
  * Import own modules
  */
+const configProvider = require('./config');
+
+/**
+ * Import own modules
+ */
 const config = {
     unifi: {
-        ip: process.env.UNIFI_IP || '192.168.1.1',
-        port: process.env.UNIFI_PORT || 443,
-        username: process.env.UNIFI_USERNAME || 'admin',
-        password: process.env.UNIFI_PASSWORD || 'password',
-        siteID: process.env.UNIFI_SITE_ID || 'default'
+        ip: configProvider('unifi_ip') || process.env.UNIFI_IP || '192.168.1.1',
+        port: configProvider('unifi_port') || process.env.UNIFI_PORT || 443,
+        username: configProvider('unifi_username') || process.env.UNIFI_USERNAME || 'admin',
+        password: configProvider('unifi_password') || process.env.UNIFI_PASSWORD || 'password',
+        siteID: configProvider('unifi_site_id') || process.env.UNIFI_SITE_ID || 'default'
     }
 };
 
