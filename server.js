@@ -11,6 +11,7 @@ const cookieParser = require('cookie-parser');
  * Import own modules
  */
 const config = require('./modules/config');
+const log = require('./modules/log');
 const logo = require('./modules/logo');
 const types = require('./modules/types');
 const time = require('./modules/time');
@@ -46,32 +47,32 @@ logo();
  * Log external config
  */
 if (fs.existsSync('/data/options.json')) {
-    console.log('[Options] Found at /data/options.json');
+    log.info('[Options] Found at /data/options.json');
 }
 
 /**
  * Log service status
  */
-console.log(`[Service][Web] ${webService ? 'Enabled!' : 'Disabled!'}`);
-console.log(`[Service][Api] ${apiService ? 'Enabled!' : 'Disabled!'}`);
+log.info(`[Service][Web] ${webService ? 'Enabled!' : 'Disabled!'}`);
+log.info(`[Service][Api] ${apiService ? 'Enabled!' : 'Disabled!'}`);
 
 /**
  * Log voucher types
  */
-console.log('[VoucherType] Loaded the following types:');
+log.info('[VoucherType] Loaded the following types:');
 voucherTypes.forEach((type, key) => {
-    console.log(`[VoucherType][${key}] ${time(type.expiration)}, ${type.usage === '1' ? 'single-use' : 'multi-use'}${typeof type.upload === "undefined" && typeof type.download === "undefined" && typeof type.megabytes === "undefined" ? ', no limits' : `${typeof type.upload !== "undefined" ? `, upload bandwidth limit: ${type.upload} kb/s` : ''}${typeof type.download !== "undefined" ? `, download bandwidth limit: ${type.download} kb/s` : ''}${typeof type.megabytes !== "undefined" ? `, quota limit: ${type.megabytes} mb` : ''}`}`);
+    log.info(`[VoucherType][${key}] ${time(type.expiration)}, ${type.usage === '1' ? 'single-use' : 'multi-use'}${typeof type.upload === "undefined" && typeof type.download === "undefined" && typeof type.megabytes === "undefined" ? ', no limits' : `${typeof type.upload !== "undefined" ? `, upload bandwidth limit: ${type.upload} kb/s` : ''}${typeof type.download !== "undefined" ? `, download bandwidth limit: ${type.download} kb/s` : ''}${typeof type.megabytes !== "undefined" ? `, quota limit: ${type.megabytes} mb` : ''}`}`);
 });
 
 /**
  * Log auth status
  */
-console.log(`[Auth] ${authDisabled ? 'Disabled!' : 'Enabled!'}`);
+log.info(`[Auth] ${authDisabled ? 'Disabled!' : 'Enabled!'}`);
 
 /**
  * Log controller
  */
-console.log(`[UniFi] Using Controller on: ${config('unifi_ip') || process.env.UNIFI_IP || '192.168.1.1'}:${config('unifi_port') || process.env.UNIFI_PORT || 443} (Site ID: ${config('unifi_site_id') || process.env.UNIFI_SITE_ID || 'default'})`);
+log.info(`[UniFi] Using Controller on: ${config('unifi_ip') || process.env.UNIFI_IP || '192.168.1.1'}:${config('unifi_port') || process.env.UNIFI_PORT || 443} (Site ID: ${config('unifi_site_id') || process.env.UNIFI_SITE_ID || 'default'})`);
 
 /**
  * Trust proxy
@@ -122,9 +123,9 @@ app.use(sid);
  */
 app.use((req, res, next) => {
     if(req.originalUrl.includes('/images') || req.originalUrl.includes('/dist') || req.originalUrl.includes('/manifest')) {
-        console.log(`[Web]: ${req.originalUrl}`);
+        log.info(`[Web]: ${req.originalUrl}`);
     } else {
-        console.log(`[Web][${req.sid}]: ${req.originalUrl}`);
+        log.info(`[Web][${req.sid}]: ${req.originalUrl}`);
     }
 
     next();
@@ -324,5 +325,5 @@ app.disable('x-powered-by');
  * Start listening on port
  */
 app.listen(3000, '0.0.0.0', () => {
-    console.log(`[App] Running on: 0.0.0.0:3000`);
+    log.info(`[App] Running on: 0.0.0.0:3000`);
 });
