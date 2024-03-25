@@ -10,7 +10,7 @@ const configProvider = require('./config');
 const log = require('./log');
 
 /**
- * Import own modules
+ * Build config
  */
 const config = {
     unifi: {
@@ -23,7 +23,7 @@ const config = {
 };
 
 /**
- * Exports the UniFi voucher function
+ * Exports the UniFi voucher functions
  *
  * @param type
  * @param create
@@ -48,26 +48,20 @@ module.exports = (type, create = true) => {
              * Login and create a voucher
              */
             controller.login(config.unifi.username, config.unifi.password).then(() => {
-                controller.getSitesStats().then(() => {
-                    controller.createVouchers(type.expiration, 1, parseInt(type.usage) === 1 ? 1 : 0, null, typeof type.upload !== "undefined" ? type.upload : null, typeof type.download !== "undefined" ? type.download : null, typeof type.megabytes !== "undefined" ? type.megabytes : null).then((voucher_data) => {
-                        controller.getVouchers(voucher_data[0].create_time).then((voucher_data_complete) => {
-                            const voucher = `${[voucher_data_complete[0].code.slice(0, 5), '-', voucher_data_complete[0].code.slice(5)].join('')}`;
-                            log.info(`[UniFi] Created voucher with code: ${voucher}`);
-                            resolve(voucher);
-                        }).catch((e) => {
-                            log.error('[UniFi] Error while getting voucher!');
-                            log.error(e);
-                            reject('[UniFi] Error while getting voucher!');
-                        });
+                controller.createVouchers(type.expiration, 1, parseInt(type.usage) === 1 ? 1 : 0, null, typeof type.upload !== "undefined" ? type.upload : null, typeof type.download !== "undefined" ? type.download : null, typeof type.megabytes !== "undefined" ? type.megabytes : null).then((voucher_data) => {
+                    controller.getVouchers(voucher_data[0].create_time).then((voucher_data_complete) => {
+                        const voucher = `${[voucher_data_complete[0].code.slice(0, 5), '-', voucher_data_complete[0].code.slice(5)].join('')}`;
+                        log.info(`[UniFi] Created voucher with code: ${voucher}`);
+                        resolve(voucher);
                     }).catch((e) => {
-                        log.error('[UniFi] Error while creating voucher!');
+                        log.error('[UniFi] Error while getting voucher!');
                         log.error(e);
-                        reject('[UniFi] Error while creating voucher!');
+                        reject('[UniFi] Error while getting voucher!');
                     });
                 }).catch((e) => {
-                    log.error('[UniFi] Error while getting site stats!');
+                    log.error('[UniFi] Error while creating voucher!');
                     log.error(e);
-                    reject('[UniFi] Error while getting site stats!');
+                    reject('[UniFi] Error while creating voucher!');
                 });
             }).catch((e) => {
                 log.error('[UniFi] Error while logging in!');
@@ -93,19 +87,13 @@ module.exports = (type, create = true) => {
              * Login and get vouchers
              */
             controller.login(config.unifi.username, config.unifi.password).then(() => {
-                controller.getSitesStats().then(() => {
-                    controller.getVouchers().then((vouchers) => {
-                        log.info(`[UniFi] Found ${vouchers.length} voucher(s)`);
-                        resolve(vouchers);
-                    }).catch((e) => {
-                        log.error('[UniFi] Error while getting vouchers!');
-                        log.error(e);
-                        reject('[UniFi] Error while getting vouchers!');
-                    });
+                controller.getVouchers().then((vouchers) => {
+                    log.info(`[UniFi] Found ${vouchers.length} voucher(s)`);
+                    resolve(vouchers);
                 }).catch((e) => {
-                    log.error('[UniFi] Error while getting site stats!');
+                    log.error('[UniFi] Error while getting vouchers!');
                     log.error(e);
-                    reject('[UniFi] Error while getting site stats!');
+                    reject('[UniFi] Error while getting vouchers!');
                 });
             }).catch((e) => {
                 log.error('[UniFi] Error while logging in!');
