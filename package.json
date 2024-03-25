@@ -5,7 +5,7 @@
   "private": true,
   "scripts": {
     "start": "node server.js",
-    "dev": "nodemon --watch . --ignore db.json --exec 'node server.js'",
+    "dev": "nodemon --watch . --exec 'node server.js'",
     "tailwind": "tailwindcss -i ./css/style.css -o ./public/dist/style.css --watch",
     "build": "tailwindcss -i ./css/style.css -o ./public/dist/style.css --minify"
   },
@@ -17,15 +17,16 @@
   "dependencies": {
     "cookie-parser": "^1.4.6",
     "ejs": "^3.1.9",
-    "express": "^4.19.1",
+    "express": "^4.19.2",
     "js-logger": "^1.6.1",
     "multer": "^1.4.5-lts.1",
     "node-unifi": "^2.5.1",
-    "tailwindcss": "^3.4.1",
-    "tailwindcss-text-fill": "^0.2.0",
     "uuid": "^9.0.1"
   },
   "devDependencies": {
-    "nodemon": "^3.1.0"
+    "@tailwindcss/forms": "^0.5.7",
+    "nodemon": "^3.1.0",
+    "tailwindcss": "^3.4.1",
+    "tailwindcss-text-fill": "^0.2.0"
   }
 }
