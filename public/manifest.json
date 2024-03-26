@@ -33,6 +33,12 @@
       "form_factor": "narrow"
     },
     {
+      "src": "./images/screenshots/mobile_screenshot_3.png",
+      "sizes": "413x877",
+      "type": "image/png",
+      "form_factor": "narrow"
+    },
+    {
       "src": "./images/screenshots/desktop_screenshot_1.png",
       "sizes": "1280x720",
       "type": "image/png",
@@ -40,6 +46,12 @@
     },
     {
       "src": "./images/screenshots/desktop_screenshot_2.png",
+      "sizes": "1280x720",
+      "type": "image/png",
+      "form_factor": "wide"
+    },
+    {
+      "src": "./images/screenshots/desktop_screenshot_3.png",
       "sizes": "1280x720",
       "type": "image/png",
       "form_factor": "wide"

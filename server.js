@@ -12,6 +12,7 @@ const cookieParser = require('cookie-parser');
  */
 const config = require('./modules/config');
 const log = require('./modules/log');
+const cache = require('./modules/cache');
 const logo = require('./modules/logo');
 const types = require('./modules/types');
 const time = require('./modules/time');
@@ -22,7 +23,6 @@ const unifi = require('./modules/unifi');
  */
 const authorization = require('./middlewares/authorization');
 const flashMessage = require('./middlewares/flashMessage');
-const sid = require('./middlewares/sid');
 
 /**
  * Setup Express app
@@ -32,7 +32,6 @@ const app = express();
 /**
  * Define global functions and variables
  */
-const random = (min, max) => Math.floor(Math.random() * (max - min)) + min;
 const voucherTypes = types(config('voucher_types') || process.env.VOUCHER_TYPES || '480,0,,,;');
 const webService = (process.env.SERVICE_WEB === 'true') || true;
 const apiService = (process.env.SERVICE_API === 'true') || false;
@@ -114,20 +113,10 @@ app.use(cookieParser());
 app.use(flashMessage);
 
 /**
- * Enable session id
- */
-app.use(sid);
-
-/**
  * Request logger
  */
 app.use((req, res, next) => {
-    if(req.originalUrl.includes('/images') || req.originalUrl.includes('/dist') || req.originalUrl.includes('/manifest')) {
-        log.info(`[Web]: ${req.originalUrl}`);
-    } else {
-        log.info(`[Web][${req.sid}]: ${req.originalUrl}`);
-    }
-
+    log.info(`[Web]: ${req.originalUrl}`);
     next();
 });
 
@@ -141,7 +130,7 @@ app.use(express.static(`${__dirname}/public`));
  */
 app.get('/', (req, res) => {
     if(webService) {
-        res.redirect(302, `${req.headers['x-ingress-path'] ? req.headers['x-ingress-path'] : ''}/voucher`);
+        res.redirect(302, `${req.headers['x-ingress-path'] ? req.headers['x-ingress-path'] : ''}/vouchers`);
     } else {
         res.status(501).send();
     }
@@ -152,7 +141,7 @@ if(webService) {
     app.get('/login', (req, res) => {
         // Check if authentication is disabled
         if (authDisabled) {
-            res.redirect(302, `${req.headers['x-ingress-path'] ? req.headers['x-ingress-path'] : ''}/voucher`);
+            res.redirect(302, `${req.headers['x-ingress-path'] ? req.headers['x-ingress-path'] : ''}/vouchers`);
             return;
         }
 
@@ -163,9 +152,7 @@ if(webService) {
             baseUrl: req.headers['x-ingress-path'] ? req.headers['x-ingress-path'] : '',
             error: req.flashMessage.type === 'error',
             error_text: req.flashMessage.message || '',
-            banner_image: process.env.BANNER_IMAGE || `/images/bg-${random(1, 10)}.jpg`,
-            app_header: timeHeader,
-            sid: req.sid
+            app_header: timeHeader
         });
     });
     app.post('/login', async (req, res) => {
@@ -181,25 +168,7 @@ if(webService) {
             return;
         }
 
-        res.cookie('authorization', req.body.password, {httpOnly: true, expires: new Date(Date.now() + 24 * 60 * 60 * 1000)}).redirect(302, `${req.headers['x-ingress-path'] ? req.headers['x-ingress-path'] : ''}/voucher`);
-    });
-    app.get('/voucher', [authorization.web], async (req, res) => {
-        const hour = new Date().getHours();
-        const timeHeader = hour < 12 ? 'Good Morning' : hour < 18 ? 'Good Afternoon' : 'Good Evening';
-
-        res.render('voucher', {
-            baseUrl: req.headers['x-ingress-path'] ? req.headers['x-ingress-path'] : '',
-            info: req.flashMessage.type === 'info',
-            info_text: req.flashMessage.message || '',
-            error: req.flashMessage.type === 'error',
-            error_text: req.flashMessage.message || '',
-            banner_image: process.env.BANNER_IMAGE || `/images/bg-${random(1, 10)}.jpg`,
-            app_header: timeHeader,
-            sid: req.sid,
-            timeConvert: time,
-            voucher_types: voucherTypes,
-            vouchers_popup: false
-        });
+        res.cookie('authorization', req.body.password, {httpOnly: true, expires: new Date(Date.now() + 24 * 60 * 60 * 1000)}).redirect(302, `${req.headers['x-ingress-path'] ? req.headers['x-ingress-path'] : ''}/vouchers`);
     });
     app.post('/voucher', [authorization.web], async (req, res) => {
         if (typeof req.body === "undefined") {
@@ -210,43 +179,64 @@ if(webService) {
         const typeCheck = (process.env.VOUCHER_TYPES || '480,0,,,;').split(';').includes(req.body['voucher-type']);
 
         if(!typeCheck) {
-            res.cookie('flashMessage', JSON.stringify({type: 'error', message: 'Unknown Type!'}), {httpOnly: true, expires: new Date(Date.now() + 24 * 60 * 60 * 1000)}).redirect(302, `${req.headers['x-ingress-path'] ? req.headers['x-ingress-path'] : ''}/voucher`);
+            res.cookie('flashMessage', JSON.stringify({type: 'error', message: 'Unknown Type!'}), {httpOnly: true, expires: new Date(Date.now() + 24 * 60 * 60 * 1000)}).redirect(302, `${req.headers['x-ingress-path'] ? req.headers['x-ingress-path'] : ''}/vouchers`);
             return;
         }
 
         // Create voucher code
         const voucherCode = await unifi(types(req.body['voucher-type'], true)).catch((e) => {
-            res.cookie('flashMessage', JSON.stringify({type: 'error', message: e}), {httpOnly: true, expires: new Date(Date.now() + 24 * 60 * 60 * 1000)}).redirect(302, `${req.headers['x-ingress-path'] ? req.headers['x-ingress-path'] : ''}/voucher`);
+            res.cookie('flashMessage', JSON.stringify({type: 'error', message: e}), {httpOnly: true, expires: new Date(Date.now() + 24 * 60 * 60 * 1000)}).redirect(302, `${req.headers['x-ingress-path'] ? req.headers['x-ingress-path'] : ''}/vouchers`);
         });
 
+        log.info('[Cache] Requesting UniFi Vouchers...');
+
+        const vouchers = await unifi('', false).catch((e) => {
+            log.error('[Cache] Error requesting vouchers!');
+            log.error(e);
+            res.cookie('flashMessage', JSON.stringify({type: 'error', message: e}), {httpOnly: true, expires: new Date(Date.now() + 24 * 60 * 60 * 1000)}).redirect(302, `${req.headers['x-ingress-path'] ? req.headers['x-ingress-path'] : ''}/vouchers`);
+        });
+
+        if(vouchers) {
+            cache.vouchers = vouchers;
+            cache.updated = new Date().getTime();
+            log.info(`[Cache] Saved ${vouchers.length} voucher(s)`);
+        }
+
         if(voucherCode) {
-            res.cookie('flashMessage', JSON.stringify({type: 'info', message: `Voucher Created: ${voucherCode}`}), {httpOnly: true, expires: new Date(Date.now() + 24 * 60 * 60 * 1000)}).redirect(302, `${req.headers['x-ingress-path'] ? req.headers['x-ingress-path'] : ''}/voucher`);
+            res.cookie('flashMessage', JSON.stringify({type: 'info', message: `Voucher Created: ${voucherCode}`}), {httpOnly: true, expires: new Date(Date.now() + 24 * 60 * 60 * 1000)}).redirect(302, `${req.headers['x-ingress-path'] ? req.headers['x-ingress-path'] : ''}/vouchers`);
         }
     });
     app.get('/vouchers', [authorization.web], async (req, res) => {
-        const hour = new Date().getHours();
-        const timeHeader = hour < 12 ? 'Good Morning' : hour < 18 ? 'Good Afternoon' : 'Good Evening';
+        if(req.query.refresh) {
+            log.info('[Cache] Requesting UniFi Vouchers...');
 
-        const vouchers = await unifi('', false).catch((e) => {
-            res.cookie('flashMessage', JSON.stringify({type: 'error', message: e}), {httpOnly: true, expires: new Date(Date.now() + 24 * 60 * 60 * 1000)}).redirect(302, `${req.headers['x-ingress-path'] ? req.headers['x-ingress-path'] : ''}/voucher`);
-        });
-
-        if (vouchers) {
-            res.render('voucher', {
-                baseUrl: req.headers['x-ingress-path'] ? req.headers['x-ingress-path'] : '',
-                info: req.flashMessage.type === 'info',
-                info_text: req.flashMessage.message || '',
-                error: req.flashMessage.type === 'error',
-                error_text: req.flashMessage.message || '',
-                banner_image: process.env.BANNER_IMAGE || `/images/bg-${random(1, 10)}.jpg`,
-                app_header: timeHeader,
-                sid: req.sid,
-                timeConvert: time,
-                voucher_types: voucherTypes,
-                vouchers_popup: true,
-                vouchers
+            const vouchers = await unifi('', false).catch((e) => {
+                log.error('[Cache] Error requesting vouchers!');
+                log.error(e);
+                res.cookie('flashMessage', JSON.stringify({type: 'error', message: e}), {httpOnly: true, expires: new Date(Date.now() + 24 * 60 * 60 * 1000)}).redirect(302, `${req.headers['x-ingress-path'] ? req.headers['x-ingress-path'] : ''}/vouchers`);
             });
+
+            if(vouchers) {
+                cache.vouchers = vouchers;
+                cache.updated = new Date().getTime();
+                log.info(`[Cache] Saved ${vouchers.length} voucher(s)`);
+
+                res.cookie('flashMessage', JSON.stringify({type: 'info', message: 'Synced Vouchers!'}), {httpOnly: true, expires: new Date(Date.now() + 24 * 60 * 60 * 1000)}).redirect(302, `${req.headers['x-ingress-path'] ? req.headers['x-ingress-path'] : ''}/vouchers`);
+            }
+
+            return;
         }
+
+        res.render('voucher', {
+            baseUrl: req.headers['x-ingress-path'] ? req.headers['x-ingress-path'] : '',
+            info: req.flashMessage.type === 'info',
+            info_text: req.flashMessage.message || '',
+            error: req.flashMessage.type === 'error',
+            error_text: req.flashMessage.message || '',
+            timeConvert: time,
+            voucher_types: voucherTypes,
+            vouchers: cache.vouchers
+        });
     });
 }
 
@@ -310,9 +300,7 @@ if(apiService) {
 app.use((req, res) => {
     res.status(404);
     res.render('404', {
-        baseUrl: req.headers['x-ingress-path'] ? req.headers['x-ingress-path'] : '',
-        banner_image: process.env.BANNER_IMAGE || `/images/bg-${random(1, 10)}.jpg`,
-        sid: req.sid
+        baseUrl: req.headers['x-ingress-path'] ? req.headers['x-ingress-path'] : ''
     });
 });
 
@@ -324,6 +312,19 @@ app.disable('x-powered-by');
 /**
  * Start listening on port
  */
-app.listen(3000, '0.0.0.0', () => {
+app.listen(3000, '0.0.0.0', async () => {
     log.info(`[App] Running on: 0.0.0.0:3000`);
+
+    log.info('[Cache] Requesting UniFi Vouchers...');
+
+    const vouchers = await unifi('', false).catch((e) => {
+        log.error('[Cache] Error requesting vouchers!');
+        log.error(e);
+    });
+
+    if(vouchers) {
+        cache.vouchers = vouchers;
+        cache.updated = new Date().getTime();
+        log.info(`[Cache] Saved ${vouchers.length} voucher(s)`);
+    }
 });
