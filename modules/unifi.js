@@ -25,12 +25,16 @@ const config = {
 /**
  * Exports the UniFi voucher functions
  *
- * @param type
- * @param create
- * @returns {Promise<unknown>}
+ * @type {{create: (function(*): Promise<*>), list: (function(): Promise<*>)}}
  */
-module.exports = (type, create = true) => {
-    if(create) {
+module.exports = {
+    /**
+     * Creates a new UniFi Voucher
+     *
+     * @param type
+     * @return {Promise<unknown>}
+     */
+    create: (type) => {
         return new Promise((resolve, reject) => {
             /**
              * Create new UniFi controller object
@@ -69,7 +73,14 @@ module.exports = (type, create = true) => {
                 reject('[UniFi] Error while logging in!');
             });
         });
-    } else {
+    },
+
+    /**
+     * Returns a list with all UniFi Vouchers
+     *
+     * @return {Promise<unknown>}
+     */
+    list: () => {
         return new Promise((resolve, reject) => {
             /**
              * Create new UniFi controller object
@@ -102,4 +113,4 @@ module.exports = (type, create = true) => {
             });
         });
     }
-};
+}

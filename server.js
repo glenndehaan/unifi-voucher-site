@@ -25,6 +25,11 @@ const authorization = require('./middlewares/authorization');
 const flashMessage = require('./middlewares/flashMessage');
 
 /**
+ * Import own utils
+ */
+const {updateCache} = require('./utils/cache');
+
+/**
  * Setup Express app
  */
 const app = express();
@@ -184,13 +189,13 @@ if(webService) {
         }
 
         // Create voucher code
-        const voucherCode = await unifi(types(req.body['voucher-type'], true)).catch((e) => {
+        const voucherCode = await unifi.create(types(req.body['voucher-type'], true)).catch((e) => {
             res.cookie('flashMessage', JSON.stringify({type: 'error', message: e}), {httpOnly: true, expires: new Date(Date.now() + 24 * 60 * 60 * 1000)}).redirect(302, `${req.headers['x-ingress-path'] ? req.headers['x-ingress-path'] : ''}/vouchers`);
         });
 
         log.info('[Cache] Requesting UniFi Vouchers...');
 
-        const vouchers = await unifi('', false).catch((e) => {
+        const vouchers = await unifi.list().catch((e) => {
             log.error('[Cache] Error requesting vouchers!');
             log.error(e);
             res.cookie('flashMessage', JSON.stringify({type: 'error', message: e}), {httpOnly: true, expires: new Date(Date.now() + 24 * 60 * 60 * 1000)}).redirect(302, `${req.headers['x-ingress-path'] ? req.headers['x-ingress-path'] : ''}/vouchers`);
@@ -202,7 +207,7 @@ if(webService) {
             log.info(`[Cache] Saved ${vouchers.length} voucher(s)`);
         }
 
-        if(voucherCode) {
+        if(vouchers && voucherCode) {
             res.cookie('flashMessage', JSON.stringify({type: 'info', message: `Voucher Created: ${voucherCode}`}), {httpOnly: true, expires: new Date(Date.now() + 24 * 60 * 60 * 1000)}).redirect(302, `${req.headers['x-ingress-path'] ? req.headers['x-ingress-path'] : ''}/vouchers`);
         }
     });
@@ -210,7 +215,7 @@ if(webService) {
         if(req.query.refresh) {
             log.info('[Cache] Requesting UniFi Vouchers...');
 
-            const vouchers = await unifi('', false).catch((e) => {
+            const vouchers = await unifi.list().catch((e) => {
                 log.error('[Cache] Error requesting vouchers!');
                 log.error(e);
                 res.cookie('flashMessage', JSON.stringify({type: 'error', message: e}), {httpOnly: true, expires: new Date(Date.now() + 24 * 60 * 60 * 1000)}).redirect(302, `${req.headers['x-ingress-path'] ? req.headers['x-ingress-path'] : ''}/vouchers`);
@@ -235,7 +240,8 @@ if(webService) {
             error_text: req.flashMessage.message || '',
             timeConvert: time,
             voucher_types: voucherTypes,
-            vouchers: cache.vouchers
+            vouchers: cache.vouchers,
+            updated: cache.updated
         });
     });
 }
@@ -275,12 +281,14 @@ if(apiService) {
         }
 
         // Create voucher code
-        const voucherCode = await unifi(types(req.params.type, true)).catch((e) => {
+        const voucherCode = await unifi.create(types(req.params.type, true)).catch((e) => {
             res.json({
                 error: e,
                 data: {}
             });
         });
+
+        await updateCache();
 
         if(voucherCode) {
             res.json({
@@ -314,17 +322,11 @@ app.disable('x-powered-by');
  */
 app.listen(3000, '0.0.0.0', async () => {
     log.info(`[App] Running on: 0.0.0.0:3000`);
+    await updateCache();
 
-    log.info('[Cache] Requesting UniFi Vouchers...');
-
-    const vouchers = await unifi('', false).catch((e) => {
-        log.error('[Cache] Error requesting vouchers!');
-        log.error(e);
-    });
-
-    if(vouchers) {
-        cache.vouchers = vouchers;
-        cache.updated = new Date().getTime();
-        log.info(`[Cache] Saved ${vouchers.length} voucher(s)`);
-    }
+    // Run auto sync every 15 minutes
+    setInterval(async () => {
+        log.info('[Auto Sync] Starting Sync...');
+        await updateCache();
+    }, 900000);
 });
