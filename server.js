@@ -189,26 +189,50 @@ if(webService) {
         }
 
         // Create voucher code
-        const voucherCode = await unifi.create(types(req.body['voucher-type'], true)).catch((e) => {
+        const voucherCode = await unifi.create(types(req.body['voucher-type'], true), parseInt(req.body['voucher-amount'])).catch((e) => {
             res.cookie('flashMessage', JSON.stringify({type: 'error', message: e}), {httpOnly: true, expires: new Date(Date.now() + 24 * 60 * 60 * 1000)}).redirect(302, `${req.headers['x-ingress-path'] ? req.headers['x-ingress-path'] : ''}/vouchers`);
         });
 
-        log.info('[Cache] Requesting UniFi Vouchers...');
+        if(voucherCode) {
+            log.info('[Cache] Requesting UniFi Vouchers...');
 
-        const vouchers = await unifi.list().catch((e) => {
-            log.error('[Cache] Error requesting vouchers!');
-            log.error(e);
-            res.cookie('flashMessage', JSON.stringify({type: 'error', message: e}), {httpOnly: true, expires: new Date(Date.now() + 24 * 60 * 60 * 1000)}).redirect(302, `${req.headers['x-ingress-path'] ? req.headers['x-ingress-path'] : ''}/vouchers`);
-        });
+            const vouchers = await unifi.list().catch((e) => {
+                log.error('[Cache] Error requesting vouchers!');
+                log.error(e);
+                res.cookie('flashMessage', JSON.stringify({type: 'error', message: e}), {httpOnly: true, expires: new Date(Date.now() + 24 * 60 * 60 * 1000)}).redirect(302, `${req.headers['x-ingress-path'] ? req.headers['x-ingress-path'] : ''}/vouchers`);
+            });
 
-        if(vouchers) {
-            cache.vouchers = vouchers;
-            cache.updated = new Date().getTime();
-            log.info(`[Cache] Saved ${vouchers.length} voucher(s)`);
+            if(vouchers) {
+                cache.vouchers = vouchers;
+                cache.updated = new Date().getTime();
+                log.info(`[Cache] Saved ${vouchers.length} voucher(s)`);
+
+                res.cookie('flashMessage', JSON.stringify({type: 'info', message: parseInt(req.body['voucher-amount']) > 1 ? `${req.body['voucher-amount']} Vouchers Created!` : `Voucher Created: ${voucherCode}`}), {httpOnly: true, expires: new Date(Date.now() + 24 * 60 * 60 * 1000)}).redirect(302, `${req.headers['x-ingress-path'] ? req.headers['x-ingress-path'] : ''}/vouchers`);
+            }
         }
+    });
+    app.get('/voucher/:id/remove', [authorization.web], async (req, res) => {
+        // Revoke voucher code
+        const response = await unifi.remove(req.params.id).catch((e) => {
+            res.cookie('flashMessage', JSON.stringify({type: 'error', message: e}), {httpOnly: true, expires: new Date(Date.now() + 24 * 60 * 60 * 1000)}).redirect(302, `${req.headers['x-ingress-path'] ? req.headers['x-ingress-path'] : ''}/vouchers`);
+        });
 
-        if(vouchers && voucherCode) {
-            res.cookie('flashMessage', JSON.stringify({type: 'info', message: `Voucher Created: ${voucherCode}`}), {httpOnly: true, expires: new Date(Date.now() + 24 * 60 * 60 * 1000)}).redirect(302, `${req.headers['x-ingress-path'] ? req.headers['x-ingress-path'] : ''}/vouchers`);
+        if(response) {
+            log.info('[Cache] Requesting UniFi Vouchers...');
+
+            const vouchers = await unifi.list().catch((e) => {
+                log.error('[Cache] Error requesting vouchers!');
+                log.error(e);
+                res.cookie('flashMessage', JSON.stringify({type: 'error', message: e}), {httpOnly: true, expires: new Date(Date.now() + 24 * 60 * 60 * 1000)}).redirect(302, `${req.headers['x-ingress-path'] ? req.headers['x-ingress-path'] : ''}/vouchers`);
+            });
+
+            if(vouchers) {
+                cache.vouchers = vouchers;
+                cache.updated = new Date().getTime();
+                log.info(`[Cache] Saved ${vouchers.length} voucher(s)`);
+
+                res.cookie('flashMessage', JSON.stringify({type: 'info', message: `Voucher Removed!`}), {httpOnly: true, expires: new Date(Date.now() + 24 * 60 * 60 * 1000)}).redirect(302, `${req.headers['x-ingress-path'] ? req.headers['x-ingress-path'] : ''}/vouchers`);
+            }
         }
     });
     app.get('/vouchers', [authorization.web], async (req, res) => {
