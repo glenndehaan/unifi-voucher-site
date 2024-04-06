@@ -4,7 +4,7 @@ A small UniFi Voucher Site for simple voucher creation
 
 [![Image Size](https://img.shields.io/docker/image-size/glenndehaan/unifi-voucher-site)](https://hub.docker.com/r/glenndehaan/unifi-voucher-site)
 
-![Vouchers Overview - Desktop](https://github.com/glenndehaan/unifi-voucher-site/assets/7496187/b501a49c-530c-4a58-8c69-685d5fdf1b88)
+![Vouchers Overview - Desktop](https://github.com/glenndehaan/unifi-voucher-site/assets/7496187/2bc18cce-afb2-41e9-a34c-d923fab9f6e4)
 
 ## Structure
 
@@ -164,25 +164,43 @@ To install the UniFi Voucher Site add-on for Home Assistant, follow these steps:
 4. Once the repository is added, you will find the "UniFi Voucher Site" add-on in the add-on store. Click on it.
 5. Click "Install" and wait for the installation to complete.
 
+## Print Functionality
+
+The UniFi Voucher Site application includes built-in support for printing vouchers using 80mm receipt printers, offering a convenient way to distribute vouchers in physical format.
+
+### Compatibility
+
+The print functionality is compatible with most 80mm thermal receipt printers commonly used in various industries. These printers typically use thermal printing technology, eliminating the need for ink cartridges and ensuring efficient and cost-effective voucher printing.
+
+### Usage
+
+Once your 80mm receipt printer is configured and connected, you can easily print vouchers directly from the UniFi Voucher Site application. Simply navigate to the voucher within the interface and click on the "Print" button.
+
+The application will automatically format the voucher for 80mm paper width, ensuring optimal printing results. Depending on your printer settings and preferences, you may adjust print quality, paper type, and other printing parameters to suit your needs.
+
+### Example Print PDF
+
+![Example Print PDF](https://github.com/glenndehaan/unifi-voucher-site/assets/7496187/e86d0789-47d2-4630-a7fe-291a4fa9502f)
+
 ## Screenshots
 
 ### Login (Desktop)
 ![Login - Desktop](https://github.com/glenndehaan/unifi-voucher-site/assets/7496187/89289053-50e0-4169-9916-2bce7191bf49)
 
 ### Vouchers Overview (Desktop)
-![Vouchers Overview - Desktop](https://github.com/glenndehaan/unifi-voucher-site/assets/7496187/b501a49c-530c-4a58-8c69-685d5fdf1b88)
+![Vouchers Overview - Desktop](https://github.com/glenndehaan/unifi-voucher-site/assets/7496187/2bc18cce-afb2-41e9-a34c-d923fab9f6e4)
 
 ### Create Voucher (Desktop)
-![Create Voucher - Desktop](https://github.com/glenndehaan/unifi-voucher-site/assets/7496187/7bc14c84-dcc8-4a04-8bee-f8a75ffac1da)
+![Create Voucher - Desktop](https://github.com/glenndehaan/unifi-voucher-site/assets/7496187/32803e88-c3cb-4708-914c-7e7184eae1c6)
 
 ### Login (Mobile)
 ![Login - Mobile](https://github.com/glenndehaan/unifi-voucher-site/assets/7496187/c236bb65-1ef5-41dd-976f-8f72a98416a3)
 
 ### Vouchers Overview (Mobile)
-![Voucher Overview - Mobile](https://github.com/glenndehaan/unifi-voucher-site/assets/7496187/0b59625e-4e47-49c8-884f-af35fd060911)
+![Voucher Overview - Mobile](https://github.com/glenndehaan/unifi-voucher-site/assets/7496187/68656bad-b4a2-495d-baae-61a64ed52e72)
 
 ### Create Voucher (Mobile)
-![Create Voucher - Mobile](https://github.com/glenndehaan/unifi-voucher-site/assets/7496187/6dbf05f6-7632-4140-b023-c8aa9a6f9e49)
+![Create Voucher - Mobile](https://github.com/glenndehaan/unifi-voucher-site/assets/7496187/b393c3d9-1e87-40e7-8998-9607872b161f)
 
 ## License
 

@@ -6,6 +6,7 @@ const os = require('os');
 const express = require('express');
 const multer = require('multer');
 const cookieParser = require('cookie-parser');
+const PDFDocument =  require('pdfkit');
 
 /**
  * Import own modules
@@ -233,6 +234,118 @@ if(webService) {
 
                 res.cookie('flashMessage', JSON.stringify({type: 'info', message: `Voucher Removed!`}), {httpOnly: true, expires: new Date(Date.now() + 24 * 60 * 60 * 1000)}).redirect(302, `${req.headers['x-ingress-path'] ? req.headers['x-ingress-path'] : ''}/vouchers`);
             }
+        }
+    });
+    app.get('/voucher/:id/print', [authorization.web], async (req, res) => {
+        const voucher = cache.vouchers.find((e) => {
+            return e._id === req.params.id;
+        });
+
+        if(voucher) {
+            const doc = new PDFDocument({
+                bufferPages: true,
+                size: [226.77165354330398, 290],
+                margins : {
+                    top: 20,
+                    bottom: 20,
+                    left: 20,
+                    right: 20
+                }
+            });
+
+            const buffers = [];
+            doc.on('data', buffers.push.bind(buffers));
+            doc.on('end', () => {
+                let pdfData = Buffer.concat(buffers);
+                res.writeHead(200, {
+                    'Content-Length': Buffer.byteLength(pdfData),
+                    'Content-Type': 'application/pdf',
+                    'Content-Disposition': `attachment;filename=voucher_${req.params.id}.pdf`
+                }).end(pdfData);
+            });
+
+            doc.image('public/images/logo_grayscale.png', 75, 15, {fit: [75, 75], align: 'center', valign: 'center'});
+
+            doc.moveDown(6);
+
+            doc.font('Helvetica-Bold')
+                .fontSize(20)
+                .text(`WiFi Voucher Code`, {
+                    align: 'center'
+                });
+            doc.font('Helvetica-Bold')
+                .fontSize(15)
+                .text(`${voucher.code.slice(0, 5)}-${voucher.code.slice(5)}`, {
+                    align: 'center'
+                });
+
+            doc.moveDown(2);
+
+            doc.font('Helvetica-Bold')
+                .fontSize(12)
+                .text(`Voucher Details`);
+
+            doc.font('Helvetica-Bold')
+                .fontSize(10)
+                .text(`--------------------------------------------------------`);
+
+            doc.font('Helvetica-Bold')
+                .fontSize(10)
+                .text(`Type: `, {
+                    continued: true
+                });
+            doc.font('Helvetica')
+                .fontSize(10)
+                .text(voucher.quota === 0 ? 'Multi-use' : 'Single-use');
+
+            doc.font('Helvetica-Bold')
+                .fontSize(10)
+                .text(`Duration: `, {
+                    continued: true
+                });
+            doc.font('Helvetica')
+                .fontSize(10)
+                .text(time(voucher.duration));
+
+            if(voucher.qos_usage_quota) {
+                doc.font('Helvetica-Bold')
+                    .fontSize(10)
+                    .text(`Data Limit: `, {
+                        continued: true
+                    });
+                doc.font('Helvetica')
+                    .fontSize(10)
+                    .text(`${voucher.qos_usage_quota}MB`);
+            }
+
+            if(voucher.qos_rate_max_down) {
+                doc.font('Helvetica-Bold')
+                    .fontSize(10)
+                    .text(`Download Limit: `, {
+                        continued: true
+                    });
+                doc.font('Helvetica')
+                    .fontSize(10)
+                    .text(`${voucher.qos_rate_max_down}kbps`);
+            }
+
+            if(voucher.qos_rate_max_up) {
+                doc.font('Helvetica-Bold')
+                    .fontSize(10)
+                    .text(`Upload Limit: `, {
+                        continued: true
+                    });
+                doc.font('Helvetica')
+                    .fontSize(10)
+                    .text(`${voucher.qos_rate_max_up}kbps`);
+            }
+
+            doc.end();
+        } else {
+            res.status(404);
+            res.render('404', {
+                baseUrl: req.headers['x-ingress-path'] ? req.headers['x-ingress-path'] : ''
+            });
         }
     });
     app.get('/vouchers', [authorization.web], async (req, res) => {

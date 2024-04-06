@@ -21,6 +21,7 @@
     "js-logger": "^1.6.1",
     "multer": "^1.4.5-lts.1",
     "node-unifi": "^2.5.1",
+    "pdfkit": "^0.15.0",
     "uuid": "^9.0.1"
   },
   "devDependencies": {
