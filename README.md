@@ -58,7 +58,9 @@ services:
       # Voucher Types, format: expiration in minutes (required),single-use or multi-use vouchers value - '0' is for multi-use - '1' is for single-use (optional),upload speed limit in kbps (optional),download speed limit in kbps (optional),data transfer limit in MB (optional)
       # To skip a parameter just but nothing in between the comma's
       # After a voucher type add a semicolon, after the semicolon you can start a new voucher type
-      VOUCHER_TYPES: '480,0,,,;'
+      VOUCHER_TYPES: '480,1,,,;'
+      # Allow users to create custom vouchers types within the UI
+      VOUCHER_CUSTOM: 'true'
       # Enable/disable the Web UI
       SERVICE_WEB: 'true'
       # Enable/disable the API

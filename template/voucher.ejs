@@ -31,12 +31,12 @@
                 <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
                     <div class="flex h-16 justify-between">
                         <div class="flex">
-                            <div class="flex flex-shrink-0 items-center">
+                            <a href="<%= baseUrl %>/vouchers" class="flex flex-shrink-0 items-center">
                                 <img class="h-12 w-auto" alt="UniFi Voucher Site Logo" src="<%= baseUrl %>/images/logo.png">
                                 <div class="hidden sm:block ml-4 text-2xl font-semibold leading-7 text-gray-900 dark:text-white">
                                     UniFi Voucher
                                 </div>
-                            </div>
+                            </a>
                         </div>
                         <div class="flex items-center">
                             <div class="flex-shrink-0">
@@ -210,7 +210,7 @@
                 <div class="absolute inset-0 overflow-hidden">
                     <div class="pointer-events-none fixed inset-y-0 right-0 flex max-w-full pl-10 sm:pl-16">
                         <div class="pointer-events-auto w-screen max-w-md">
-                            <form id="voucher-forum" class="flex h-full flex-col divide-y divide-black/5 dark:divide-white/5 bg-white dark:bg-gray-900 shadow-xl" action="<%= baseUrl %>/voucher" method="post" enctype="multipart/form-data">
+                            <form id="voucher-forum" class="flex h-full flex-col divide-y divide-black/5 dark:divide-white/25 bg-white dark:bg-gray-900 shadow-xl" action="<%= baseUrl %>/voucher" method="post" enctype="multipart/form-data">
                                 <div class="h-0 flex-1 overflow-y-auto">
                                     <div class="bg-sky-700 px-4 py-6 sm:px-6">
                                         <div class="flex items-center justify-between">
@@ -221,15 +221,18 @@
                                         </div>
                                     </div>
                                     <div class="flex flex-1 flex-col justify-between">
-                                        <div class="divide-y divide-black/5 dark:divide-white/5 px-4 sm:px-6">
+                                        <div class="divide-y divide-black/5 dark:divide-white/25 px-4 sm:px-6">
                                             <div class="space-y-6 pb-5 pt-6">
                                                 <div>
-                                                    <label for="voucher-type" class="block text-sm font-medium leading-6 text-gray-900 dark:text-white">Voucher Type</label>
+                                                    <label for="voucher-type" class="block text-sm font-medium leading-6 text-gray-900 dark:text-white">Preset Voucher Type</label>
                                                     <div class="mt-2">
                                                         <select id="voucher-type" name="voucher-type" class="mt-2 block w-full rounded-md border-0 py-1.5 pl-3 pr-10 text-gray-900 dark:text-white dark:bg-white/5 ring-1 ring-inset ring-gray-300 dark:ring-white/10 focus:ring-2 focus:ring-sky-600 sm:text-sm sm:leading-6">
                                                             <% voucher_types.forEach((type) => { %>
                                                                 <option value="<%= type.raw %>"><%= timeConvert(type.expiration) %>, <%= type.usage === '1' ? 'single-use' : 'multi-use' %><%= typeof type.upload === "undefined" && typeof type.download === "undefined" && typeof type.megabytes === "undefined" ? ', no limits' : '' %><%= typeof type.upload !== "undefined" ? `, upload bandwidth limit: ${type.upload} kb/s` : '' %><%= typeof type.download !== "undefined" ? `, download bandwidth limit: ${type.download} kb/s` : '' %><%= typeof type.megabytes !== "undefined" ? `, quota limit: ${type.megabytes} mb` : '' %></option>
                                                             <% }); %>
+                                                            <% if(voucher_custom) { %>
+                                                                <option value="custom">Custom</option>
+                                                            <% } %>
                                                         </select>
                                                     </div>
                                                 </div>
@@ -237,6 +240,39 @@
                                                     <label for="voucher-amount" class="block text-sm font-medium leading-6 text-gray-900 dark:text-white">Amount</label>
                                                     <div class="mt-2">
                                                         <input type="number" min="1" step="1" value="1" id="voucher-amount" name="voucher-amount" required class="mt-2 block w-full rounded-md border-0 py-1.5 text-gray-900 dark:text-white dark:bg-white/5 ring-1 ring-inset ring-gray-300 dark:ring-white/10 focus:ring-2 focus:ring-sky-600 sm:text-sm sm:leading-6">
+                                                    </div>
+                                                </div>
+                                                <div class="custom-voucher-field hidden border-t border-black/5 dark:border-white/25">
+                                                    <label for="voucher-duration" class="mt-4 block text-sm font-medium leading-6 text-gray-900 dark:text-white">Duration (in Minutes)</label>
+                                                    <div class="mt-2">
+                                                        <input type="number" min="1" step="1" value="60" id="voucher-duration" name="voucher-duration" required class="mt-2 block w-full rounded-md border-0 py-1.5 text-gray-900 dark:text-white dark:bg-white/5 ring-1 ring-inset ring-gray-300 dark:ring-white/10 focus:ring-2 focus:ring-sky-600 sm:text-sm sm:leading-6">
+                                                    </div>
+                                                </div>
+                                                <div class="custom-voucher-field hidden">
+                                                    <label for="voucher-usage" class="block text-sm font-medium leading-6 text-gray-900 dark:text-white">Voucher Usage</label>
+                                                    <div class="mt-2">
+                                                        <select id="voucher-usage" name="voucher-usage" class="mt-2 block w-full rounded-md border-0 py-1.5 pl-3 pr-10 text-gray-900 dark:text-white dark:bg-white/5 ring-1 ring-inset ring-gray-300 dark:ring-white/10 focus:ring-2 focus:ring-sky-600 sm:text-sm sm:leading-6">
+                                                            <option value="0">Multi-use</option>
+                                                            <option value="1">Single-use</option>
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                                <div class="custom-voucher-field hidden">
+                                                    <label for="voucher-data-limit" class="block text-sm font-medium leading-6 text-gray-900 dark:text-white">Data Limit (in MB)</label>
+                                                    <div class="mt-2">
+                                                        <input type="number" step="1" id="voucher-data-limit" name="voucher-data-limit" class="mt-2 block w-full rounded-md border-0 py-1.5 text-gray-900 dark:text-white dark:bg-white/5 ring-1 ring-inset ring-gray-300 dark:ring-white/10 focus:ring-2 focus:ring-sky-600 sm:text-sm sm:leading-6">
+                                                    </div>
+                                                </div>
+                                                <div class="custom-voucher-field hidden">
+                                                    <label for="voucher-download-limit" class="block text-sm font-medium leading-6 text-gray-900 dark:text-white">Download Bandwidth Limit (in kb/s)</label>
+                                                    <div class="mt-2">
+                                                        <input type="number" step="1" id="voucher-download-limit" name="voucher-download-limit" class="mt-2 block w-full rounded-md border-0 py-1.5 text-gray-900 dark:text-white dark:bg-white/5 ring-1 ring-inset ring-gray-300 dark:ring-white/10 focus:ring-2 focus:ring-sky-600 sm:text-sm sm:leading-6">
+                                                    </div>
+                                                </div>
+                                                <div class="custom-voucher-field hidden">
+                                                    <label for="voucher-upload-limit" class="block text-sm font-medium leading-6 text-gray-900 dark:text-white">Upload Bandwidth Limit (in kb/s)</label>
+                                                    <div class="mt-2">
+                                                        <input type="number" step="1" id="voucher-upload-limit" name="voucher-upload-limit" class="mt-2 block w-full rounded-md border-0 py-1.5 text-gray-900 dark:text-white dark:bg-white/5 ring-1 ring-inset ring-gray-300 dark:ring-white/10 focus:ring-2 focus:ring-sky-600 sm:text-sm sm:leading-6">
                                                     </div>
                                                 </div>
                                             </div>
@@ -325,6 +361,8 @@
         <script type="application/javascript">
             const createDialog = document.querySelector('#create-dialog');
             const createForum = document.querySelector("#voucher-forum");
+            const voucherTypeField = document.querySelector('#voucher-type');
+            const customVoucherFields = document.querySelectorAll('.custom-voucher-field');
             const createButtonHeader = document.querySelector('#create-button-header');
             const createButtonInfo = document.querySelector('#create-button-info');
             const cancelButton = document.querySelector('#cancel');
@@ -371,6 +409,17 @@
                 el.addEventListener('click', async () => {
                     spinnerRemove.style.display = '';
                 });
+            });
+            voucherTypeField.addEventListener('change', () => {
+                if(voucherTypeField.value === 'custom') {
+                    customVoucherFields.forEach((el) => {
+                        el.classList.remove('hidden');
+                    });
+                } else {
+                    customVoucherFields.forEach((el) => {
+                        el.classList.add('hidden');
+                    });
+                }
             });
         </script>
     </body>

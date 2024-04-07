@@ -38,7 +38,8 @@ const app = express();
 /**
  * Define global functions and variables
  */
-const voucherTypes = types(config('voucher_types') || process.env.VOUCHER_TYPES || '480,0,,,;');
+const voucherTypes = types(config('voucher_types') || process.env.VOUCHER_TYPES || '480,1,,,;');
+const voucherCustom = (process.env.VOUCHER_CUSTOM === 'true') || true;
 const webService = (process.env.SERVICE_WEB === 'true') || true;
 const apiService = (process.env.SERVICE_API === 'true') || false;
 const authDisabled = (process.env.DISABLE_AUTH === 'true') || false;
@@ -182,15 +183,17 @@ if(webService) {
             return;
         }
 
-        const typeCheck = (process.env.VOUCHER_TYPES || '480,0,,,;').split(';').includes(req.body['voucher-type']);
+        if(req.body['voucher-type'] !== 'custom') {
+            const typeCheck = (process.env.VOUCHER_TYPES || '480,1,,,;').split(';').includes(req.body['voucher-type']);
 
-        if(!typeCheck) {
-            res.cookie('flashMessage', JSON.stringify({type: 'error', message: 'Unknown Type!'}), {httpOnly: true, expires: new Date(Date.now() + 24 * 60 * 60 * 1000)}).redirect(302, `${req.headers['x-ingress-path'] ? req.headers['x-ingress-path'] : ''}/vouchers`);
-            return;
+            if (!typeCheck) {
+                res.cookie('flashMessage', JSON.stringify({type: 'error', message: 'Unknown Type!'}), {httpOnly: true, expires: new Date(Date.now() + 24 * 60 * 60 * 1000)}).redirect(302, `${req.headers['x-ingress-path'] ? req.headers['x-ingress-path'] : ''}/vouchers`);
+                return;
+            }
         }
 
         // Create voucher code
-        const voucherCode = await unifi.create(types(req.body['voucher-type'], true), parseInt(req.body['voucher-amount'])).catch((e) => {
+        const voucherCode = await unifi.create(types(req.body['voucher-type'] === 'custom' ? `${req.body['voucher-duration']},${req.body['voucher-usage']},${req.body['voucher-upload-limit']},${req.body['voucher-download-limit']},${req.body['voucher-data-limit']};` : req.body['voucher-type'], true), parseInt(req.body['voucher-amount'])).catch((e) => {
             res.cookie('flashMessage', JSON.stringify({type: 'error', message: e}), {httpOnly: true, expires: new Date(Date.now() + 24 * 60 * 60 * 1000)}).redirect(302, `${req.headers['x-ingress-path'] ? req.headers['x-ingress-path'] : ''}/vouchers`);
         });
 
@@ -377,6 +380,7 @@ if(webService) {
             error_text: req.flashMessage.message || '',
             timeConvert: time,
             voucher_types: voucherTypes,
+            voucher_custom: voucherCustom,
             vouchers: cache.vouchers,
             updated: cache.updated
         });
@@ -407,7 +411,7 @@ if(apiService) {
         });
     });
     app.get('/api/voucher/:type', [authorization.api], async (req, res) => {
-        const typeCheck = (process.env.VOUCHER_TYPES || '480,0,,,;').split(';').includes(req.params.type);
+        const typeCheck = (process.env.VOUCHER_TYPES || '480,1,,,;').split(';').includes(req.params.type);
 
         if(!typeCheck) {
             res.json({

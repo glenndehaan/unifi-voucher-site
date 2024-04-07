@@ -12,6 +12,7 @@ services:
       UNIFI_SITE_ID: 'default'
       SECURITY_CODE: '0000'
       DISABLE_AUTH: 'false'
-      VOUCHER_TYPES: '480,0,,,;'
+      VOUCHER_TYPES: '480,1,,,;'
+      VOUCHER_CUSTOM: 'true'
       SERVICE_WEB: 'true'
       SERVICE_API: 'false'
