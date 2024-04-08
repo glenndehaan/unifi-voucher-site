@@ -17,6 +17,7 @@ const cache = require('./modules/cache');
 const logo = require('./modules/logo');
 const types = require('./modules/types');
 const time = require('./modules/time');
+const bytes = require('./modules/bytes');
 const unifi = require('./modules/unifi');
 
 /**
@@ -39,8 +40,8 @@ const app = express();
  * Define global functions and variables
  */
 const voucherTypes = types(config('voucher_types') || process.env.VOUCHER_TYPES || '480,1,,,;');
-const voucherCustom = (process.env.VOUCHER_CUSTOM === 'true') || true;
-const webService = (process.env.SERVICE_WEB === 'true') || true;
+const voucherCustom = config('voucher_custom') !== null ? config('voucher_custom') : process.env.VOUCHER_CUSTOM ? process.env.VOUCHER_CUSTOM !== 'false' : true;
+const webService = process.env.SERVICE_WEB ? process.env.SERVICE_WEB !== 'false' : true;
 const apiService = (process.env.SERVICE_API === 'true') || false;
 const authDisabled = (process.env.DISABLE_AUTH === 'true') || false;
 
@@ -184,7 +185,7 @@ if(webService) {
         }
 
         if(req.body['voucher-type'] !== 'custom') {
-            const typeCheck = (process.env.VOUCHER_TYPES || '480,1,,,;').split(';').includes(req.body['voucher-type']);
+            const typeCheck = (config('voucher_types') || process.env.VOUCHER_TYPES || '480,1,,,;').split(';').includes(req.body['voucher-type']);
 
             if (!typeCheck) {
                 res.cookie('flashMessage', JSON.stringify({type: 'error', message: 'Unknown Type!'}), {httpOnly: true, expires: new Date(Date.now() + 24 * 60 * 60 * 1000)}).redirect(302, `${req.headers['x-ingress-path'] ? req.headers['x-ingress-path'] : ''}/vouchers`);
@@ -318,7 +319,7 @@ if(webService) {
                     });
                 doc.font('Helvetica')
                     .fontSize(10)
-                    .text(`${voucher.qos_usage_quota}MB`);
+                    .text(`${bytes(voucher.qos_usage_quota, 2)}`);
             }
 
             if(voucher.qos_rate_max_down) {
@@ -329,7 +330,7 @@ if(webService) {
                     });
                 doc.font('Helvetica')
                     .fontSize(10)
-                    .text(`${voucher.qos_rate_max_down}kbps`);
+                    .text(`${bytes(voucher.qos_rate_max_down, 1, true)}`);
             }
 
             if(voucher.qos_rate_max_up) {
@@ -340,7 +341,7 @@ if(webService) {
                     });
                 doc.font('Helvetica')
                     .fontSize(10)
-                    .text(`${voucher.qos_rate_max_up}kbps`);
+                    .text(`${bytes(voucher.qos_rate_max_up, 1, true)}`);
             }
 
             doc.end();
@@ -379,6 +380,7 @@ if(webService) {
             error: req.flashMessage.type === 'error',
             error_text: req.flashMessage.message || '',
             timeConvert: time,
+            bytesConvert: bytes,
             voucher_types: voucherTypes,
             voucher_custom: voucherCustom,
             vouchers: cache.vouchers,

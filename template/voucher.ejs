@@ -160,19 +160,19 @@
                                         <svg viewBox="0 0 2 2" class="h-0.5 w-0.5 flex-none fill-gray-500 dark:fill-gray-300">
                                             <circle cx="1" cy="1" r="1" />
                                         </svg>
-                                        <p class="truncate"><%= voucher.qos_usage_quota %>MB Data Limit</p>
+                                        <p class="truncate"><%= bytesConvert(voucher.qos_usage_quota, 2) %> Data Limit</p>
                                     <% } %>
                                     <% if(voucher.qos_rate_max_down) { %>
                                         <svg viewBox="0 0 2 2" class="h-0.5 w-0.5 flex-none fill-gray-500 dark:fill-gray-300">
                                             <circle cx="1" cy="1" r="1" />
                                         </svg>
-                                        <p class="truncate"><%= voucher.qos_rate_max_down %>kbps Download Limit</p>
+                                        <p class="truncate"><%= bytesConvert(voucher.qos_rate_max_down, 1, true) %> Download Limit</p>
                                     <% } %>
                                     <% if(voucher.qos_rate_max_up) { %>
                                         <svg viewBox="0 0 2 2" class="h-0.5 w-0.5 flex-none fill-gray-500 dark:fill-gray-300">
                                             <circle cx="1" cy="1" r="1" />
                                         </svg>
-                                        <p class="truncate"><%= voucher.qos_rate_max_up %>kbps Upload Limit</p>
+                                        <p class="truncate"><%= bytesConvert(voucher.qos_rate_max_up, 1, true) %> Upload Limit</p>
                                     <% } %>
                                 </div>
                             </div>
