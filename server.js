@@ -14,10 +14,11 @@ const PDFDocument =  require('pdfkit');
 const config = require('./modules/config');
 const log = require('./modules/log');
 const cache = require('./modules/cache');
-const logo = require('./modules/logo');
-const types = require('./modules/types');
-const time = require('./modules/time');
-const bytes = require('./modules/bytes');
+const jwt = require('./modules/jwt');
+const logo = require('./utils/logo');
+const types = require('./utils/types');
+const time = require('./utils/time');
+const bytes = require('./utils/bytes');
 const unifi = require('./modules/unifi');
 
 /**
@@ -42,7 +43,7 @@ const app = express();
 const voucherTypes = types(config('voucher_types') || process.env.VOUCHER_TYPES || '480,1,,,;');
 const voucherCustom = config('voucher_custom') !== null ? config('voucher_custom') : process.env.VOUCHER_CUSTOM ? process.env.VOUCHER_CUSTOM !== 'false' : true;
 const webService = process.env.SERVICE_WEB ? process.env.SERVICE_WEB !== 'false' : true;
-const apiService = (process.env.SERVICE_API === 'true') || false;
+const apiService = config('service_api') || (process.env.SERVICE_API === 'true') || false;
 const authDisabled = (process.env.DISABLE_AUTH === 'true') || false;
 
 /**
@@ -75,6 +76,13 @@ voucherTypes.forEach((type, key) => {
  * Log auth status
  */
 log.info(`[Auth] ${authDisabled ? 'Disabled!' : 'Enabled!'}`);
+
+/**
+ * Initialize JWT
+ */
+if(!authDisabled) {
+    jwt.init();
+}
 
 /**
  * Log controller
@@ -176,7 +184,7 @@ if(webService) {
             return;
         }
 
-        res.cookie('authorization', req.body.password, {httpOnly: true, expires: new Date(Date.now() + 24 * 60 * 60 * 1000)}).redirect(302, `${req.headers['x-ingress-path'] ? req.headers['x-ingress-path'] : ''}/vouchers`);
+        res.cookie('authorization', jwt.sign(), {httpOnly: true, expires: new Date(Date.now() + 24 * 60 * 60 * 1000)}).redirect(302, `${req.headers['x-ingress-path'] ? req.headers['x-ingress-path'] : ''}/vouchers`);
     });
     app.post('/voucher', [authorization.web], async (req, res) => {
         if (typeof req.body === "undefined") {
@@ -398,7 +406,8 @@ if(apiService) {
                 endpoints: [
                     '/api',
                     '/api/types',
-                    '/api/voucher/:type'
+                    '/api/voucher/:type',
+                    '/api/vouchers'
                 ]
             }
         });
@@ -442,6 +451,25 @@ if(apiService) {
                 }
             });
         }
+    });
+    app.get('/api/vouchers', [authorization.api], async (req, res) => {
+        res.json({
+            error: null,
+            data: {
+                message: 'OK',
+                vouchers: cache.vouchers.map((voucher) => {
+                    return {
+                        code: `${voucher.code.slice(0, 5)}-${voucher.code.slice(5)}`,
+                        type: voucher.quota === 0 ? 'multi' : 'single',
+                        duration: voucher.duration,
+                        data_limit: voucher.qos_usage_quota ? voucher.qos_usage_quota : null,
+                        download_limit: voucher.qos_rate_max_down ? voucher.qos_rate_max_down : null,
+                        upload_limit: voucher.qos_rate_max_up ? voucher.qos_rate_max_up : null
+                    };
+                }),
+                updated: cache.updated
+            }
+        });
     });
 }
 

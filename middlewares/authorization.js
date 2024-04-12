@@ -1,4 +1,9 @@
 /**
+ * Import own modules
+ */
+const jwt = require('../modules/jwt');
+
+/**
  * Global variables
  */
 const authDisabled = (process.env.DISABLE_AUTH === 'true') || false;
@@ -26,10 +31,15 @@ module.exports = {
                 return;
             }
 
-            // Check if password is correct
-            const passwordCheck = req.cookies.authorization === (process.env.SECURITY_CODE || "0000");
-            if (!passwordCheck) {
-                res.cookie('flashMessage', JSON.stringify({type: 'error', message: 'Password Invalid!'}), {httpOnly: true, expires: new Date(Date.now() + 24 * 60 * 60 * 1000)}).redirect(302, '/login');
+            // Check if token is correct and valid
+            try {
+                const check = jwt.verify(req.cookies.authorization);
+
+                if(!check) {
+                    res.cookie('flashMessage', JSON.stringify({type: 'error', message: 'Invalid or expired login!'}), {httpOnly: true, expires: new Date(Date.now() + 24 * 60 * 60 * 1000)}).redirect(302, '/login');
+                }
+            } catch (e) {
+                res.cookie('flashMessage', JSON.stringify({type: 'error', message: 'Invalid or expired login!'}), {httpOnly: true, expires: new Date(Date.now() + 24 * 60 * 60 * 1000)}).redirect(302, '/login');
                 return;
             }
         }
@@ -50,14 +60,20 @@ module.exports = {
         if(!authDisabled) {
             // Check if user has sent the authorization header
             if (!req.headers.authorization) {
-                res.status(401).send();
+                res.status(401).json({
+                    error: 'Unauthorized',
+                    data: {}
+                });
                 return;
             }
 
             // Check if password is correct
             const passwordCheck = req.headers.authorization === `Bearer ${(process.env.SECURITY_CODE || "0000")}`;
             if (!passwordCheck) {
-                res.status(403).send();
+                res.status(403).json({
+                    error: 'Forbidden',
+                    data: {}
+                });
                 return;
             }
         }

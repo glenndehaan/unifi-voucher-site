@@ -98,7 +98,8 @@ the different endpoints available in the API:
     "endpoints": [
       "/api",
       "/api/types",
-      "/api/voucher/:type"
+      "/api/voucher/:type",
+      "/api/vouchers"
     ]
   }
 }
@@ -149,6 +150,45 @@ the different endpoints available in the API:
    > This endpoint is protected by a security mechanism. To access it, users need to include a bearer token in the
    request authorization header. The token must match the value of the `SECURITY_CODE` environment variable. Without
    this token, access to the endpoint will be denied.
+
+4. **`/api/vouchers`**
+    - Method: GET
+    - Description: Retrieves a list of available vouchers.
+    - Response Format: JSON
+    - Access: Protected by Bearer Token
+    - Response Example:
+
+```json
+{
+  "error": null,
+  "data": {
+    "message": "OK",
+    "vouchers": [
+      {
+        "code": "15695-53133",
+        "type": "multi",
+        "duration": 60,
+        "data_limit": "200",
+        "download_limit": "5000",
+        "upload_limit": "2000"
+      },
+      {
+        "code": "03004-59449",
+        "type": "single",
+        "duration": 480,
+        "data_limit": null,
+        "download_limit": null,
+        "upload_limit": null
+      }
+    ],
+    "updated": 1712934667937
+  }
+}
+```
+
+> This endpoint is protected by a security mechanism. To access it, users need to include a bearer token in the
+request authorization header. The token must match the value of the `SECURITY_CODE` environment variable. Without
+this token, access to the endpoint will be denied.
 
 ## Home Assistant Add-on
 
