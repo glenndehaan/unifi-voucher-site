@@ -6,20 +6,18 @@ const unifi = require('node-unifi');
 /**
  * Import own modules
  */
-const configProvider = require('./config');
+const config = require('./config');
 const log = require('./log');
 
 /**
- * Build config
+ * UniFi Settings
  */
-const config = {
-    unifi: {
-        ip: configProvider('unifi_ip') || process.env.UNIFI_IP || '192.168.1.1',
-        port: configProvider('unifi_port') || process.env.UNIFI_PORT || 443,
-        username: configProvider('unifi_username') || process.env.UNIFI_USERNAME || 'admin',
-        password: configProvider('unifi_password') || process.env.UNIFI_PASSWORD || 'password',
-        siteID: configProvider('unifi_site_id') || process.env.UNIFI_SITE_ID || 'default'
-    }
+const settings = {
+    ip: config('unifi_ip') || process.env.UNIFI_IP || '192.168.1.1',
+    port: config('unifi_port') || process.env.UNIFI_PORT || 443,
+    username: config('unifi_username') || process.env.UNIFI_USERNAME || 'admin',
+    password: config('unifi_password') || process.env.UNIFI_PASSWORD || 'password',
+    siteID: config('unifi_site_id') || process.env.UNIFI_SITE_ID || 'default'
 };
 
 /**
@@ -42,23 +40,16 @@ const startSession = () => {
 
         // Create new UniFi controller object
         controller = new unifi.Controller({
-            host: config.unifi.ip,
-            port: config.unifi.port,
-            site: config.unifi.siteID,
+            host: settings.ip,
+            port: settings.port,
+            site: settings.siteID,
             sslverify: false
         });
 
         // Login to UniFi Controller
-        controller.login(config.unifi.username, config.unifi.password).then(() => {
+        controller.login(settings.username, settings.password).then(() => {
             log.info('[UniFi] Login successful!');
             resolve();
-
-            // Clear session after about 1 hour (bearer token will expire after 2 hours)
-            setTimeout(async () => {
-                log.info('[UniFi] Controller session timeout reached! Cleanup controller...');
-                await controller.logout();
-                controller = null;
-            }, 3600000);
         }).catch((e) => {
             // Something went wrong so clear the current controller so a user can retry
             controller = null;
@@ -70,19 +61,20 @@ const startSession = () => {
 }
 
 /**
- * Exports the UniFi voucher functions
+ * UniFi module functions
  *
- * @type {{create: (function(*): Promise<*>), list: (function(): Promise<*>)}}
+ * @type {{create: (function(*, number=, boolean=): Promise<*>), list: (function(boolean=): Promise<*>), remove: (function(*, boolean=): Promise<*>)}}
  */
-module.exports = {
+const unifiModule = {
     /**
      * Creates a new UniFi Voucher
      *
      * @param type
      * @param amount
+     * @param retry
      * @return {Promise<unknown>}
      */
-    create: (type, amount = 1) => {
+    create: (type, amount = 1, retry = true) => {
         return new Promise((resolve, reject) => {
             startSession().then(() => {
                 controller.createVouchers(type.expiration, amount, parseInt(type.usage) === 1 ? 1 : 0, null, typeof type.upload !== "undefined" ? type.upload : null, typeof type.download !== "undefined" ? type.download : null, typeof type.megabytes !== "undefined" ? type.megabytes : null).then((voucher_data) => {
@@ -103,7 +95,30 @@ module.exports = {
                 }).catch((e) => {
                     log.error('[UniFi] Error while creating voucher!');
                     log.error(e);
-                    reject('[UniFi] Error while creating voucher!');
+
+                    // Check if token expired, if true attempt login then try again
+                    if (e.response) {
+                        if(e.response.status === 401 && retry) {
+                            log.info('[UniFi] Attempting re-authentication & retry...');
+
+                            controller = null;
+                            unifiModule.create(type, amount, false).then((e) => {
+                                resolve(e);
+                            }).catch((e) => {
+                                reject(e);
+                            });
+                        } else {
+                            // Something else went wrong lets clear the current controller so a user can retry
+                            log.error(`[UniFi] Unexpected ${JSON.stringify({status: e.response.status, retry})} cleanup controller...`);
+                            controller = null;
+                            reject('[UniFi] Error while creating voucher!');
+                        }
+                    } else {
+                        // Something else went wrong lets clear the current controller so a user can retry
+                        log.error('[UniFi] Unexpected cleanup controller...');
+                        controller = null;
+                        reject('[UniFi] Error while creating voucher!');
+                    }
                 });
             }).catch((e) => {
                 reject(e);
@@ -115,9 +130,10 @@ module.exports = {
      * Removes a UniFi Voucher
      *
      * @param id
+     * @param retry
      * @return {Promise<unknown>}
      */
-    remove: (id) => {
+    remove: (id, retry = true) => {
         return new Promise((resolve, reject) => {
             startSession().then(() => {
                 controller.revokeVoucher(id).then(() => {
@@ -125,7 +141,30 @@ module.exports = {
                 }).catch((e) => {
                     log.error('[UniFi] Error while removing voucher!');
                     log.error(e);
-                    reject('[UniFi] Error while removing voucher!');
+
+                    // Check if token expired, if true attempt login then try again
+                    if (e.response) {
+                        if(e.response.status === 401 && retry) {
+                            log.info('[UniFi] Attempting re-authentication & retry...');
+
+                            controller = null;
+                            unifiModule.remove(id, false).then((e) => {
+                                resolve(e);
+                            }).catch((e) => {
+                                reject(e);
+                            });
+                        } else {
+                            // Something else went wrong lets clear the current controller so a user can retry
+                            log.error(`[UniFi] Unexpected ${JSON.stringify({status: e.response.status, retry})} cleanup controller...`);
+                            controller = null;
+                            reject('[UniFi] Error while removing voucher!');
+                        }
+                    } else {
+                        // Something else went wrong lets clear the current controller so a user can retry
+                        log.error('[UniFi] Unexpected cleanup controller...');
+                        controller = null;
+                        reject('[UniFi] Error while removing voucher!');
+                    }
                 });
             }).catch((e) => {
                 reject(e);
@@ -136,9 +175,10 @@ module.exports = {
     /**
      * Returns a list with all UniFi Vouchers
      *
+     * @param retry
      * @return {Promise<unknown>}
      */
-    list: () => {
+    list: (retry = true) => {
         return new Promise((resolve, reject) => {
             startSession().then(() => {
                 controller.getVouchers().then((vouchers) => {
@@ -147,7 +187,30 @@ module.exports = {
                 }).catch((e) => {
                     log.error('[UniFi] Error while getting vouchers!');
                     log.error(e);
-                    reject('[UniFi] Error while getting vouchers!');
+
+                    // Check if token expired, if true attempt login then try again
+                    if (e.response) {
+                        if(e.response.status === 401 && retry) {
+                            log.info('[UniFi] Attempting re-authentication & retry...');
+
+                            controller = null;
+                            unifiModule.list(false).then((e) => {
+                                resolve(e);
+                            }).catch((e) => {
+                                reject(e);
+                            });
+                        } else {
+                            // Something else went wrong lets clear the current controller so a user can retry
+                            log.error(`[UniFi] Unexpected ${JSON.stringify({status: e.response.status, retry})} cleanup controller...`);
+                            controller = null;
+                            reject('[UniFi] Error while getting vouchers!');
+                        }
+                    } else {
+                        // Something else went wrong lets clear the current controller so a user can retry
+                        log.error('[UniFi] Unexpected cleanup controller...');
+                        controller = null;
+                        reject('[UniFi] Error while getting vouchers!');
+                    }
                 });
             }).catch((e) => {
                 reject(e);
@@ -155,3 +218,8 @@ module.exports = {
         });
     }
 }
+
+/**
+ * Exports the UniFi module functions
+ */
+module.exports = unifiModule;

@@ -38,7 +38,7 @@ const {updateCache} = require('./utils/cache');
 const app = express();
 
 /**
- * Define global functions and variables
+ * Define global variables
  */
 const voucherTypes = types(config('voucher_types') || process.env.VOUCHER_TYPES || '480,1,,,;');
 const voucherCustom = config('voucher_custom') !== null ? config('voucher_custom') : process.env.VOUCHER_CUSTOM ? process.env.VOUCHER_CUSTOM !== 'false' : true;
