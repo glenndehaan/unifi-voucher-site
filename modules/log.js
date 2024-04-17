@@ -4,9 +4,14 @@
 const log = require('js-logger');
 
 /**
- * Check if we are using the dev version
+ * Import own modules
  */
-const dev = process.env.NODE_ENV !== 'production';
+const config = require('./config');
+
+/**
+ * Define global variables
+ */
+const level = config('log_level') || process.env.LOG_LEVEL || "info";
 
 /**
  * Setup logger
@@ -25,6 +30,26 @@ const consoleLogger = log.createDefaultHandler({
 });
 
 /**
+ * Log Level converter
+ */
+const logConvert = (level) => {
+    switch(level) {
+        case "error":
+            return log.ERROR;
+        case "warn":
+            return log.WARN;
+        case "info":
+            return log.INFO;
+        case "debug":
+            return log.DEBUG;
+        case "trace":
+            return log.TRACE;
+        default:
+            return log.INFO;
+    }
+}
+
+/**
  * Set all logger handlers
  */
 log.setHandler((messages, context) => {
@@ -34,7 +59,7 @@ log.setHandler((messages, context) => {
 /**
  * Set log level
  */
-log.setLevel(dev ? log.TRACE : log.INFO);
+log.setLevel(logConvert(level));
 
 /**
  * Export the application logger

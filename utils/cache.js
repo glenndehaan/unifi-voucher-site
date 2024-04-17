@@ -20,9 +20,8 @@ module.exports = {
         return new Promise(async (resolve) => {
             log.info('[Cache] Requesting UniFi Vouchers...');
 
-            const vouchers = await unifi.list().catch((e) => {
+            const vouchers = await unifi.list().catch(() => {
                 log.error('[Cache] Error requesting vouchers!');
-                log.error(e);
             });
 
             if(vouchers) {

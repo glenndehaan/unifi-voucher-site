@@ -52,6 +52,15 @@ const authDisabled = (process.env.DISABLE_AUTH === 'true') || false;
 logo();
 
 /**
+ * Output build version
+ */
+if(fs.existsSync('/etc/unifi_voucher_site_build')) {
+    log.info(`[Version] ${fs.readFileSync('/etc/unifi_voucher_site_build', 'utf-8')}`);
+} else {
+    log.info(`[Version] **DEVELOPMENT**`);
+}
+
+/**
  * Log external config
  */
 if (fs.existsSync('/data/options.json')) {
@@ -211,7 +220,6 @@ if(webService) {
 
             const vouchers = await unifi.list().catch((e) => {
                 log.error('[Cache] Error requesting vouchers!');
-                log.error(e);
                 res.cookie('flashMessage', JSON.stringify({type: 'error', message: e}), {httpOnly: true, expires: new Date(Date.now() + 24 * 60 * 60 * 1000)}).redirect(302, `${req.headers['x-ingress-path'] ? req.headers['x-ingress-path'] : ''}/vouchers`);
             });
 
@@ -235,7 +243,6 @@ if(webService) {
 
             const vouchers = await unifi.list().catch((e) => {
                 log.error('[Cache] Error requesting vouchers!');
-                log.error(e);
                 res.cookie('flashMessage', JSON.stringify({type: 'error', message: e}), {httpOnly: true, expires: new Date(Date.now() + 24 * 60 * 60 * 1000)}).redirect(302, `${req.headers['x-ingress-path'] ? req.headers['x-ingress-path'] : ''}/vouchers`);
             });
 
@@ -366,7 +373,6 @@ if(webService) {
 
             const vouchers = await unifi.list().catch((e) => {
                 log.error('[Cache] Error requesting vouchers!');
-                log.error(e);
                 res.cookie('flashMessage', JSON.stringify({type: 'error', message: e}), {httpOnly: true, expires: new Date(Date.now() + 24 * 60 * 60 * 1000)}).redirect(302, `${req.headers['x-ingress-path'] ? req.headers['x-ingress-path'] : ''}/vouchers`);
             });
 

@@ -110,3 +110,8 @@ CMD ["dumb-init", "node", "/app/server.js"]
 COPY --from=dependencies /app/node_modules ./node_modules
 COPY --from=css /app/public/dist ./public/dist
 COPY . .
+
+#
+# Set build
+#
+RUN echo -n `date '+%Y.%m.%d.%H.%M'` > /etc/unifi_voucher_site_build

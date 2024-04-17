@@ -54,7 +54,7 @@ const startSession = () => {
             // Something went wrong so clear the current controller so a user can retry
             controller = null;
             log.error('[UniFi] Error while logging in!');
-            log.error(e);
+            log.debug(e);
             reject('[UniFi] Error while logging in!');
         });
     });
@@ -88,13 +88,13 @@ const unifiModule = {
                             resolve(voucher);
                         }).catch((e) => {
                             log.error('[UniFi] Error while getting voucher!');
-                            log.error(e);
+                            log.debug(e);
                             reject('[UniFi] Error while getting voucher!');
                         });
                     }
                 }).catch((e) => {
                     log.error('[UniFi] Error while creating voucher!');
-                    log.error(e);
+                    log.debug(e);
 
                     // Check if token expired, if true attempt login then try again
                     if (e.response) {
@@ -140,7 +140,7 @@ const unifiModule = {
                     resolve(true);
                 }).catch((e) => {
                     log.error('[UniFi] Error while removing voucher!');
-                    log.error(e);
+                    log.debug(e);
 
                     // Check if token expired, if true attempt login then try again
                     if (e.response) {
@@ -186,7 +186,7 @@ const unifiModule = {
                     resolve(vouchers);
                 }).catch((e) => {
                     log.error('[UniFi] Error while getting vouchers!');
-                    log.error(e);
+                    log.debug(e);
 
                     // Check if token expired, if true attempt login then try again
                     if (e.response) {

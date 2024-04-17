@@ -65,7 +65,11 @@ services:
       SERVICE_WEB: 'true'
       # Enable/disable the API
       SERVICE_API: 'false'
+      # Sets the application Log Level (Valid Options: error|warn|info|debug|trace)
+      LOG_LEVEL: 'info'
 ```
+
+> Attention!: We recommend only using Local UniFi accounts due to short token lengths provided by UniFi Cloud Accounts. Also UniFi Cloud Accounts using 2FA won't work!
 
 ## Services
 

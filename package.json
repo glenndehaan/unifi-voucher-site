@@ -4,8 +4,8 @@
   "description": "NPM packages for unifi-voucher-site",
   "private": true,
   "scripts": {
-    "start": "node server.js",
-    "dev": "nodemon --watch . --exec 'node server.js'",
+    "start": "LOG_LEVEL=trace node server.js",
+    "dev": "nodemon --watch . --exec 'LOG_LEVEL=trace node server.js'",
     "tailwind": "tailwindcss -i ./css/style.css -o ./public/dist/style.css --watch",
     "build": "tailwindcss -i ./css/style.css -o ./public/dist/style.css --minify"
   },

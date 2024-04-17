@@ -16,3 +16,4 @@ services:
       VOUCHER_CUSTOM: 'true'
       SERVICE_WEB: 'true'
       SERVICE_API: 'false'
+      LOG_LEVEL: 'info'
