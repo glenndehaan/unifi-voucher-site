@@ -69,7 +69,9 @@ services:
       LOG_LEVEL: 'info'
 ```
 
-> Attention!: We recommend only using Local UniFi accounts due to short token lengths provided by UniFi Cloud Accounts. Also UniFi Cloud Accounts using 2FA won't work!
+> Attention!: We recommend only using Local UniFi accounts due to short token lengths provided by UniFi Cloud Accounts. Also, UniFi Cloud Accounts using 2FA won't work!
+
+> Note: When creating a Local UniFi account ensure you give 'Full Management' access rights to the Network controller. The 'Hotspot Role' won't give access to the API and therefore the application will throw errors.
 
 ## Services
 
