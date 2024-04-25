@@ -4,7 +4,7 @@ A small UniFi Voucher Site for simple voucher creation
 
 [![Image Size](https://img.shields.io/docker/image-size/glenndehaan/unifi-voucher-site)](https://hub.docker.com/r/glenndehaan/unifi-voucher-site)
 
-![Vouchers Overview - Desktop](https://github.com/glenndehaan/unifi-voucher-site/assets/7496187/2bc18cce-afb2-41e9-a34c-d923fab9f6e4)
+![Vouchers Overview - Desktop](https://github.com/glenndehaan/unifi-voucher-site/assets/7496187/b0d5c208-2ac7-444e-977d-31287ff19e8b)
 
 ## Structure
 
@@ -233,22 +233,28 @@ The application will automatically format the voucher for 80mm paper width, ensu
 ## Screenshots
 
 ### Login (Desktop)
-![Login - Desktop](https://github.com/glenndehaan/unifi-voucher-site/assets/7496187/89289053-50e0-4169-9916-2bce7191bf49)
+![Login - Desktop](https://github.com/glenndehaan/unifi-voucher-site/assets/7496187/5f89ecbd-7e03-4fd0-ae7d-279d16321384)
 
 ### Vouchers Overview (Desktop)
-![Vouchers Overview - Desktop](https://github.com/glenndehaan/unifi-voucher-site/assets/7496187/2bc18cce-afb2-41e9-a34c-d923fab9f6e4)
+![Vouchers Overview - Desktop](https://github.com/glenndehaan/unifi-voucher-site/assets/7496187/b0d5c208-2ac7-444e-977d-31287ff19e8b)
 
 ### Create Voucher (Desktop)
-![Create Voucher - Desktop](https://github.com/glenndehaan/unifi-voucher-site/assets/7496187/32803e88-c3cb-4708-914c-7e7184eae1c6)
+![Create Voucher - Desktop](https://github.com/glenndehaan/unifi-voucher-site/assets/7496187/72f8dcf0-6642-4c89-849f-21cfbcc488ab)
+
+### Voucher Details (Desktop)
+![Voucher Details - Desktop](https://github.com/glenndehaan/unifi-voucher-site/assets/7496187/b84ad74c-afaa-4bf1-8bc1-398fb0450ff1)
 
 ### Login (Mobile)
-![Login - Mobile](https://github.com/glenndehaan/unifi-voucher-site/assets/7496187/c236bb65-1ef5-41dd-976f-8f72a98416a3)
+![Login - Mobile](https://github.com/glenndehaan/unifi-voucher-site/assets/7496187/d74bc487-5b80-4bb6-8617-da870cdf4cec)
 
 ### Vouchers Overview (Mobile)
-![Voucher Overview - Mobile](https://github.com/glenndehaan/unifi-voucher-site/assets/7496187/68656bad-b4a2-495d-baae-61a64ed52e72)
+![Voucher Overview - Mobile](https://github.com/glenndehaan/unifi-voucher-site/assets/7496187/c986e03d-5edf-4b04-8903-0b42ff1c4fc9)
 
 ### Create Voucher (Mobile)
-![Create Voucher - Mobile](https://github.com/glenndehaan/unifi-voucher-site/assets/7496187/b393c3d9-1e87-40e7-8998-9607872b161f)
+![Create Voucher - Mobile](https://github.com/glenndehaan/unifi-voucher-site/assets/7496187/f1cef8c8-a7a5-4238-8a2e-461835375f29)
+
+### Voucher Details (Mobile)
+![Voucher Details - Mobile](https://github.com/glenndehaan/unifi-voucher-site/assets/7496187/28b8f97b-8042-4e6d-b1dc-8386860a1e39)
 
 ## License
 

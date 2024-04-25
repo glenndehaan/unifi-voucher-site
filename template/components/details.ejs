@@ -1,0 +1,154 @@
+<div class="relative z-40" role="dialog" aria-modal="true">
+    <div class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity"></div>
+
+    <div class="fixed inset-0 overflow-hidden">
+        <div class="absolute inset-0 overflow-hidden">
+            <div class="pointer-events-none fixed inset-y-0 right-0 flex max-w-full pl-10 sm:pl-16">
+                <div class="pointer-events-auto w-screen max-w-md">
+                    <div class="flex h-full flex-col divide-y divide-black/5 dark:divide-white/25 bg-white dark:bg-gray-900 shadow-xl">
+                        <div class="h-0 flex-1 overflow-y-auto">
+                            <div class="flex flex-1 flex-col justify-between">
+                                <div class="divide-y divide-black/5 dark:divide-white/25 px-4 sm:px-6">
+                                    <div class="space-y-6 pb-5 pt-6">
+                                        <div>
+                                            <h3 class="text-base font-semibold leading-7 text-gray-900 dark:text-white">
+                                                Voucher Details
+                                            </h3>
+                                            <p class="mt-1 text-sm leading-6 text-gray-600 dark:text-gray-400">
+                                                Voucher Details and Configuration.
+                                            </p>
+                                        </div>
+                                        <dl>
+                                            <div class="py-2 grid grid-cols-3 gap-4 px-0">
+                                                <dt class="text-sm font-medium leading-6 text-gray-900 dark:text-white">Code</dt>
+                                                <dd class="text-sm leading-6 text-gray-600 dark:text-gray-400 col-span-2 mt-0"><%= voucher.code.slice(0, 5) %>-<%= voucher.code.slice(5) %></dd>
+                                            </div>
+                                            <div class="py-2 grid grid-cols-3 gap-4 px-0">
+                                                <dt class="text-sm font-medium leading-6 text-gray-900 dark:text-white">Status</dt>
+                                                <dd class="text-sm leading-6 text-gray-600 dark:text-gray-400 col-span-2 mt-0">
+                                                    <% if(voucher.used > 0) { %>
+                                                        <div class="rounded-full w-fit py-1 px-2 text-xs font-medium ring-1 ring-inset bg-yellow-50 text-yellow-800 ring-yellow-600/20 dark:text-yellow-400 dark:bg-yellow-400/10 dark:ring-yellow-400/20">
+                                                            In Use
+                                                        </div>
+                                                    <% } else { %>
+                                                        <div class="rounded-full w-fit py-1 px-2 text-xs font-medium ring-1 ring-inset bg-green-50 text-green-700 ring-green-600/20 dark:text-green-400 dark:bg-green-400/10 dark:ring-green-400/20">
+                                                            Available
+                                                        </div>
+                                                    <% } %>
+                                                </dd>
+                                            </div>
+                                            <div class="py-2 grid grid-cols-3 gap-4 px-0">
+                                                <dt class="text-sm font-medium leading-6 text-gray-900 dark:text-white">Type</dt>
+                                                <dd class="text-sm leading-6 text-gray-600 dark:text-gray-400 col-span-2 mt-0"><%= voucher.quota === 0 ? 'Multi-use' : 'Single-use' %></dd>
+                                            </div>
+                                            <div class="py-2 grid grid-cols-3 gap-4 px-0">
+                                                <dt class="text-sm font-medium leading-6 text-gray-900 dark:text-white">Duration</dt>
+                                                <dd class="text-sm leading-6 text-gray-600 dark:text-gray-400 col-span-2 mt-0"><%= timeConvert(voucher.duration) %></dd>
+                                            </div>
+                                            <div class="py-2 grid grid-cols-3 gap-4 px-0">
+                                                <dt class="text-sm font-medium leading-6 text-gray-900 dark:text-white">Data Limit</dt>
+                                                <dd class="text-sm leading-6 text-gray-600 dark:text-gray-400 col-span-2 mt-0"><%= voucher.qos_usage_quota ? bytesConvert(voucher.qos_usage_quota, 2) : 'Unlimited' %></dd>
+                                            </div>
+                                            <div class="py-2 grid grid-cols-3 gap-4 px-0">
+                                                <dt class="text-sm font-medium leading-6 text-gray-900 dark:text-white">Download Limit</dt>
+                                                <dd class="text-sm leading-6 text-gray-600 dark:text-gray-400 col-span-2 mt-0"><%= voucher.qos_rate_max_down ? bytesConvert(voucher.qos_rate_max_down, 1, true) : 'Unlimited' %></dd>
+                                            </div>
+                                            <div class="py-2 grid grid-cols-3 gap-4 px-0">
+                                                <dt class="text-sm font-medium leading-6 text-gray-900 dark:text-white">Upload Limit</dt>
+                                                <dd class="text-sm leading-6 text-gray-600 dark:text-gray-400 col-span-2 mt-0"><%= voucher.qos_rate_max_up ? bytesConvert(voucher.qos_rate_max_up, 1, true) : 'Unlimited' %></dd>
+                                            </div>
+                                        </dl>
+                                    </div>
+                                    <div class="space-y-6 pb-5 pt-6">
+                                        <div>
+                                            <h3 class="text-base font-semibold leading-7 text-gray-900 dark:text-white">
+                                                Guest Details
+                                            </h3>
+                                            <p class="mt-1 text-sm leading-6 text-gray-600 dark:text-gray-400">
+                                                Guest Details for Voucher.
+                                            </p>
+                                        </div>
+                                        <% if(guests.length < 1) { %>
+                                            <div>
+                                                <div class="relative block w-full rounded-lg border-2 border-dashed border-gray-300 p-7 text-center">
+                                                    <svg class="mx-auto h-12 w-12 text-gray-600 dark:text-gray-400" stroke="currentColor" stroke-width="1.5" fill="none" viewBox="0 0 24 24" aria-hidden="true">
+                                                        <path stroke-linecap="round" stroke-linejoin="round" d="M18 18.72a9.094 9.094 0 0 0 3.741-.479 3 3 0 0 0-4.682-2.72m.94 3.198.001.031c0 .225-.012.447-.037.666A11.944 11.944 0 0 1 12 21c-2.17 0-4.207-.576-5.963-1.584A6.062 6.062 0 0 1 6 18.719m12 0a5.971 5.971 0 0 0-.941-3.197m0 0A5.995 5.995 0 0 0 12 12.75a5.995 5.995 0 0 0-5.058 2.772m0 0a3 3 0 0 0-4.681 2.72 8.986 8.986 0 0 0 3.74.477m.94-3.197a5.971 5.971 0 0 0-.94 3.197M15 6.75a3 3 0 1 1-6 0 3 3 0 0 1 6 0Zm6 3a2.25 2.25 0 1 1-4.5 0 2.25 2.25 0 0 1 4.5 0Zm-13.5 0a2.25 2.25 0 1 1-4.5 0 2.25 2.25 0 0 1 4.5 0Z" />
+                                                    </svg>
+                                                    <span class="mt-2 block text-sm font-semibold text-gray-900 dark:text-white">
+                                                        No Guests Connected
+                                                    </span>
+                                                </div>
+                                            </div>
+                                        <% } else { %>
+                                            <% guests.forEach((guest) => { %>
+                                                <div class="lg:col-start-3 lg:row-end-1">
+                                                    <div class="rounded-lg bg-gray-50 dark:bg-gray-800 shadow-sm ring-1 ring-gray-900/5 dark:ring-gray-50/25">
+                                                        <dl class="flex flex-wrap">
+                                                            <div class="flex-auto pl-6 pt-6">
+                                                                <dt class="text-sm font-semibold leading-6 text-gray-900 dark:text-white"><%= guest.mac %></dt>
+                                                                <dd class="mt-1 text-base font-semibold leading-6 text-gray-900 dark:text-white"><%= guest.hostname || guest.mac %></dd>
+                                                            </div>
+                                                            <div class="flex-none self-end px-6 pt-4">
+                                                                <dt class="sr-only">Returning User</dt>
+                                                                <% if(guest.is_returning) { %>
+                                                                    <dd class="rounded-full w-fit py-1 px-2 text-xs font-medium ring-1 ring-inset bg-yellow-50 text-yellow-800 ring-yellow-600/20 dark:text-yellow-400 dark:bg-yellow-400/10 dark:ring-yellow-400/20">
+                                                                        Returning
+                                                                    </dd>
+                                                                <% } else { %>
+                                                                    <dd class="rounded-full w-fit py-1 px-2 text-xs font-medium ring-1 ring-inset bg-green-50 text-green-700 ring-green-600/20 dark:text-green-400 dark:bg-green-400/10 dark:ring-green-400/20">
+                                                                        New
+                                                                    </dd>
+                                                                <% } %>
+                                                            </div>
+                                                            <div class="mt-6 flex w-full flex-none gap-x-4 border-t border-black/5 dark:border-white/25 px-6 pt-6">
+                                                                <dt class="flex-none">
+                                                                    <span class="sr-only">Expiration</span>
+                                                                    <svg class="h-6 w-5 text-gray-900 dark:text-white" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                                                                        <path d="M5.25 12a.75.75 0 01.75-.75h.01a.75.75 0 01.75.75v.01a.75.75 0 01-.75.75H6a.75.75 0 01-.75-.75V12zM6 13.25a.75.75 0 00-.75.75v.01c0 .414.336.75.75.75h.01a.75.75 0 00.75-.75V14a.75.75 0 00-.75-.75H6zM7.25 12a.75.75 0 01.75-.75h.01a.75.75 0 01.75.75v.01a.75.75 0 01-.75.75H8a.75.75 0 01-.75-.75V12zM8 13.25a.75.75 0 00-.75.75v.01c0 .414.336.75.75.75h.01a.75.75 0 00.75-.75V14a.75.75 0 00-.75-.75H8zM9.25 10a.75.75 0 01.75-.75h.01a.75.75 0 01.75.75v.01a.75.75 0 01-.75.75H10a.75.75 0 01-.75-.75V10zM10 11.25a.75.75 0 00-.75.75v.01c0 .414.336.75.75.75h.01a.75.75 0 00.75-.75V12a.75.75 0 00-.75-.75H10zM9.25 14a.75.75 0 01.75-.75h.01a.75.75 0 01.75.75v.01a.75.75 0 01-.75.75H10a.75.75 0 01-.75-.75V14zM12 9.25a.75.75 0 00-.75.75v.01c0 .414.336.75.75.75h.01a.75.75 0 00.75-.75V10a.75.75 0 00-.75-.75H12zM11.25 12a.75.75 0 01.75-.75h.01a.75.75 0 01.75.75v.01a.75.75 0 01-.75.75H12a.75.75 0 01-.75-.75V12zM12 13.25a.75.75 0 00-.75.75v.01c0 .414.336.75.75.75h.01a.75.75 0 00.75-.75V14a.75.75 0 00-.75-.75H12zM13.25 10a.75.75 0 01.75-.75h.01a.75.75 0 01.75.75v.01a.75.75 0 01-.75.75H14a.75.75 0 01-.75-.75V10zM14 11.25a.75.75 0 00-.75.75v.01c0 .414.336.75.75.75h.01a.75.75 0 00.75-.75V12a.75.75 0 00-.75-.75H14z" />
+                                                                        <path fill-rule="evenodd" d="M5.75 2a.75.75 0 01.75.75V4h7V2.75a.75.75 0 011.5 0V4h.25A2.75 2.75 0 0118 6.75v8.5A2.75 2.75 0 0115.25 18H4.75A2.75 2.75 0 012 15.25v-8.5A2.75 2.75 0 014.75 4H5V2.75A.75.75 0 015.75 2zm-1 5.5c-.69 0-1.25.56-1.25 1.25v6.5c0 .69.56 1.25 1.25 1.25h10.5c.69 0 1.25-.56 1.25-1.25v-6.5c0-.69-.56-1.25-1.25-1.25H4.75z" clip-rule="evenodd" />
+                                                                    </svg>
+                                                                </dt>
+                                                                <dd class="text-sm font-medium leading-6 text-gray-600 dark:text-gray-400">
+                                                                    <%= new Intl.DateTimeFormat('en-US', {dateStyle: 'short', timeStyle: 'short', hour12: false}).format(new Date(guest.end * 1000)) %>
+                                                                </dd>
+                                                            </div>
+                                                            <div class="mt-4 flex w-full flex-none gap-x-4 px-6">
+                                                                <dt class="flex-none">
+                                                                    <span class="sr-only">Downloaded</span>
+                                                                    <svg class="h-6 w-5 text-gray-900 dark:text-white" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                                                                        <path fill-rule="evenodd" d="M10 18a8 8 0 1 0 0-16 8 8 0 0 0 0 16Zm.75-11.25a.75.75 0 0 0-1.5 0v4.59L7.3 9.24a.75.75 0 0 0-1.1 1.02l3.25 3.5a.75.75 0 0 0 1.1 0l3.25-3.5a.75.75 0 1 0-1.1-1.02l-1.95 2.1V6.75Z" clip-rule="evenodd" />
+                                                                    </svg>
+                                                                </dt>
+                                                                <dd class="text-sm leading-6 text-gray-600 dark:text-gray-400">
+                                                                    <%= bytesConvert(guest.tx_bytes) %>
+                                                                </dd>
+                                                            </div>
+                                                            <div class="mt-4 mb-6 flex w-full flex-none gap-x-4 px-6">
+                                                                <dt class="flex-none">
+                                                                    <span class="sr-only">Uploaded</span>
+                                                                    <svg class="h-6 w-5 text-gray-900 dark:text-white" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                                                                        <path fill-rule="evenodd" d="M10 18a8 8 0 1 0 0-16 8 8 0 0 0 0 16Zm-.75-4.75a.75.75 0 0 0 1.5 0V8.66l1.95 2.1a.75.75 0 1 0 1.1-1.02l-3.25-3.5a.75.75 0 0 0-1.1 0L6.2 9.74a.75.75 0 1 0 1.1 1.02l1.95-2.1v4.59Z" clip-rule="evenodd" />
+                                                                    </svg>
+                                                                </dt>
+                                                                <dd class="text-sm leading-6 text-gray-600 dark:text-gray-400">
+                                                                    <%= bytesConvert(guest.rx_bytes) %>
+                                                                </dd>
+                                                            </div>
+                                                        </dl>
+                                                    </div>
+                                                </div>
+                                            <% }); %>
+                                        <% } %>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="flex flex-shrink-0 justify-end px-4 py-4">
+                            <button id="close" type="button" class="rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50">Close</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

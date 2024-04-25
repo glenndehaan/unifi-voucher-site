@@ -30,6 +30,18 @@ module.exports = {
                 log.info(`[Cache] Saved ${vouchers.length} voucher(s)`);
             }
 
+            log.info('[Cache] Requesting UniFi Guests...');
+
+            const guests = await unifi.guests().catch(() => {
+                log.error('[Cache] Error requesting guests!');
+            });
+
+            if(guests) {
+                cache.guests = guests;
+                cache.updated = new Date().getTime();
+                log.info(`[Cache] Saved ${guests.length} guest(s)`);
+            }
+
             resolve();
         });
     }

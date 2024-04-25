@@ -132,8 +132,8 @@
 
                 <ul role="list" class="divide-y divide-black/5 dark:divide-white/5">
                     <% vouchers.forEach((voucher) => { %>
-                        <li class="relative flex items-center space-x-4 px-4 py-4 sm:px-6 lg:px-8">
-                            <div class="min-w-0 flex-auto">
+                        <li class="relative flex items-center space-x-4 px-4 py-4 sm:px-6 lg:px-8 hover:bg-gray-200 dark:hover:bg-gray-800 cursor-pointer">
+                            <div class="voucher min-w-0 flex-auto" data-id="<%= voucher._id %>">
                                 <div class="flex items-center gap-x-3">
                                     <h2 class="min-w-0 text-sm font-semibold leading-6 text-gray-900 dark:text-white">
                                         <div class="flex gap-x-2">
@@ -204,6 +204,8 @@
                 </ul>
             </main>
         </div>
+
+        <div id="detail-dialog"></div>
 
         <div id="create-dialog" class="hidden relative z-40" role="dialog" aria-modal="true">
             <div class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity"></div>
@@ -362,6 +364,7 @@
         </script>
         <script type="application/javascript">
             const createDialog = document.querySelector('#create-dialog');
+            const detailDialog = document.querySelector('#detail-dialog');
             const createForum = document.querySelector("#voucher-forum");
             const voucherTypeField = document.querySelector('#voucher-type');
             const customVoucherFields = document.querySelectorAll('.custom-voucher-field');
@@ -375,6 +378,12 @@
             const spinnerRemove = document.querySelector("#spinner-remove");
             const spinnerList = document.querySelector("#spinner-list");
             const copyNotification = document.querySelector("#copy-notification");
+            const vouchers = document.querySelectorAll('.voucher');
+
+            const clearDetailDialog = () => {
+                document.querySelector('#close').removeEventListener('click', clearDetailDialog);
+                detailDialog.innerHTML = '';
+            };
 
             createButtonHeader.addEventListener('click', () => {
                 createDialog.classList.remove('hidden');
@@ -422,6 +431,18 @@
                         el.classList.add('hidden');
                     });
                 }
+            });
+            vouchers.forEach((el) => {
+                el.addEventListener('click', async () => {
+                    const htmlRes = await fetch(`<%= baseUrl %>/voucher/${el.dataset.id}`);
+
+                    if(htmlRes.status === 200 && !htmlRes.redirected) {
+                        detailDialog.innerHTML = await htmlRes.text();
+                        document.querySelector('#close').addEventListener('click', clearDetailDialog);
+                    } else {
+                        window.location.reload();
+                    }
+                });
             });
         </script>
     </body>

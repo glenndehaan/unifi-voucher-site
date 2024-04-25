@@ -216,6 +216,52 @@ const unifiModule = {
                 reject(e);
             });
         });
+    },
+
+    /**
+     * Returns a list with all UniFi Guests
+     *
+     * @param retry
+     * @return {Promise<unknown>}
+     */
+    guests: (retry = true) => {
+        return new Promise((resolve, reject) => {
+            startSession().then(() => {
+                controller.getGuests().then((guests) => {
+                    log.info(`[UniFi] Found ${guests.length} guest(s)`);
+                    resolve(guests);
+                }).catch((e) => {
+                    log.error('[UniFi] Error while getting guests!');
+                    log.debug(e);
+
+                    // Check if token expired, if true attempt login then try again
+                    if (e.response) {
+                        if(e.response.status === 401 && retry) {
+                            log.info('[UniFi] Attempting re-authentication & retry...');
+
+                            controller = null;
+                            unifiModule.guests(false).then((e) => {
+                                resolve(e);
+                            }).catch((e) => {
+                                reject(e);
+                            });
+                        } else {
+                            // Something else went wrong lets clear the current controller so a user can retry
+                            log.error(`[UniFi] Unexpected ${JSON.stringify({status: e.response.status, retry})} cleanup controller...`);
+                            controller = null;
+                            reject('[UniFi] Error while getting guests!');
+                        }
+                    } else {
+                        // Something else went wrong lets clear the current controller so a user can retry
+                        log.error('[UniFi] Unexpected cleanup controller...');
+                        controller = null;
+                        reject('[UniFi] Error while getting guests!');
+                    }
+                });
+            }).catch((e) => {
+                reject(e);
+            });
+        });
     }
 }
 

@@ -376,12 +376,21 @@ if(webService) {
                 res.cookie('flashMessage', JSON.stringify({type: 'error', message: e}), {httpOnly: true, expires: new Date(Date.now() + 24 * 60 * 60 * 1000)}).redirect(302, `${req.headers['x-ingress-path'] ? req.headers['x-ingress-path'] : ''}/vouchers`);
             });
 
-            if(vouchers) {
+            log.info('[Cache] Requesting UniFi Guests...');
+
+            const guests = await unifi.guests().catch((e) => {
+                log.error('[Cache] Error requesting guests!');
+                res.cookie('flashMessage', JSON.stringify({type: 'error', message: e}), {httpOnly: true, expires: new Date(Date.now() + 24 * 60 * 60 * 1000)}).redirect(302, `${req.headers['x-ingress-path'] ? req.headers['x-ingress-path'] : ''}/vouchers`);
+            });
+
+            if(vouchers && guests) {
                 cache.vouchers = vouchers;
+                cache.guests = guests;
                 cache.updated = new Date().getTime();
                 log.info(`[Cache] Saved ${vouchers.length} voucher(s)`);
+                log.info(`[Cache] Saved ${guests.length} guest(s)`);
 
-                res.cookie('flashMessage', JSON.stringify({type: 'info', message: 'Synced Vouchers!'}), {httpOnly: true, expires: new Date(Date.now() + 24 * 60 * 60 * 1000)}).redirect(302, `${req.headers['x-ingress-path'] ? req.headers['x-ingress-path'] : ''}/vouchers`);
+                res.cookie('flashMessage', JSON.stringify({type: 'info', message: 'Synced Vouchers & Guests!'}), {httpOnly: true, expires: new Date(Date.now() + 24 * 60 * 60 * 1000)}).redirect(302, `${req.headers['x-ingress-path'] ? req.headers['x-ingress-path'] : ''}/vouchers`);
             }
 
             return;
@@ -400,6 +409,29 @@ if(webService) {
             vouchers: cache.vouchers,
             updated: cache.updated
         });
+    });
+    app.get('/voucher/:id', [authorization.web], async (req, res) => {
+        const voucher = cache.vouchers.find((e) => {
+            return e._id === req.params.id;
+        });
+        const guests = cache.guests.filter((e) => {
+            return e.voucher_id === req.params.id;
+        });
+
+        if(voucher) {
+            res.render('components/details', {
+                baseUrl: req.headers['x-ingress-path'] ? req.headers['x-ingress-path'] : '',
+                timeConvert: time,
+                bytesConvert: bytes,
+                voucher,
+                guests
+            });
+        } else {
+            res.status(404);
+            res.render('404', {
+                baseUrl: req.headers['x-ingress-path'] ? req.headers['x-ingress-path'] : ''
+            });
+        }
     });
 }
 
