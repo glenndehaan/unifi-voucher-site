@@ -21,7 +21,7 @@
                                         <dl>
                                             <div class="py-2 grid grid-cols-3 gap-4 px-0">
                                                 <dt class="text-sm font-medium leading-6 text-gray-900 dark:text-white">Code</dt>
-                                                <dd class="text-sm leading-6 text-gray-600 dark:text-gray-400 col-span-2 mt-0"><%= voucher.code.slice(0, 5) %>-<%= voucher.code.slice(5) %></dd>
+                                                <dd class="text-sm leading-6 text-gray-600 dark:text-gray-400 col-span-2 mt-0 pointer-events-none no-underline text-inherit"><%= voucher.code.slice(0, 5) %>-<%= voucher.code.slice(5) %></dd>
                                             </div>
                                             <div class="py-2 grid grid-cols-3 gap-4 px-0">
                                                 <dt class="text-sm font-medium leading-6 text-gray-900 dark:text-white">Status</dt>
@@ -60,13 +60,18 @@
                                         </dl>
                                     </div>
                                     <div class="space-y-6 pb-5 pt-6">
-                                        <div>
-                                            <h3 class="text-base font-semibold leading-7 text-gray-900 dark:text-white">
-                                                Guest Details
-                                            </h3>
-                                            <p class="mt-1 text-sm leading-6 text-gray-600 dark:text-gray-400">
-                                                Guest Details for Voucher.
-                                            </p>
+                                        <div class="grid grid-cols-2">
+                                            <div>
+                                                <h3 class="text-base font-semibold leading-7 text-gray-900 dark:text-white">
+                                                    Guest Details
+                                                </h3>
+                                                <p class="mt-1 text-sm leading-6 text-gray-600 dark:text-gray-400">
+                                                    Guest Details for Voucher.
+                                                </p>
+                                            </div>
+                                            <div class="text-xs text-right self-center italic text-gray-900 dark:text-white">
+                                                Last Sync:<br/><%= new Intl.DateTimeFormat('en-GB', {dateStyle: 'short', timeStyle: 'short', hour12: false}).format(new Date(updated)) %>
+                                            </div>
                                         </div>
                                         <% if(guests.length < 1) { %>
                                             <div>
@@ -109,7 +114,7 @@
                                                                     </svg>
                                                                 </dt>
                                                                 <dd class="text-sm font-medium leading-6 text-gray-600 dark:text-gray-400">
-                                                                    <%= new Intl.DateTimeFormat('en-US', {dateStyle: 'short', timeStyle: 'short', hour12: false}).format(new Date(guest.end * 1000)) %>
+                                                                    <%= new Intl.DateTimeFormat('en-GB', {dateStyle: 'short', timeStyle: 'short', hour12: false}).format(new Date(guest.end * 1000)) %>
                                                                 </dd>
                                                             </div>
                                                             <div class="mt-4 flex w-full flex-none gap-x-4 px-6">

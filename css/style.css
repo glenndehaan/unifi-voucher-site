@@ -1,28 +1,3 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-
-.divider {
-    display: flex;
-    align-items: center;
-    text-align: center;
-    @apply mt-6;
-}
-
-/* To show the lines on right
-and left sides of the text */
-.divider::after,
-.divider::before {
-    content: "";
-    flex: 1;
-    @apply border;
-}
-
-/* Space on left and right sides of text */
-.divider:not(:empty)::before {
-    margin-right: 1em;
-}
-
-.divider:not(:empty)::after {
-    margin-left: 1em;
-}

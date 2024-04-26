@@ -424,7 +424,8 @@ if(webService) {
                 timeConvert: time,
                 bytesConvert: bytes,
                 voucher,
-                guests
+                guests,
+                updated: cache.updated
             });
         } else {
             res.status(404);

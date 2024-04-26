@@ -1,6 +1,8 @@
 <!DOCTYPE html>
 <html lang="en" class="h-full bg-gray-100 dark:bg-gray-900">
     <head>
+        <meta name="format-detection" content="telephone=no">
+
         <title>Voucher | UniFi Voucher</title>
 
         <meta charset="UTF-8">
@@ -102,14 +104,14 @@
                     </h1>
 
                     <div class="grid">
-                        <a href="<%= baseUrl %>/vouchers?refresh=true" id="reload-vouchers" type="button" class="relative inline-flex items-center gap-x-1.5 rounded-md bg-sky-700 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-sky-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sky-700">
+                        <a href="<%= baseUrl %>/vouchers?refresh=true" id="reload-vouchers" type="button" class="w-fit justify-self-end relative inline-flex items-center gap-x-1.5 rounded-md bg-sky-700 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-sky-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sky-700">
                             <svg class="-ml-0.5 h-5 w-5" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
                                 <path fill-rule="evenodd" d="M15.312 11.424a5.5 5.5 0 0 1-9.201 2.466l-.312-.311h2.433a.75.75 0 0 0 0-1.5H3.989a.75.75 0 0 0-.75.75v4.242a.75.75 0 0 0 1.5 0v-2.43l.31.31a7 7 0 0 0 11.712-3.138.75.75 0 0 0-1.449-.39Zm1.23-3.723a.75.75 0 0 0 .219-.53V2.929a.75.75 0 0 0-1.5 0V5.36l-.31-.31A7 7 0 0 0 3.239 8.188a.75.75 0 1 0 1.448.389A5.5 5.5 0 0 1 13.89 6.11l.311.31h-2.432a.75.75 0 0 0 0 1.5h4.243a.75.75 0 0 0 .53-.219Z" clip-rule="evenodd" />
                             </svg>
                             Sync Vouchers
                         </a>
                         <span class="mt-2 text-xs text-center italic text-gray-900 dark:text-white">
-                            Last Sync: <%= new Intl.DateTimeFormat('en-US', {dateStyle: 'short', timeStyle: 'short', hour12: false}).format(new Date(updated)) %>
+                            Last Sync: <%= new Intl.DateTimeFormat('en-GB', {dateStyle: 'short', timeStyle: 'short', hour12: false}).format(new Date(updated)) %>
                         </span>
                     </div>
                 </header>
@@ -137,7 +139,7 @@
                                 <div class="flex items-center gap-x-3">
                                     <h2 class="min-w-0 text-sm font-semibold leading-6 text-gray-900 dark:text-white">
                                         <div class="flex gap-x-2">
-                                            <span class="tabular-nums"><%= voucher.code.slice(0, 5) %>-<%= voucher.code.slice(5) %></span>
+                                            <span class="tabular-nums pointer-events-none no-underline text-inherit"><%= voucher.code.slice(0, 5) %>-<%= voucher.code.slice(5) %></span>
                                             <% if(voucher.used > 0) { %>
                                                 <div class="rounded-full flex-none py-1 px-2 text-xs font-medium ring-1 ring-inset bg-yellow-50 text-yellow-800 ring-yellow-600/20 dark:text-yellow-400 dark:bg-yellow-400/10 dark:ring-yellow-400/20">
                                                     In Use
