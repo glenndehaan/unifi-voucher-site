@@ -232,7 +232,7 @@
                                                 <div>
                                                     <label for="voucher-type" class="block text-sm font-medium leading-6 text-gray-900 dark:text-white">Preset Voucher Type</label>
                                                     <div class="mt-2">
-                                                        <select id="voucher-type" name="voucher-type" class="mt-2 block w-full rounded-md border-0 py-1.5 pl-3 pr-10 text-gray-900 dark:text-white dark:bg-white/5 ring-1 ring-inset ring-gray-300 dark:ring-white/10 focus:ring-2 focus:ring-sky-600 sm:text-sm sm:leading-6">
+                                                        <select id="voucher-type" name="voucher-type" class="mt-2 block w-full rounded-md border-0 py-1.5 pl-3 pr-10 text-gray-900 dark:text-white dark:bg-white/5 ring-1 ring-inset ring-gray-300 dark:ring-white/10 focus:ring-2 focus:ring-sky-600 sm:text-sm sm:leading-6 [&_*]:text-black">
                                                             <% voucher_types.forEach((type) => { %>
                                                                 <option value="<%= type.raw %>"><%= timeConvert(type.expiration) %>, <%= type.usage === '1' ? 'single-use' : 'multi-use' %><%= typeof type.upload === "undefined" && typeof type.download === "undefined" && typeof type.megabytes === "undefined" ? ', no limits' : '' %><%= typeof type.upload !== "undefined" ? `, upload bandwidth limit: ${type.upload} kb/s` : '' %><%= typeof type.download !== "undefined" ? `, download bandwidth limit: ${type.download} kb/s` : '' %><%= typeof type.megabytes !== "undefined" ? `, quota limit: ${type.megabytes} mb` : '' %></option>
                                                             <% }); %>
@@ -257,7 +257,7 @@
                                                 <div class="custom-voucher-field hidden">
                                                     <label for="voucher-usage" class="block text-sm font-medium leading-6 text-gray-900 dark:text-white">Voucher Usage</label>
                                                     <div class="mt-2">
-                                                        <select id="voucher-usage" name="voucher-usage" class="mt-2 block w-full rounded-md border-0 py-1.5 pl-3 pr-10 text-gray-900 dark:text-white dark:bg-white/5 ring-1 ring-inset ring-gray-300 dark:ring-white/10 focus:ring-2 focus:ring-sky-600 sm:text-sm sm:leading-6">
+                                                        <select id="voucher-usage" name="voucher-usage" class="mt-2 block w-full rounded-md border-0 py-1.5 pl-3 pr-10 text-gray-900 dark:text-white dark:bg-white/5 ring-1 ring-inset ring-gray-300 dark:ring-white/10 focus:ring-2 focus:ring-sky-600 sm:text-sm sm:leading-6 [&_*]:text-black">
                                                             <option value="0">Multi-use</option>
                                                             <option value="1">Single-use</option>
                                                         </select>
