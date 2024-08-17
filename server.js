@@ -46,9 +46,9 @@ const voucherCustom = config('voucher_custom') !== null ? config('voucher_custom
 const webService = process.env.SERVICE_WEB ? process.env.SERVICE_WEB !== 'false' : true;
 const apiService = config('service_api') || (process.env.SERVICE_API === 'true') || false;
 const authDisabled = (process.env.DISABLE_AUTH === 'true') || false;
-const smtpFrom = process.env.SMTP_FROM || '';
-const smtpHost = process.env.SMTP_HOST || '';
-const smtpPort = process.env.SMTP_PORT || 25;
+const smtpFrom = config('smtp_from') || process.env.SMTP_FROM || '';
+const smtpHost = config('smtp_host') || process.env.SMTP_HOST || '';
+const smtpPort = config('smtp_port') || process.env.SMTP_PORT || 25;
 
 /**
  * Output logo

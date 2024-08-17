@@ -8,17 +8,18 @@ const nodemailer = require('nodemailer');
 /**
  * Import own modules
  */
+const config = require('./config');
 const log = require('./log');
 
 /**
  * Define global variables
  */
-const smtpFrom = process.env.SMTP_FROM || '';
-const smtpHost = process.env.SMTP_HOST || '';
-const smtpPort = process.env.SMTP_PORT || 25;
-const smtpSecure = process.env.SMTP_SECURE || false;
-const smtpUsername = process.env.SMTP_USERNAME || '';
-const smtpPassword = process.env.SMTP_PASSWORD || '';
+const smtpFrom = config('smtp_from') || process.env.SMTP_FROM || '';
+const smtpHost = config('smtp_host') || process.env.SMTP_HOST || '';
+const smtpPort = config('smtp_port') || process.env.SMTP_PORT || 25;
+const smtpSecure = config('smtp_secure') || process.env.SMTP_SECURE || false;
+const smtpUsername = config('smtp_username') || process.env.SMTP_USERNAME || '';
+const smtpPassword = config('smtp_password') || process.env.SMTP_PASSWORD || '';
 
 /**
  * Create nodemailer transport
@@ -26,7 +27,7 @@ const smtpPassword = process.env.SMTP_PASSWORD || '';
 const transport = nodemailer.createTransport({
     host: smtpHost,
     port: parseInt(smtpPort),
-    secure: (smtpSecure === 'true'),
+    secure: (smtpSecure === 'true' || smtpSecure === true),
     auth: {
         user: smtpUsername,
         pass: smtpPassword
