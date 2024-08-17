@@ -457,6 +457,7 @@ if(webService) {
             error_text: req.flashMessage.message || '',
             timeConvert: time,
             bytesConvert: bytes,
+            email_enabled: smtpFrom !== '' && smtpHost !== '' && smtpPort !== '',
             voucher_types: voucherTypes,
             voucher_custom: voucherCustom,
             vouchers: cache.vouchers,

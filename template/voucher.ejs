@@ -187,7 +187,7 @@
                                     <path d="M10.5 10.5a5.23 5.23 0 0 0-1.279-3.434 9.768 9.768 0 0 1 6.963 6.963 5.23 5.23 0 0 0-3.434-1.279h-1.875a.375.375 0 0 1-.375-.375V10.5Z" />
                                 </svg>
                             </button>
-                            <button type="button" data-id="<%= voucher._id %>" class="voucher-email relative rounded-full p-1 text-gray-500 dark:text-gray-400 hover:text-black dark:hover:text-white">
+                            <button type="button" data-id="<%= voucher._id %>" class="voucher-email relative rounded-full p-1 text-gray-500 dark:text-gray-400 hover:text-black dark:hover:text-white<%= !email_enabled ? ' hidden' : '' %>">
                                 <span class="absolute -inset-1.5"></span>
                                 <span class="sr-only">Email Voucher Code</span>
                                 <svg class="h-5 w-5" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
