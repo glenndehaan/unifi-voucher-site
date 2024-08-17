@@ -187,6 +187,14 @@
                                     <path d="M10.5 10.5a5.23 5.23 0 0 0-1.279-3.434 9.768 9.768 0 0 1 6.963 6.963 5.23 5.23 0 0 0-3.434-1.279h-1.875a.375.375 0 0 1-.375-.375V10.5Z" />
                                 </svg>
                             </button>
+                            <button type="button" data-id="<%= voucher._id %>" class="voucher-email relative rounded-full p-1 text-gray-500 dark:text-gray-400 hover:text-black dark:hover:text-white">
+                                <span class="absolute -inset-1.5"></span>
+                                <span class="sr-only">Email Voucher Code</span>
+                                <svg class="h-5 w-5" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                                    <path d="M1.5 8.67v8.58a3 3 0 0 0 3 3h15a3 3 0 0 0 3-3V8.67l-8.928 5.493a3 3 0 0 1-3.144 0L1.5 8.67Z" />
+                                    <path d="M22.5 6.908V6.75a3 3 0 0 0-3-3h-15a3 3 0 0 0-3 3v.158l9.714 5.978a1.5 1.5 0 0 0 1.572 0L22.5 6.908Z" />
+                                </svg>
+                            </button>
                             <a href="<%= baseUrl %>/voucher/<%= voucher._id %>/print" type="button" class="relative rounded-full p-1 text-gray-500 dark:text-gray-400 hover:text-black dark:hover:text-white">
                                 <span class="absolute -inset-1.5"></span>
                                 <span class="sr-only">Print Voucher Code</span>
@@ -208,6 +216,7 @@
         </div>
 
         <div id="detail-dialog"></div>
+        <div id="email-dialog"></div>
 
         <div id="create-dialog" class="hidden relative z-40" role="dialog" aria-modal="true">
             <div class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity"></div>
@@ -367,6 +376,7 @@
         <script type="application/javascript">
             const createDialog = document.querySelector('#create-dialog');
             const detailDialog = document.querySelector('#detail-dialog');
+            const emailDialog = document.querySelector('#email-dialog');
             const createForum = document.querySelector("#voucher-forum");
             const voucherTypeField = document.querySelector('#voucher-type');
             const customVoucherFields = document.querySelectorAll('.custom-voucher-field');
@@ -381,10 +391,16 @@
             const spinnerList = document.querySelector("#spinner-list");
             const copyNotification = document.querySelector("#copy-notification");
             const vouchers = document.querySelectorAll('.voucher');
+            const vouchersEmail = document.querySelectorAll('.voucher-email');
 
             const clearDetailDialog = () => {
                 document.querySelector('#close').removeEventListener('click', clearDetailDialog);
                 detailDialog.innerHTML = '';
+            };
+
+            const clearEmailDialog = () => {
+                document.querySelector('#close').removeEventListener('click', clearEmailDialog);
+                emailDialog.innerHTML = '';
             };
 
             createButtonHeader.addEventListener('click', () => {
@@ -441,6 +457,18 @@
                     if(htmlRes.status === 200 && !htmlRes.redirected) {
                         detailDialog.innerHTML = await htmlRes.text();
                         document.querySelector('#close').addEventListener('click', clearDetailDialog);
+                    } else {
+                        window.location.reload();
+                    }
+                });
+            });
+            vouchersEmail.forEach((el) => {
+                el.addEventListener('click', async () => {
+                    const htmlRes = await fetch(`<%= baseUrl %>/voucher/${el.dataset.id}/email`);
+
+                    if(htmlRes.status === 200 && !htmlRes.redirected) {
+                        emailDialog.innerHTML = await htmlRes.text();
+                        document.querySelector('#close').addEventListener('click', clearEmailDialog);
                     } else {
                         window.location.reload();
                     }

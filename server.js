@@ -20,6 +20,7 @@ const types = require('./utils/types');
 const time = require('./utils/time');
 const bytes = require('./utils/bytes');
 const unifi = require('./modules/unifi');
+const mail = require('./modules/mail');
 
 /**
  * Import own middlewares
@@ -45,6 +46,9 @@ const voucherCustom = config('voucher_custom') !== null ? config('voucher_custom
 const webService = process.env.SERVICE_WEB ? process.env.SERVICE_WEB !== 'false' : true;
 const apiService = config('service_api') || (process.env.SERVICE_API === 'true') || false;
 const authDisabled = (process.env.DISABLE_AUTH === 'true') || false;
+const smtpFrom = process.env.SMTP_FROM || '';
+const smtpHost = process.env.SMTP_HOST || '';
+const smtpPort = process.env.SMTP_PORT || 25;
 
 /**
  * Output logo
@@ -85,6 +89,15 @@ voucherTypes.forEach((type, key) => {
  * Log auth status
  */
 log.info(`[Auth] ${authDisabled ? 'Disabled!' : 'Enabled!'}`);
+
+/**
+ * Log email status
+ */
+if(smtpFrom !== '' && smtpHost !== '' && smtpPort !== '') {
+    log.info(`[Email] Enabled! SMTP Server: ${smtpHost}:${smtpPort}`);
+} else {
+    log.info(`[Email] Disabled!`);
+}
 
 /**
  * Initialize JWT
@@ -360,6 +373,46 @@ if(webService) {
             }
 
             doc.end();
+        } else {
+            res.status(404);
+            res.render('404', {
+                baseUrl: req.headers['x-ingress-path'] ? req.headers['x-ingress-path'] : ''
+            });
+        }
+    });
+    app.get('/voucher/:id/email', [authorization.web], async (req, res) => {
+        const voucher = cache.vouchers.find((e) => {
+            return e._id === req.params.id;
+        });
+
+        if(voucher) {
+            res.render('components/email', {
+                baseUrl: req.headers['x-ingress-path'] ? req.headers['x-ingress-path'] : '',
+                timeConvert: time,
+                bytesConvert: bytes,
+                voucher,
+                updated: cache.updated
+            });
+        } else {
+            res.status(404);
+            res.render('404', {
+                baseUrl: req.headers['x-ingress-path'] ? req.headers['x-ingress-path'] : ''
+            });
+        }
+    });
+    app.post('/voucher/:id/email', [authorization.web], async (req, res) => {
+        if (typeof req.body === "undefined") {
+            res.status(400).send();
+            return;
+        }
+
+        const voucher = cache.vouchers.find((e) => {
+            return e._id === req.params.id;
+        });
+
+        if(voucher) {
+            await mail.send(req.body.email, voucher);
+            res.cookie('flashMessage', JSON.stringify({type: 'info', message: 'Email has been send!'}), {httpOnly: true, expires: new Date(Date.now() + 24 * 60 * 60 * 1000)}).redirect(302, `${req.headers['x-ingress-path'] ? req.headers['x-ingress-path'] : ''}/vouchers`);
         } else {
             res.status(404);
             res.render('404', {

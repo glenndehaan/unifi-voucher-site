@@ -65,6 +65,18 @@ services:
       SERVICE_WEB: 'true'
       # Enable/disable the API
       SERVICE_API: 'false'
+      # SMTP Mail from email address (optional)
+      SMTP_FROM: ''
+      # SMTP Mail server hostname/ip (optional)
+      SMTP_HOST: ''
+      # SMTP Mail server port (optional)
+      SMTP_PORT: ''
+      # SMTP Mail use TLS? (optional)
+      SMTP_SECURE: 'false'
+      # SMTP Mail username (optional)
+      SMTP_USERNAME: ''
+      # SMTP Mail password (optional)
+      SMTP_PASSWORD: ''
       # Sets the application Log Level (Valid Options: error|warn|info|debug|trace)
       LOG_LEVEL: 'info'
 ```
@@ -229,6 +241,42 @@ The application will automatically format the voucher for 80mm paper width, ensu
 ### Example Print PDF
 
 ![Example Print PDF](https://github.com/glenndehaan/unifi-voucher-site/assets/7496187/e86d0789-47d2-4630-a7fe-291a4fa9502f)
+
+## Email Functionality
+
+The UniFi Voucher Site includes a convenient email feature that allows you to send vouchers directly to users from the web interface. By configuring the SMTP settings, you can enable email sending and make it easy to distribute vouchers digitally.
+
+### Configuration
+
+To enable the email feature, you need to set the following environment variables with your SMTP server details:
+
+```env
+SMTP_FROM: ''
+SMTP_HOST: ''
+SMTP_PORT: ''
+SMTP_SECURE: ''
+SMTP_USERNAME: ''
+SMTP_PASSWORD: ''
+```
+
+Here’s what each variable represents:
+
+- **`SMTP_FROM`**: The sender email address that will appear in the "From" field when users receive the voucher.
+- **`SMTP_HOST`**: The hostname or IP address of your SMTP server (e.g., `smtp.example.com`).
+- **`SMTP_PORT`**: The port used by your SMTP server (e.g., `587` for TLS or `465` for SSL).
+- **`SMTP_SECURE`**: Set to `true` if your SMTP server requires a secure connection (SSL/TLS), or `false` if it does not.
+- **`SMTP_USERNAME`**: The username for authenticating with your SMTP server.
+- **`SMTP_PASSWORD`**: The password for authenticating with your SMTP server.
+
+These settings allow the application to connect to your SMTP server and send emails on your behalf.
+
+### Usage
+
+Once the SMTP environment variables are configured, the email feature will be available within the UniFi Voucher Site interface. After generating a voucher, you will see an option to send the voucher via email. Enter the recipient's email address, and the application will send the voucher details directly to their inbox.
+
+### Example Email
+
+![Example Email](https://github.com/user-attachments/assets/45615db3-df76-48b0-ad30-05236e3754c1)
 
 ## Screenshots
 
