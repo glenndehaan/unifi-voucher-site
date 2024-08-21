@@ -1,7 +1,7 @@
 {
   "name": "UniFi Voucher",
   "short_name": "Voucher",
-  "description": "UniFi Voucher",
+  "description": "UniFi Voucher Site is a web-based platform for generating and managing UniFi network guest vouchers",
   "icons": [
     {
       "src": "./images/icon/logo_192x192.png",

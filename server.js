@@ -45,7 +45,7 @@ const voucherTypes = types(config('voucher_types') || process.env.VOUCHER_TYPES 
 const voucherCustom = config('voucher_custom') !== null ? config('voucher_custom') : process.env.VOUCHER_CUSTOM ? process.env.VOUCHER_CUSTOM !== 'false' : true;
 const webService = process.env.SERVICE_WEB ? process.env.SERVICE_WEB !== 'false' : true;
 const apiService = config('service_api') || (process.env.SERVICE_API === 'true') || false;
-const authDisabled = (process.env.DISABLE_AUTH === 'true') || false;
+const authDisabled = (process.env.AUTH_DISABLE === 'true') || false;
 const smtpFrom = config('smtp_from') || process.env.SMTP_FROM || '';
 const smtpHost = config('smtp_host') || process.env.SMTP_HOST || '';
 const smtpPort = config('smtp_port') || process.env.SMTP_PORT || 25;
@@ -199,7 +199,7 @@ if(webService) {
             return;
         }
 
-        const passwordCheck = req.body.password === (process.env.SECURITY_CODE || "0000");
+        const passwordCheck = req.body.password === (process.env.AUTH_PASSWORD || "0000");
 
         if(!passwordCheck) {
             res.cookie('flashMessage', JSON.stringify({type: 'error', message: 'Password Invalid!'}), {httpOnly: true, expires: new Date(Date.now() + 24 * 60 * 60 * 1000)}).redirect(302, `${req.headers['x-ingress-path'] ? req.headers['x-ingress-path'] : ''}/login`);

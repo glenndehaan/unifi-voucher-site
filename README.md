@@ -1,33 +1,35 @@
 # UniFi Voucher Site
 
-A small UniFi Voucher Site for simple voucher creation
+UniFi Voucher Site is a web-based platform for generating and managing UniFi network guest vouchers
 
 [![Image Size](https://img.shields.io/docker/image-size/glenndehaan/unifi-voucher-site)](https://hub.docker.com/r/glenndehaan/unifi-voucher-site)
 
 ![Vouchers Overview - Desktop](https://github.com/glenndehaan/unifi-voucher-site/assets/7496187/b0d5c208-2ac7-444e-977d-31287ff19e8b)
 
+> Upgrading from 2.x to 3.x? Please take a look at the [migration guide](#migration-from-2x-to-3x)
+
+## Features
+
+- **Voucher Management**: Create, view, and manage vouchers with customizable options for expiration, data limits, and speeds.
+- **Web and API Services**: Access the service via a web interface or integrate with other systems using a REST API.
+- **Docker Support**: Easily deploy using Docker, with customizable environment settings.
+- **Home Assistant Add-on**: Seamlessly integrate with Home Assistant for centralized management.
+- **Receipt Printing**: Supports printing vouchers with 80mm thermal printers.
+- **Email Functionality**: Automatically send vouchers via SMTP.
+
 ## Structure
 
-- Javascript
+- NodeJS
 - ExpressJS
+- EJS
 - Node UniFi
 - TailwindCSS
+- NodeMailer
+- PDFKit
 
-## Development Usage
+## Installation
 
-- Install NodeJS 20.0 or higher.
-- Run `npm ci` in the root folder
-- Run `npm start` & `npm run tailwind` in the root folder
-
-Then open up your favorite browser and go to http://localhost:3000/
-
-## Build Usage
-
-- Install NodeJS 20.0 or higher.
-- Run `npm ci` in the root folder
-- Run `npm run build` in the root folder
-
-## Docker
+### Docker
 
 - Code from master is build by Docker Hub
 - Builds can be pulled by using this command: `docker pull glenndehaan/unifi-voucher-site`
@@ -51,10 +53,12 @@ services:
       UNIFI_PASSWORD: 'password'
       # The UniFi Site ID
       UNIFI_SITE_ID: 'default'
-      # The 'password' used to log in to the voucher portal and used as Bearer token for the API
-      SECURITY_CODE: '0000'
+      # The password used to log in to the voucher portal Web UI
+      AUTH_PASSWORD: '0000'
+      # The Bearer token used for the API
+      AUTH_TOKEN: '00000000-0000-0000-0000-000000000000'
       # Disables the login/authentication for the portal and API
-      DISABLE_AUTH: 'false'
+      AUTH_DISABLE: 'false'
       # Voucher Types, format: expiration in minutes (required),single-use or multi-use vouchers value - '0' is for multi-use - '1' is for single-use (optional),upload speed limit in kbps (optional),download speed limit in kbps (optional),data transfer limit in MB (optional)
       # To skip a parameter just but nothing in between the comma's
       # After a voucher type add a semicolon, after the semicolon you can start a new voucher type
@@ -84,6 +88,30 @@ services:
 > Attention!: We recommend only using Local UniFi accounts due to short token lengths provided by UniFi Cloud Accounts. Also, UniFi Cloud Accounts using 2FA won't work!
 
 > Note: When creating a Local UniFi account ensure you give 'Full Management' access rights to the Network controller. The 'Hotspot Role' won't give access to the API and therefore the application will throw errors.
+
+### Home Assistant Add-on
+
+For users of Home Assistant, we provide a dedicated add-on to seamlessly integrate the UniFi Voucher Site with your Home Assistant instance. This add-on simplifies the setup process and allows you to manage UniFi vouchers directly from your Home Assistant dashboard.
+
+[![Open your Home Assistant instance and show the add add-on repository dialog with a specific repository URL pre-filled.](https://my.home-assistant.io/badges/supervisor_add_addon_repository.svg)](https://my.home-assistant.io/redirect/supervisor_add_addon_repository/?repository_url=https%3A%2F%2Fgithub.com%2Fglenndehaan%2Fha-addons)
+
+#### Manual Installation
+
+To install the UniFi Voucher Site add-on for Home Assistant, follow these steps:
+
+1. Open the Supervisor panel in your Home Assistant instance.
+2. Navigate to the "Add-on Store."
+3. Add our repository to the list of repositories by clicking the three dots in the upper-right corner, then selecting "Repositories," and entering the URL of our repository: `https://github.com/glenndehaan/ha-addons`.
+4. Once the repository is added, you will find the "UniFi Voucher Site" add-on in the add-on store. Click on it.
+5. Click "Install" and wait for the installation to complete.
+
+## Development
+
+- Install NodeJS 20.0 or higher.
+- Run `npm ci` in the root folder
+- Run `npm start` & `npm run tailwind` in the root folder
+
+Then open up your favorite browser and go to http://localhost:3000/
 
 ## Services
 
@@ -166,7 +194,7 @@ the different endpoints available in the API:
 ```
 
    > This endpoint is protected by a security mechanism. To access it, users need to include a bearer token in the
-   request authorization header. The token must match the value of the `SECURITY_CODE` environment variable. Without
+   request authorization header. The token must match the value of the `AUTH_TOKEN` environment variable. Without
    this token, access to the endpoint will be denied.
 
 4. **`/api/vouchers`**
@@ -205,24 +233,8 @@ the different endpoints available in the API:
 ```
 
 > This endpoint is protected by a security mechanism. To access it, users need to include a bearer token in the
-request authorization header. The token must match the value of the `SECURITY_CODE` environment variable. Without
+request authorization header. The token must match the value of the `AUTH_TOKEN` environment variable. Without
 this token, access to the endpoint will be denied.
-
-## Home Assistant Add-on
-
-For users of Home Assistant, we provide a dedicated add-on to seamlessly integrate the UniFi Voucher Site with your Home Assistant instance. This add-on simplifies the setup process and allows you to manage UniFi vouchers directly from your Home Assistant dashboard.
-
-[![Open your Home Assistant instance and show the add add-on repository dialog with a specific repository URL pre-filled.](https://my.home-assistant.io/badges/supervisor_add_addon_repository.svg)](https://my.home-assistant.io/redirect/supervisor_add_addon_repository/?repository_url=https%3A%2F%2Fgithub.com%2Fglenndehaan%2Fha-addons)
-
-### Installation
-
-To install the UniFi Voucher Site add-on for Home Assistant, follow these steps:
-
-1. Open the Supervisor panel in your Home Assistant instance.
-2. Navigate to the "Add-on Store."
-3. Add our repository to the list of repositories by clicking the three dots in the upper-right corner, then selecting "Repositories," and entering the URL of our repository: `https://github.com/glenndehaan/ha-addons`.
-4. Once the repository is added, you will find the "UniFi Voucher Site" add-on in the add-on store. Click on it.
-5. Click "Install" and wait for the installation to complete.
 
 ## Print Functionality
 
@@ -303,6 +315,29 @@ Once the SMTP environment variables are configured, the email feature will be av
 
 ### Voucher Details (Mobile)
 ![Voucher Details - Mobile](https://github.com/glenndehaan/unifi-voucher-site/assets/7496187/28b8f97b-8042-4e6d-b1dc-8386860a1e39)
+
+## Migration Guide
+
+### Migration from 2.x to 3.x
+
+When upgrading from 2.x to 3.x, the following changes need to be made:
+
+1. **`SECURITY_CODE`** has been replaced by **`AUTH_PASSWORD`**.
+    - Update your environment variables configuration to use `AUTH_PASSWORD` instead of `SECURITY_CODE`.
+
+2. **`DISABLE_AUTH`** has been replaced by **`AUTH_DISABLE`**.
+    - Replace `DISABLE_AUTH` with `AUTH_DISABLE` in your environment variables.
+
+3. The API bearer token now uses a dedicated variable **`AUTH_TOKEN`**.
+    - Ensure that your API token is now stored under the `AUTH_TOKEN` variable and update your implementations to used this new token instead of the `SECURITY_CODE`.
+
+### Migration from 1.x to 2.x
+
+No migration steps are required.
+
+### Migration from Versions Prior to v1
+
+Versions before v1 do not have a direct migration path. If you are using a version earlier than v1, a fresh installation is required. Be sure to back up any important data before proceeding with a reinstall.
 
 ## License
 

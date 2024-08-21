@@ -6,7 +6,7 @@ const jwt = require('../modules/jwt');
 /**
  * Global variables
  */
-const authDisabled = (process.env.DISABLE_AUTH === 'true') || false;
+const authDisabled = (process.env.AUTH_DISABLE === 'true') || false;
 
 /**
  * Verifies if a user is signed in
@@ -68,7 +68,7 @@ module.exports = {
             }
 
             // Check if password is correct
-            const passwordCheck = req.headers.authorization === `Bearer ${(process.env.SECURITY_CODE || "0000")}`;
+            const passwordCheck = req.headers.authorization === `Bearer ${(process.env.AUTH_TOKEN || "0000")}`;
             if (!passwordCheck) {
                 res.status(403).json({
                     error: 'Forbidden',
