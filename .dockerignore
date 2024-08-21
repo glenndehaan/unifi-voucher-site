@@ -12,6 +12,9 @@ npm-debug.log
 # Build files
 public/dist/
 
+# Local config
+.options.json
+
 # Project files
 .github
 .editorconfig

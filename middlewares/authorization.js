@@ -27,7 +27,7 @@ module.exports = {
         if(!authDisabled) {
             // Check if user has an existing authorization cookie
             if (!req.cookies.authorization) {
-                res.redirect(302, '/login');
+                res.redirect(302, `${req.headers['x-ingress-path'] ? req.headers['x-ingress-path'] : ''}/login`);
                 return;
             }
 
@@ -36,10 +36,10 @@ module.exports = {
                 const check = jwt.verify(req.cookies.authorization);
 
                 if(!check) {
-                    res.cookie('flashMessage', JSON.stringify({type: 'error', message: 'Invalid or expired login!'}), {httpOnly: true, expires: new Date(Date.now() + 24 * 60 * 60 * 1000)}).redirect(302, '/login');
+                    res.cookie('flashMessage', JSON.stringify({type: 'error', message: 'Invalid or expired login!'}), {httpOnly: true, expires: new Date(Date.now() + 24 * 60 * 60 * 1000)}).redirect(302, `${req.headers['x-ingress-path'] ? req.headers['x-ingress-path'] : ''}/login`);
                 }
             } catch (e) {
-                res.cookie('flashMessage', JSON.stringify({type: 'error', message: 'Invalid or expired login!'}), {httpOnly: true, expires: new Date(Date.now() + 24 * 60 * 60 * 1000)}).redirect(302, '/login');
+                res.cookie('flashMessage', JSON.stringify({type: 'error', message: 'Invalid or expired login!'}), {httpOnly: true, expires: new Date(Date.now() + 24 * 60 * 60 * 1000)}).redirect(302, `${req.headers['x-ingress-path'] ? req.headers['x-ingress-path'] : ''}/login`);
                 return;
             }
         }

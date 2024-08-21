@@ -70,6 +70,9 @@ if(fs.existsSync('/etc/unifi_voucher_site_build')) {
 if (fs.existsSync('/data/options.json')) {
     log.info('[Options] Found at /data/options.json');
 }
+if (fs.existsSync(`${__dirname}/.options.json`)) {
+    log.info(`[Options] Found at ${__dirname}/.options.json`);
+}
 
 /**
  * Log service status
