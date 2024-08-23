@@ -57,6 +57,12 @@ services:
       AUTH_PASSWORD: '0000'
       # The Bearer token used for the API
       AUTH_TOKEN: '00000000-0000-0000-0000-000000000000'
+      # OIDC issuer base url provided by oauth provider. Example: https://auth.example.com/.well-known/openid-configuration
+      AUTH_OIDC_ISSUER_BASE_URL: ''
+      # OIDC UniFi Voucher base url (This application). Example: https://voucher.example.com
+      AUTH_OIDC_APP_BASE_URL: ''
+      # OIDC client id provided by oauth provider
+      AUTH_OIDC_CLIENT_ID: ''
       # Disables the login/authentication for the portal and API
       AUTH_DISABLE: 'false'
       # Voucher Types, format: expiration in minutes (required),single-use or multi-use vouchers value - '0' is for multi-use - '1' is for single-use (optional),upload speed limit in kbps (optional),download speed limit in kbps (optional),data transfer limit in MB (optional)
@@ -289,6 +295,31 @@ Once the SMTP environment variables are configured, the email feature will be av
 ### Example Email
 
 ![Example Email](https://github.com/user-attachments/assets/45615db3-df76-48b0-ad30-05236e3754c1)
+
+## OpenID Connect (OIDC) Authentication
+
+The UniFi Voucher Site allows seamless integration with OpenID Connect (OIDC), enabling users to authenticate through their preferred identity provider (IdP). The setup is straightforward, requiring configuration through environment variables to align with your existing OIDC provider.
+
+### Configuration
+
+To enable OIDC authentication, set the following environment variables in your application’s environment:
+
+- **`AUTH_OIDC_ISSUER_BASE_URL`**:
+  The base URL of your OIDC provider. This is typically the URL where the well-known OIDC configuration is hosted (e.g., `https://auth.example.com/.well-known/openid-configuration`).
+
+- **`AUTH_OIDC_APP_BASE_URL`**:
+  The base URL of your UniFi Voucher Site application. This should be the public URL where the site is accessible to users (e.g., `https://voucher.example.com`).
+
+- **`AUTH_OIDC_CLIENT_ID`**:
+  The client ID registered with your OIDC provider. This value is specific to the OIDC client created for the UniFi Voucher Site.
+
+> Please note that **enabling OIDC support will automatically disable the built-in login system**. Once OIDC is activated, all user authentication will be handled through your configured identity provider, and the local login mechanism will no longer be available.
+
+### OIDC Client Configuration
+
+When configuring your OIDC client, ensure that the following settings are enabled:
+
+- **Implicit Flow Support**: The OIDC client **must** support the Implicit flow. This is essential as the UniFi Voucher Site relies on this flow for authentication.
 
 ## Screenshots
 

@@ -21,7 +21,7 @@ const settings = {
 };
 
 /**
- * Exports the UniFi voucher functions
+ * Exports the JWT functions
  */
 module.exports = {
     /**

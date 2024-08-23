@@ -21,6 +21,7 @@ const time = require('./utils/time');
 const bytes = require('./utils/bytes');
 const unifi = require('./modules/unifi');
 const mail = require('./modules/mail');
+const oidc = require('./modules/oidc');
 
 /**
  * Import own middlewares
@@ -49,6 +50,9 @@ const authDisabled = (process.env.AUTH_DISABLE === 'true') || false;
 const smtpFrom = config('smtp_from') || process.env.SMTP_FROM || '';
 const smtpHost = config('smtp_host') || process.env.SMTP_HOST || '';
 const smtpPort = config('smtp_port') || process.env.SMTP_PORT || 25;
+const oidcIssuerBaseUrl = process.env.AUTH_OIDC_ISSUER_BASE_URL || '';
+const oidcAppBaseUrl = process.env.AUTH_OIDC_APP_BASE_URL || '';
+const oidcClientId = process.env.AUTH_OIDC_CLIENT_ID || '';
 
 /**
  * Output logo
@@ -105,7 +109,7 @@ if(smtpFrom !== '' && smtpHost !== '' && smtpPort !== '') {
 /**
  * Initialize JWT
  */
-if(!authDisabled) {
+if(!authDisabled && (oidcIssuerBaseUrl === '' && oidcAppBaseUrl === '' && oidcClientId === '')) {
     jwt.init();
 }
 
@@ -137,6 +141,13 @@ app.get('/_health', (req, res) => {
         uptime: process.uptime()
     });
 });
+
+/**
+ * Initialize OIDC
+ */
+if(!authDisabled && (oidcIssuerBaseUrl !== '' && oidcAppBaseUrl !== '' && oidcClientId !== '')) {
+    oidc.init(app);
+}
 
 /**
  * Enable multer
@@ -179,38 +190,40 @@ app.get('/', (req, res) => {
 
 // Check if web service is enabled
 if(webService) {
-    app.get('/login', (req, res) => {
-        // Check if authentication is disabled
-        if (authDisabled) {
-            res.redirect(302, `${req.headers['x-ingress-path'] ? req.headers['x-ingress-path'] : ''}/vouchers`);
-            return;
-        }
+    if(oidcIssuerBaseUrl === '' && oidcAppBaseUrl === '' && oidcClientId === '') {
+        app.get('/login', (req, res) => {
+            // Check if authentication is disabled
+            if (authDisabled) {
+                res.redirect(302, `${req.headers['x-ingress-path'] ? req.headers['x-ingress-path'] : ''}/vouchers`);
+                return;
+            }
 
-        const hour = new Date().getHours();
-        const timeHeader = hour < 12 ? 'Good Morning' : hour < 18 ? 'Good Afternoon' : 'Good Evening';
+            const hour = new Date().getHours();
+            const timeHeader = hour < 12 ? 'Good Morning' : hour < 18 ? 'Good Afternoon' : 'Good Evening';
 
-        res.render('login', {
-            baseUrl: req.headers['x-ingress-path'] ? req.headers['x-ingress-path'] : '',
-            error: req.flashMessage.type === 'error',
-            error_text: req.flashMessage.message || '',
-            app_header: timeHeader
+            res.render('login', {
+                baseUrl: req.headers['x-ingress-path'] ? req.headers['x-ingress-path'] : '',
+                error: req.flashMessage.type === 'error',
+                error_text: req.flashMessage.message || '',
+                app_header: timeHeader
+            });
         });
-    });
-    app.post('/login', async (req, res) => {
-        if (typeof req.body === "undefined") {
-            res.status(400).send();
-            return;
-        }
+        app.post('/login', async (req, res) => {
+            if (typeof req.body === "undefined") {
+                res.status(400).send();
+                return;
+            }
 
-        const passwordCheck = req.body.password === (process.env.AUTH_PASSWORD || "0000");
+            const passwordCheck = req.body.password === (process.env.AUTH_PASSWORD || "0000");
 
-        if(!passwordCheck) {
-            res.cookie('flashMessage', JSON.stringify({type: 'error', message: 'Password Invalid!'}), {httpOnly: true, expires: new Date(Date.now() + 24 * 60 * 60 * 1000)}).redirect(302, `${req.headers['x-ingress-path'] ? req.headers['x-ingress-path'] : ''}/login`);
-            return;
-        }
+            if (!passwordCheck) {
+                res.cookie('flashMessage', JSON.stringify({type: 'error', message: 'Password Invalid!'}), {httpOnly: true, expires: new Date(Date.now() + 24 * 60 * 60 * 1000)}).redirect(302, `${req.headers['x-ingress-path'] ? req.headers['x-ingress-path'] : ''}/login`);
+                return;
+            }
 
-        res.cookie('authorization', jwt.sign(), {httpOnly: true, expires: new Date(Date.now() + 24 * 60 * 60 * 1000)}).redirect(302, `${req.headers['x-ingress-path'] ? req.headers['x-ingress-path'] : ''}/vouchers`);
-    });
+            res.cookie('authorization', jwt.sign(), {httpOnly: true, expires: new Date(Date.now() + 24 * 60 * 60 * 1000)}).redirect(302, `${req.headers['x-ingress-path'] ? req.headers['x-ingress-path'] : ''}/vouchers`);
+        });
+    }
     app.post('/voucher', [authorization.web], async (req, res) => {
         if (typeof req.body === "undefined") {
             res.status(400).send();

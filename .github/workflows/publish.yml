@@ -28,6 +28,7 @@ jobs:
         if: startsWith(github.ref, 'refs/tags/')
         uses: docker/build-push-action@v5
         with:
+          context: .
           platforms: linux/amd64,linux/arm64
           push: true
           tags: glenndehaan/unifi-voucher-site:${{ github.ref_name }}
@@ -35,6 +36,7 @@ jobs:
         if: github.ref == 'refs/heads/master'
         uses: docker/build-push-action@v5
         with:
+          context: .
           platforms: linux/amd64,linux/arm64
           push: true
           tags: glenndehaan/unifi-voucher-site:latest
