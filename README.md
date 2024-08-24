@@ -11,6 +11,7 @@ UniFi Voucher Site is a web-based platform for generating and managing UniFi net
 ## Features
 
 - **Voucher Management**: Create, view, and manage vouchers with customizable options for expiration, data limits, and speeds.
+- **OIDC Support**: Integrates OpenID Connect for secure user authentication and single sign-on (SSO).
 - **Web and API Services**: Access the service via a web interface or integrate with other systems using a REST API.
 - **Docker Support**: Easily deploy using Docker, with customizable environment settings.
 - **Home Assistant Add-on**: Seamlessly integrate with Home Assistant for centralized management.
