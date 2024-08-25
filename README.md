@@ -76,7 +76,7 @@ services:
       SERVICE_WEB: 'true'
       # Enable/disable the API
       SERVICE_API: 'false'
-      # Enabled/disable the printer and set the preferred type, currently supported types: pdf
+      # Enable/disable the printer and set the preferred type, currently supported types: pdf
       PRINTER_TYPE: ''
       # SMTP Mail from email address (optional)
       SMTP_FROM: ''
