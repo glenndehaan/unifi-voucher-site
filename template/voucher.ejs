@@ -195,7 +195,7 @@
                                     <path d="M22.5 6.908V6.75a3 3 0 0 0-3-3h-15a3 3 0 0 0-3 3v.158l9.714 5.978a1.5 1.5 0 0 0 1.572 0L22.5 6.908Z" />
                                 </svg>
                             </button>
-                            <a href="<%= baseUrl %>/voucher/<%= voucher._id %>/print" type="button" class="relative rounded-full p-1 text-gray-500 dark:text-gray-400 hover:text-black dark:hover:text-white">
+                            <a href="<%= baseUrl %>/voucher/<%= voucher._id %>/print" type="button" class="relative rounded-full p-1 text-gray-500 dark:text-gray-400 hover:text-black dark:hover:text-white<%= !printer_enabled ? ' hidden' : '' %>">
                                 <span class="absolute -inset-1.5"></span>
                                 <span class="sr-only">Print Voucher Code</span>
                                 <svg class="h-5 w-5" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">

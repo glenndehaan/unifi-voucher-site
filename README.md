@@ -76,6 +76,8 @@ services:
       SERVICE_WEB: 'true'
       # Enable/disable the API
       SERVICE_API: 'false'
+      # Enabled/disable the printer and set the preferred type, currently supported types: pdf
+      PRINTER_TYPE: ''
       # SMTP Mail from email address (optional)
       SMTP_FROM: ''
       # SMTP Mail server hostname/ip (optional)
@@ -250,6 +252,18 @@ The UniFi Voucher Site application includes built-in support for printing vouche
 ### Compatibility
 
 The print functionality is compatible with most 80mm thermal receipt printers commonly used in various industries. These printers typically use thermal printing technology, eliminating the need for ink cartridges and ensuring efficient and cost-effective voucher printing.
+
+### Configuration
+
+To enable the print feature, you need to set the following environment variables:
+
+```env
+PRINTER_TYPE: ''
+```
+
+Here’s what each variable represents:
+
+- **`PRINTER_TYPE`**: Sets the printer type used by UniFi Voucher Site. Currently supported options: pdf
 
 ### Usage
 

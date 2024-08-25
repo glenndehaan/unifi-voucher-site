@@ -47,6 +47,7 @@ const voucherCustom = config('voucher_custom') !== null ? config('voucher_custom
 const webService = process.env.SERVICE_WEB ? process.env.SERVICE_WEB !== 'false' : true;
 const apiService = config('service_api') || (process.env.SERVICE_API === 'true') || false;
 const authDisabled = (process.env.AUTH_DISABLE === 'true') || false;
+const printerType = config('printer_type') || process.env.PRINTER_TYPE || '';
 const smtpFrom = config('smtp_from') || process.env.SMTP_FROM || '';
 const smtpHost = config('smtp_host') || process.env.SMTP_HOST || '';
 const smtpPort = config('smtp_port') || process.env.SMTP_PORT || 25;
@@ -87,15 +88,21 @@ log.info(`[Service][Api] ${apiService ? 'Enabled!' : 'Disabled!'}`);
 /**
  * Log voucher types
  */
-log.info('[VoucherType] Loaded the following types:');
+log.info('[Voucher] Loaded the following types:');
 voucherTypes.forEach((type, key) => {
-    log.info(`[VoucherType][${key}] ${time(type.expiration)}, ${type.usage === '1' ? 'single-use' : 'multi-use'}${typeof type.upload === "undefined" && typeof type.download === "undefined" && typeof type.megabytes === "undefined" ? ', no limits' : `${typeof type.upload !== "undefined" ? `, upload bandwidth limit: ${type.upload} kb/s` : ''}${typeof type.download !== "undefined" ? `, download bandwidth limit: ${type.download} kb/s` : ''}${typeof type.megabytes !== "undefined" ? `, quota limit: ${type.megabytes} mb` : ''}`}`);
+    log.info(`[Voucher][Type][${key}] ${time(type.expiration)}, ${type.usage === '1' ? 'single-use' : 'multi-use'}${typeof type.upload === "undefined" && typeof type.download === "undefined" && typeof type.megabytes === "undefined" ? ', no limits' : `${typeof type.upload !== "undefined" ? `, upload bandwidth limit: ${type.upload} kb/s` : ''}${typeof type.download !== "undefined" ? `, download bandwidth limit: ${type.download} kb/s` : ''}${typeof type.megabytes !== "undefined" ? `, quota limit: ${type.megabytes} mb` : ''}`}`);
 });
+log.info(`[Voucher][Custom] ${voucherCustom ? 'Enabled!' : 'Disabled!'}`);
 
 /**
  * Log auth status
  */
 log.info(`[Auth] ${authDisabled ? 'Disabled!' : 'Enabled!'}`);
+
+/**
+ * Log printer status
+ */
+log.info(`[Printer] ${printerType !== '' ? `Enabled! Type: ${printerType}` : 'Disabled!'}`);
 
 /**
  * Log email status
@@ -474,6 +481,7 @@ if(webService) {
             timeConvert: time,
             bytesConvert: bytes,
             email_enabled: smtpFrom !== '' && smtpHost !== '' && smtpPort !== '',
+            printer_enabled: printerType !== '',
             voucher_types: voucherTypes,
             voucher_custom: voucherCustom,
             vouchers: cache.vouchers,

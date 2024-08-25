@@ -17,6 +17,7 @@ services:
       VOUCHER_CUSTOM: 'true'
       SERVICE_WEB: 'true'
       SERVICE_API: 'false'
+      PRINTER_TYPE: ''
       SMTP_FROM: ''
       SMTP_HOST: ''
       SMTP_PORT: ''
