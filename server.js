@@ -601,6 +601,18 @@ app.use((req, res) => {
 });
 
 /**
+ * Setup default 500 message
+ */
+app.use((err, req, res, next) => {
+    log.error(err.stack);
+    res.status(500);
+    res.render('500', {
+        baseUrl: req.headers['x-ingress-path'] ? req.headers['x-ingress-path'] : '',
+        error: err.stack
+    });
+});
+
+/**
  * Disable powered by header for security reasons
  */
 app.disable('x-powered-by');
