@@ -16,6 +16,7 @@ public/dist/
 .options.json
 
 # Project files
+.docs
 .github
 .editorconfig
 .gitignore

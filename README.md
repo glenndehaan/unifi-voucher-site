@@ -28,11 +28,25 @@ UniFi Voucher Site is a web-based platform for generating and managing UniFi net
 - NodeMailer
 - PDFKit
 
+## Prerequisites
+
+- UniFi Network Controller (Cloud Key, Dream Machine, or Controller software)
+- UniFi Access Point (AP)
+- UniFi Local Account with 'Full Management' access
+
+[Follow this guide to set up the Hotspot Portal](https://help.ui.com/hc/en-us/articles/115000166827-UniFi-Hotspot-Portal-and-Guest-WiFi), then continue with the installation below
+
+> Ensure voucher authentication is enabled within the Hotspot Portal
+
+> Attention!: We recommend only using Local UniFi accounts due to short token lengths provided by UniFi Cloud Accounts. Also, UniFi Cloud Accounts using 2FA are not supported!
+
+> Note: When creating a Local UniFi account ensure you give 'Full Management' access rights to the Network controller. The 'Hotspot Role' won't give access to the API and therefore the application will throw errors.
+
 ## Installation
 
 ### Docker
 
-- Code from master is build by Docker Hub
+- Code from master is build by GitHub actions
 - Builds can be pulled by using this command: `docker pull glenndehaan/unifi-voucher-site`
 - An example docker compose file can be found below:
 
@@ -97,10 +111,6 @@ services:
       # Sets the application Log Level (Valid Options: error|warn|info|debug|trace)
       LOG_LEVEL: 'info'
 ```
-
-> Attention!: We recommend only using Local UniFi accounts due to short token lengths provided by UniFi Cloud Accounts. Also, UniFi Cloud Accounts using 2FA won't work!
-
-> Note: When creating a Local UniFi account ensure you give 'Full Management' access rights to the Network controller. The 'Hotspot Role' won't give access to the API and therefore the application will throw errors.
 
 ### Home Assistant Add-on
 
@@ -389,6 +399,19 @@ To identify which client types your OpenID Connect (OIDC) provider supports (Pub
 4. **Verify Client Authentication Methods:**
 
    For confidential clients, confirm that the `token_endpoint_auth_methods_supported` field lists options like `client_secret_post` or `client_secret_basic`, which indicate that the provider supports client secret authentication.
+
+### OIDC IdP Integration Guides
+
+This section provides integration guides for configuring the UniFi Voucher Site with various OIDC (OpenID Connect) Identity Providers (IdPs). These guides cover the necessary steps for setting up the IdP, configuring client credentials, and integrating the IdP with the UniFi Voucher Site.
+
+#### Available Guides
+
+Below is a list of tested Identity Providers (IdPs) with detailed integration instructions:
+
+- [Keycloak Integration](.docs/oidc/keycloak/README.md)
+- [Authentik Integration](.docs/oidc/authentik/README.md)
+
+> Integrated with an IdP that is not on the list? Feel free to create a guide for others and contribute it to the project
 
 ## Screenshots
 
