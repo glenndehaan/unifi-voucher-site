@@ -23,6 +23,7 @@ services:
       SERVICE_WEB: 'true'
       SERVICE_API: 'false'
       PRINTER_TYPE: ''
+      PRINTER_IP: '192.168.1.1'
       SMTP_FROM: ''
       SMTP_HOST: ''
       SMTP_PORT: ''

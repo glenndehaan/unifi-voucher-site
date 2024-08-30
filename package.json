@@ -27,6 +27,7 @@
     "js-logger": "^1.6.1",
     "jsonwebtoken": "^9.0.2",
     "multer": "^1.4.5-lts.1",
+    "node-thermal-printer": "^4.4.3",
     "node-unifi": "^2.5.1",
     "nodemailer": "^6.9.14",
     "pdfkit": "^0.15.0"

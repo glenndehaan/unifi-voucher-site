@@ -6,7 +6,6 @@ const os = require('os');
 const express = require('express');
 const multer = require('multer');
 const cookieParser = require('cookie-parser');
-const PDFDocument =  require('pdfkit');
 
 /**
  * Import own modules
@@ -20,6 +19,7 @@ const types = require('./utils/types');
 const time = require('./utils/time');
 const bytes = require('./utils/bytes');
 const unifi = require('./modules/unifi');
+const print = require('./modules/print');
 const mail = require('./modules/mail');
 const oidc = require('./modules/oidc');
 
@@ -48,6 +48,7 @@ const webService = process.env.SERVICE_WEB ? process.env.SERVICE_WEB !== 'false'
 const apiService = config('service_api') || (process.env.SERVICE_API === 'true') || false;
 const authDisabled = (process.env.AUTH_DISABLE === 'true') || false;
 const printerType = config('printer_type') || process.env.PRINTER_TYPE || '';
+const printerIp = config('printer_ip') || process.env.PRINTER_IP || '192.168.1.1';
 const smtpFrom = config('smtp_from') || process.env.SMTP_FROM || '';
 const smtpHost = config('smtp_host') || process.env.SMTP_HOST || '';
 const smtpPort = config('smtp_port') || process.env.SMTP_PORT || 25;
@@ -97,12 +98,12 @@ log.info(`[Voucher][Custom] ${voucherCustom ? 'Enabled!' : 'Disabled!'}`);
 /**
  * Log auth status
  */
-log.info(`[Auth] ${authDisabled ? 'Disabled!' : 'Enabled!'}`);
+log.info(`[Auth] ${authDisabled ? 'Disabled!' : `Enabled! Type: ${(oidcIssuerBaseUrl !== '' && oidcAppBaseUrl !== '' && oidcClientId !== '') ? 'OIDC' : 'Internal'}`}`);
 
 /**
  * Log printer status
  */
-log.info(`[Printer] ${printerType !== '' ? `Enabled! Type: ${printerType}` : 'Disabled!'}`);
+log.info(`[Printer] ${printerType !== '' ? `Enabled! Type: ${printerType}${printerType === 'escpos' ? `, IP: ${printerIp}` : ''}` : 'Disabled!'}`);
 
 /**
  * Log email status
@@ -297,105 +298,25 @@ if(webService) {
         });
 
         if(voucher) {
-            const doc = new PDFDocument({
-                bufferPages: true,
-                size: [226.77165354330398, 290],
-                margins : {
-                    top: 20,
-                    bottom: 20,
-                    left: 20,
-                    right: 20
-                }
-            });
-
-            const buffers = [];
-            doc.on('data', buffers.push.bind(buffers));
-            doc.on('end', () => {
-                let pdfData = Buffer.concat(buffers);
+            if(printerType === 'pdf') {
+                const buffers = await print.pdf(voucher);
+                const pdfData = Buffer.concat(buffers);
                 res.writeHead(200, {
                     'Content-Length': Buffer.byteLength(pdfData),
                     'Content-Type': 'application/pdf',
                     'Content-Disposition': `attachment;filename=voucher_${req.params.id}.pdf`
                 }).end(pdfData);
-            });
-
-            doc.image('public/images/logo_grayscale.png', 75, 15, {fit: [75, 75], align: 'center', valign: 'center'});
-
-            doc.moveDown(6);
-
-            doc.font('Helvetica-Bold')
-                .fontSize(20)
-                .text(`WiFi Voucher Code`, {
-                    align: 'center'
-                });
-            doc.font('Helvetica-Bold')
-                .fontSize(15)
-                .text(`${voucher.code.slice(0, 5)}-${voucher.code.slice(5)}`, {
-                    align: 'center'
-                });
-
-            doc.moveDown(2);
-
-            doc.font('Helvetica-Bold')
-                .fontSize(12)
-                .text(`Voucher Details`);
-
-            doc.font('Helvetica-Bold')
-                .fontSize(10)
-                .text(`--------------------------------------------------------`);
-
-            doc.font('Helvetica-Bold')
-                .fontSize(10)
-                .text(`Type: `, {
-                    continued: true
-                });
-            doc.font('Helvetica')
-                .fontSize(10)
-                .text(voucher.quota === 0 ? 'Multi-use' : 'Single-use');
-
-            doc.font('Helvetica-Bold')
-                .fontSize(10)
-                .text(`Duration: `, {
-                    continued: true
-                });
-            doc.font('Helvetica')
-                .fontSize(10)
-                .text(time(voucher.duration));
-
-            if(voucher.qos_usage_quota) {
-                doc.font('Helvetica-Bold')
-                    .fontSize(10)
-                    .text(`Data Limit: `, {
-                        continued: true
-                    });
-                doc.font('Helvetica')
-                    .fontSize(10)
-                    .text(`${bytes(voucher.qos_usage_quota, 2)}`);
             }
 
-            if(voucher.qos_rate_max_down) {
-                doc.font('Helvetica-Bold')
-                    .fontSize(10)
-                    .text(`Download Limit: `, {
-                        continued: true
-                    });
-                doc.font('Helvetica')
-                    .fontSize(10)
-                    .text(`${bytes(voucher.qos_rate_max_down, 1, true)}`);
-            }
+            if(printerType === 'escpos') {
+                const printResult = await print.escpos(voucher).catch((e) => {
+                    res.cookie('flashMessage', JSON.stringify({type: 'error', message: e}), {httpOnly: true, expires: new Date(Date.now() + 24 * 60 * 60 * 1000)}).redirect(302, `${req.headers['x-ingress-path'] ? req.headers['x-ingress-path'] : ''}/vouchers`);
+                });
 
-            if(voucher.qos_rate_max_up) {
-                doc.font('Helvetica-Bold')
-                    .fontSize(10)
-                    .text(`Upload Limit: `, {
-                        continued: true
-                    });
-                doc.font('Helvetica')
-                    .fontSize(10)
-                    .text(`${bytes(voucher.qos_rate_max_up, 1, true)}`);
+                if(printResult) {
+                    res.cookie('flashMessage', JSON.stringify({type: 'info', message: `Voucher send to printer!`}), {httpOnly: true, expires: new Date(Date.now() + 24 * 60 * 60 * 1000)}).redirect(302, `${req.headers['x-ingress-path'] ? req.headers['x-ingress-path'] : ''}/vouchers`);
+                }
             }
-
-            doc.end();
         } else {
             res.status(404);
             res.render('404', {

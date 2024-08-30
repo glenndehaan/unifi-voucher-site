@@ -4,7 +4,7 @@ UniFi Voucher Site is a web-based platform for generating and managing UniFi net
 
 [![Image Size](https://img.shields.io/docker/image-size/glenndehaan/unifi-voucher-site)](https://hub.docker.com/r/glenndehaan/unifi-voucher-site)
 
-![Vouchers Overview - Desktop](https://github.com/glenndehaan/unifi-voucher-site/assets/7496187/b0d5c208-2ac7-444e-977d-31287ff19e8b)
+![Vouchers Overview - Desktop](.docs/images/desktop_1.png)
 
 > Upgrading from 2.x to 3.x? Please take a look at the [migration guide](#migration-from-2x-to-3x)
 
@@ -27,6 +27,7 @@ UniFi Voucher Site is a web-based platform for generating and managing UniFi net
 - TailwindCSS
 - NodeMailer
 - PDFKit
+- Node Thermal Printer
 
 ## Prerequisites
 
@@ -94,8 +95,10 @@ services:
       SERVICE_WEB: 'true'
       # Enable/disable the API
       SERVICE_API: 'false'
-      # Enable/disable the printer and set the preferred type, currently supported types: pdf
+      # Enable/disable the printer and set the preferred type, currently supported types: pdf, escpos
       PRINTER_TYPE: ''
+      # IP address to your network enabled ESC/POS compatible printer (Only required when using PRINTER_TYPE: 'escpos')
+      PRINTER_IP: '192.168.1.1'
       # SMTP Mail from email address (optional)
       SMTP_FROM: ''
       # SMTP Mail server hostname/ip (optional)
@@ -273,21 +276,46 @@ To enable the print feature, you need to set the following environment variables
 
 ```env
 PRINTER_TYPE: ''
+PRINTER_IP: ''
 ```
 
 Here’s what each variable represents:
 
-- **`PRINTER_TYPE`**: Sets the printer type used by UniFi Voucher Site. Currently supported options: pdf
+- **`PRINTER_TYPE`**: Sets the printer type used by UniFi Voucher Site. Supported options:
+    - `pdf`: For generating PDF files formatted for 80mm paper width.
+    - `escpos`: For printing directly to network-enabled ESC/POS compatible printers.
+
+- **`PRINTER_IP`**: Specifies the IP address of the network-enabled ESC/POS printer. This variable is only required when `PRINTER_TYPE` is set to `escpos`.
 
 ### Usage
 
-Once your 80mm receipt printer is configured and connected, you can easily print vouchers directly from the UniFi Voucher Site application. Simply navigate to the voucher within the interface and click on the "Print" button.
+#### PDF
+
+If you're using the PDF option, once your 80mm receipt printer is configured and connected to your local client, you can easily export vouchers to pdf from the UniFi Voucher Site application. Simply navigate to the voucher within the interface and click on the "Print" button.
 
 The application will automatically format the voucher for 80mm paper width, ensuring optimal printing results. Depending on your printer settings and preferences, you may adjust print quality, paper type, and other printing parameters to suit your needs.
 
-### Example Print PDF
+##### Example PDF
 
-![Example Print PDF](https://github.com/glenndehaan/unifi-voucher-site/assets/7496187/e86d0789-47d2-4630-a7fe-291a4fa9502f)
+![Example PDF](.docs/images/pdf_example.png)
+
+#### ESC/POS
+
+For network-enabled ESC/POS compatible printers, set the `PRINTER_TYPE` to `escpos` and provide the printer's IP address in the `PRINTER_IP` variable. Once configured, you can print vouchers directly to your network printer from the UniFi Voucher Site application.
+
+Just like with PDF printing, navigate to the voucher and click on the "Print" button. The application will send the print job directly to the ESC/POS printer over the network, ensuring quick and seamless voucher printing. Make sure your printer supports ESC/POS commands and is correctly configured to accept print jobs over the network.
+
+##### Tested Printers
+
+- EPSON TM-T88V
+- EPSON TM-T20X
+- EPSON TM-T82IIIL
+- Posman BTP-R880NP
+- NetumScan NT-8360 / 80-V
+
+##### Example Print
+
+![Example Print](.docs/images/escpos_example.jpg)
 
 ## Email Functionality
 
@@ -323,7 +351,7 @@ Once the SMTP environment variables are configured, the email feature will be av
 
 ### Example Email
 
-![Example Email](https://github.com/user-attachments/assets/45615db3-df76-48b0-ad30-05236e3754c1)
+![Example Email](.docs/images/email_example.png)
 
 ## OpenID Connect (OIDC) Authentication
 
@@ -416,28 +444,28 @@ Below is a list of tested Identity Providers (IdPs) with detailed integration in
 ## Screenshots
 
 ### Login (Desktop)
-![Login - Desktop](https://github.com/glenndehaan/unifi-voucher-site/assets/7496187/5f89ecbd-7e03-4fd0-ae7d-279d16321384)
+![Login - Desktop](.docs/images/desktop_0.png)
 
 ### Vouchers Overview (Desktop)
-![Vouchers Overview - Desktop](https://github.com/glenndehaan/unifi-voucher-site/assets/7496187/b0d5c208-2ac7-444e-977d-31287ff19e8b)
+![Vouchers Overview - Desktop](.docs/images/desktop_1.png)
 
 ### Create Voucher (Desktop)
-![Create Voucher - Desktop](https://github.com/glenndehaan/unifi-voucher-site/assets/7496187/72f8dcf0-6642-4c89-849f-21cfbcc488ab)
+![Create Voucher - Desktop](.docs/images/desktop_2.png)
 
 ### Voucher Details (Desktop)
-![Voucher Details - Desktop](https://github.com/glenndehaan/unifi-voucher-site/assets/7496187/b84ad74c-afaa-4bf1-8bc1-398fb0450ff1)
+![Voucher Details - Desktop](.docs/images/desktop_3.png)
 
 ### Login (Mobile)
-![Login - Mobile](https://github.com/glenndehaan/unifi-voucher-site/assets/7496187/d74bc487-5b80-4bb6-8617-da870cdf4cec)
+![Login - Mobile](.docs/images/mobile_0.png)
 
 ### Vouchers Overview (Mobile)
-![Voucher Overview - Mobile](https://github.com/glenndehaan/unifi-voucher-site/assets/7496187/c986e03d-5edf-4b04-8903-0b42ff1c4fc9)
+![Voucher Overview - Mobile](.docs/images/mobile_1.png)
 
 ### Create Voucher (Mobile)
-![Create Voucher - Mobile](https://github.com/glenndehaan/unifi-voucher-site/assets/7496187/f1cef8c8-a7a5-4238-8a2e-461835375f29)
+![Create Voucher - Mobile](.docs/images/mobile_2.png)
 
 ### Voucher Details (Mobile)
-![Voucher Details - Mobile](https://github.com/glenndehaan/unifi-voucher-site/assets/7496187/28b8f97b-8042-4e6d-b1dc-8386860a1e39)
+![Voucher Details - Mobile](.docs/images/mobile_3.png)
 
 ## Migration Guide
 
