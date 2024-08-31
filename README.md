@@ -20,7 +20,7 @@ UniFi Voucher Site is a web-based platform for generating and managing UniFi net
 
 ## Structure
 
-- NodeJS
+- Node.js
 - ExpressJS
 - EJS
 - Node UniFi
@@ -133,7 +133,7 @@ To install the UniFi Voucher Site add-on for Home Assistant, follow these steps:
 
 ## Development
 
-- Install NodeJS 20.0 or higher.
+- Install Node.js 20.0 or higher.
 - Run `npm ci` in the root folder
 - Run `npm start` & `npm run tailwind` in the root folder
 
@@ -438,7 +438,7 @@ Below is a list of tested Identity Providers (IdPs) with detailed integration in
 
 - [Keycloak Integration](.docs/oidc/keycloak/README.md)
 - [Authentik Integration](.docs/oidc/authentik/README.md)
-- [Unifi Identity Enterprose (UID)](.docs/oidc/uid/README.md)
+- [UniFi Identity Enterprise (UID)](.docs/oidc/uid/README.md)
 
 > Integrated with an IdP that is not on the list? Feel free to create a guide for others and contribute it to the project
 
@@ -481,7 +481,7 @@ When upgrading from 2.x to 3.x, the following changes need to be made:
     - Replace `DISABLE_AUTH` with `AUTH_DISABLE` in your environment variables.
 
 3. The API bearer token now uses a dedicated variable **`AUTH_TOKEN`**.
-    - Ensure that your API token is now stored under the `AUTH_TOKEN` variable and update your implementations to used this new token instead of the `SECURITY_CODE`.
+    - Ensure that your API token is now stored under the `AUTH_TOKEN` variable and update your implementations to use this new token instead of the `SECURITY_CODE`.
 
 ### Migration from 1.x to 2.x
 
@@ -489,7 +489,7 @@ No migration steps are required.
 
 ### Migration from Versions Prior to v1
 
-Versions before v1 do not have a direct migration path. If you are using a version earlier than v1, a fresh installation is required. Be sure to back up any important data before proceeding with a reinstall.
+Versions before v1 do not have a direct migration path. If you are using a version earlier than v1, a fresh installation is required. Be sure to back up any important data before proceeding with a re-install.
 
 ## License
 

@@ -55,6 +55,8 @@ const smtpPort = config('smtp_port') || process.env.SMTP_PORT || 25;
 const oidcIssuerBaseUrl = process.env.AUTH_OIDC_ISSUER_BASE_URL || '';
 const oidcAppBaseUrl = process.env.AUTH_OIDC_APP_BASE_URL || '';
 const oidcClientId = process.env.AUTH_OIDC_CLIENT_ID || '';
+const oidcClientType = process.env.AUTH_OIDC_CLIENT_TYPE || 'public';
+const oidcClientSecret = process.env.AUTH_OIDC_CLIENT_SECRET || '';
 
 /**
  * Output logo
@@ -98,7 +100,17 @@ log.info(`[Voucher][Custom] ${voucherCustom ? 'Enabled!' : 'Disabled!'}`);
 /**
  * Log auth status
  */
-log.info(`[Auth] ${authDisabled ? 'Disabled!' : `Enabled! Type: ${(oidcIssuerBaseUrl !== '' && oidcAppBaseUrl !== '' && oidcClientId !== '') ? 'OIDC' : 'Internal'}`}`);
+log.info(`[Auth] ${authDisabled ? 'Disabled!' : `Enabled! Type: ${(oidcIssuerBaseUrl !== '' || oidcAppBaseUrl !== '' || oidcClientId !== '') ? 'OIDC' : 'Internal'}`}`);
+
+/**
+ * Verify OIDC configuration
+ */
+if(oidcIssuerBaseUrl !== '' && (oidcAppBaseUrl === '' || oidcClientId === '')) {
+    log.error(`[OIDC] Incorrect Configuration Detected!. Verify 'AUTH_OIDC_ISSUER_BASE_URL', 'AUTH_OIDC_APP_BASE_URL' and 'AUTH_OIDC_CLIENT_ID' are set! Authentication will be unstable or disabled until issue is resolved!`);
+}
+if(oidcIssuerBaseUrl !== '' && oidcClientType === 'confidential' && oidcClientSecret === '') {
+    log.error(`[OIDC] Incorrect Configuration Detected!. Verify 'AUTH_OIDC_CLIENT_SECRET' is set! Authentication will be unstable or disabled until issue is resolved!`);
+}
 
 /**
  * Log printer status
