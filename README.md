@@ -262,6 +262,117 @@ the different endpoints available in the API:
 request authorization header. The token must match the value of the `AUTH_TOKEN` environment variable. Without
 this token, access to the endpoint will be denied.
 
+## Authentication
+
+The UniFi Voucher Site provides three options for authenticating access to the web service.
+
+> Note that these options only affect the web service; the API service uses a different authentication method, which is explained above.
+
+### 1. Internal Authentication (Default)
+
+By default, the UniFi Voucher Site uses an internal authentication method. You can set the password for this internal authentication using the `AUTH_PASSWORD` environment variable.
+
+```env
+AUTH_PASSWORD: '0000'
+```
+
+### 2. OpenID Connect (OIDC) Authentication
+
+The UniFi Voucher Site allows seamless integration with OpenID Connect (OIDC), enabling users to authenticate through their preferred identity provider (IdP). With support for both Public and Confidential client types. Configuration is easy using environment variables to align with your existing OIDC provider.
+
+#### Configuration
+
+To enable OIDC authentication, set the following environment variables in your application’s environment:
+
+- **`AUTH_OIDC_ISSUER_BASE_URL`**:
+  The base URL of your OIDC provider. This is typically the URL where the well-known OIDC configuration is hosted (e.g., `https://auth.example.com/.well-known/openid-configuration`).
+
+- **`AUTH_OIDC_APP_BASE_URL`**:
+  The base URL of your UniFi Voucher Site application. This should be the public URL where the site is accessible to users (e.g., `https://voucher.example.com`).
+
+- **`AUTH_OIDC_CLIENT_ID`**:
+  The client ID registered with your OIDC provider. This value is specific to the OIDC client created for the UniFi Voucher Site.
+
+- **`AUTH_OIDC_CLIENT_TYPE`**:
+  Specify the type of OIDC client:
+    - **`public`**: Uses the Implicit flow (default).
+    - **`confidential`**: Uses the Authorization Code flow with client secret.
+
+- **`AUTH_OIDC_CLIENT_SECRET`** (required if using the Confidential client type):
+  The client secret associated with your OIDC provider, necessary when using the Authorization Code flow.
+
+> Please note that **enabling OIDC support will automatically disable the built-in login system**. Once OIDC is activated, all user authentication will be handled through your configured identity provider, and the local login mechanism will no longer be available.
+
+#### OIDC Client Configuration
+
+When configuring your OIDC client, ensure the following settings are enabled based on your chosen client type:
+
+- **Public Client (Implicit Flow)**: The OIDC client **must** support the Implicit flow. Be sure to enable both the ID token and access token retrieval.
+- **Confidential Client (Authorization Code Flow)**: The client secret is required for secure token exchanges.
+
+#### Determine Supported Client Types
+
+To identify which client types your OpenID Connect (OIDC) provider supports (Public or Confidential), you can check the `.well-known/openid-configuration` endpoint. This endpoint contains metadata about the OIDC provider, including the supported flows and grant types.
+
+##### Steps to Check Supported Client Types
+
+1. **Access the `.well-known/openid-configuration` URL:**
+
+   The URL is typically structured like this:
+   ```text
+   https://auth.example.com/.well-known/openid-configuration
+   ```
+
+2. **Look for the `grant_types_supported` Field:**
+
+   In the returned JSON, the `grant_types_supported` field will indicate the flows your provider supports:
+    - **For Public Clients (Implicit Flow):** Look for `implicit`.
+    - **For Confidential Clients (Authorization Code Flow):** Look for `authorization_code`.
+
+   Example snippet:
+   ```json
+   {
+     "grant_types_supported": [
+       "authorization_code",
+       "implicit",
+       "refresh_token",
+       "client_credentials"
+     ]
+   }
+   ```
+
+3. **Check the `response_types_supported` Field:**
+
+   This field also provides details on supported client types:
+    - **Implicit Flow:** Should include values like `id_token` or `id_token token`.
+    - **Authorization Code Flow:** Should include `code`.
+
+4. **Verify Client Authentication Methods:**
+
+   For confidential clients, confirm that the `token_endpoint_auth_methods_supported` field lists options like `client_secret_post` or `client_secret_basic`, which indicate that the provider supports client secret authentication.
+
+#### OIDC IdP Integration Guides
+
+This section provides integration guides for configuring the UniFi Voucher Site with various OIDC (OpenID Connect) Identity Providers (IdPs). These guides cover the necessary steps for setting up the IdP, configuring client credentials, and integrating the IdP with the UniFi Voucher Site.
+
+##### Available Guides
+
+Below is a list of tested Identity Providers (IdPs) with detailed integration instructions:
+
+- [Keycloak Integration](.docs/oidc/keycloak/README.md)
+- [Authentik Integration](.docs/oidc/authentik/README.md)
+- [UniFi Identity Enterprise (UID)](.docs/oidc/uid/README.md)
+
+> Integrated with an IdP that is not on the list? Feel free to create a guide for others and contribute it to the project
+
+### 3. Disabling Authentication
+
+If you prefer not to use authentication for the web service, you can disable it entirely by setting the `AUTH_DISABLE` environment variable.
+
+```env
+AUTH_DISABLE: 'true'
+```
+
 ## Print Functionality
 
 The UniFi Voucher Site application includes built-in support for printing vouchers using 80mm receipt printers, offering a convenient way to distribute vouchers in physical format.
@@ -352,95 +463,6 @@ Once the SMTP environment variables are configured, the email feature will be av
 ### Example Email
 
 ![Example Email](.docs/images/email_example.png)
-
-## OpenID Connect (OIDC) Authentication
-
-The UniFi Voucher Site allows seamless integration with OpenID Connect (OIDC), enabling users to authenticate through their preferred identity provider (IdP). With support for both Public and Confidential client types. Configuration is easy using environment variables to align with your existing OIDC provider.
-
-### Configuration
-
-To enable OIDC authentication, set the following environment variables in your application’s environment:
-
-- **`AUTH_OIDC_ISSUER_BASE_URL`**:
-  The base URL of your OIDC provider. This is typically the URL where the well-known OIDC configuration is hosted (e.g., `https://auth.example.com/.well-known/openid-configuration`).
-
-- **`AUTH_OIDC_APP_BASE_URL`**:
-  The base URL of your UniFi Voucher Site application. This should be the public URL where the site is accessible to users (e.g., `https://voucher.example.com`).
-
-- **`AUTH_OIDC_CLIENT_ID`**:
-  The client ID registered with your OIDC provider. This value is specific to the OIDC client created for the UniFi Voucher Site.
-
-- **`AUTH_OIDC_CLIENT_TYPE`**:
-  Specify the type of OIDC client:
-    - **`public`**: Uses the Implicit flow (default).
-    - **`confidential`**: Uses the Authorization Code flow with client secret.
-
-- **`AUTH_OIDC_CLIENT_SECRET`** (required if using the Confidential client type):
-  The client secret associated with your OIDC provider, necessary when using the Authorization Code flow.
-
-> Please note that **enabling OIDC support will automatically disable the built-in login system**. Once OIDC is activated, all user authentication will be handled through your configured identity provider, and the local login mechanism will no longer be available.
-
-### OIDC Client Configuration
-
-When configuring your OIDC client, ensure the following settings are enabled based on your chosen client type:
-
-- **Public Client (Implicit Flow)**: The OIDC client **must** support the Implicit flow. Be sure to enable both the ID token and access token retrieval.
-- **Confidential Client (Authorization Code Flow)**: The client secret is required for secure token exchanges.
-
-### Determine Supported Client Types
-
-To identify which client types your OpenID Connect (OIDC) provider supports (Public or Confidential), you can check the `.well-known/openid-configuration` endpoint. This endpoint contains metadata about the OIDC provider, including the supported flows and grant types.
-
-#### Steps to Check Supported Client Types
-
-1. **Access the `.well-known/openid-configuration` URL:**
-
-   The URL is typically structured like this:
-   ```text
-   https://auth.example.com/.well-known/openid-configuration
-   ```
-
-2. **Look for the `grant_types_supported` Field:**
-
-   In the returned JSON, the `grant_types_supported` field will indicate the flows your provider supports:
-    - **For Public Clients (Implicit Flow):** Look for `implicit`.
-    - **For Confidential Clients (Authorization Code Flow):** Look for `authorization_code`.
-
-   Example snippet:
-   ```json
-   {
-     "grant_types_supported": [
-       "authorization_code",
-       "implicit",
-       "refresh_token",
-       "client_credentials"
-     ]
-   }
-   ```
-
-3. **Check the `response_types_supported` Field:**
-
-   This field also provides details on supported client types:
-    - **Implicit Flow:** Should include values like `id_token` or `id_token token`.
-    - **Authorization Code Flow:** Should include `code`.
-
-4. **Verify Client Authentication Methods:**
-
-   For confidential clients, confirm that the `token_endpoint_auth_methods_supported` field lists options like `client_secret_post` or `client_secret_basic`, which indicate that the provider supports client secret authentication.
-
-### OIDC IdP Integration Guides
-
-This section provides integration guides for configuring the UniFi Voucher Site with various OIDC (OpenID Connect) Identity Providers (IdPs). These guides cover the necessary steps for setting up the IdP, configuring client credentials, and integrating the IdP with the UniFi Voucher Site.
-
-#### Available Guides
-
-Below is a list of tested Identity Providers (IdPs) with detailed integration instructions:
-
-- [Keycloak Integration](.docs/oidc/keycloak/README.md)
-- [Authentik Integration](.docs/oidc/authentik/README.md)
-- [UniFi Identity Enterprise (UID)](.docs/oidc/uid/README.md)
-
-> Integrated with an IdP that is not on the list? Feel free to create a guide for others and contribute it to the project
 
 ## Screenshots
 
