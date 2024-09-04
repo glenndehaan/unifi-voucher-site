@@ -27,7 +27,7 @@ module.exports = {
             if(vouchers) {
                 cache.vouchers = vouchers;
                 cache.updated = new Date().getTime();
-                log.info(`[Cache] Saved ${vouchers.length} voucher(s)`);
+                log.debug(`[Cache] Saved ${vouchers.length} voucher(s)`);
             }
 
             log.info('[Cache] Requesting UniFi Guests...');
@@ -39,7 +39,7 @@ module.exports = {
             if(guests) {
                 cache.guests = guests;
                 cache.updated = new Date().getTime();
-                log.info(`[Cache] Saved ${guests.length} guest(s)`);
+                log.debug(`[Cache] Saved ${guests.length} guest(s)`);
             }
 
             resolve();

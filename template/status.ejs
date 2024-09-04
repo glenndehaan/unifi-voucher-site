@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="en" class="h-full bg-gray-100 dark:bg-gray-900">
+    <head>
+        <meta name="format-detection" content="telephone=no">
+
+        <title>UniFi Voucher Status | UniFi Voucher</title>
+
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, minimal-ui">
+
+        <meta name="description" content="UniFi Voucher Site is a web-based platform for generating and managing UniFi network guest vouchers">
+        <meta name="author" content="Glenn de Haan">
+
+        <meta property="og:title" content="UniFi Voucher Status | UniFi Voucher"/>
+        <meta property="og:type" content="website"/>
+        <meta property="og:description" content="UniFi Voucher Site is a web-based platform for generating and managing UniFi network guest vouchers"/>
+
+        <link rel="manifest" href="<%= baseUrl %>/manifest.json">
+        <link rel="shortcut icon" href="<%= baseUrl %>/images/favicon.ico">
+        <link rel="apple-touch-icon" href="<%= baseUrl %>/images/icon/logo_256x256.png">
+
+        <meta name="mobile-web-app-capable" content="yes">
+        <meta name="apple-mobile-web-app-capable" content="yes">
+        <meta name="theme-color" content="#139CDA">
+
+        <link rel="preload" href="<%= baseUrl %>/images/logo.png" as="image">
+        <link rel="preload" href="<%= baseUrl %>/dist/style.css" as="style">
+        <link href="<%= baseUrl %>/dist/style.css" rel="stylesheet">
+    </head>
+    <body class="h-full">
+        <div>
+            <nav class="sticky top-0 z-40 bg-white shadow-sm dark:bg-gray-800">
+                <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+                    <div class="flex h-16 justify-between">
+                        <div class="flex">
+                            <a href="<%= baseUrl %>/vouchers" class="flex flex-shrink-0 items-center">
+                                <img class="h-12 w-auto" alt="UniFi Voucher Site Logo" src="<%= baseUrl %>/images/logo.png">
+                                <div class="hidden sm:block ml-4 text-2xl font-semibold leading-7 text-gray-900 dark:text-white">
+                                    UniFi Voucher
+                                </div>
+                            </a>
+                        </div>
+                        <div class="flex items-center">
+                            <div class="ml-4 flex flex-shrink-0 items-center">
+                                <a href="/status" aria-label="UniFi Voucher Status" type="button" class="mr-1 relative rounded-full p-1 text-gray-500 dark:text-gray-400 hover:text-black dark:hover:text-white">
+                                    <span class="absolute -inset-1.5"></span>
+                                    <span class="sr-only">UniFi Voucher Status</span>
+                                    <svg class="h-6 w-6 inline-block" viewBox="0 0 24 24" fill="currentColor">
+                                        <path fill-rule="evenodd" d="M10.5 3.798v5.02a3 3 0 0 1-.879 2.121l-2.377 2.377a9.845 9.845 0 0 1 5.091 1.013 8.315 8.315 0 0 0 5.713.636l.285-.071-3.954-3.955a3 3 0 0 1-.879-2.121v-5.02a23.614 23.614 0 0 0-3 0Zm4.5.138a.75.75 0 0 0 .093-1.495A24.837 24.837 0 0 0 12 2.25a25.048 25.048 0 0 0-3.093.191A.75.75 0 0 0 9 3.936v4.882a1.5 1.5 0 0 1-.44 1.06l-6.293 6.294c-1.62 1.621-.903 4.475 1.471 4.88 2.686.46 5.447.698 8.262.698 2.816 0 5.576-.239 8.262-.697 2.373-.406 3.092-3.26 1.47-4.881L15.44 9.879A1.5 1.5 0 0 1 15 8.818V3.936Z" clip-rule="evenodd" />
+                                    </svg>
+                                </a>
+                                <a href="https://github.com/glenndehaan/unifi-voucher-site" aria-label="GitHub Project Link" target="_blank" rel="noreferrer noopener" type="button" class="relative rounded-full p-1 text-gray-500 dark:text-gray-400 hover:text-black dark:hover:text-white">
+                                    <span class="absolute -inset-1.5"></span>
+                                    <span class="sr-only">GitHub Project Link</span>
+                                    <svg class="h-6 w-6" viewBox="0 0 42 42" fill="currentColor">
+                                        <path d="M21,0.5c-11.6,0-21,9.4-21,21c0,9.3,6,17.1,14.4,19.9c1.1,0.2,1.4-0.5,1.4-1c0-0.5,0-1.8,0-3.6C9.9,38.1,8.7,34,8.7,34c-1-2.4-2.3-3.1-2.3-3.1c-1.9-1.3,0.1-1.3,0.1-1.3c2.1,0.1,3.2,2.2,3.2,2.2c1.9,3.2,4.9,2.3,6.1,1.7c0.2-1.4,0.7-2.3,1.3-2.8c-4.7-0.5-9.6-2.3-9.6-10.4c0-2.3,0.8-4.2,2.2-5.6c-0.2-0.5-0.9-2.7,0.2-5.6c0,0,1.8-0.6,5.8,2.2c1.7-0.5,3.5-0.7,5.3-0.7c1.8,0,3.6,0.2,5.3,0.7c4-2.7,5.8-2.2,5.8-2.2c1.1,2.9,0.4,5,0.2,5.6c1.3,1.5,2.2,3.3,2.2,5.6c0,8.1-4.9,9.8-9.6,10.4c0.8,0.6,1.4,1.9,1.4,3.9c0,2.8,0,5.1,0,5.8c0,0.6,0.4,1.2,1.4,1C36,38.7,42,30.8,42,21.5C42,9.9,32.6,0.5,21,0.5z"></path>
+                                    </svg>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </nav>
+
+            <main class="mx-auto max-w-7xl">
+                <div class="w-full max-w-4xl mx-auto py-8 px-4 md:px-6">
+                    <header class="mb-6">
+                        <h1 class="text-2xl font-bold text-gray-900 dark:text-white">
+                            UniFi Voucher Status
+                        </h1>
+                        <p class="text-gray-600 dark:text-gray-400">
+                            Overview of the current configuration status for various features
+                        </p>
+                    </header>
+                    <div class="border border-gray-300 dark:border-white/10 rounded-lg overflow-hidden">
+                        <div class="relative w-full overflow-auto">
+                            <table class="w-full caption-bottom text-sm">
+                                <thead>
+                                    <tr class="border-b border-gray-300 dark:border-white/10 bg-white dark:bg-white/5">
+                                        <th class="h-12 px-4 text-left align-middle font-medium text-muted-foreground">
+                                            Feature
+                                        </th>
+                                        <th class="h-12 px-4 text-left align-middle font-medium text-muted-foreground">
+                                            Status
+                                        </th>
+                                        <th class="h-12 px-4 text-left align-middle font-medium text-muted-foreground">
+                                            Details
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr class="border-b border-gray-300 dark:border-white/10 bg-white dark:bg-white/5">
+                                        <td class="p-4 align-middle font-medium flex items-center gap-2">
+                                            <svg class="w-5 h-5" viewBox="0 0 24 24" fill="currentColor">
+                                                <path fill-rule="evenodd" d="M2.25 6a3 3 0 0 1 3-3h13.5a3 3 0 0 1 3 3v12a3 3 0 0 1-3 3H5.25a3 3 0 0 1-3-3V6Zm18 3H3.75v9a1.5 1.5 0 0 0 1.5 1.5h13.5a1.5 1.5 0 0 0 1.5-1.5V9Zm-15-3.75A.75.75 0 0 0 4.5 6v.008c0 .414.336.75.75.75h.008a.75.75 0 0 0 .75-.75V6a.75.75 0 0 0-.75-.75H5.25Zm1.5.75a.75.75 0 0 1 .75-.75h.008a.75.75 0 0 1 .75.75v.008a.75.75 0 0 1-.75.75H7.5a.75.75 0 0 1-.75-.75V6Zm3-.75A.75.75 0 0 0 9 6v.008c0 .414.336.75.75.75h.008a.75.75 0 0 0 .75-.75V6a.75.75 0 0 0-.75-.75H9.75Z" clip-rule="evenodd" />
+                                            </svg>
+                                            UniFi Voucher Services
+                                        </td>
+                                        <td class="p-4 align-middle">
+                                            <%- include('partials/tag', {status: status.app.status}) %>
+                                        </td>
+                                        <td class="p-4 align-middle">
+                                            <%= status.app.details %>&nbsp;<a href="<%= status.app.info %>" class="italic text-xs underline" aria-label="More Info Link" target="_blank" rel="noreferrer noopener">More Info</a>
+                                        </td>
+                                    </tr>
+                                    <tr class="border-b border-gray-300 dark:border-white/10 bg-white dark:bg-white/5">
+                                        <td class="p-4 align-middle font-medium flex items-center gap-2 pl-6">
+                                            <svg class="w-5 h-5" viewBox="0 0 24 24" fill="currentColor">
+                                                <path fill-rule="evenodd" d="M2.25 5.25a3 3 0 0 1 3-3h13.5a3 3 0 0 1 3 3V15a3 3 0 0 1-3 3h-3v.257c0 .597.237 1.17.659 1.591l.621.622a.75.75 0 0 1-.53 1.28h-9a.75.75 0 0 1-.53-1.28l.621-.622a2.25 2.25 0 0 0 .659-1.59V18h-3a3 3 0 0 1-3-3V5.25Zm1.5 0v7.5a1.5 1.5 0 0 0 1.5 1.5h13.5a1.5 1.5 0 0 0 1.5-1.5v-7.5a1.5 1.5 0 0 0-1.5-1.5H5.25a1.5 1.5 0 0 0-1.5 1.5Z" clip-rule="evenodd" />
+                                            </svg>
+                                            Web Service
+                                        </td>
+                                        <td class="p-4 align-middle">
+                                            <%- include('partials/tag', {status: status.app.modules.web.status}) %>
+                                        </td>
+                                        <td class="p-4 align-middle">
+                                            <%= status.app.modules.web.details %>&nbsp;<a href="<%= status.app.modules.web.info %>" class="italic text-xs underline" aria-label="More Info Link" target="_blank" rel="noreferrer noopener">More Info</a>
+                                        </td>
+                                    </tr>
+                                    <tr class="border-b border-gray-300 dark:border-white/10 bg-white dark:bg-white/5">
+                                        <td class="p-4 align-middle font-medium flex items-center gap-2 pl-6">
+                                            <svg class="w-5 h-5" viewBox="0 0 24 24" fill="currentColor">
+                                                <path fill-rule="evenodd" d="M14.447 3.026a.75.75 0 0 1 .527.921l-4.5 16.5a.75.75 0 0 1-1.448-.394l4.5-16.5a.75.75 0 0 1 .921-.527ZM16.72 6.22a.75.75 0 0 1 1.06 0l5.25 5.25a.75.75 0 0 1 0 1.06l-5.25 5.25a.75.75 0 1 1-1.06-1.06L21.44 12l-4.72-4.72a.75.75 0 0 1 0-1.06Zm-9.44 0a.75.75 0 0 1 0 1.06L2.56 12l4.72 4.72a.75.75 0 0 1-1.06 1.06L.97 12.53a.75.75 0 0 1 0-1.06l5.25-5.25a.75.75 0 0 1 1.06 0Z" clip-rule="evenodd" />
+                                            </svg>
+                                            API Service
+                                        </td>
+                                        <td class="p-4 align-middle">
+                                            <%- include('partials/tag', {status: status.app.modules.api.status}) %>
+                                        </td>
+                                        <td class="p-4 align-middle">
+                                            <%= status.app.modules.api.details %>&nbsp;<a href="<%= status.app.modules.api.info %>" class="italic text-xs underline" aria-label="More Info Link" target="_blank" rel="noreferrer noopener">More Info</a>
+                                        </td>
+                                    </tr>
+                                    <tr class="border-b border-gray-300 dark:border-white/10 bg-white dark:bg-white/5">
+                                        <td class="p-4 align-middle font-medium flex items-center gap-2">
+                                            <svg class="w-5 h-5" viewBox="0 0 24 24" fill="currentColor">
+                                                <path fill-rule="evenodd" d="M1.371 8.143c5.858-5.857 15.356-5.857 21.213 0a.75.75 0 0 1 0 1.061l-.53.53a.75.75 0 0 1-1.06 0c-4.98-4.979-13.053-4.979-18.032 0a.75.75 0 0 1-1.06 0l-.53-.53a.75.75 0 0 1 0-1.06Zm3.182 3.182c4.1-4.1 10.749-4.1 14.85 0a.75.75 0 0 1 0 1.061l-.53.53a.75.75 0 0 1-1.062 0 8.25 8.25 0 0 0-11.667 0 .75.75 0 0 1-1.06 0l-.53-.53a.75.75 0 0 1 0-1.06Zm3.204 3.182a6 6 0 0 1 8.486 0 .75.75 0 0 1 0 1.061l-.53.53a.75.75 0 0 1-1.061 0 3.75 3.75 0 0 0-5.304 0 .75.75 0 0 1-1.06 0l-.53-.53a.75.75 0 0 1 0-1.06Zm3.182 3.182a1.5 1.5 0 0 1 2.122 0 .75.75 0 0 1 0 1.061l-.53.53a.75.75 0 0 1-1.061 0l-.53-.53a.75.75 0 0 1 0-1.06Z" clip-rule="evenodd" />
+                                            </svg>
+                                            UniFi Network
+                                        </td>
+                                        <td class="p-4 align-middle">
+                                            <%- include('partials/tag', {status: status.unifi.status}) %>
+                                        </td>
+                                        <td class="p-4 align-middle">
+                                            <%= status.unifi.details %>&nbsp;<a href="<%= status.unifi.info %>" class="italic text-xs underline" aria-label="More Info Link" target="_blank" rel="noreferrer noopener">More Info</a>
+                                        </td>
+                                    </tr>
+                                    <tr class="border-b border-gray-300 dark:border-white/10 bg-white dark:bg-white/5">
+                                        <td class="p-4 align-middle font-medium flex items-center gap-2">
+                                            <svg class="w-5 h-5" viewBox="0 0 24 24" fill="currentColor">
+                                                <path fill-rule="evenodd" d="M7.875 1.5C6.839 1.5 6 2.34 6 3.375v2.99c-.426.053-.851.11-1.274.174-1.454.218-2.476 1.483-2.476 2.917v6.294a3 3 0 0 0 3 3h.27l-.155 1.705A1.875 1.875 0 0 0 7.232 22.5h9.536a1.875 1.875 0 0 0 1.867-2.045l-.155-1.705h.27a3 3 0 0 0 3-3V9.456c0-1.434-1.022-2.7-2.476-2.917A48.716 48.716 0 0 0 18 6.366V3.375c0-1.036-.84-1.875-1.875-1.875h-8.25ZM16.5 6.205v-2.83A.375.375 0 0 0 16.125 3h-8.25a.375.375 0 0 0-.375.375v2.83a49.353 49.353 0 0 1 9 0Zm-.217 8.265c.178.018.317.16.333.337l.526 5.784a.375.375 0 0 1-.374.409H7.232a.375.375 0 0 1-.374-.409l.526-5.784a.373.373 0 0 1 .333-.337 41.741 41.741 0 0 1 8.566 0Zm.967-3.97a.75.75 0 0 1 .75-.75h.008a.75.75 0 0 1 .75.75v.008a.75.75 0 0 1-.75.75H18a.75.75 0 0 1-.75-.75V10.5ZM15 9.75a.75.75 0 0 0-.75.75v.008c0 .414.336.75.75.75h.008a.75.75 0 0 0 .75-.75V10.5a.75.75 0 0 0-.75-.75H15Z" clip-rule="evenodd" />
+                                            </svg>
+                                            Printing
+                                        </td>
+                                        <td class="p-4 align-middle">
+                                            <%- include('partials/tag', {status: status.printing.status}) %>
+                                        </td>
+                                        <td class="p-4 align-middle">
+                                            <%= status.printing.details %>&nbsp;<a href="<%= status.printing.info %>" class="italic text-xs underline" aria-label="More Info Link" target="_blank" rel="noreferrer noopener">More Info</a>
+                                        </td>
+                                    </tr>
+                                    <tr class="border-b border-gray-300 dark:border-white/10 bg-white dark:bg-white/5">
+                                        <td class="p-4 align-middle font-medium flex items-center gap-2 pl-6">
+                                            <svg class="w-5 h-5" viewBox="0 0 24 24" fill="currentColor">
+                                                <path d="M5.625 1.5c-1.036 0-1.875.84-1.875 1.875v17.25c0 1.035.84 1.875 1.875 1.875h12.75c1.035 0 1.875-.84 1.875-1.875V12.75A3.75 3.75 0 0 0 16.5 9h-1.875a1.875 1.875 0 0 1-1.875-1.875V5.25A3.75 3.75 0 0 0 9 1.5H5.625Z" />
+                                                <path d="M12.971 1.816A5.23 5.23 0 0 1 14.25 5.25v1.875c0 .207.168.375.375.375H16.5a5.23 5.23 0 0 1 3.434 1.279 9.768 9.768 0 0 0-6.963-6.963Z" />
+                                            </svg>
+                                            PDF
+                                        </td>
+                                        <td class="p-4 align-middle">
+                                            <%- include('partials/tag', {status: status.printing.modules.pdf.status}) %>
+                                        </td>
+                                        <td class="p-4 align-middle">
+                                            <%= status.printing.modules.pdf.details %>&nbsp;<a href="<%= status.printing.modules.pdf.info %>" class="italic text-xs underline" aria-label="More Info Link" target="_blank" rel="noreferrer noopener">More Info</a>
+                                        </td>
+                                    </tr>
+                                    <tr class="border-b border-gray-300 dark:border-white/10 bg-white dark:bg-white/5">
+                                        <td class="p-4 align-middle font-medium flex items-center gap-2 pl-6">
+                                            <svg class="w-5 h-5" viewBox="0 0 24 24" fill="currentColor">
+                                                <path fill-rule="evenodd" d="M7.875 1.5C6.839 1.5 6 2.34 6 3.375v2.99c-.426.053-.851.11-1.274.174-1.454.218-2.476 1.483-2.476 2.917v6.294a3 3 0 0 0 3 3h.27l-.155 1.705A1.875 1.875 0 0 0 7.232 22.5h9.536a1.875 1.875 0 0 0 1.867-2.045l-.155-1.705h.27a3 3 0 0 0 3-3V9.456c0-1.434-1.022-2.7-2.476-2.917A48.716 48.716 0 0 0 18 6.366V3.375c0-1.036-.84-1.875-1.875-1.875h-8.25ZM16.5 6.205v-2.83A.375.375 0 0 0 16.125 3h-8.25a.375.375 0 0 0-.375.375v2.83a49.353 49.353 0 0 1 9 0Zm-.217 8.265c.178.018.317.16.333.337l.526 5.784a.375.375 0 0 1-.374.409H7.232a.375.375 0 0 1-.374-.409l.526-5.784a.373.373 0 0 1 .333-.337 41.741 41.741 0 0 1 8.566 0Zm.967-3.97a.75.75 0 0 1 .75-.75h.008a.75.75 0 0 1 .75.75v.008a.75.75 0 0 1-.75.75H18a.75.75 0 0 1-.75-.75V10.5ZM15 9.75a.75.75 0 0 0-.75.75v.008c0 .414.336.75.75.75h.008a.75.75 0 0 0 .75-.75V10.5a.75.75 0 0 0-.75-.75H15Z" clip-rule="evenodd" />
+                                            </svg>
+                                            ESC/POS
+                                        </td>
+                                        <td class="p-4 align-middle">
+                                            <%- include('partials/tag', {status: status.printing.modules.escpos.status}) %>
+                                        </td>
+                                        <td class="p-4 align-middle">
+                                            <%= status.printing.modules.escpos.details %>&nbsp;<a href="<%= status.printing.modules.escpos.info %>" class="italic text-xs underline" aria-label="More Info Link" target="_blank" rel="noreferrer noopener">More Info</a>
+                                        </td>
+                                    </tr>
+                                    <tr class="border-b border-gray-300 dark:border-white/10 bg-white dark:bg-white/5">
+                                        <td class="p-4 align-middle font-medium flex items-center gap-2">
+                                            <svg class="w-5 h-5" viewBox="0 0 24 24" fill="currentColor">
+                                                <path d="M1.5 8.67v8.58a3 3 0 0 0 3 3h15a3 3 0 0 0 3-3V8.67l-8.928 5.493a3 3 0 0 1-3.144 0L1.5 8.67Z" />
+                                                <path d="M22.5 6.908V6.75a3 3 0 0 0-3-3h-15a3 3 0 0 0-3 3v.158l9.714 5.978a1.5 1.5 0 0 0 1.572 0L22.5 6.908Z" />
+                                            </svg>
+                                            Email
+                                        </td>
+                                        <td class="p-4 align-middle">
+                                            <%- include('partials/tag', {status: status.email.status}) %>
+                                        </td>
+                                        <td class="p-4 align-middle">
+                                            <%= status.email.details %>&nbsp;<a href="<%= status.email.info %>" class="italic text-xs underline" aria-label="More Info Link" target="_blank" rel="noreferrer noopener">More Info</a>
+                                        </td>
+                                    </tr>
+                                    <tr class="border-b border-gray-300 dark:border-white/10 bg-white dark:bg-white/5">
+                                        <td class="p-4 align-middle font-medium flex items-center gap-2">
+                                            <svg class="w-5 h-5" viewBox="0 0 24 24" fill="currentColor">
+                                                <path fill-rule="evenodd" d="M12 1.5a5.25 5.25 0 0 0-5.25 5.25v3a3 3 0 0 0-3 3v6.75a3 3 0 0 0 3 3h10.5a3 3 0 0 0 3-3v-6.75a3 3 0 0 0-3-3v-3c0-2.9-2.35-5.25-5.25-5.25Zm3.75 8.25v-3a3.75 3.75 0 1 0-7.5 0v3h7.5Z" clip-rule="evenodd" />
+                                            </svg>
+                                            Authentication
+                                        </td>
+                                        <td class="p-4 align-middle">
+                                            <%- include('partials/tag', {status: status.authentication.status}) %>
+                                        </td>
+                                        <td class="p-4 align-middle">
+                                            <%= status.authentication.details %>&nbsp;<a href="<%= status.authentication.info %>" class="italic text-xs underline" aria-label="More Info Link" target="_blank" rel="noreferrer noopener">More Info</a>
+                                        </td>
+                                    </tr>
+                                    <tr class="border-b border-gray-300 dark:border-white/10 bg-white dark:bg-white/5">
+                                        <td class="p-4 align-middle font-medium flex items-center gap-2 pl-6">
+                                            <svg class="w-5 h-5" viewBox="0 0 24 24" fill="currentColor">
+                                                <path fill-rule="evenodd" d="M14.615 1.595a.75.75 0 0 1 .359.852L12.982 9.75h7.268a.75.75 0 0 1 .548 1.262l-10.5 11.25a.75.75 0 0 1-1.272-.71l1.992-7.302H3.75a.75.75 0 0 1-.548-1.262l10.5-11.25a.75.75 0 0 1 .913-.143Z" clip-rule="evenodd" />
+                                            </svg>
+                                            Internal
+                                        </td>
+                                        <td class="p-4 align-middle">
+                                            <%- include('partials/tag', {status: status.authentication.modules.internal.status}) %>
+                                        </td>
+                                        <td class="p-4 align-middle">
+                                            <%= status.authentication.modules.internal.details %>&nbsp;<a href="<%= status.authentication.modules.internal.info %>" class="italic text-xs underline" aria-label="More Info Link" target="_blank" rel="noreferrer noopener">More Info</a>
+                                        </td>
+                                    </tr>
+                                    <tr class="border-b border-gray-300 dark:border-white/10 bg-white dark:bg-white/5">
+                                        <td class="p-4 align-middle font-medium flex items-center gap-2 pl-6">
+                                            <svg class="w-5 h-5" viewBox="0 0 24 24" fill="currentColor">
+                                                <path fill-rule="evenodd" d="M15.75 1.5a6.75 6.75 0 0 0-6.651 7.906c.067.39-.032.717-.221.906l-6.5 6.499a3 3 0 0 0-.878 2.121v2.818c0 .414.336.75.75.75H6a.75.75 0 0 0 .75-.75v-1.5h1.5A.75.75 0 0 0 9 19.5V18h1.5a.75.75 0 0 0 .53-.22l2.658-2.658c.19-.189.517-.288.906-.22A6.75 6.75 0 1 0 15.75 1.5Zm0 3a.75.75 0 0 0 0 1.5A2.25 2.25 0 0 1 18 8.25a.75.75 0 0 0 1.5 0 3.75 3.75 0 0 0-3.75-3.75Z" clip-rule="evenodd" />
+                                            </svg>
+                                            OpenID Connect (OIDC)
+                                        </td>
+                                        <td class="p-4 align-middle">
+                                            <%- include('partials/tag', {status: status.authentication.modules.oidc.status}) %>
+                                        </td>
+                                        <td class="p-4 align-middle">
+                                            <%= status.authentication.modules.oidc.details %>&nbsp;<a href="<%= status.authentication.modules.oidc.info %>" class="italic text-xs underline" aria-label="More Info Link" target="_blank" rel="noreferrer noopener">More Info</a>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </main>
+        </div>
+
+        <script type="application/javascript">
+            if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+                document.querySelector('html').setAttribute('style', 'color-scheme: dark;');
+            }
+
+            window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', event => {
+                const newColorScheme = event.matches ? "dark" : "light";
+
+                if(newColorScheme === 'light') {
+                    document.querySelector('html').removeAttribute('style');
+                } else {
+                    document.querySelector('html').setAttribute('style', 'color-scheme: dark;');
+                }
+            });
+        </script>
+    </body>
+</html>

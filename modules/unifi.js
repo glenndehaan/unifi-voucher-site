@@ -48,7 +48,7 @@ const startSession = () => {
 
         // Login to UniFi Controller
         controller.login(settings.username, settings.password).then(() => {
-            log.info('[UniFi] Login successful!');
+            log.debug('[UniFi] Login successful!');
             resolve();
         }).catch((e) => {
             // Something went wrong so clear the current controller so a user can retry

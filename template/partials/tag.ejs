@@ -1,0 +1,17 @@
+<% if(status.state === 'red') { %>
+    <div class="inline-flex w-fit items-center whitespace-nowrap rounded-full px-2.5 py-0.5 text-xs font-semibold ring-1 ring-inset bg-red-50 text-red-800 ring-red-600/20 dark:text-red-400 dark:bg-red-400/10 dark:ring-red-400/20">
+        <%= status.text %>
+    </div>
+<% } %>
+
+<% if(status.state === 'yellow') { %>
+    <div class="inline-flex w-fit items-center whitespace-nowrap rounded-full px-2.5 py-0.5 text-xs font-semibold ring-1 ring-inset bg-yellow-50 text-yellow-800 ring-yellow-600/20 dark:text-yellow-400 dark:bg-yellow-400/10 dark:ring-yellow-400/20">
+        <%= status.text %>
+    </div>
+<% } %>
+
+<% if(status.state === 'green') { %>
+    <div class="inline-flex w-fit items-center whitespace-nowrap rounded-full px-2.5 py-0.5 text-xs font-semibold ring-1 ring-inset bg-green-50 text-green-700 ring-green-600/20 dark:text-green-400 dark:bg-green-400/10 dark:ring-green-400/20">
+        <%= status.text %>
+    </div>
+<% } %>
