@@ -29,11 +29,11 @@
     "multer": "^1.4.5-lts.1",
     "node-thermal-printer": "^4.4.3",
     "node-unifi": "^2.5.1",
-    "nodemailer": "^6.9.14",
+    "nodemailer": "^6.9.15",
     "pdfkit": "^0.15.0"
   },
   "devDependencies": {
-    "@tailwindcss/forms": "^0.5.7",
+    "@tailwindcss/forms": "^0.5.8",
     "nodemon": "^3.1.4",
     "tailwindcss": "^3.4.10"
   }

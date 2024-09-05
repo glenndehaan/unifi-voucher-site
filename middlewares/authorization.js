@@ -1,16 +1,13 @@
 /**
- * Import own modules
+ * Import base packages
  */
-const jwt = require('../modules/jwt');
 const oidc = require('express-openid-connect');
 
 /**
- * Global variables
+ * Import own modules
  */
-const authDisabled = (process.env.AUTH_DISABLE === 'true') || false;
-const oidcIssuerBaseUrl = process.env.AUTH_OIDC_ISSUER_BASE_URL || '';
-const oidcAppBaseUrl = process.env.AUTH_OIDC_APP_BASE_URL || '';
-const oidcClientId = process.env.AUTH_OIDC_CLIENT_ID || '';
+const variables = require('../modules/variables');
+const jwt = require('../modules/jwt');
 
 /**
  * Verifies if a user is signed in
@@ -28,7 +25,7 @@ module.exports = {
      */
     web: async (req, res, next) => {
         // Check if authentication is enabled & OIDC is disabled
-        if(!authDisabled && (oidcIssuerBaseUrl === '' && oidcAppBaseUrl === '' && oidcClientId === '')) {
+        if(!variables.authDisabled && (variables.authOidcIssuerBaseUrl === '' && variables.authOidcAppBaseUrl === '' && variables.authOidcClientId === '')) {
             // Check if user has an existing authorization cookie
             if (!req.cookies.authorization) {
                 res.redirect(302, `${req.headers['x-ingress-path'] ? req.headers['x-ingress-path'] : ''}/login`);
@@ -49,7 +46,7 @@ module.exports = {
         }
 
         // Check if authentication is enabled & OIDC is enabled
-        if(!authDisabled && (oidcIssuerBaseUrl !== '' && oidcAppBaseUrl !== '' && oidcClientId !== '')) {
+        if(!variables.authDisabled && (variables.authOidcIssuerBaseUrl !== '' && variables.authOidcAppBaseUrl !== '' && variables.authOidcClientId !== '')) {
             const middleware = oidc.requiresAuth();
             return middleware(req, res, next);
         }
@@ -67,7 +64,7 @@ module.exports = {
      */
     api: async (req, res, next) => {
         // Check if authentication is enabled
-        if(!authDisabled) {
+        if(!variables.authDisabled) {
             // Check if user has sent the authorization header
             if (!req.headers.authorization) {
                 res.status(401).json({
@@ -78,7 +75,7 @@ module.exports = {
             }
 
             // Check if password is correct
-            const passwordCheck = req.headers.authorization === `Bearer ${(process.env.AUTH_TOKEN || "0000")}`;
+            const passwordCheck = req.headers.authorization === `Bearer ${variables.authToken}`;
             if (!passwordCheck) {
                 res.status(403).json({
                     error: 'Forbidden',

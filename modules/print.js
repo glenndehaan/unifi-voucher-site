@@ -8,16 +8,11 @@ const PrinterTypes = require('node-thermal-printer').types;
 /**
  * Import own modules
  */
+const variables = require('./variables');
 const log = require('./log');
-const config = require('./config');
 const time = require('../utils/time');
 const bytes = require('../utils/bytes');
 const size = require('../utils/size');
-
-/**
- * Define global variables
- */
-const printerIp = config('printer_ip') || process.env.PRINTER_IP || '192.168.1.1';
 
 /**
  * Exports the printer module
@@ -139,7 +134,7 @@ module.exports = {
         return new Promise(async (resolve, reject) => {
             const printer = new ThermalPrinter({
                 type: PrinterTypes.EPSON,
-                interface: `tcp://${printerIp}`
+                interface: `tcp://${variables.printerIp}`
             });
 
             const status = await printer.isPrinterConnected();

@@ -6,12 +6,7 @@ const log = require('js-logger');
 /**
  * Import own modules
  */
-const config = require('./config');
-
-/**
- * Define global variables
- */
-const level = config('log_level') || process.env.LOG_LEVEL || "info";
+const variables = require('./variables');
 
 /**
  * Setup logger
@@ -59,7 +54,7 @@ log.setHandler((messages, context) => {
 /**
  * Set log level
  */
-log.setLevel(logConvert(level));
+log.setLevel(logConvert(variables.logLevel));
 
 /**
  * Export the application logger

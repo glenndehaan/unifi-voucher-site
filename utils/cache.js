@@ -18,7 +18,7 @@ module.exports = {
      */
     updateCache: () => {
         return new Promise(async (resolve) => {
-            log.info('[Cache] Requesting UniFi Vouchers...');
+            log.debug('[Cache] Requesting UniFi Vouchers...');
 
             const vouchers = await unifi.list().catch(() => {
                 log.error('[Cache] Error requesting vouchers!');
@@ -30,7 +30,7 @@ module.exports = {
                 log.debug(`[Cache] Saved ${vouchers.length} voucher(s)`);
             }
 
-            log.info('[Cache] Requesting UniFi Guests...');
+            log.debug('[Cache] Requesting UniFi Guests...');
 
             const guests = await unifi.guests().catch(() => {
                 log.error('[Cache] Error requesting guests!');

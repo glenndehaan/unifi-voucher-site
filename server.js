@@ -9,7 +9,7 @@ const cookieParser = require('cookie-parser');
 /**
  * Import own modules
  */
-const config = require('./modules/config');
+const variables = require('./modules/variables');
 const log = require('./modules/log');
 const cache = require('./modules/cache');
 const jwt = require('./modules/jwt');
@@ -40,22 +40,6 @@ const status = require('./utils/status');
 const app = express();
 
 /**
- * Define global variables
- */
-const voucherTypes = types(config('voucher_types') || process.env.VOUCHER_TYPES || '480,1,,,;');
-const voucherCustom = config('voucher_custom') !== null ? config('voucher_custom') : process.env.VOUCHER_CUSTOM ? process.env.VOUCHER_CUSTOM !== 'false' : true;
-const webService = process.env.SERVICE_WEB ? process.env.SERVICE_WEB !== 'false' : true;
-const apiService = config('service_api') || (process.env.SERVICE_API === 'true') || false;
-const authDisabled = (process.env.AUTH_DISABLE === 'true') || false;
-const printerType = config('printer_type') || process.env.PRINTER_TYPE || '';
-const smtpFrom = config('smtp_from') || process.env.SMTP_FROM || '';
-const smtpHost = config('smtp_host') || process.env.SMTP_HOST || '';
-const smtpPort = config('smtp_port') || process.env.SMTP_PORT || 25;
-const oidcIssuerBaseUrl = process.env.AUTH_OIDC_ISSUER_BASE_URL || '';
-const oidcAppBaseUrl = process.env.AUTH_OIDC_APP_BASE_URL || '';
-const oidcClientId = process.env.AUTH_OIDC_CLIENT_ID || '';
-
-/**
  * Output info
  */
 info();
@@ -63,7 +47,7 @@ info();
 /**
  * Initialize JWT
  */
-if(!authDisabled && (oidcIssuerBaseUrl === '' && oidcAppBaseUrl === '' && oidcClientId === '')) {
+if(!variables.authDisabled && (variables.authOidcIssuerBaseUrl === '' && variables.authOidcAppBaseUrl === '' && variables.authOidcClientId === '')) {
     jwt.init();
 }
 
@@ -94,7 +78,7 @@ app.get('/_health', (req, res) => {
 /**
  * Initialize OIDC
  */
-if(!authDisabled && (oidcIssuerBaseUrl !== '' && oidcAppBaseUrl !== '' && oidcClientId !== '')) {
+if(!variables.authDisabled && (variables.authOidcIssuerBaseUrl !== '' && variables.authOidcAppBaseUrl !== '' && variables.authOidcClientId !== '')) {
     oidc.init(app);
 }
 
@@ -130,7 +114,7 @@ app.use(express.static(`${__dirname}/public`));
  * Configure routers
  */
 app.get('/', (req, res) => {
-    if(webService) {
+    if(variables.serviceWeb) {
         res.redirect(302, `${req.headers['x-ingress-path'] ? req.headers['x-ingress-path'] : ''}/vouchers`);
     } else {
         res.status(501).send();
@@ -138,11 +122,11 @@ app.get('/', (req, res) => {
 });
 
 // Check if web service is enabled
-if(webService) {
-    if(oidcIssuerBaseUrl === '' && oidcAppBaseUrl === '' && oidcClientId === '') {
+if(variables.serviceWeb) {
+    if(variables.authOidcIssuerBaseUrl === '' && variables.authOidcAppBaseUrl === '' && variables.authOidcClientId === '') {
         app.get('/login', (req, res) => {
             // Check if authentication is disabled
-            if (authDisabled) {
+            if (variables.authDisabled) {
                 res.redirect(302, `${req.headers['x-ingress-path'] ? req.headers['x-ingress-path'] : ''}/vouchers`);
                 return;
             }
@@ -163,7 +147,7 @@ if(webService) {
                 return;
             }
 
-            const passwordCheck = req.body.password === (process.env.AUTH_PASSWORD || "0000");
+            const passwordCheck = req.body.password === variables.authPassword;
 
             if (!passwordCheck) {
                 res.cookie('flashMessage', JSON.stringify({type: 'error', message: 'Password Invalid!'}), {httpOnly: true, expires: new Date(Date.now() + 24 * 60 * 60 * 1000)}).redirect(302, `${req.headers['x-ingress-path'] ? req.headers['x-ingress-path'] : ''}/login`);
@@ -180,7 +164,7 @@ if(webService) {
         }
 
         if(req.body['voucher-type'] !== 'custom') {
-            const typeCheck = (config('voucher_types') || process.env.VOUCHER_TYPES || '480,1,,,;').split(';').includes(req.body['voucher-type']);
+            const typeCheck = (variables.voucherTypes).split(';').includes(req.body['voucher-type']);
 
             if (!typeCheck) {
                 res.cookie('flashMessage', JSON.stringify({type: 'error', message: 'Unknown Type!'}), {httpOnly: true, expires: new Date(Date.now() + 24 * 60 * 60 * 1000)}).redirect(302, `${req.headers['x-ingress-path'] ? req.headers['x-ingress-path'] : ''}/vouchers`);
@@ -234,7 +218,7 @@ if(webService) {
         }
     });
     app.get('/voucher/:id/print', [authorization.web], async (req, res) => {
-        if(printerType === '') {
+        if(variables.printerType === '') {
             res.status(501).send();
             return;
         }
@@ -244,7 +228,7 @@ if(webService) {
         });
 
         if(voucher) {
-            if(printerType === 'pdf') {
+            if(variables.printerType === 'pdf') {
                 const buffers = await print.pdf(voucher);
                 const pdfData = Buffer.concat(buffers);
                 res.writeHead(200, {
@@ -254,7 +238,7 @@ if(webService) {
                 }).end(pdfData);
             }
 
-            if(printerType === 'escpos') {
+            if(variables.printerType === 'escpos') {
                 const printResult = await print.escpos(voucher).catch((e) => {
                     res.cookie('flashMessage', JSON.stringify({type: 'error', message: e}), {httpOnly: true, expires: new Date(Date.now() + 24 * 60 * 60 * 1000)}).redirect(302, `${req.headers['x-ingress-path'] ? req.headers['x-ingress-path'] : ''}/vouchers`);
                 });
@@ -271,7 +255,7 @@ if(webService) {
         }
     });
     app.get('/voucher/:id/email', [authorization.web], async (req, res) => {
-        if(smtpFrom === '' || smtpHost === '' || smtpPort === '') {
+        if(variables.smtpFrom === '' || variables.smtpHost === '' || variables.smtpPort === '') {
             res.status(501).send();
             return;
         }
@@ -296,7 +280,7 @@ if(webService) {
         }
     });
     app.post('/voucher/:id/email', [authorization.web], async (req, res) => {
-        if(smtpFrom === '' || smtpHost === '' || smtpPort === '') {
+        if(variables.smtpFrom === '' || variables.smtpHost === '' || variables.smtpPort === '') {
             res.status(501).send();
             return;
         }
@@ -357,10 +341,10 @@ if(webService) {
             error_text: req.flashMessage.message || '',
             timeConvert: time,
             bytesConvert: bytes,
-            email_enabled: smtpFrom !== '' && smtpHost !== '' && smtpPort !== '',
-            printer_enabled: printerType !== '',
-            voucher_types: voucherTypes,
-            voucher_custom: voucherCustom,
+            email_enabled: variables.smtpFrom !== '' && variables.smtpHost !== '' && variables.smtpPort !== '',
+            printer_enabled: variables.printerType !== '',
+            voucher_types: types(variables.voucherTypes),
+            voucher_custom: variables.voucherCustom,
             vouchers: cache.vouchers,
             updated: cache.updated
         });
@@ -397,7 +381,7 @@ if(webService) {
     });
 }
 
-if(apiService) {
+if(variables.serviceApi) {
     app.get('/api', (req, res) => {
         res.json({
             error: null,
@@ -417,12 +401,12 @@ if(apiService) {
             error: null,
             data: {
                 message: 'OK',
-                types: voucherTypes
+                types: types(variables.voucherTypes)
             }
         });
     });
     app.get('/api/voucher/:type', [authorization.api], async (req, res) => {
-        const typeCheck = (process.env.VOUCHER_TYPES || '480,1,,,;').split(';').includes(req.params.type);
+        const typeCheck = (variables.voucherTypes).split(';').includes(req.params.type);
 
         if(!typeCheck) {
             res.json({

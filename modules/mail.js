@@ -8,29 +8,19 @@ const nodemailer = require('nodemailer');
 /**
  * Import own modules
  */
-const config = require('./config');
+const variables = require('./variables');
 const log = require('./log');
-
-/**
- * Define global variables
- */
-const smtpFrom = config('smtp_from') || process.env.SMTP_FROM || '';
-const smtpHost = config('smtp_host') || process.env.SMTP_HOST || '';
-const smtpPort = config('smtp_port') || process.env.SMTP_PORT || 25;
-const smtpSecure = config('smtp_secure') || process.env.SMTP_SECURE || false;
-const smtpUsername = config('smtp_username') || process.env.SMTP_USERNAME || '';
-const smtpPassword = config('smtp_password') || process.env.SMTP_PASSWORD || '';
 
 /**
  * Create nodemailer transport
  */
 const transport = nodemailer.createTransport({
-    host: smtpHost,
-    port: parseInt(smtpPort),
-    secure: (smtpSecure === 'true' || smtpSecure === true),
+    host: variables.smtpHost,
+    port: parseInt(variables.smtpPort),
+    secure: (variables.smtpSecure === 'true' || variables.smtpSecure === true),
     auth: {
-        user: smtpUsername,
-        pass: smtpPassword
+        user: variables.smtpUsername,
+        pass: variables.smtpPassword
     }
 });
 
@@ -48,7 +38,7 @@ module.exports = {
     send: (to, voucher) => {
         return new Promise(async (resolve) => {
             await transport.sendMail({
-                from: smtpFrom,
+                from: variables.smtpFrom,
                 to: to,
                 subject: 'Your WiFi Voucher',
                 text: `Hi there,\n\nSomeone generated a WiFi Voucher, please use this code when connecting:\n\n${voucher.code.slice(0, 5)}-${voucher.code.slice(5)}`,
