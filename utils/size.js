@@ -2,7 +2,7 @@
  * Util function to calculate paper size based on voucher data
  */
 module.exports = (voucher) => {
-    let base = 260;
+    let base = 375;
 
     if(voucher.qos_usage_quota) {
         base += 10;

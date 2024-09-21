@@ -10,6 +10,11 @@ const PrinterTypes = require('node-thermal-printer').types;
  */
 const variables = require('./variables');
 const log = require('./log');
+const qr = require('./qr');
+
+/**
+ * Import own utils
+ */
 const time = require('../utils/time');
 const bytes = require('../utils/bytes');
 const size = require('../utils/size');
@@ -25,7 +30,7 @@ module.exports = {
      * @return {Promise<unknown>}
      */
     pdf: (voucher) => {
-        return new Promise((resolve) => {
+        return new Promise(async (resolve) => {
             const doc = new PDFDocument({
                 bufferPages: true,
                 size: [226.77165354330398, size(voucher)],
@@ -45,7 +50,6 @@ module.exports = {
             });
 
             doc.image('public/images/logo_grayscale_dark.png', 75, 15, {fit: [75, 75], align: 'center', valign: 'center'});
-
             doc.moveDown(6);
 
             doc.font('Helvetica-Bold')
@@ -58,6 +62,28 @@ module.exports = {
                 .text(`${voucher.code.slice(0, 5)}-${voucher.code.slice(5)}`, {
                     align: 'center'
                 });
+
+            doc.moveDown(2);
+
+            doc.font('Helvetica')
+                .fontSize(10)
+                .text(`Connect to: `, {
+                    continued: true
+                });
+            doc.font('Helvetica-Bold')
+                .fontSize(10)
+                .text(variables.unifiSsid, {
+                    continued: true
+                });
+            doc.font('Helvetica')
+                .fontSize(10)
+                .text(` or,`);
+            doc.font('Helvetica')
+                .fontSize(10)
+                .text(`Scan to connect:`);
+
+            doc.image(await qr(), 75, 205, {fit: [75, 75], align: 'center', valign: 'center'});
+            doc.moveDown(6);
 
             doc.moveDown(2);
 
