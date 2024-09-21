@@ -10,6 +10,7 @@ const nodemailer = require('nodemailer');
  */
 const variables = require('./variables');
 const log = require('./log');
+const qr = require('./qr');
 
 /**
  * Import own utils
@@ -50,6 +51,8 @@ module.exports = {
                 text: `Hi there,\n\nSomeone generated a WiFi Voucher, please use this code when connecting:\n\n${voucher.code.slice(0, 5)}-${voucher.code.slice(5)}`,
                 html: ejs.render(fs.readFileSync(`${__dirname}/../template/email/voucher.ejs`, 'utf-8'), {
                     voucher,
+                    unifiSsid: variables.unifiSsid,
+                    qr: await qr(),
                     timeConvert: time,
                     bytesConvert: bytes
                 })

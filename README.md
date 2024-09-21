@@ -28,6 +28,7 @@ UniFi Voucher Site is a web-based platform for generating and managing UniFi net
 - NodeMailer
 - PDFKit
 - Node Thermal Printer
+- QRCode
 
 ## Prerequisites
 

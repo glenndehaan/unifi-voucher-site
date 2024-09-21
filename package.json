@@ -30,7 +30,8 @@
     "node-thermal-printer": "^4.4.3",
     "node-unifi": "^2.5.1",
     "nodemailer": "^6.9.15",
-    "pdfkit": "^0.15.0"
+    "pdfkit": "^0.15.0",
+    "qrcode": "^1.5.4"
   },
   "devDependencies": {
     "@tailwindcss/forms": "^0.5.9",
