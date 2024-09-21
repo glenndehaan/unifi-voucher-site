@@ -186,9 +186,24 @@ module.exports = {
             printer.println(`${voucher.code.slice(0, 5)}-${voucher.code.slice(5)}`);
             printer.setTextNormal();
 
-            printer.newLine();
-            printer.newLine();
-            printer.newLine();
+            if(variables.unifiSsid) {
+                printer.newLine();
+                printer.newLine();
+                printer.newLine();
+
+                printer.alignLeft();
+                printer.print('Connect to: ');
+                printer.setTypeFontB();
+                printer.setTextSize(1, 1);
+                printer.print(variables.unifiSsid);
+                printer.setTextNormal();
+                printer.print(' or,');
+                printer.newLine();
+                printer.println('Scan to connect:');
+                printer.alignCenter();
+                await printer.printImageBuffer(await qr(true));
+            }
+
             printer.newLine();
             printer.newLine();
 
