@@ -65,27 +65,29 @@ module.exports = {
 
             doc.moveDown(2);
 
-            doc.font('Helvetica')
-                .fontSize(10)
-                .text(`Connect to: `, {
-                    continued: true
-                });
-            doc.font('Helvetica-Bold')
-                .fontSize(10)
-                .text(variables.unifiSsid, {
-                    continued: true
-                });
-            doc.font('Helvetica')
-                .fontSize(10)
-                .text(` or,`);
-            doc.font('Helvetica')
-                .fontSize(10)
-                .text(`Scan to connect:`);
+            if(variables.unifiSsid !== '') {
+                doc.font('Helvetica')
+                    .fontSize(10)
+                    .text(`Connect to: `, {
+                        continued: true
+                    });
+                doc.font('Helvetica-Bold')
+                    .fontSize(10)
+                    .text(variables.unifiSsid, {
+                        continued: true
+                    });
+                doc.font('Helvetica')
+                    .fontSize(10)
+                    .text(` or,`);
+                doc.font('Helvetica')
+                    .fontSize(10)
+                    .text(`Scan to connect:`);
 
-            doc.image(await qr(), 75, 205, {fit: [75, 75], align: 'center', valign: 'center'});
-            doc.moveDown(6);
+                doc.image(await qr(), 75, 205, {fit: [75, 75], align: 'center', valign: 'center'});
+                doc.moveDown(6);
 
-            doc.moveDown(2);
+                doc.moveDown(2);
+            }
 
             doc.font('Helvetica-Bold')
                 .fontSize(12)
