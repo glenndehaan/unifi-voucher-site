@@ -12,6 +12,7 @@ module.exports = {
     unifiUsername: config('unifi_username') || process.env.UNIFI_USERNAME || 'admin',
     unifiPassword: config('unifi_password') || process.env.UNIFI_PASSWORD || 'password',
     unifiSiteId: config('unifi_site_id') || process.env.UNIFI_SITE_ID || 'default',
+    unifiSsid: config('unifi_ssid') || process.env.UNIFI_SSID || '',
     voucherTypes: config('voucher_types') || process.env.VOUCHER_TYPES || '480,1,,,;',
     voucherCustom: config('voucher_custom') !== null ? config('voucher_custom') : process.env.VOUCHER_CUSTOM ? process.env.VOUCHER_CUSTOM !== 'false' : true,
     serviceWeb: process.env.SERVICE_WEB ? process.env.SERVICE_WEB !== 'false' : true,

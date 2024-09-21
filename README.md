@@ -69,6 +69,8 @@ services:
       UNIFI_PASSWORD: 'password'
       # The UniFi Site ID
       UNIFI_SITE_ID: 'default'
+      # The UniFi SSID where guests need to connect to (Used within templating and 'Scan to Connect')
+      UNIFI_SSID: ''
       # The password used to log in to the voucher portal Web UI
       AUTH_PASSWORD: '0000'
       # The Bearer token used for the API
