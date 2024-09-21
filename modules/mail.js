@@ -63,6 +63,7 @@ module.exports = {
             });
 
             if(result) {
+                log.info(`[Mail] Sent to: ${to}`);
                 resolve(true);
             }
         });
