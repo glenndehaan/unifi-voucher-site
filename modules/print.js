@@ -76,14 +76,35 @@ module.exports = {
                     .text(variables.unifiSsid, {
                         continued: true
                     });
-                doc.font('Helvetica')
-                    .fontSize(10)
-                    .text(` or,`);
+
+                if(variables.unifiSsidPassword !== '') {
+                    doc.font('Helvetica')
+                        .fontSize(10)
+                        .text(`,`);
+                    doc.font('Helvetica')
+                        .fontSize(10)
+                        .text(`Password: `, {
+                            continued: true
+                        });
+                    doc.font('Helvetica-Bold')
+                        .fontSize(10)
+                        .text(variables.unifiSsidPassword, {
+                            continued: true
+                        });
+                    doc.font('Helvetica')
+                        .fontSize(10)
+                        .text(` or,`);
+                } else {
+                    doc.font('Helvetica')
+                        .fontSize(10)
+                        .text(` or,`);
+                }
+
                 doc.font('Helvetica')
                     .fontSize(10)
                     .text(`Scan to connect:`);
 
-                doc.image(await qr(), 75, 205, {fit: [75, 75], align: 'center', valign: 'center'});
+                doc.image(await qr(), 75, variables.unifiSsidPassword !== '' ? 215 : 205, {fit: [75, 75], align: 'center', valign: 'center'});
                 doc.moveDown(6);
 
                 doc.moveDown(2);
@@ -197,8 +218,20 @@ module.exports = {
                 printer.setTextSize(1, 1);
                 printer.print(variables.unifiSsid);
                 printer.setTextNormal();
-                printer.print(' or,');
-                printer.newLine();
+                if(variables.unifiSsidPassword) {
+                    printer.print(',');
+                    printer.newLine();
+                    printer.print('Password: ');
+                    printer.setTypeFontB();
+                    printer.setTextSize(1, 1);
+                    printer.print(variables.unifiSsidPassword);
+                    printer.setTextNormal();
+                    printer.print(' or,');
+                    printer.newLine();
+                } else {
+                    printer.print(' or,');
+                    printer.newLine();
+                }
                 printer.println('Scan to connect:');
                 printer.alignCenter();
                 await printer.printImageBuffer(await qr(true));

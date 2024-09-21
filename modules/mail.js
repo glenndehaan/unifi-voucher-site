@@ -52,6 +52,7 @@ module.exports = {
                 html: ejs.render(fs.readFileSync(`${__dirname}/../template/email/voucher.ejs`, 'utf-8'), {
                     voucher,
                     unifiSsid: variables.unifiSsid,
+                    unifiSsidPassword: variables.unifiSsidPassword,
                     qr: await qr(),
                     timeConvert: time,
                     bytesConvert: bytes

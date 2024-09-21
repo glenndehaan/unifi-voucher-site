@@ -18,7 +18,7 @@ const variables = require('./variables');
 module.exports = (buffer = false) => {
     return new Promise((resolve) => {
         if(!buffer) {
-            QRCode.toDataURL(`WIFI:S:${variables.unifiSsid};T:;P:;;`, { version: 4, errorCorrectionLevel: 'Q' }, (err, url) => {
+            QRCode.toDataURL(`WIFI:S:${variables.unifiSsid};T:${variables.unifiSsidPassword !== '' ? 'WPA' : ''};P:${variables.unifiSsidPassword !== '' ? variables.unifiSsidPassword : ''};;`, { version: 4, errorCorrectionLevel: 'Q' }, (err, url) => {
                 if(err) {
                     log.error(`[Qr] Error while generating code!`);
                     log.error(err);
@@ -27,7 +27,7 @@ module.exports = (buffer = false) => {
                 resolve(url);
             });
         } else {
-            QRCode.toBuffer(`WIFI:S:${variables.unifiSsid};T:;P:;;`, { version: 4, errorCorrectionLevel: 'Q' }, (err, buffer) => {
+            QRCode.toBuffer(`WIFI:S:${variables.unifiSsid};T:${variables.unifiSsidPassword !== '' ? 'WPA' : ''};P:${variables.unifiSsidPassword !== '' ? variables.unifiSsidPassword : ''};;`, { version: 4, errorCorrectionLevel: 'Q' }, (err, buffer) => {
                 if(err) {
                     log.error(`[Qr] Error while generating code!`);
                     log.error(err);
