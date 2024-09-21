@@ -295,8 +295,13 @@ if(variables.serviceWeb) {
         });
 
         if(voucher) {
-            await mail.send(req.body.email, voucher);
-            res.cookie('flashMessage', JSON.stringify({type: 'info', message: 'Email has been send!'}), {httpOnly: true, expires: new Date(Date.now() + 24 * 60 * 60 * 1000)}).redirect(302, `${req.headers['x-ingress-path'] ? req.headers['x-ingress-path'] : ''}/vouchers`);
+            const emailResult = await mail.send(req.body.email, voucher).catch((e) => {
+                res.cookie('flashMessage', JSON.stringify({type: 'error', message: e}), {httpOnly: true, expires: new Date(Date.now() + 24 * 60 * 60 * 1000)}).redirect(302, `${req.headers['x-ingress-path'] ? req.headers['x-ingress-path'] : ''}/vouchers`);
+            });
+
+            if(emailResult) {
+                res.cookie('flashMessage', JSON.stringify({type: 'info', message: 'Email has been sent!'}), {httpOnly: true, expires: new Date(Date.now() + 24 * 60 * 60 * 1000)}).redirect(302, `${req.headers['x-ingress-path'] ? req.headers['x-ingress-path'] : ''}/vouchers`);
+            }
         } else {
             res.status(404);
             res.render('404', {

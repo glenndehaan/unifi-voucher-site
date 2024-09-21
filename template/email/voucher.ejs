@@ -3,7 +3,7 @@
 <head>
     <meta name="viewport" content="width=device-width">
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-    <title>Your WiFi Voucher</title>
+    <title>WiFi Voucher Code</title>
     <style>
         @media only screen and (max-width: 620px) {
             table[class=body] h1 {
@@ -98,7 +98,7 @@
     </style>
 </head>
 <body class="" style="background-color: #f6f6f6; font-family: sans-serif; -webkit-font-smoothing: antialiased; font-size: 14px; line-height: 1.4; margin: 0; padding: 0; -ms-text-size-adjust: 100%; -webkit-text-size-adjust: 100%;">
-<span class="preheader" style="color: transparent; display: none; height: 0; max-height: 0; max-width: 0; opacity: 0; overflow: hidden; mso-hide: all; visibility: hidden; width: 0;">Your WiFi Voucher</span>
+<span class="preheader" style="color: transparent; display: none; height: 0; max-height: 0; max-width: 0; opacity: 0; overflow: hidden; mso-hide: all; visibility: hidden; width: 0;">Your WiFi Voucher Code: <%= voucher.code.slice(0, 5) %>-<%= voucher.code.slice(5) %></span>
 <table role="presentation" border="0" cellpadding="0" cellspacing="0" class="body" style="border-collapse: separate; mso-table-lspace: 0pt; mso-table-rspace: 0pt; background-color: #f6f6f6; width: 100%;" width="100%" bgcolor="#f6f6f6">
     <tr>
         <td style="font-family: sans-serif; font-size: 14px; vertical-align: top;" valign="top">&nbsp;</td>
@@ -116,12 +116,28 @@
                                         <center>
                                             <img src="https://github.com/glenndehaan/unifi-voucher-site/blob/master/public/images/icon/logo_192x192.png?raw=true" height="75px"/>
                                             <br/>
-                                            <h1 style="font-weight: 400; font-size: 1.75rem; line-height: 1.2;">WiFi Voucher</h1>
+                                            <h1 style="font-weight: 400; font-size: 1.75rem; line-height: 1.2;">WiFi Voucher Code</h1>
                                         </center>
                                         </p>
                                         <p style="font-family: sans-serif; font-size: 14px; font-weight: normal; margin: 0; margin-bottom: 15px;">Hi there,</p>
                                         <p style="font-family: sans-serif; font-size: 14px; font-weight: normal; margin: 0; margin-bottom: 15px;">Someone generated a WiFi Voucher, please use this code when connecting:</p>
-                                        <p style="font-family: sans-serif; font-size: 24px; font-weight: bold; margin: 0; margin-bottom: 15px;"><%= voucher.code.slice(0, 5) %>-<%= voucher.code.slice(5) %></p>
+                                        <center>
+                                        <p style="font-family: sans-serif; font-size: 28px; font-weight: bold; margin: 0; margin-bottom: 15px;"><%= voucher.code.slice(0, 5) %>-<%= voucher.code.slice(5) %></p>
+                                        </center>
+                                        <p style="font-family: sans-serif; font-size: 15px; font-weight: bold; margin: 0; margin-bottom: 15px;">&nbsp;</p>
+                                        <p style="font-family: sans-serif; font-size: 20px; font-weight: bold; margin: 0; margin-bottom: 15px;">Voucher Details</p>
+                                        <hr/>
+                                        <p style="font-family: sans-serif; font-size: 14px; font-weight: normal; margin: 0;"><span style="font-weight: bold;">Type:</span> <%= voucher.quota === 0 ? 'Multi-use' : 'Single-use' %></p>
+                                        <p style="font-family: sans-serif; font-size: 14px; font-weight: normal; margin: 0;"><span style="font-weight: bold;">Duration:</span> <%= timeConvert(voucher.duration) %></p>
+                                        <% if(voucher.qos_usage_quota) { %>
+                                            <p style="font-family: sans-serif; font-size: 14px; font-weight: normal; margin: 0;"><span style="font-weight: bold;">Data Limit:</span> <%= bytesConvert(voucher.qos_usage_quota, 2) %></p>
+                                        <% } %>
+                                        <% if(voucher.qos_rate_max_down) { %>
+                                            <p style="font-family: sans-serif; font-size: 14px; font-weight: normal; margin: 0;"><span style="font-weight: bold;">Download Limit:</span> <%= bytesConvert(voucher.qos_rate_max_down, 1, true) %></p>
+                                        <% } %>
+                                        <% if(voucher.qos_rate_max_up) { %>
+                                            <p style="font-family: sans-serif; font-size: 14px; font-weight: normal; margin: 0;"><span style="font-weight: bold;">Upload Limit:</span> <%= bytesConvert(voucher.qos_rate_max_up, 1, true) %></p>
+                                        <% } %>
                                     </td>
                                 </tr>
                             </table>
