@@ -76,6 +76,14 @@ app.get('/_health', (req, res) => {
 });
 
 /**
+ * Request logger
+ */
+app.use((req, res, next) => {
+    log.info(`[Web]: ${req.originalUrl}`);
+    next();
+});
+
+/**
  * Initialize OIDC
  */
 if(!variables.authDisabled && (variables.authOidcIssuerBaseUrl !== '' && variables.authOidcAppBaseUrl !== '' && variables.authOidcClientId !== '')) {
@@ -96,14 +104,6 @@ app.use(cookieParser());
  * Enable flash-message
  */
 app.use(flashMessage);
-
-/**
- * Request logger
- */
-app.use((req, res, next) => {
-    log.info(`[Web]: ${req.originalUrl}`);
-    next();
-});
 
 /**
  * Serve static public dir
