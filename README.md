@@ -367,6 +367,7 @@ Below is a list of tested Identity Providers (IdPs) with detailed integration in
 - [Keycloak Integration](.docs/oidc/keycloak/README.md)
 - [Authentik Integration](.docs/oidc/authentik/README.md)
 - [UniFi Identity Enterprise (UID)](.docs/oidc/uid/README.md)
+- [ZITADEL Integration](.docs/oidc/zitadel/README.md)
 
 > Integrated with an IdP that is not on the list? Feel free to create a guide for others and contribute it to the project
 
