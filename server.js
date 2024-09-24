@@ -2,6 +2,7 @@
  * Import base packages
  */
 const os = require('os');
+const crypto = require('crypto');
 const express = require('express');
 const multer = require('multer');
 const cookieParser = require('cookie-parser');
@@ -155,6 +156,9 @@ if(variables.serviceWeb) {
             }
 
             res.cookie('authorization', jwt.sign(), {httpOnly: true, expires: new Date(Date.now() + 24 * 60 * 60 * 1000)}).redirect(302, `${req.headers['x-ingress-path'] ? req.headers['x-ingress-path'] : ''}/vouchers`);
+        });
+        app.get('/logout', (req, res) => {
+            res.cookie('authorization', '', {httpOnly: true, expires: new Date(0)}).redirect(302, `${req.headers['x-ingress-path'] ? req.headers['x-ingress-path'] : ''}/`);
         });
     }
     app.post('/voucher', [authorization.web], async (req, res) => {
@@ -338,8 +342,13 @@ if(variables.serviceWeb) {
             return;
         }
 
+        const user = req.oidc ? await req.oidc.fetchUserInfo() : { email: 'admin' };
+
         res.render('voucher', {
             baseUrl: req.headers['x-ingress-path'] ? req.headers['x-ingress-path'] : '',
+            user: user,
+            userIcon: crypto.createHash('sha256').update(user.email).digest('hex'),
+            authDisabled: variables.authDisabled,
             info: req.flashMessage.type === 'info',
             info_text: req.flashMessage.message || '',
             error: req.flashMessage.type === 'error',
@@ -378,9 +387,14 @@ if(variables.serviceWeb) {
             });
         }
     });
-    app.get('/status', [authorization.web], (req, res) => {
+    app.get('/status', [authorization.web], async (req, res) => {
+        const user = req.oidc ? await req.oidc.fetchUserInfo() : { email: 'admin' };
+
         res.render('status', {
             baseUrl: req.headers['x-ingress-path'] ? req.headers['x-ingress-path'] : '',
+            user: user,
+            userIcon: crypto.createHash('sha256').update(user.email).digest('hex'),
+            authDisabled: variables.authDisabled,
             status: status()
         });
     });
