@@ -347,7 +347,7 @@ if(variables.serviceWeb) {
         res.render('voucher', {
             baseUrl: req.headers['x-ingress-path'] ? req.headers['x-ingress-path'] : '',
             user: user,
-            userIcon: crypto.createHash('sha256').update(user.email).digest('hex'),
+            userIcon: req.oidc ? crypto.createHash('sha256').update(user.email).digest('hex') : '',
             authDisabled: variables.authDisabled,
             info: req.flashMessage.type === 'info',
             info_text: req.flashMessage.message || '',
@@ -393,7 +393,7 @@ if(variables.serviceWeb) {
         res.render('status', {
             baseUrl: req.headers['x-ingress-path'] ? req.headers['x-ingress-path'] : '',
             user: user,
-            userIcon: crypto.createHash('sha256').update(user.email).digest('hex'),
+            userIcon: req.oidc ? crypto.createHash('sha256').update(user.email).digest('hex') : '',
             authDisabled: variables.authDisabled,
             status: status()
         });
