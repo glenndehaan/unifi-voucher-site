@@ -1,0 +1,62 @@
+name: Report an issue with UniFi Voucher Site
+description: Report an issue with UniFi Voucher Site.
+labels: ["bug"]
+assignees:
+  - glenndehaan
+body:
+  - type: textarea
+    validations:
+      required: true
+    attributes:
+      label: The problem
+      description: >-
+        Describe the issue you are experiencing here, to communicate to the
+        maintainers. Tell us what you were trying to do and what happened.
+
+        Provide a clear and concise description of what the problem is.
+        If you have screenshots please place them here.
+  - type: markdown
+    attributes:
+      value: |
+        ## Environment
+  - type: input
+    id: version
+    validations:
+      required: true
+    attributes:
+      label: What version of UniFi Voucher Site has the issue?
+      placeholder: x.x.x
+      description: >
+        Use the docker image tag, Home Assistant version or the version displayed within the logs.
+  - type: input
+    attributes:
+      label: What was the last working version of UniFi Voucher Site?
+      placeholder: x.x.x
+      description: >
+        If known, otherwise leave blank.
+  - type: dropdown
+    validations:
+      required: true
+    attributes:
+      label: What type of installation are you running?
+      description: >
+        This refers to the installation guide you followed here: https://github.com/glenndehaan/unifi-voucher-site#installation
+      options:
+        - Docker
+        - Home Assistant Add-on
+        - Development Version (Not Recommended)
+
+  - type: markdown
+    attributes:
+      value: |
+        # Details
+  - type: textarea
+    attributes:
+      label: Anything in the logs that might be useful for us?
+      description: For example, error messages or stack traces.
+      render: Text
+  - type: textarea
+    attributes:
+      label: Additional information
+      description: >
+        If you have any additional information for us, use the field below.

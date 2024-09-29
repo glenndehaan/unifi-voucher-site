@@ -1,0 +1,13 @@
+name: Propose a feature for UniFi Voucher Site
+description: Propose a feature for UniFi Voucher Site.
+labels: ["enhancement"]
+assignees:
+  - glenndehaan
+body:
+  - type: textarea
+    validations:
+      required: true
+    attributes:
+      label: The feature
+      description: >-
+        Describe your question here.
