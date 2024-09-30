@@ -8,6 +8,11 @@ const fs = require('fs');
  */
 const variables = require('./variables');
 const log = require('./log');
+
+/**
+ * Import own utils
+ */
+const array = require('../utils/array');
 const logo = require('../utils/logo');
 const types = require('../utils/types');
 const time = require('../utils/time');
@@ -20,6 +25,15 @@ module.exports = () => {
      * Output logo
      */
     logo();
+
+    /**
+     * Check for deprecated strings
+     */
+    array.deprecated.forEach((item) => {
+        if(typeof process.env[item] !== 'undefined') {
+            log.warn(`[Deprecation] '${item}' has been deprecated! Please remove this item from the environment variables and/or follow migration guides: https://github.com/glenndehaan/unifi-voucher-site#migration-guide`);
+        }
+    });
 
     /**
      * Output build version
@@ -88,4 +102,11 @@ module.exports = () => {
      * Log controller
      */
     log.info(`[UniFi] Using Controller on: ${variables.unifiIp}:${variables.unifiPort} (Site ID: ${variables.unifiSiteId}${variables.unifiSsid !== '' ? `, SSID: ${variables.unifiSsid}` : ''})`);
+
+    /**
+     * Check for valid UniFi username
+     */
+    if(variables.unifiUsername.includes('@')) {
+        log.error('[UniFi] Incorrect username detected! UniFi Cloud credentials are not supported!');
+    }
 };

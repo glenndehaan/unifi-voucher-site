@@ -38,6 +38,11 @@ const startSession = () => {
             return;
         }
 
+        if(settings.username.includes('@')) {
+            reject('[UniFi] Incorrect username detected! UniFi Cloud credentials are not supported!');
+            return;
+        }
+
         // Create new UniFi controller object
         controller = new unifi.Controller({
             host: settings.ip,

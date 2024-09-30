@@ -322,6 +322,10 @@ if(variables.serviceWeb) {
                 res.cookie('flashMessage', JSON.stringify({type: 'error', message: e}), {httpOnly: true, expires: new Date(Date.now() + 24 * 60 * 60 * 1000)}).redirect(302, `${req.headers['x-ingress-path'] ? req.headers['x-ingress-path'] : ''}/vouchers`);
             });
 
+            if(!vouchers) {
+                return;
+            }
+
             log.info('[Cache] Requesting UniFi Guests...');
 
             const guests = await unifi.guests().catch((e) => {
