@@ -24,8 +24,8 @@ const settings = {
     idpLogout: true,
     authRequired: false,
     authorizationParams: {
-        response_type: (variables.authOidcClientType === 'confidential') ? 'code' : 'id_token',
-        response_mode: (variables.authOidcClientType === 'confidential') ? 'query' : 'form_post',
+        response_type: 'code',
+        response_mode: 'query',
         scope: 'openid profile email'
     }
 };
@@ -43,6 +43,6 @@ module.exports = {
         settings.secret = crypto.randomBytes(20).toString('hex');
         log.info(`[OIDC] Set secret: ${settings.secret}`);
         app.use(oidc.auth(settings));
-        log.info(`[OIDC] Issuer: ${settings.issuerBaseURL}, Client: ${settings.clientID}, Type: ${variables.authOidcClientType}`);
+        log.info(`[OIDC] Issuer: ${settings.issuerBaseURL}, Client: ${settings.clientID}`);
     }
 };

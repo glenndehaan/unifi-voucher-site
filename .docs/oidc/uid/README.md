@@ -38,12 +38,11 @@
 
 Now, configure your UniFi Voucher Site to use the UID client.
 
-1. In your UniFi Voucher Site configuration, set `AUTH_OIDC_CLIENT_TYPE` as `confidential`.
-2. Set the `AUTH_OIDC_CLIENT_ID` as found within the UID Application.
-3. Provide the `AUTH_OIDC_CLIENT_SECRET` as found within the UID Application.
-4. Provide the `AUTH_OIDC_ISSUER_BASE_URL` from your UID domain (e.g., `https://your-site.ui.com/gw/idp/api/v1/public/oauth/your-secret-token/.well-known/openid-configuration`).
-5. Provide the `AUTH_OIDC_APP_BASE_URL` from your UniFi Voucher Site instance (e.g., `https://voucher.example.com`).
-6. Restart the container after these changes
+1. Set the `AUTH_OIDC_CLIENT_ID` as found within the UID Application.
+2. Provide the `AUTH_OIDC_CLIENT_SECRET` as found within the UID Application.
+3. Provide the `AUTH_OIDC_ISSUER_BASE_URL` from your UID domain (e.g., `https://your-site.ui.com/gw/idp/api/v1/public/oauth/your-secret-token/.well-known/openid-configuration`).
+4. Provide the `AUTH_OIDC_APP_BASE_URL` from your UniFi Voucher Site instance (e.g., `https://voucher.example.com`).
+5. Restart the container after these changes
 
 ---
 

@@ -23,7 +23,6 @@ module.exports = {
     authOidcIssuerBaseUrl: process.env.AUTH_OIDC_ISSUER_BASE_URL || '',
     authOidcAppBaseUrl: process.env.AUTH_OIDC_APP_BASE_URL || '',
     authOidcClientId: process.env.AUTH_OIDC_CLIENT_ID || '',
-    authOidcClientType: process.env.AUTH_OIDC_CLIENT_TYPE || 'public',
     authOidcClientSecret: process.env.AUTH_OIDC_CLIENT_SECRET || '',
     authDisabled: (process.env.AUTH_DISABLE === 'true') || false,
     printerType: config('printer_type') || process.env.PRINTER_TYPE || '',

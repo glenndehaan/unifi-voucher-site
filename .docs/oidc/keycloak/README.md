@@ -50,12 +50,11 @@ You’ll see various tabs for configuring the client. Set the following fields:
 
 Now, configure your UniFi Voucher Site to use the Keycloak client.
 
-1. In your UniFi Voucher Site configuration, set `AUTH_OIDC_CLIENT_TYPE` as `confidential`.
-2. Set the `AUTH_OIDC_CLIENT_ID` as configured in Keycloak (e.g., `unifi-voucher-site`).
-3. Provide the `AUTH_OIDC_CLIENT_SECRET` (found in the Credentials tab in Keycloak).
-4. Provide the `AUTH_OIDC_ISSUER_BASE_URL` from your Keycloak server (e.g., `https://auth.example.com/realms/{realm}/.well-known/openid-configuration`).
-5. Provide the `AUTH_OIDC_APP_BASE_URL` from your UniFi Voucher Site instance (e.g., `https://voucher.example.com`).
-6. Restart the container after these changes
+1. Set the `AUTH_OIDC_CLIENT_ID` as configured in Keycloak (e.g., `unifi-voucher-site`).
+2. Provide the `AUTH_OIDC_CLIENT_SECRET` (found in the Credentials tab in Keycloak).
+3. Provide the `AUTH_OIDC_ISSUER_BASE_URL` from your Keycloak server (e.g., `https://auth.example.com/realms/{realm}/.well-known/openid-configuration`).
+4. Provide the `AUTH_OIDC_APP_BASE_URL` from your UniFi Voucher Site instance (e.g., `https://voucher.example.com`).
+5. Restart the container after these changes
 
 ---
 
@@ -67,4 +66,4 @@ Now, configure your UniFi Voucher Site to use the Keycloak client.
 ### Common Issues
 
 - **Invalid Redirect URI**: Ensure the callback URI matches what is configured in Keycloak.
-- **Client Secret Errors** (for confidential clients): Double-check the client secret in both Keycloak and your UniFi configuration.
+- **Client Secret Errors**: Double-check the client secret in both Keycloak and your UniFi configuration.

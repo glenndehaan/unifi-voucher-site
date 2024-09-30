@@ -77,11 +77,8 @@ module.exports = () => {
     /**
      * Verify OIDC configuration
      */
-    if(variables.authOidcIssuerBaseUrl !== '' && (variables.authOidcAppBaseUrl === '' || variables.authOidcClientId === '')) {
-        log.error(`[OIDC] Incorrect Configuration Detected!. Verify 'AUTH_OIDC_ISSUER_BASE_URL', 'AUTH_OIDC_APP_BASE_URL' and 'AUTH_OIDC_CLIENT_ID' are set! Authentication will be unstable or disabled until issue is resolved!`);
-    }
-    if(variables.authOidcIssuerBaseUrl !== '' && variables.authOidcClientType === 'confidential' && variables.authOidcClientSecret === '') {
-        log.error(`[OIDC] Incorrect Configuration Detected!. Verify 'AUTH_OIDC_CLIENT_SECRET' is set! Authentication will be unstable or disabled until issue is resolved!`);
+    if(variables.authOidcIssuerBaseUrl !== '' && (variables.authOidcAppBaseUrl === '' || variables.authOidcClientId === '' || variables.authOidcClientSecret === '')) {
+        log.error(`[OIDC] Incorrect Configuration Detected!. Verify 'AUTH_OIDC_ISSUER_BASE_URL', 'AUTH_OIDC_APP_BASE_URL', 'AUTH_OIDC_CLIENT_ID' and 'AUTH_OIDC_CLIENT_SECRET' are set! Authentication will be unstable or disabled until issue is resolved!`);
     }
 
     /**
