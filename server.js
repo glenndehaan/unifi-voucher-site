@@ -148,7 +148,7 @@ if(variables.serviceWeb) {
                 return;
             }
 
-            const passwordCheck = req.body.password === variables.authPassword;
+            const passwordCheck = req.body.password === variables.authInternalPassword;
 
             if (!passwordCheck) {
                 res.cookie('flashMessage', JSON.stringify({type: 'error', message: 'Password Invalid!'}), {httpOnly: true, expires: new Date(Date.now() + 24 * 60 * 60 * 1000)}).redirect(302, `${req.headers['x-ingress-path'] ? req.headers['x-ingress-path'] : ''}/login`);

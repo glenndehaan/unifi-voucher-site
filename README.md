@@ -75,7 +75,7 @@ services:
       # The UniFi SSID WPA/WPA2/WPA3 Password (Can be ignored for 'Open' networks) (Used within templating and 'Scan to Connect')
       UNIFI_SSID_PASSWORD: ''
       # The password used to log in to the voucher portal Web UI
-      AUTH_PASSWORD: '0000'
+      AUTH_INTERNAL_PASSWORD: '0000'
       # The Bearer token used for the API
       AUTH_TOKEN: '00000000-0000-0000-0000-000000000000'
       # OIDC issuer base url provided by oauth provider. Example: https://auth.example.com/.well-known/openid-configuration
@@ -275,10 +275,10 @@ The UniFi Voucher Site provides three options for authenticating access to the w
 
 ### 1. Internal Authentication (Default)
 
-By default, the UniFi Voucher Site uses an internal authentication method. You can set the password for this internal authentication using the `AUTH_PASSWORD` environment variable.
+By default, the UniFi Voucher Site uses an internal authentication method. You can set the password for this internal authentication using the `AUTH_INTERNAL_PASSWORD` environment variable.
 
 ```env
-AUTH_PASSWORD: '0000'
+AUTH_INTERNAL_PASSWORD: '0000'
 ```
 
 ### 2. OpenID Connect (OIDC) Authentication

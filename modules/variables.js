@@ -18,7 +18,7 @@ module.exports = {
     voucherCustom: config('voucher_custom') !== null ? config('voucher_custom') : process.env.VOUCHER_CUSTOM ? process.env.VOUCHER_CUSTOM !== 'false' : true,
     serviceWeb: process.env.SERVICE_WEB ? process.env.SERVICE_WEB !== 'false' : true,
     serviceApi: config('service_api') || (process.env.SERVICE_API === 'true') || false,
-    authPassword: process.env.AUTH_PASSWORD || '0000',
+    authInternalPassword: process.env.AUTH_INTERNAL_PASSWORD || '0000',
     authToken: process.env.AUTH_TOKEN || '0000',
     authOidcIssuerBaseUrl: process.env.AUTH_OIDC_ISSUER_BASE_URL || '',
     authOidcAppBaseUrl: process.env.AUTH_OIDC_APP_BASE_URL || '',
