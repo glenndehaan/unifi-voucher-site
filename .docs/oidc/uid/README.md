@@ -20,7 +20,7 @@
    The required fields needed are `Initiate Sign-In URI` and `Sign-In Redirect URI`.
 
    Initiate Sign-In URI - (e.g., `https://voucher.example.com`)
-   Sign-In Redirect URI - (e.g., `https://voucher.example.com/callback`)
+   Sign-In Redirect URI - (e.g., `https://voucher.example.com/oidc/callback`)
 
 7. Press Add. You will now be presented with your Tool Collection for the app. Copy your `Client ID`, `Client Secret` and the value form your `Well Known Config Endpoint`.
 8. Press Done. You can now assign users or groups to the application. The setup has been completed UID side.

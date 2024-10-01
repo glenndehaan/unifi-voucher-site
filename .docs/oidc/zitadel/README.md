@@ -28,7 +28,7 @@ Now, create an application under the project you just created.
     - **Type**: `Web`.
 4. Select **Code** and click **Continue**.
 5. Fill in the following fields and click **Continue**:
-    - **Login Redirect URIs**: Enter the URL of your UniFi Voucher callback (e.g., `https://voucher.example.com/callback`).
+    - **Login Redirect URIs**: Enter the URL of your UniFi Voucher callback (e.g., `https://voucher.example.com/oidc/callback`).
     - **Logout Redirect URIs**: Enter the root URL of your UniFi Voucher instance (e.g., `https://voucher.example.com`).
 6. Click **Create** to save the application.
 7. Save the Client ID and Client Secret shown within the popup and click **Close**

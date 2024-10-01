@@ -6,7 +6,7 @@ UniFi Voucher Site is a web-based platform for generating and managing UniFi net
 
 ![Vouchers Overview - Desktop](.docs/images/desktop_1.png)
 
-> Upgrading from 2.x to 3.x? Please take a look at the [migration guide](#migration-from-2x-to-3x)
+> Upgrading from 3.x to 4.x? Please take a look at the [migration guide](#migration-from-3x-to-4x)
 
 ## Features
 
@@ -476,6 +476,29 @@ Once the SMTP environment variables are configured, the email feature will be av
 Detailed information on the changes in each release can be found on the [GitHub Releases](https://github.com/glenndehaan/unifi-voucher-site/releases) page. It is highly recommended to review the release notes before updating or deploying a new version, especially if you are upgrading from a previous version.
 
 ## Migration Guide
+
+### Migration from 3.x to 4.x
+
+When upgrading from 3.x to 4.x, the following changes need to be made:
+
+1. **OIDC Public Flow Removal**
+    - The OIDC public flow has been removed in v4. Only the **confidential flow** is now supported.
+    - Users must migrate to the confidential flow. Updated integration guides are available to help with this migration: [OIDC IdP Integration Guides](#oidc-idp-integration-guides).
+
+2. **OIDC Endpoints Update**
+    - OIDC endpoints have been moved to dedicated paths.
+    - Update the IdP callback URL from **`/callback`** to **`/oidc/callback`** in your IdP configuration.
+
+3. **Environment Variable Changes**
+    - **`AUTH_OIDC_CLIENT_TYPE`** has been **removed**. It is no longer required.
+    - **`AUTH_OIDC_ENABLED`** has been introduced. If you are using OIDC, you must set `AUTH_OIDC_ENABLED` to **`true`** in your environment configuration.
+    - **`AUTH_INTERNAL_ENABLED`** has been introduced.
+        - If you are using **internal authentication**, set `AUTH_INTERNAL_ENABLED` to **`true`**.
+        - If you are using OIDC **and want to disable internal authentication**, set `AUTH_INTERNAL_ENABLED` to **`false`**.
+
+4. **Password Variable Rename**
+    - **`AUTH_PASSWORD`** has been renamed to **`AUTH_INTERNAL_PASSWORD`**.
+    - Update your environment variable to use `AUTH_INTERNAL_PASSWORD` if you rely on internal authentication.
 
 ### Migration from 2.x to 3.x
 

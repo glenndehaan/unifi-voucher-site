@@ -17,7 +17,7 @@
     - **Authentication flow**: `default-authentication-flow`.
     - **Authorization flow**: `default-provider-authorization-implicit-consent`.
     - **Client Type**: Select `confidential`, A client secret will be generated.
-5. Set the **Redirect URI** to match your UniFi Voucher Site’s callback URL (e.g., `https://voucher.example.com/callback`).
+5. Set the **Redirect URI** to match your UniFi Voucher Site’s callback URL (e.g., `https://voucher.example.com/oidc/callback`).
 6. Click **Submit**.
 
 ![Create Provider 1](images/create_provider_1.png)

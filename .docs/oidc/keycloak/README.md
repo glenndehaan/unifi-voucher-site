@@ -35,7 +35,7 @@ You’ll see various tabs for configuring the client. Set the following fields:
 1. Go to the **Settings** tab.
 2. Set **Access Type** to `confidential`.
 3. Ensure **Standard Flow Enabled** is set to `ON`.
-4. Set **Valid Redirect URIs** to your UniFi voucher callback URL (e.g., `https://voucher.example.com/callback`).
+4. Set **Valid Redirect URIs** to your UniFi voucher callback URL (e.g., `https://voucher.example.com/oidc/callback`).
 5. Click **Save**.
 
 6. After saving, go to the **Credentials** tab to get the **Client Secret**. This secret will be used by your UniFi Voucher Site when authenticating as a confidential client.
