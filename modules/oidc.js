@@ -12,8 +12,6 @@ const log = require('./log');
 
 /**
  * OIDC Settings
- *
- * @type {{baseURL: string, idpLogout: boolean, authRequired: boolean, clientID: string, issuerBaseURL: string, clientSecret: string, secret: string, authorizationParams: {scope: string, response_type: (string), response_mode: (string)}}}
  */
 const settings = {
     issuerBaseURL: variables.authOidcIssuerBaseUrl,
@@ -27,6 +25,11 @@ const settings = {
         response_type: 'code',
         response_mode: 'query',
         scope: 'openid profile email'
+    },
+    routes: {
+        callback: '/oidc/callback',
+        login: '/oidc/login',
+        logout: '/oidc/logout'
     }
 };
 
