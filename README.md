@@ -48,15 +48,18 @@ UniFi Voucher Site is a web-based platform for generating and managing UniFi net
 
 ### Docker
 
-- Code from master is build by GitHub actions
-- Builds can be pulled by using this command: `docker pull glenndehaan/unifi-voucher-site`
-- An example docker compose file can be found below:
+You can easily run UniFi Voucher Site using Docker. We provide two release tracks to ensure you have flexibility in how you manage your deployments:
+
+- **Master Branch**: The `latest` Docker tag is always built from the `master` branch. This tag contains the most recent changes, but may also include experimental or less stable features.
+- **Tag-based Versions**: For production environments, we recommend using tag-based versions. These tags correspond to specific, stable releases of the application. To use a tag-based version, simply replace `latest` with the desired version number.
+
+**Below is an example docker-compose.yml file that can help you get started:**
 
 ```yaml
 version: '3'
 services:
   app:
-    image: glenndehaan/unifi-voucher-site
+    image: glenndehaan/unifi-voucher-site:latest
     ports:
       - "3000:3000"
     environment:
@@ -467,6 +470,10 @@ Once the SMTP environment variables are configured, the email feature will be av
 
 ### Voucher Details (Mobile)
 ![Voucher Details - Mobile](.docs/images/mobile_3.png)
+
+## Release Notes
+
+Detailed information on the changes in each release can be found on the [GitHub Releases](https://github.com/glenndehaan/unifi-voucher-site/releases) page. It is highly recommended to review the release notes before updating or deploying a new version, especially if you are upgrading from a previous version.
 
 ## Migration Guide
 
