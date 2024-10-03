@@ -48,7 +48,7 @@ info();
 /**
  * Initialize JWT
  */
-if(!variables.authDisabled && (variables.authOidcIssuerBaseUrl === '' && variables.authOidcAppBaseUrl === '' && variables.authOidcClientId === '')) {
+if(!variables.authDisabled && !variables.authOidcEnabled) {
     jwt.init();
 }
 
@@ -87,7 +87,7 @@ app.use((req, res, next) => {
 /**
  * Initialize OIDC
  */
-if(!variables.authDisabled && (variables.authOidcIssuerBaseUrl !== '' && variables.authOidcAppBaseUrl !== '' && variables.authOidcClientId !== '')) {
+if(!variables.authDisabled && variables.authOidcEnabled) {
     oidc.init(app);
 }
 
@@ -124,7 +124,7 @@ app.get('/', (req, res) => {
 
 // Check if web service is enabled
 if(variables.serviceWeb) {
-    if(variables.authOidcIssuerBaseUrl === '' && variables.authOidcAppBaseUrl === '' && variables.authOidcClientId === '') {
+    if(!variables.authOidcEnabled) {
         app.get('/login', (req, res) => {
             // Check if authentication is disabled
             if (variables.authDisabled) {

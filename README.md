@@ -77,10 +77,14 @@ services:
       UNIFI_SSID: ''
       # The UniFi SSID WPA/WPA2/WPA3 Password (Can be ignored for 'Open' networks) (Used within templating and 'Scan to Connect')
       UNIFI_SSID_PASSWORD: ''
+      # Toggle to enable/disable internal authentication
+      AUTH_INTERNAL_ENABLED: 'true'
       # The password used to log in to the voucher portal Web UI
       AUTH_INTERNAL_PASSWORD: '0000'
       # The Bearer token used for the API
       AUTH_TOKEN: '00000000-0000-0000-0000-000000000000'
+      # Toggle to enable/disable OIDC authentication
+      AUTH_OIDC_ENABLED: 'false'
       # OIDC issuer base url provided by oauth provider. Example: https://auth.example.com/.well-known/openid-configuration
       AUTH_OIDC_ISSUER_BASE_URL: ''
       # OIDC UniFi Voucher base url (This application). Example: https://voucher.example.com
@@ -282,6 +286,8 @@ By default, the UniFi Voucher Site uses an internal authentication method. You c
 AUTH_INTERNAL_PASSWORD: '0000'
 ```
 
+> To enable/disable internal authentication use the `AUTH_INTERNAL_ENABLED` environment variable
+
 ### 2. OpenID Connect (OIDC) Authentication
 
 The UniFi Voucher Site allows seamless integration with OpenID Connect (OIDC), enabling users to authenticate through their preferred identity provider (IdP). Configuration is easy using environment variables to align with your existing OIDC provider.
@@ -289,6 +295,9 @@ The UniFi Voucher Site allows seamless integration with OpenID Connect (OIDC), e
 #### Configuration
 
 To enable OIDC authentication, set the following environment variables in your application’s environment:
+
+- **`AUTH_OIDC_ENABLED`**:
+  Toggle to enable/disable OIDC authentication. Set this value to `true` to enable OIDC authentication. (Default: `false`)
 
 - **`AUTH_OIDC_ISSUER_BASE_URL`**:
   The base URL of your OIDC provider. This is typically the URL where the well-known OIDC configuration is hosted (e.g., `https://auth.example.com/.well-known/openid-configuration`).
@@ -348,7 +357,7 @@ Below is a list of tested Identity Providers (IdPs) with detailed integration in
 
 ### 3. Disabling Authentication
 
-If you prefer not to use authentication for the web service, you can disable it entirely by setting the `AUTH_DISABLE` environment variable.
+If you prefer not to use any authentication for the web and api service, you can disable it entirely by setting the `AUTH_DISABLE` environment variable.
 
 ```env
 AUTH_DISABLE: 'true'

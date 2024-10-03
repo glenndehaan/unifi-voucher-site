@@ -25,7 +25,7 @@ module.exports = {
      */
     web: async (req, res, next) => {
         // Check if authentication is enabled & OIDC is disabled
-        if(!variables.authDisabled && (variables.authOidcIssuerBaseUrl === '' && variables.authOidcAppBaseUrl === '' && variables.authOidcClientId === '')) {
+        if(!variables.authDisabled && !variables.authOidcEnabled) {
             // Check if user has an existing authorization cookie
             if (!req.cookies.authorization) {
                 res.redirect(302, `${req.headers['x-ingress-path'] ? req.headers['x-ingress-path'] : ''}/login`);
@@ -46,7 +46,7 @@ module.exports = {
         }
 
         // Check if authentication is enabled & OIDC is enabled
-        if(!variables.authDisabled && (variables.authOidcIssuerBaseUrl !== '' && variables.authOidcAppBaseUrl !== '' && variables.authOidcClientId !== '')) {
+        if(!variables.authDisabled && variables.authOidcEnabled) {
             const middleware = oidc.requiresAuth();
             return middleware(req, res, next);
         }
