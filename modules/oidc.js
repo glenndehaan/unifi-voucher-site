@@ -21,6 +21,7 @@ const settings = {
     secret: '',
     idpLogout: true,
     authRequired: false,
+    attemptSilentLogin: true,
     authorizationParams: {
         response_type: 'code',
         response_mode: 'query',
