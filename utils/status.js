@@ -90,10 +90,10 @@ module.exports = () => {
             modules: {
                 internal: {
                     status: {
-                        text: (!variables.authDisabled && !variables.authOidcEnabled) ? 'Enabled' : 'Disabled',
-                        state: (!variables.authDisabled && !variables.authOidcEnabled) ? 'green' : 'red'
+                        text: (!variables.authDisabled && variables.authInternalEnabled) ? 'Enabled' : 'Disabled',
+                        state: (!variables.authDisabled && variables.authInternalEnabled) ? 'green' : 'red'
                     },
-                    details: (!variables.authDisabled && !variables.authOidcEnabled) ? 'Internal Authentication enabled.' : 'Internal Authentication not enabled.',
+                    details: (!variables.authDisabled && variables.authInternalEnabled) ? 'Internal Authentication enabled.' : 'Internal Authentication not enabled.',
                     info: 'https://github.com/glenndehaan/unifi-voucher-site#1-internal-authentication-default'
                 },
                 oidc: {

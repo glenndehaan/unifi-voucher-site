@@ -72,7 +72,14 @@ module.exports = () => {
     /**
      * Log auth status
      */
-    log.info(`[Auth] ${variables.authDisabled ? 'Disabled!' : `Enabled! Type: ${variables.authOidcEnabled ? 'OIDC' : 'Internal'}`}`);
+    log.info(`[Auth] ${variables.authDisabled ? 'Disabled!' : `Enabled! Type: ${variables.authInternalEnabled ? 'Internal' : ''}${variables.authInternalEnabled && variables.authOidcEnabled ? ', ' : ''}${variables.authOidcEnabled ? 'OIDC' : ''}`}`);
+
+    /**
+     * Check auth services
+     */
+    if(!variables.authDisabled && !variables.authInternalEnabled && !variables.authOidcEnabled) {
+        log.error(`[Auth] Incorrect Configuration Detected!. Authentication is enabled but all authentication services have been disabled`);
+    }
 
     /**
      * Verify OIDC configuration

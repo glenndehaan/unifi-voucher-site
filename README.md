@@ -311,8 +311,6 @@ To enable OIDC authentication, set the following environment variables in your a
 - **`AUTH_OIDC_CLIENT_SECRET`**:
   The client secret associated with your OIDC provider. This value is specific to the OIDC client created for the UniFi Voucher Site.
 
-> Please note that **enabling OIDC support will automatically disable the built-in login system**. Once OIDC is activated, all user authentication will be handled through your configured identity provider, and the local login mechanism will no longer be available.
-
 > Ensure your idP supports **Confidential Clients** with the **Authorization Code Flow**
 
 #### Determine Supported Client Types
@@ -362,6 +360,8 @@ If you prefer not to use any authentication for the web and api service, you can
 ```env
 AUTH_DISABLE: 'true'
 ```
+
+> Note: This disables the token based authentication on the API
 
 ## Print Functionality
 

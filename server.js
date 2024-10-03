@@ -48,7 +48,7 @@ info();
 /**
  * Initialize JWT
  */
-if(!variables.authDisabled && !variables.authOidcEnabled) {
+if(!variables.authDisabled && variables.authInternalEnabled) {
     jwt.init();
 }
 
@@ -124,41 +124,47 @@ app.get('/', (req, res) => {
 
 // Check if web service is enabled
 if(variables.serviceWeb) {
-    if(!variables.authOidcEnabled) {
-        app.get('/login', (req, res) => {
-            // Check if authentication is disabled
-            if (variables.authDisabled) {
-                res.redirect(302, `${req.headers['x-ingress-path'] ? req.headers['x-ingress-path'] : ''}/vouchers`);
-                return;
-            }
+    app.get('/login', (req, res) => {
+        // Check if authentication is disabled
+        if (variables.authDisabled) {
+            res.redirect(302, `${req.headers['x-ingress-path'] ? req.headers['x-ingress-path'] : ''}/vouchers`);
+            return;
+        }
 
-            const hour = new Date().getHours();
-            const timeHeader = hour < 12 ? 'Good Morning' : hour < 18 ? 'Good Afternoon' : 'Good Evening';
+        const hour = new Date().getHours();
+        const timeHeader = hour < 12 ? 'Good Morning' : hour < 18 ? 'Good Afternoon' : 'Good Evening';
 
-            res.render('login', {
-                baseUrl: req.headers['x-ingress-path'] ? req.headers['x-ingress-path'] : '',
-                error: req.flashMessage.type === 'error',
-                error_text: req.flashMessage.message || '',
-                app_header: timeHeader
-            });
+        res.render('login', {
+            baseUrl: req.headers['x-ingress-path'] ? req.headers['x-ingress-path'] : '',
+            error: req.flashMessage.type === 'error',
+            error_text: req.flashMessage.message || '',
+            app_header: timeHeader,
+            internalAuth: variables.authInternalEnabled,
+            oidcAuth: variables.authOidcEnabled
         });
-        app.post('/login', async (req, res) => {
-            if (typeof req.body === "undefined") {
-                res.status(400).send();
-                return;
-            }
+    });
+    app.post('/login', async (req, res) => {
+        // Check if internal authentication is enabled
+        if(!variables.authInternalEnabled) {
+            res.status(501).send();
+            return;
+        }
 
-            const passwordCheck = req.body.password === variables.authInternalPassword;
+        if (typeof req.body === "undefined") {
+            res.status(400).send();
+            return;
+        }
 
-            if (!passwordCheck) {
-                res.cookie('flashMessage', JSON.stringify({type: 'error', message: 'Password Invalid!'}), {httpOnly: true, expires: new Date(Date.now() + 24 * 60 * 60 * 1000)}).redirect(302, `${req.headers['x-ingress-path'] ? req.headers['x-ingress-path'] : ''}/login`);
-                return;
-            }
+        const passwordCheck = req.body.password === variables.authInternalPassword;
 
-            res.cookie('authorization', jwt.sign(), {httpOnly: true, expires: new Date(Date.now() + 24 * 60 * 60 * 1000)}).redirect(302, `${req.headers['x-ingress-path'] ? req.headers['x-ingress-path'] : ''}/vouchers`);
-        });
-    }
-    app.get('/logout', (req, res) => {
+        if (!passwordCheck) {
+            res.cookie('flashMessage', JSON.stringify({type: 'error', message: 'Password Invalid!'}), {httpOnly: true, expires: new Date(Date.now() + 24 * 60 * 60 * 1000)}).redirect(302, `${req.headers['x-ingress-path'] ? req.headers['x-ingress-path'] : ''}/login`);
+            return;
+        }
+
+        res.cookie('authorization', jwt.sign(), {httpOnly: true, expires: new Date(Date.now() + 24 * 60 * 60 * 1000)}).redirect(302, `${req.headers['x-ingress-path'] ? req.headers['x-ingress-path'] : ''}/vouchers`);
+    });
+    app.get('/logout', [authorization.web], (req, res) => {
         // Check if authentication is disabled
         if (variables.authDisabled) {
             res.redirect(302, `${req.headers['x-ingress-path'] ? req.headers['x-ingress-path'] : ''}/vouchers`);
