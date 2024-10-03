@@ -157,10 +157,20 @@ if(variables.serviceWeb) {
 
             res.cookie('authorization', jwt.sign(), {httpOnly: true, expires: new Date(Date.now() + 24 * 60 * 60 * 1000)}).redirect(302, `${req.headers['x-ingress-path'] ? req.headers['x-ingress-path'] : ''}/vouchers`);
         });
-        app.get('/logout', (req, res) => {
-            res.cookie('authorization', '', {httpOnly: true, expires: new Date(0)}).redirect(302, `${req.headers['x-ingress-path'] ? req.headers['x-ingress-path'] : ''}/`);
-        });
     }
+    app.get('/logout', (req, res) => {
+        // Check if authentication is disabled
+        if (variables.authDisabled) {
+            res.redirect(302, `${req.headers['x-ingress-path'] ? req.headers['x-ingress-path'] : ''}/vouchers`);
+            return;
+        }
+
+        if(req.oidc) {
+            res.redirect(302, `${req.headers['x-ingress-path'] ? req.headers['x-ingress-path'] : ''}/oidc/logout`);
+        } else {
+            res.cookie('authorization', '', {httpOnly: true, expires: new Date(0)}).redirect(302, `${req.headers['x-ingress-path'] ? req.headers['x-ingress-path'] : ''}/`);
+        }
+    });
     app.post('/voucher', [authorization.web], async (req, res) => {
         if (typeof req.body === "undefined") {
             res.status(400).send();
