@@ -103,26 +103,15 @@ HEALTHCHECK --interval=10s --timeout=3s \
 CMD ["dumb-init", "node", "/app/server.js"]
 
 #
-# Setup non-root user
+# Bundle app
 #
-RUN addgroup -g 1000 node \
-    && adduser -u 1000 -G node -s /bin/sh -D node;
+
+# Bundle from build image
+COPY --from=dependencies /app/node_modules ./node_modules
+COPY --from=css /app/public/dist ./public/dist
+COPY . .
 
 #
 # Set build
 #
 RUN echo -n `date '+%Y.%m.%d.%H.%M'` > /etc/unifi_voucher_site_build
-
-#
-# Continue as non-root user
-#
-USER node
-
-#
-# Bundle app
-#
-
-# Bundle from build image
-COPY --chown=node:node --from=dependencies /app/node_modules ./node_modules
-COPY --chown=node:node --from=css /app/public/dist ./public/dist
-COPY --chown=node:node . .
