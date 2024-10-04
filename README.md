@@ -82,7 +82,7 @@ services:
       # The password used to log in to the voucher portal Web UI
       AUTH_INTERNAL_PASSWORD: '0000'
       # The Bearer token used for the API
-      AUTH_TOKEN: '00000000-0000-0000-0000-000000000000'
+      AUTH_INTERNAL_BEARER_TOKEN: '00000000-0000-0000-0000-000000000000'
       # Toggle to enable/disable OIDC authentication
       AUTH_OIDC_ENABLED: 'false'
       # OIDC issuer base url provided by oauth provider. Example: https://auth.example.com/.well-known/openid-configuration
@@ -230,7 +230,7 @@ the different endpoints available in the API:
 ```
 
    > This endpoint is protected by a security mechanism. To access it, users need to include a bearer token in the
-   request authorization header. The token must match the value of the `AUTH_TOKEN` environment variable. Without
+   request authorization header. The token must match the value of the `AUTH_INTERNAL_BEARER_TOKEN` environment variable. Without
    this token, access to the endpoint will be denied.
 
 4. **`/api/vouchers`**
@@ -269,7 +269,7 @@ the different endpoints available in the API:
 ```
 
 > This endpoint is protected by a security mechanism. To access it, users need to include a bearer token in the
-request authorization header. The token must match the value of the `AUTH_TOKEN` environment variable. Without
+request authorization header. The token must match the value of the `AUTH_INTERNAL_BEARER_TOKEN` environment variable. Without
 this token, access to the endpoint will be denied.
 
 ## Authentication
@@ -508,6 +508,10 @@ When upgrading from 3.x to 4.x, the following changes need to be made:
 4. **Password Variable Rename**
     - **`AUTH_PASSWORD`** has been renamed to **`AUTH_INTERNAL_PASSWORD`**.
     - Update your environment variable to use `AUTH_INTERNAL_PASSWORD` if you rely on internal authentication.
+
+5. **Bearer Token Variable Rename**
+    - **`AUTH_TOKEN`** has been replaced by **`AUTH_INTERNAL_BEARER_TOKEN`**.
+    - Update your environment variable to use `AUTH_INTERNAL_BEARER_TOKEN` for api bearer token authentication.
 
 ### Migration from 2.x to 3.x
 

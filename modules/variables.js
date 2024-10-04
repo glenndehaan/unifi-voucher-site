@@ -20,7 +20,7 @@ module.exports = {
     serviceApi: config('service_api') || (process.env.SERVICE_API === 'true') || false,
     authInternalEnabled: config('auth_internal_enabled') !== null ? config('auth_internal_enabled') : process.env.AUTH_INTERNAL_ENABLED ? process.env.AUTH_INTERNAL_ENABLED !== 'false' : true,
     authInternalPassword: config('auth_internal_password') || process.env.AUTH_INTERNAL_PASSWORD || '0000',
-    authToken: config('auth_token') || process.env.AUTH_TOKEN || '00000000-0000-0000-0000-000000000000',
+    authToken: config('auth_internal_bearer_token') || process.env.AUTH_INTERNAL_BEARER_TOKEN || '00000000-0000-0000-0000-000000000000',
     authOidcEnabled: config('auth_oidc_enabled') || (process.env.AUTH_OIDC_ENABLED === 'true') || false,
     authOidcIssuerBaseUrl: config('auth_oidc_issuer_base_url') || process.env.AUTH_OIDC_ISSUER_BASE_URL || '',
     authOidcAppBaseUrl: config('auth_oidc_app_base_url') || process.env.AUTH_OIDC_APP_BASE_URL || '',
