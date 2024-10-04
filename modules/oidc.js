@@ -12,8 +12,6 @@ const log = require('./log');
 
 /**
  * OIDC Settings
- *
- * @type {{baseURL: string, idpLogout: boolean, authRequired: boolean, clientID: string, issuerBaseURL: string, clientSecret: string, secret: string, authorizationParams: {scope: string, response_type: (string), response_mode: (string)}}}
  */
 const settings = {
     issuerBaseURL: variables.authOidcIssuerBaseUrl,
@@ -23,10 +21,16 @@ const settings = {
     secret: '',
     idpLogout: true,
     authRequired: false,
+    attemptSilentLogin: true,
     authorizationParams: {
-        response_type: (variables.authOidcClientType === 'confidential') ? 'code' : 'id_token',
-        response_mode: (variables.authOidcClientType === 'confidential') ? 'query' : 'form_post',
+        response_type: 'code',
+        response_mode: 'query',
         scope: 'openid profile email'
+    },
+    routes: {
+        callback: '/oidc/callback',
+        login: '/oidc/login',
+        logout: '/oidc/logout'
     }
 };
 
@@ -43,6 +47,6 @@ module.exports = {
         settings.secret = crypto.randomBytes(20).toString('hex');
         log.info(`[OIDC] Set secret: ${settings.secret}`);
         app.use(oidc.auth(settings));
-        log.info(`[OIDC] Issuer: ${settings.issuerBaseURL}, Client: ${settings.clientID}, Type: ${variables.authOidcClientType}`);
+        log.info(`[OIDC] Issuer: ${settings.issuerBaseURL}, Client: ${settings.clientID}`);
     }
 };

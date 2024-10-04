@@ -6,7 +6,7 @@ UniFi Voucher Site is a web-based platform for generating and managing UniFi net
 
 ![Vouchers Overview - Desktop](.docs/images/desktop_1.png)
 
-> Upgrading from 2.x to 3.x? Please take a look at the [migration guide](#migration-from-2x-to-3x)
+> Upgrading from 3.x to 4.x? Please take a look at the [migration guide](#migration-from-3x-to-4x)
 
 ## Features
 
@@ -48,15 +48,18 @@ UniFi Voucher Site is a web-based platform for generating and managing UniFi net
 
 ### Docker
 
-- Code from master is build by GitHub actions
-- Builds can be pulled by using this command: `docker pull glenndehaan/unifi-voucher-site`
-- An example docker compose file can be found below:
+You can easily run UniFi Voucher Site using Docker. We provide two release tracks to ensure you have flexibility in how you manage your deployments:
+
+- **Master Branch**: The `latest` Docker tag is always built from the `master` branch. This tag contains the most recent changes, but may also include experimental or less stable features.
+- **Tag-based Versions**: For production environments, we recommend using tag-based versions. These tags correspond to specific, stable releases of the application. To use a tag-based version, simply replace `latest` with the desired version number.
+
+**Below is an example docker-compose.yml file that can help you get started:**
 
 ```yaml
 version: '3'
 services:
   app:
-    image: glenndehaan/unifi-voucher-site
+    image: glenndehaan/unifi-voucher-site:latest
     ports:
       - "3000:3000"
     environment:
@@ -74,19 +77,21 @@ services:
       UNIFI_SSID: ''
       # The UniFi SSID WPA/WPA2/WPA3 Password (Can be ignored for 'Open' networks) (Used within templating and 'Scan to Connect')
       UNIFI_SSID_PASSWORD: ''
+      # Toggle to enable/disable internal authentication
+      AUTH_INTERNAL_ENABLED: 'true'
       # The password used to log in to the voucher portal Web UI
-      AUTH_PASSWORD: '0000'
+      AUTH_INTERNAL_PASSWORD: '0000'
       # The Bearer token used for the API
-      AUTH_TOKEN: '00000000-0000-0000-0000-000000000000'
+      AUTH_INTERNAL_BEARER_TOKEN: '00000000-0000-0000-0000-000000000000'
+      # Toggle to enable/disable OIDC authentication
+      AUTH_OIDC_ENABLED: 'false'
       # OIDC issuer base url provided by oauth provider. Example: https://auth.example.com/.well-known/openid-configuration
       AUTH_OIDC_ISSUER_BASE_URL: ''
       # OIDC UniFi Voucher base url (This application). Example: https://voucher.example.com
       AUTH_OIDC_APP_BASE_URL: ''
       # OIDC client id provided by oauth provider
       AUTH_OIDC_CLIENT_ID: ''
-      # OIDC client type, public/confidential
-      AUTH_OIDC_CLIENT_TYPE: 'public'
-      # OIDC client secret provided by oauth provider (Only required when using confidential client type)
+      # OIDC client secret provided by oauth provider
       AUTH_OIDC_CLIENT_SECRET: ''
       # Disables the login/authentication for the portal and API
       AUTH_DISABLE: 'false'
@@ -225,7 +230,7 @@ the different endpoints available in the API:
 ```
 
    > This endpoint is protected by a security mechanism. To access it, users need to include a bearer token in the
-   request authorization header. The token must match the value of the `AUTH_TOKEN` environment variable. Without
+   request authorization header. The token must match the value of the `AUTH_INTERNAL_BEARER_TOKEN` environment variable. Without
    this token, access to the endpoint will be denied.
 
 4. **`/api/vouchers`**
@@ -264,7 +269,7 @@ the different endpoints available in the API:
 ```
 
 > This endpoint is protected by a security mechanism. To access it, users need to include a bearer token in the
-request authorization header. The token must match the value of the `AUTH_TOKEN` environment variable. Without
+request authorization header. The token must match the value of the `AUTH_INTERNAL_BEARER_TOKEN` environment variable. Without
 this token, access to the endpoint will be denied.
 
 ## Authentication
@@ -275,19 +280,24 @@ The UniFi Voucher Site provides three options for authenticating access to the w
 
 ### 1. Internal Authentication (Default)
 
-By default, the UniFi Voucher Site uses an internal authentication method. You can set the password for this internal authentication using the `AUTH_PASSWORD` environment variable.
+By default, the UniFi Voucher Site uses an internal authentication method. You can set the password for this internal authentication using the `AUTH_INTERNAL_PASSWORD` environment variable.
 
 ```env
-AUTH_PASSWORD: '0000'
+AUTH_INTERNAL_PASSWORD: '0000'
 ```
+
+> To enable/disable internal authentication use the `AUTH_INTERNAL_ENABLED` environment variable
 
 ### 2. OpenID Connect (OIDC) Authentication
 
-The UniFi Voucher Site allows seamless integration with OpenID Connect (OIDC), enabling users to authenticate through their preferred identity provider (IdP). With support for both Public and Confidential client types. Configuration is easy using environment variables to align with your existing OIDC provider.
+The UniFi Voucher Site allows seamless integration with OpenID Connect (OIDC), enabling users to authenticate through their preferred identity provider (IdP). Configuration is easy using environment variables to align with your existing OIDC provider.
 
 #### Configuration
 
 To enable OIDC authentication, set the following environment variables in your application’s environment:
+
+- **`AUTH_OIDC_ENABLED`**:
+  Toggle to enable/disable OIDC authentication. Set this value to `true` to enable OIDC authentication. (Default: `false`)
 
 - **`AUTH_OIDC_ISSUER_BASE_URL`**:
   The base URL of your OIDC provider. This is typically the URL where the well-known OIDC configuration is hosted (e.g., `https://auth.example.com/.well-known/openid-configuration`).
@@ -298,28 +308,14 @@ To enable OIDC authentication, set the following environment variables in your a
 - **`AUTH_OIDC_CLIENT_ID`**:
   The client ID registered with your OIDC provider. This value is specific to the OIDC client created for the UniFi Voucher Site.
 
-- **`AUTH_OIDC_CLIENT_TYPE`**:
-  Specify the type of OIDC client:
-    - **`public`**: Uses the Implicit flow (default).
-    - **`confidential`**: Uses the Authorization Code flow with client secret.
+- **`AUTH_OIDC_CLIENT_SECRET`**:
+  The client secret associated with your OIDC provider. This value is specific to the OIDC client created for the UniFi Voucher Site.
 
-- **`AUTH_OIDC_CLIENT_SECRET`** (required if using the Confidential client type):
-  The client secret associated with your OIDC provider, necessary when using the Authorization Code flow.
-
-> Please note that **enabling OIDC support will automatically disable the built-in login system**. Once OIDC is activated, all user authentication will be handled through your configured identity provider, and the local login mechanism will no longer be available.
-
-#### OIDC Client Configuration
-
-When configuring your OIDC client, ensure the following settings are enabled based on your chosen client type:
-
-- **Public Client (Implicit Flow)**: The OIDC client **must** support the Implicit flow. Be sure to enable both the ID token and access token retrieval.
-- **Confidential Client (Authorization Code Flow)**: The client secret is required for secure token exchanges.
+> Ensure your idP supports **Confidential Clients** with the **Authorization Code Flow**
 
 #### Determine Supported Client Types
 
-To identify which client types your OpenID Connect (OIDC) provider supports (Public or Confidential), you can check the `.well-known/openid-configuration` endpoint. This endpoint contains metadata about the OIDC provider, including the supported flows and grant types.
-
-##### Steps to Check Supported Client Types
+To identify which client types your OpenID Connect (OIDC) provider supports, you can check the `.well-known/openid-configuration` endpoint. This endpoint contains metadata about the OIDC provider, including the supported flows and grant types.
 
 1. **Access the `.well-known/openid-configuration` URL:**
 
@@ -330,9 +326,7 @@ To identify which client types your OpenID Connect (OIDC) provider supports (Pub
 
 2. **Look for the `grant_types_supported` Field:**
 
-   In the returned JSON, the `grant_types_supported` field will indicate the flows your provider supports:
-    - **For Public Clients (Implicit Flow):** Look for `implicit`.
-    - **For Confidential Clients (Authorization Code Flow):** Look for `authorization_code`.
+   In the returned JSON, the `grant_types_supported` field will indicate the flows your provider supports: Check if your response contains `authorization_code`.
 
    Example snippet:
    ```json
@@ -346,21 +340,9 @@ To identify which client types your OpenID Connect (OIDC) provider supports (Pub
    }
    ```
 
-3. **Check the `response_types_supported` Field:**
-
-   This field also provides details on supported client types:
-    - **Implicit Flow:** Should include values like `id_token` or `id_token token`.
-    - **Authorization Code Flow:** Should include `code`.
-
-4. **Verify Client Authentication Methods:**
-
-   For confidential clients, confirm that the `token_endpoint_auth_methods_supported` field lists options like `client_secret_post` or `client_secret_basic`, which indicate that the provider supports client secret authentication.
-
 #### OIDC IdP Integration Guides
 
 This section provides integration guides for configuring the UniFi Voucher Site with various OIDC (OpenID Connect) Identity Providers (IdPs). These guides cover the necessary steps for setting up the IdP, configuring client credentials, and integrating the IdP with the UniFi Voucher Site.
-
-##### Available Guides
 
 Below is a list of tested Identity Providers (IdPs) with detailed integration instructions:
 
@@ -373,11 +355,13 @@ Below is a list of tested Identity Providers (IdPs) with detailed integration in
 
 ### 3. Disabling Authentication
 
-If you prefer not to use authentication for the web service, you can disable it entirely by setting the `AUTH_DISABLE` environment variable.
+If you prefer not to use any authentication for the web and api service, you can disable it entirely by setting the `AUTH_DISABLE` environment variable.
 
 ```env
 AUTH_DISABLE: 'true'
 ```
+
+> Note: This disables the token based authentication on the API
 
 ## Print Functionality
 
@@ -496,7 +480,38 @@ Once the SMTP environment variables are configured, the email feature will be av
 ### Voucher Details (Mobile)
 ![Voucher Details - Mobile](.docs/images/mobile_3.png)
 
+## Release Notes
+
+Detailed information on the changes in each release can be found on the [GitHub Releases](https://github.com/glenndehaan/unifi-voucher-site/releases) page. It is highly recommended to review the release notes before updating or deploying a new version, especially if you are upgrading from a previous version.
+
 ## Migration Guide
+
+### Migration from 3.x to 4.x
+
+When upgrading from 3.x to 4.x, the following changes need to be made:
+
+1. **OIDC Public Flow Removal**
+    - The OIDC public flow has been removed in v4. Only the **confidential flow** is now supported.
+    - Users must migrate to the confidential flow. Updated integration guides are available to help with this migration: [OIDC IdP Integration Guides](#oidc-idp-integration-guides).
+
+2. **OIDC Endpoints Update**
+    - OIDC endpoints have been moved to dedicated paths.
+    - Update the IdP callback URL from **`/callback`** to **`/oidc/callback`** in your IdP configuration.
+
+3. **Environment Variable Changes**
+    - **`AUTH_OIDC_CLIENT_TYPE`** has been **removed**. It is no longer required.
+    - **`AUTH_OIDC_ENABLED`** has been introduced. If you are using OIDC, you must set `AUTH_OIDC_ENABLED` to **`true`** in your environment configuration.
+    - **`AUTH_INTERNAL_ENABLED`** has been introduced.
+        - If you are using **internal authentication**, set `AUTH_INTERNAL_ENABLED` to **`true`**.
+        - If you are using OIDC **and want to disable internal authentication**, set `AUTH_INTERNAL_ENABLED` to **`false`**.
+
+4. **Password Variable Rename**
+    - **`AUTH_PASSWORD`** has been renamed to **`AUTH_INTERNAL_PASSWORD`**.
+    - Update your environment variable to use `AUTH_INTERNAL_PASSWORD` if you rely on internal authentication.
+
+5. **Bearer Token Variable Rename**
+    - **`AUTH_TOKEN`** has been replaced by **`AUTH_INTERNAL_BEARER_TOKEN`**.
+    - Update your environment variable to use `AUTH_INTERNAL_BEARER_TOKEN` for api bearer token authentication.
 
 ### Migration from 2.x to 3.x
 

@@ -24,34 +24,48 @@ module.exports = {
      * @return {Promise<void>}
      */
     web: async (req, res, next) => {
-        // Check if authentication is enabled & OIDC is disabled
-        if(!variables.authDisabled && (variables.authOidcIssuerBaseUrl === '' && variables.authOidcAppBaseUrl === '' && variables.authOidcClientId === '')) {
+        let internal = false;
+        let oidc = false;
+
+        // Continue is authentication is disabled
+        if(variables.authDisabled) {
+            next();
+            return;
+        }
+
+        // Check if Internal auth is enabled then verify user status
+        if(variables.authInternalEnabled) {
             // Check if user has an existing authorization cookie
-            if (!req.cookies.authorization) {
-                res.redirect(302, `${req.headers['x-ingress-path'] ? req.headers['x-ingress-path'] : ''}/login`);
-                return;
-            }
+            if (req.cookies.authorization) {
+                // Check if token is correct and valid
+                try {
+                    const check = jwt.verify(req.cookies.authorization);
 
-            // Check if token is correct and valid
-            try {
-                const check = jwt.verify(req.cookies.authorization);
-
-                if(!check) {
-                    res.cookie('flashMessage', JSON.stringify({type: 'error', message: 'Invalid or expired login!'}), {httpOnly: true, expires: new Date(Date.now() + 24 * 60 * 60 * 1000)}).redirect(302, `${req.headers['x-ingress-path'] ? req.headers['x-ingress-path'] : ''}/login`);
-                }
-            } catch (e) {
-                res.cookie('flashMessage', JSON.stringify({type: 'error', message: 'Invalid or expired login!'}), {httpOnly: true, expires: new Date(Date.now() + 24 * 60 * 60 * 1000)}).redirect(302, `${req.headers['x-ingress-path'] ? req.headers['x-ingress-path'] : ''}/login`);
-                return;
+                    if(check) {
+                        internal = true;
+                    }
+                } catch (e) {}
             }
         }
 
-        // Check if authentication is enabled & OIDC is enabled
-        if(!variables.authDisabled && (variables.authOidcIssuerBaseUrl !== '' && variables.authOidcAppBaseUrl !== '' && variables.authOidcClientId !== '')) {
-            const middleware = oidc.requiresAuth();
-            return middleware(req, res, next);
+        // Check if OIDC is enabled then verify user status
+        if(variables.authOidcEnabled) {
+            oidc = req.oidc.isAuthenticated();
         }
 
-        next();
+        // Check if user is authorized by a service
+        if(internal || oidc) {
+            // Remove req.oidc if user is authenticated internally
+            if(internal) {
+                delete req.oidc;
+            }
+
+            next();
+            return;
+        }
+
+        // Fallback to login page
+        res.redirect(302, `${req.headers['x-ingress-path'] ? req.headers['x-ingress-path'] : ''}/login`);
     },
 
     /**

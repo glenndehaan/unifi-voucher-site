@@ -20,7 +20,7 @@
    The required fields needed are `Initiate Sign-In URI` and `Sign-In Redirect URI`.
 
    Initiate Sign-In URI - (e.g., `https://voucher.example.com`)
-   Sign-In Redirect URI - (e.g., `https://voucher.example.com/callback`)
+   Sign-In Redirect URI - (e.g., `https://voucher.example.com/oidc/callback`)
 
 7. Press Add. You will now be presented with your Tool Collection for the app. Copy your `Client ID`, `Client Secret` and the value form your `Well Known Config Endpoint`.
 8. Press Done. You can now assign users or groups to the application. The setup has been completed UID side.
@@ -38,7 +38,7 @@
 
 Now, configure your UniFi Voucher Site to use the UID client.
 
-1. In your UniFi Voucher Site configuration, set `AUTH_OIDC_CLIENT_TYPE` as `confidential`.
+1. In your UniFi Voucher Site configuration, set `AUTH_OIDC_ENABLED` to `true`.
 2. Set the `AUTH_OIDC_CLIENT_ID` as found within the UID Application.
 3. Provide the `AUTH_OIDC_CLIENT_SECRET` as found within the UID Application.
 4. Provide the `AUTH_OIDC_ISSUER_BASE_URL` from your UID domain (e.g., `https://your-site.ui.com/gw/idp/api/v1/public/oauth/your-secret-token/.well-known/openid-configuration`).

@@ -4,6 +4,7 @@
 module.exports = {
     deprecated: [
         'SECURITY_CODE',
-        'DISABLE_AUTH'
+        'DISABLE_AUTH',
+        'AUTH_OIDC_CLIENT_TYPE'
     ]
 };

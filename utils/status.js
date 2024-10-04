@@ -90,18 +90,18 @@ module.exports = () => {
             modules: {
                 internal: {
                     status: {
-                        text: (!variables.authDisabled && variables.authOidcIssuerBaseUrl === '' && variables.authOidcAppBaseUrl === '' && variables.authOidcClientId === '') ? 'Enabled' : 'Disabled',
-                        state: (!variables.authDisabled && variables.authOidcIssuerBaseUrl === '' && variables.authOidcAppBaseUrl === '' && variables.authOidcClientId === '') ? 'green' : 'red'
+                        text: (!variables.authDisabled && variables.authInternalEnabled) ? 'Enabled' : 'Disabled',
+                        state: (!variables.authDisabled && variables.authInternalEnabled) ? 'green' : 'red'
                     },
-                    details: (!variables.authDisabled && variables.authOidcIssuerBaseUrl === '' && variables.authOidcAppBaseUrl === '' && variables.authOidcClientId === '') ? 'Internal Authentication enabled.' : 'Internal Authentication not enabled.',
+                    details: (!variables.authDisabled && variables.authInternalEnabled) ? 'Internal Authentication enabled.' : 'Internal Authentication not enabled.',
                     info: 'https://github.com/glenndehaan/unifi-voucher-site#1-internal-authentication-default'
                 },
                 oidc: {
                     status: {
-                        text: (!variables.authDisabled && variables.authOidcIssuerBaseUrl !== '' && variables.authOidcAppBaseUrl !== '' && variables.authOidcClientId !== '') ? 'Enabled' : 'Disabled',
-                        state: (!variables.authDisabled && variables.authOidcIssuerBaseUrl !== '' && variables.authOidcAppBaseUrl !== '' && variables.authOidcClientId !== '') ? 'green' : 'red'
+                        text: (!variables.authDisabled && variables.authOidcEnabled) ? 'Enabled' : 'Disabled',
+                        state: (!variables.authDisabled && variables.authOidcEnabled) ? 'green' : 'red'
                     },
-                    details: (!variables.authDisabled && variables.authOidcIssuerBaseUrl !== '' && variables.authOidcAppBaseUrl !== '' && variables.authOidcClientId !== '') ? `OIDC Authentication via ${variables.authOidcIssuerBaseUrl}.` : 'OIDC Authentication not enabled.',
+                    details: (!variables.authDisabled && variables.authOidcEnabled) ? `OIDC Authentication via ${variables.authOidcIssuerBaseUrl}.` : 'OIDC Authentication not enabled.',
                     info: 'https://github.com/glenndehaan/unifi-voucher-site#2-openid-connect-oidc-authentication'
                 }
             }

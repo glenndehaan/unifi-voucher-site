@@ -16,24 +16,15 @@
     - **Name**: `unifi-voucher-provider`.
     - **Authentication flow**: `default-authentication-flow`.
     - **Authorization flow**: `default-provider-authorization-implicit-consent`.
-    - **Client Type**: Select either `public` or `confidential` based on your needs:
-        - **Public**: No client secret is required.
-        - **Confidential**: A client secret will be generated.
-5. Set the **Redirect URI** to match your UniFi Voucher Site’s callback URL (e.g., `https://<unifi-voucher-url>/callback`).
+    - **Client Type**: Select `confidential`, A client secret will be generated.
+5. Set the **Redirect URI** to match your UniFi Voucher Site’s callback URL (e.g., `https://voucher.example.com/oidc/callback`).
 6. Click **Submit**.
 
 ![Create Provider 1](images/create_provider_1.png)
 ![Create Provider 2](images/create_provider_2.png)
 ![Create Provider 3](images/create_provider_3.png)
-![Create Provider 4](images/create_provider_4.png)
 
-#### For Public Client Method:
-
-- After saving, note down the **Client ID** generated for this provider. You’ll need it when configuring your UniFi Voucher Site.
-
-#### For Confidential Client Method:
-
-- After saving, note down the **Client ID** and **Client Secret** generated for this provider. You’ll need it when configuring your UniFi Voucher Site.
+> After saving, note down the **Client ID** and **Client Secret** generated for this provider. You’ll need it when configuring your UniFi Voucher Site.
 
 ### Step 3: Create a New Application
 
@@ -53,18 +44,7 @@
 
 Now, configure your UniFi Voucher Site to use the Authentik client.
 
-### For Public Client Configuration
-
-1. In your UniFi Voucher Site configuration, set `AUTH_OIDC_CLIENT_TYPE` as `public`.
-2. Set the `AUTH_OIDC_CLIENT_ID` as configured in Authentik (found in the Authentik provider configuration).
-3. Provide the `AUTH_OIDC_ISSUER_BASE_URL` from your Authentik provider.
-    - You can find this under **Providers > unifi-voucher-provider > OpenID Configuration URL** in Authentik.
-4. Provide the `AUTH_OIDC_APP_BASE_URL` from your UniFi Voucher Site instance (e.g., `https://voucher.example.com`).
-5. Restart the container after these changes
-
-### For Confidential Client Configuration
-
-1. In your UniFi Voucher Site configuration, set `AUTH_OIDC_CLIENT_TYPE` as `confidential`.
+1. In your UniFi Voucher Site configuration, set `AUTH_OIDC_ENABLED` to `true`.
 2. Set the `AUTH_OIDC_CLIENT_ID` as configured in Authentik (found in the Authentik provider configuration).
 3. Provide the `AUTH_OIDC_CLIENT_SECRET` (found in the Authentik provider configuration).
 4. Provide the `AUTH_OIDC_ISSUER_BASE_URL` from your Authentik provider.
@@ -82,4 +62,4 @@ Now, configure your UniFi Voucher Site to use the Authentik client.
 ### Common Issues
 
 - **Invalid Redirect URI**: Ensure the callback URI matches what is configured in Authentik.
-- **Client Secret Errors** (for confidential clients): Double-check the client secret in both Authentik and your UniFi configuration.
+- **Client Secret Errors**: Double-check the client secret in both Authentik and your UniFi configuration.
