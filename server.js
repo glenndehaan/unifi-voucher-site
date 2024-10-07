@@ -367,6 +367,7 @@ if(variables.serviceWeb) {
         res.render('voucher', {
             baseUrl: req.headers['x-ingress-path'] ? req.headers['x-ingress-path'] : '',
             gitTag: variables.gitTag,
+            gitBuild: variables.gitBuild,
             user: user,
             userIcon: req.oidc ? crypto.createHash('sha256').update(user.email).digest('hex') : '',
             authDisabled: variables.authDisabled,
@@ -414,6 +415,7 @@ if(variables.serviceWeb) {
         res.render('status', {
             baseUrl: req.headers['x-ingress-path'] ? req.headers['x-ingress-path'] : '',
             gitTag: variables.gitTag,
+            gitBuild: variables.gitBuild,
             user: user,
             userIcon: req.oidc ? crypto.createHash('sha256').update(user.email).digest('hex') : '',
             authDisabled: variables.authDisabled,
