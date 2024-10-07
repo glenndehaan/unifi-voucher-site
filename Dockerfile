@@ -114,6 +114,6 @@ COPY . .
 #
 # Set build
 #
-RUN echo -n `date '+%Y.%m.%d.%H.%M'` > /etc/unifi_voucher_site_build
+RUN echo -n `date '+%d/%m/%Y, %H:%M'` > /etc/unifi_voucher_site_build
 ARG GIT_TAG
 ENV GIT_TAG=$GIT_TAG

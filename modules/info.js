@@ -38,7 +38,7 @@ module.exports = () => {
     /**
      * Output build version
      */
-    log.info(`[Version] Git: ${variables.gitTag}, Build: ${variables.gitBuild}`);
+    log.info(`[Version] Git: ${variables.gitTag} - Build: ${variables.gitBuild}`);
 
     /**
      * Log external config
