@@ -85,6 +85,11 @@ app.use((req, res, next) => {
 });
 
 /**
+ * Serve static public dir
+ */
+app.use(express.static(`${__dirname}/public`));
+
+/**
  * Initialize OIDC
  */
 if(!variables.authDisabled && variables.authOidcEnabled) {
@@ -105,11 +110,6 @@ app.use(cookieParser());
  * Enable flash-message
  */
 app.use(flashMessage);
-
-/**
- * Serve static public dir
- */
-app.use(express.static(`${__dirname}/public`));
 
 /**
  * Configure routers
