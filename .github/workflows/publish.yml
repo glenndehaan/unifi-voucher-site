@@ -32,6 +32,8 @@ jobs:
           platforms: linux/amd64,linux/arm64
           push: true
           tags: glenndehaan/unifi-voucher-site:${{ github.ref_name }}
+          build-args: |
+            GIT_TAG=${{ github.ref_name }}
       - name: Build and push (latest)
         if: github.ref == 'refs/heads/master'
         uses: docker/build-push-action@v5
@@ -40,3 +42,5 @@ jobs:
           platforms: linux/amd64,linux/arm64
           push: true
           tags: glenndehaan/unifi-voucher-site:latest
+          build-args: |
+            GIT_TAG=master

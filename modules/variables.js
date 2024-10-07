@@ -35,5 +35,6 @@ module.exports = {
     smtpSecure: config('smtp_secure') || process.env.SMTP_SECURE || false,
     smtpUsername: config('smtp_username') || process.env.SMTP_USERNAME || '',
     smtpPassword: config('smtp_password') || process.env.SMTP_PASSWORD || '',
-    logLevel: config('log_level') || process.env.LOG_LEVEL || 'info'
+    logLevel: config('log_level') || process.env.LOG_LEVEL || 'info',
+    gitTag: process.env.GIT_TAG || 'master'
 };

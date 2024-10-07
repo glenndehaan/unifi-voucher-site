@@ -39,9 +39,9 @@ module.exports = () => {
      * Output build version
      */
     if(fs.existsSync('/etc/unifi_voucher_site_build')) {
-        log.info(`[Version] ${fs.readFileSync('/etc/unifi_voucher_site_build', 'utf-8')}`);
+        log.info(`[Version] Git: ${variables.gitTag}, Build: ${fs.readFileSync('/etc/unifi_voucher_site_build', 'utf-8')}`);
     } else {
-        log.info(`[Version] **DEVELOPMENT**`);
+        log.info(`[Version] Git: ${variables.gitTag}, Build: **DEVELOPMENT**`);
     }
 
     /**
