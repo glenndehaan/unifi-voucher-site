@@ -187,9 +187,9 @@
         <div id="email-dialog"></div>
 
         <div id="create-dialog" class="hidden relative z-40" role="dialog" aria-modal="true">
-            <div class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity"></div>
+            <div id="create-dialog-overlay" class="fixed inset-0 bg-gray-500 bg-opacity-75"></div>
 
-            <div class="fixed inset-0 overflow-hidden">
+            <div class="fixed overflow-hidden">
                 <div class="absolute inset-0 overflow-hidden">
                     <div class="pointer-events-none fixed inset-y-0 right-0 flex max-w-full pl-10 sm:pl-16">
                         <div class="pointer-events-auto w-screen max-w-md">
@@ -354,6 +354,7 @@
         </script>
         <script type="application/javascript">
             const createDialog = document.querySelector('#create-dialog');
+            const createDialogOverlay = document.querySelector('#create-dialog-overlay');
             const detailDialog = document.querySelector('#detail-dialog');
             const emailDialog = document.querySelector('#email-dialog');
             const createForum = document.querySelector("#voucher-forum");
@@ -375,12 +376,14 @@
 
             const clearDetailDialog = () => {
                 document.querySelector('#close').removeEventListener('click', clearDetailDialog);
+                document.querySelector('#overlay').removeEventListener('click', clearDetailDialog);
                 detailDialog.innerHTML = '';
             };
 
             const clearEmailDialog = () => {
                 document.querySelector('#email-forum').removeEventListener('submit', emailSpinner);
                 document.querySelector('#close').removeEventListener('click', clearEmailDialog);
+                document.querySelector('#overlay').removeEventListener('click', clearEmailDialog);
                 emailDialog.innerHTML = '';
             };
 
@@ -396,6 +399,9 @@
                     createDialog.classList.remove('hidden');
                 });
             }
+            createDialogOverlay.addEventListener('click', () => {
+                createDialog.classList.add('hidden');
+            });
             cancelButton.addEventListener('click', () => {
                 createDialog.classList.add('hidden');
             });
@@ -442,6 +448,7 @@
                     if(htmlRes.status === 200 && !htmlRes.redirected) {
                         detailDialog.innerHTML = await htmlRes.text();
                         document.querySelector('#close').addEventListener('click', clearDetailDialog);
+                        document.querySelector('#overlay').addEventListener('click', clearDetailDialog);
                     } else {
                         window.location.reload();
                     }
@@ -454,6 +461,7 @@
                     if(htmlRes.status === 200 && !htmlRes.redirected) {
                         emailDialog.innerHTML = await htmlRes.text();
                         document.querySelector('#close').addEventListener('click', clearEmailDialog);
+                        document.querySelector('#overlay').addEventListener('click', clearEmailDialog);
                         document.querySelector('#email-forum').addEventListener('submit', emailSpinner);
                     } else {
                         window.location.reload();
