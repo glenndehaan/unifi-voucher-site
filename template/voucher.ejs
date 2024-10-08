@@ -84,6 +84,40 @@
                     </div>
                 </header>
 
+                <section class="border-b border-black/5 dark:border-white/5">
+                    <form id="filter-sort-form" action="<%= baseUrl %>/vouchers" method="get" class="px-4 py-4 sm:px-6 lg:px-8">
+                        <div class="flex flex-col sm:flex-row sm:items-end sm:justify-between space-y-2 sm:space-y-0">
+                            <div class="flex flex-col sm:flex-row sm:items-end sm:space-x-4 space-y-2 sm:space-y-0">
+                                <div class="flex flex-col">
+                                    <label for="status" class="text-sm text-gray-900 dark:text-white mb-1">Status</label>
+                                    <select id="status" name="status" class="bg-transparent rounded-md text-sm text-gray-600 dark:text-gray-400 focus:outline-none border-b border-black/5 dark:border-white/5" aria-label="Filter by category">
+                                        <option value="all">All</option>
+                                        <option value="available">Available</option>
+                                        <option value="in-use">In Use</option>
+                                    </select>
+                                </div>
+                                <div class="flex flex-col">
+                                    <label for="quota" class="text-sm text-gray-900 dark:text-white mb-1">Quota</label>
+                                    <select id="quota" name="quota" class="bg-transparent rounded-md text-sm text-gray-600 dark:text-gray-400 focus:outline-none border-b border-black/5 dark:border-white/5" aria-label="Filter by category">
+                                        <option value="all">All</option>
+                                        <option value="multi-use">Multi-use</option>
+                                        <option value="single-use">Single-use</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="flex flex-col">
+                                <label for="sort" class="text-sm text-gray-900 dark:text-white mb-1">Sort</label>
+                                <select id="sort" name="sort" class="bg-transparent rounded-md text-sm text-gray-600 dark:text-gray-400 focus:outline-none border-b border-black/5 dark:border-white/5" aria-label="Sort by">
+                                    <option value="date">Date</option>
+                                    <option value="code">Code</option>
+                                    <option value="duration">Duration</option>
+                                    <option value="status">Status</option>
+                                </select>
+                            </div>
+                        </div>
+                    </form>
+                </section>
+
                 <% if(vouchers.length < 1) { %>
                     <div class="text-center mt-10">
                         <img class="mx-auto h-12 w-auto" width="48" height="48" alt="UniFi Voucher Site Logo" src="<%= baseUrl %>/images/logo.png">
@@ -193,7 +227,7 @@
                 <div class="absolute inset-0 overflow-hidden">
                     <div class="pointer-events-none fixed inset-y-0 right-0 flex max-w-full pl-10 sm:pl-16">
                         <div class="pointer-events-auto w-screen max-w-md">
-                            <form id="voucher-forum" class="flex h-full flex-col divide-y divide-black/5 dark:divide-white/5 bg-white dark:bg-gray-900 shadow-xl" action="<%= baseUrl %>/voucher" method="post" enctype="multipart/form-data">
+                            <form id="voucher-form" class="flex h-full flex-col divide-y divide-black/5 dark:divide-white/5 bg-white dark:bg-gray-900 shadow-xl" action="<%= baseUrl %>/voucher" method="post" enctype="multipart/form-data">
                                 <div class="h-0 flex-1 overflow-y-auto">
                                     <div class="bg-sky-700 px-4 py-6 sm:px-6">
                                         <div class="flex items-center justify-between">
@@ -357,7 +391,7 @@
             const createDialogOverlay = document.querySelector('#create-dialog-overlay');
             const detailDialog = document.querySelector('#detail-dialog');
             const emailDialog = document.querySelector('#email-dialog');
-            const createForum = document.querySelector("#voucher-forum");
+            const createForm = document.querySelector('#voucher-form');
             const voucherTypeField = document.querySelector('#voucher-type');
             const customVoucherFields = document.querySelectorAll('.custom-voucher-field');
             const createButtonHeader = document.querySelector('#create-button-header');
@@ -366,13 +400,17 @@
             const reloadButton = document.querySelector('#reload-vouchers');
             const shareButtons = document.querySelectorAll('.share-button');
             const removeButtons = document.querySelectorAll('.remove-button');
-            const spinnerCreate = document.querySelector("#spinner-create");
-            const spinnerRemove = document.querySelector("#spinner-remove");
-            const spinnerList = document.querySelector("#spinner-list");
-            const spinnerEmail = document.querySelector("#spinner-email");
-            const copyNotification = document.querySelector("#copy-notification");
+            const spinnerCreate = document.querySelector('#spinner-create');
+            const spinnerRemove = document.querySelector('#spinner-remove');
+            const spinnerList = document.querySelector('#spinner-list');
+            const spinnerEmail = document.querySelector('#spinner-email');
+            const copyNotification = document.querySelector('#copy-notification');
             const vouchers = document.querySelectorAll('.voucher');
             const vouchersEmail = document.querySelectorAll('.voucher-email');
+            const filterSortForm = document.querySelector('#filter-sort-form');
+            const statusFilter = document.querySelector('#status');
+            const quotaFilter = document.querySelector('#quota');
+            const sort = document.querySelector('#sort');
 
             const clearDetailDialog = () => {
                 document.querySelector('#close').removeEventListener('click', clearDetailDialog);
@@ -408,7 +446,7 @@
             reloadButton.addEventListener('click', () => {
                 spinnerList.style.display = '';
             });
-            createForum.addEventListener('submit', () => {
+            createForm.addEventListener('submit', () => {
                 spinnerCreate.style.display = '';
             });
             shareButtons.forEach((el) => {
@@ -467,6 +505,15 @@
                         window.location.reload();
                     }
                 });
+            });
+            statusFilter.addEventListener('change', () => {
+                filterSortForm.submit();
+            });
+            quotaFilter.addEventListener('change', () => {
+                filterSortForm.submit();
+            });
+            sort.addEventListener('change', () => {
+                filterSortForm.submit();
             });
         </script>
     </body>
