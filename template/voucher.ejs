@@ -76,7 +76,7 @@
                             <div class="flex flex-col sm:flex-row sm:items-end sm:space-x-4 space-y-2 sm:space-y-0">
                                 <div class="flex flex-col">
                                     <label for="status" class="text-xs text-gray-900 dark:text-white mb-1">Status</label>
-                                    <select id="status" name="status" class="bg-transparent rounded-md text-sm text-gray-600 dark:text-gray-400 focus:outline-none border-b border-black/5 dark:border-white/5" aria-label="Filter by category">
+                                    <select id="status" name="status" class="rounded-md border-0 py-1.5 pl-3 pr-10 text-gray-900 dark:text-white dark:bg-white/5 ring-1 ring-inset ring-gray-300 dark:ring-white/10 focus:ring-2 focus:ring-sky-600 sm:text-sm sm:leading-6 [&_*]:text-black" aria-label="Filter by status">
                                         <option value="all"<%= filters.status === 'all' ? ' selected' : '' %>>All</option>
                                         <option value="available"<%= filters.status === 'available' ? ' selected' : '' %>>Available</option>
                                         <option value="in-use"<%= filters.status === 'in-use' ? ' selected' : '' %>>In Use</option>
@@ -84,7 +84,7 @@
                                 </div>
                                 <div class="flex flex-col">
                                     <label for="quota" class="text-xs text-gray-900 dark:text-white mb-1">Quota</label>
-                                    <select id="quota" name="quota" class="bg-transparent rounded-md text-sm text-gray-600 dark:text-gray-400 focus:outline-none border-b border-black/5 dark:border-white/5" aria-label="Filter by category">
+                                    <select id="quota" name="quota" class="rounded-md border-0 py-1.5 pl-3 pr-10 text-gray-900 dark:text-white dark:bg-white/5 ring-1 ring-inset ring-gray-300 dark:ring-white/10 focus:ring-2 focus:ring-sky-600 sm:text-sm sm:leading-6 [&_*]:text-black" aria-label="Filter by quota">
                                         <option value="all"<%= filters.quota === 'all' ? ' selected' : '' %>>All</option>
                                         <option value="multi-use"<%= filters.quota === 'multi-use' ? ' selected' : '' %>>Multi-use</option>
                                         <option value="single-use"<%= filters.quota === 'single-use' ? ' selected' : '' %>>Single-use</option>
@@ -92,7 +92,7 @@
                                 </div>
                                 <div class="flex flex-col">
                                     <label for="sort" class="text-xs text-gray-900 dark:text-white mb-1">Sort</label>
-                                    <select id="sort" name="sort" class="bg-transparent rounded-md text-sm text-gray-600 dark:text-gray-400 focus:outline-none border-b border-black/5 dark:border-white/5" aria-label="Sort by">
+                                    <select id="sort" name="sort" class="rounded-md border-0 py-1.5 pl-3 pr-10 text-gray-900 dark:text-white dark:bg-white/5 ring-1 ring-inset ring-gray-300 dark:ring-white/10 focus:ring-2 focus:ring-sky-600 sm:text-sm sm:leading-6 [&_*]:text-black" aria-label="Sort by">
                                         <option value="date"<%= sort === 'date' ? ' selected' : '' %>>Date</option>
                                         <option value="code"<%= sort === 'code' ? ' selected' : '' %>>Code</option>
                                         <option value="duration"<%= sort === 'duration' ? ' selected' : '' %>>Duration</option>
