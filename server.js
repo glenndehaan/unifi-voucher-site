@@ -382,7 +382,12 @@ if(variables.serviceWeb) {
             voucher_types: types(variables.voucherTypes),
             voucher_custom: variables.voucherCustom,
             vouchers: cache.vouchers,
-            updated: cache.updated
+            updated: cache.updated,
+            filters: {
+                status: req.query.status,
+                quota: req.query.quota
+            },
+            sort: req.query.sort
         });
     });
     app.get('/voucher/:id', [authorization.web], async (req, res) => {
