@@ -37,7 +37,7 @@ module.exports = {
     smtpFrom: config('smtp_from') || process.env.SMTP_FROM || '',
     smtpHost: config('smtp_host') || process.env.SMTP_HOST || '',
     smtpPort: config('smtp_port') || process.env.SMTP_PORT || 25,
-    smtpSecure: config('smtp_secure') || process.env.SMTP_SECURE || false,
+    smtpSecure: config('smtp_secure') || (process.env.SMTP_SECURE === 'true') || false,
     smtpUsername: config('smtp_username') || process.env.SMTP_USERNAME || '',
     smtpPassword: config('smtp_password') || process.env.SMTP_PASSWORD || '',
     logLevel: config('log_level') || process.env.LOG_LEVEL || 'info',

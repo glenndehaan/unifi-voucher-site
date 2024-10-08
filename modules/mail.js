@@ -24,7 +24,10 @@ const bytes = require('../utils/bytes');
 const transport = nodemailer.createTransport({
     host: variables.smtpHost,
     port: parseInt(variables.smtpPort),
-    secure: (variables.smtpSecure === 'true' || variables.smtpSecure === true),
+    secure: variables.smtpSecure,
+    tls: {
+        rejectUnauthorized: false // Skip TLS Certificate checks for Self-Hosted systems
+    },
     auth: {
         user: variables.smtpUsername,
         pass: variables.smtpPassword
