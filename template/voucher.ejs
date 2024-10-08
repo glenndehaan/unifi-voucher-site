@@ -67,29 +67,15 @@
 
             <main class="mx-auto max-w-7xl">
                 <header class="flex items-center justify-between border-b border-black/5 dark:border-white/5 px-4 py-4 sm:px-6 sm:py-6 lg:px-8">
-                    <h1 class="text-2xl font-semibold leading-7 text-gray-900 dark:text-white">
-                        Vouchers
-                    </h1>
-
                     <div class="grid">
-                        <a href="<%= baseUrl %>/vouchers?refresh=true" id="reload-vouchers" type="button" class="w-fit justify-self-end relative inline-flex items-center gap-x-1.5 rounded-md bg-sky-700 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-sky-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sky-700">
-                            <svg class="-ml-0.5 h-5 w-5" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
-                                <path fill-rule="evenodd" d="M15.312 11.424a5.5 5.5 0 0 1-9.201 2.466l-.312-.311h2.433a.75.75 0 0 0 0-1.5H3.989a.75.75 0 0 0-.75.75v4.242a.75.75 0 0 0 1.5 0v-2.43l.31.31a7 7 0 0 0 11.712-3.138.75.75 0 0 0-1.449-.39Zm1.23-3.723a.75.75 0 0 0 .219-.53V2.929a.75.75 0 0 0-1.5 0V5.36l-.31-.31A7 7 0 0 0 3.239 8.188a.75.75 0 1 0 1.448.389A5.5 5.5 0 0 1 13.89 6.11l.311.31h-2.432a.75.75 0 0 0 0 1.5h4.243a.75.75 0 0 0 .53-.219Z" clip-rule="evenodd" />
-                            </svg>
-                            Sync Vouchers
-                        </a>
-                        <span class="mt-2 text-xs text-center italic text-gray-900 dark:text-white">
-                            Last Sync: <%= new Intl.DateTimeFormat('en-GB', {dateStyle: 'short', timeStyle: 'short', hour12: false}).format(new Date(updated)) %>
-                        </span>
-                    </div>
-                </header>
+                        <h1 class="text-2xl font-semibold leading-7 text-gray-900 dark:text-white">
+                            Vouchers
+                        </h1>
 
-                <section class="border-b border-black/5 dark:border-white/5">
-                    <form id="filter-sort-form" action="<%= baseUrl %>/vouchers" method="get" class="px-4 py-4 sm:px-6 lg:px-8">
-                        <div class="flex flex-col sm:flex-row sm:items-end sm:justify-between space-y-2 sm:space-y-0">
+                        <form id="filter-sort-form" action="<%= baseUrl %>/vouchers" method="get" class="mt-4">
                             <div class="flex flex-col sm:flex-row sm:items-end sm:space-x-4 space-y-2 sm:space-y-0">
                                 <div class="flex flex-col">
-                                    <label for="status" class="text-sm text-gray-900 dark:text-white mb-1">Status</label>
+                                    <label for="status" class="text-xs text-gray-900 dark:text-white mb-1">Status</label>
                                     <select id="status" name="status" class="bg-transparent rounded-md text-sm text-gray-600 dark:text-gray-400 focus:outline-none border-b border-black/5 dark:border-white/5" aria-label="Filter by category">
                                         <option value="all"<%= filters.status === 'all' ? ' selected' : '' %>>All</option>
                                         <option value="available"<%= filters.status === 'available' ? ' selected' : '' %>>Available</option>
@@ -97,26 +83,38 @@
                                     </select>
                                 </div>
                                 <div class="flex flex-col">
-                                    <label for="quota" class="text-sm text-gray-900 dark:text-white mb-1">Quota</label>
+                                    <label for="quota" class="text-xs text-gray-900 dark:text-white mb-1">Quota</label>
                                     <select id="quota" name="quota" class="bg-transparent rounded-md text-sm text-gray-600 dark:text-gray-400 focus:outline-none border-b border-black/5 dark:border-white/5" aria-label="Filter by category">
                                         <option value="all"<%= filters.quota === 'all' ? ' selected' : '' %>>All</option>
                                         <option value="multi-use"<%= filters.quota === 'multi-use' ? ' selected' : '' %>>Multi-use</option>
                                         <option value="single-use"<%= filters.quota === 'single-use' ? ' selected' : '' %>>Single-use</option>
                                     </select>
                                 </div>
+                                <div class="flex flex-col">
+                                    <label for="sort" class="text-xs text-gray-900 dark:text-white mb-1">Sort</label>
+                                    <select id="sort" name="sort" class="bg-transparent rounded-md text-sm text-gray-600 dark:text-gray-400 focus:outline-none border-b border-black/5 dark:border-white/5" aria-label="Sort by">
+                                        <option value="date"<%= sort === 'date' ? ' selected' : '' %>>Date</option>
+                                        <option value="code"<%= sort === 'code' ? ' selected' : '' %>>Code</option>
+                                        <option value="duration"<%= sort === 'duration' ? ' selected' : '' %>>Duration</option>
+                                        <option value="status"<%= sort === 'status' ? ' selected' : '' %>>Status</option>
+                                    </select>
+                                </div>
                             </div>
-                            <div class="flex flex-col">
-                                <label for="sort" class="text-sm text-gray-900 dark:text-white mb-1">Sort</label>
-                                <select id="sort" name="sort" class="bg-transparent rounded-md text-sm text-gray-600 dark:text-gray-400 focus:outline-none border-b border-black/5 dark:border-white/5" aria-label="Sort by">
-                                    <option value="date"<%= sort === 'date' ? ' selected' : '' %>>Date</option>
-                                    <option value="code"<%= sort === 'code' ? ' selected' : '' %>>Code</option>
-                                    <option value="duration"<%= sort === 'duration' ? ' selected' : '' %>>Duration</option>
-                                    <option value="status"<%= sort === 'status' ? ' selected' : '' %>>Status</option>
-                                </select>
-                            </div>
-                        </div>
-                    </form>
-                </section>
+                        </form>
+                    </div>
+
+                    <div class="grid self-end">
+                        <a href="<%= baseUrl %>/vouchers?refresh=true" id="reload-vouchers" type="button" class="w-fit justify-self-end relative inline-flex items-center gap-x-1.5 rounded-md bg-sky-700 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-sky-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sky-700">
+                            <svg class="-ml-0.5 h-5 w-5" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                                <path fill-rule="evenodd" d="M15.312 11.424a5.5 5.5 0 0 1-9.201 2.466l-.312-.311h2.433a.75.75 0 0 0 0-1.5H3.989a.75.75 0 0 0-.75.75v4.242a.75.75 0 0 0 1.5 0v-2.43l.31.31a7 7 0 0 0 11.712-3.138.75.75 0 0 0-1.449-.39Zm1.23-3.723a.75.75 0 0 0 .219-.53V2.929a.75.75 0 0 0-1.5 0V5.36l-.31-.31A7 7 0 0 0 3.239 8.188a.75.75 0 1 0 1.448.389A5.5 5.5 0 0 1 13.89 6.11l.311.31h-2.432a.75.75 0 0 0 0 1.5h4.243a.75.75 0 0 0 .53-.219Z" clip-rule="evenodd" />
+                            </svg>
+                            Sync Vouchers
+                        </a>
+                        <span class="mt-1 text-xs text-center italic text-gray-900 dark:text-white">
+                            Last Sync: <%= new Intl.DateTimeFormat('en-GB', {dateStyle: 'short', timeStyle: 'short', hour12: false}).format(new Date(updated)) %>
+                        </span>
+                    </div>
+                </header>
 
                 <% if(vouchers.length < 1) { %>
                     <div class="text-center mt-10">
