@@ -123,6 +123,8 @@ services:
       SMTP_PASSWORD: ''
       # Sets the application Log Level (Valid Options: error|warn|info|debug|trace)
       LOG_LEVEL: 'info'
+      # Enables/disables translation debugging, when enabled only translation keys are shown
+      TRANSLATION_DEBUG: 'false'
 ```
 
 ### Home Assistant Add-on
@@ -453,6 +455,29 @@ Once the SMTP environment variables are configured, the email feature will be av
 ### Example Email
 
 ![Example Email](.docs/images/email_example.png)
+
+## Translations
+
+The UniFi Voucher Site supports multiple languages, and we're actively working to expand the list of available translations. To facilitate this, we use **Crowdin**, a platform that allows people from around the world to help translate and improve the localization of the project.
+
+### How You Can Help
+
+If you'd like to contribute by translating the UniFi Voucher Site into your language or improve existing translations, you're welcome to join our project on Crowdin. Even small contributions can make a big difference!
+
+Simply visit our Crowdin project page by clicking the badge below:
+
+[![Crowdin](https://badges.crowdin.net/unifi-voucher-site/localized.svg)](https://crowdin.com/project/unifi-voucher-site)
+
+Once you're there, you can choose your language and start contributing immediately. Crowdin provides an intuitive interface to help you suggest translations, review them, or vote on others' contributions.
+
+### Getting Started
+
+1. **Create a Crowdin account** (if you don't have one already).
+2. **Join the UniFi Voucher Site project** by visiting our [Crowdin page](https://crowdin.com/project/unifi-voucher-site).
+3. Choose the language you want to contribute to or suggest improvements for.
+4. Start translating or reviewing!
+
+Your contributions will be automatically included in the next release after review.
 
 ## Screenshots
 
