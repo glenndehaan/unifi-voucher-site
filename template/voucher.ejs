@@ -67,20 +67,52 @@
 
             <main class="mx-auto max-w-7xl">
                 <header class="flex items-center justify-between border-b border-black/5 dark:border-white/5 px-4 py-4 sm:px-6 sm:py-6 lg:px-8">
-                    <h1 class="text-2xl font-semibold leading-7 text-gray-900 dark:text-white">
-                        Vouchers
-                    </h1>
-
                     <div class="grid">
+                        <h1 class="text-2xl font-semibold leading-7 text-gray-900 dark:text-white">
+                            Vouchers
+                        </h1>
+
+                        <form id="filter-sort-form" action="<%= baseUrl %>/vouchers" method="get" class="mt-4">
+                            <div class="flex flex-col sm:flex-row sm:items-end sm:space-x-4 space-y-2 sm:space-y-0">
+                                <div class="flex flex-col">
+                                    <label for="status" class="text-xs text-gray-900 dark:text-white mb-1">Status</label>
+                                    <select id="status" name="status" class="rounded-md border-0 py-1.5 pl-3 pr-10 text-gray-900 dark:text-white dark:bg-white/5 ring-1 ring-inset ring-gray-300 dark:ring-white/10 focus:ring-2 focus:ring-sky-600 sm:text-sm sm:leading-6 [&_*]:text-black" aria-label="Filter by status">
+                                        <option value="all"<%= filters.status === 'all' ? ' selected' : '' %>>All</option>
+                                        <option value="available"<%= filters.status === 'available' ? ' selected' : '' %>>Available</option>
+                                        <option value="in-use"<%= filters.status === 'in-use' ? ' selected' : '' %>>In Use</option>
+                                    </select>
+                                </div>
+                                <div class="flex flex-col">
+                                    <label for="quota" class="text-xs text-gray-900 dark:text-white mb-1">Quota</label>
+                                    <select id="quota" name="quota" class="rounded-md border-0 py-1.5 pl-3 pr-10 text-gray-900 dark:text-white dark:bg-white/5 ring-1 ring-inset ring-gray-300 dark:ring-white/10 focus:ring-2 focus:ring-sky-600 sm:text-sm sm:leading-6 [&_*]:text-black" aria-label="Filter by quota">
+                                        <option value="all"<%= filters.quota === 'all' ? ' selected' : '' %>>All</option>
+                                        <option value="multi-use"<%= filters.quota === 'multi-use' ? ' selected' : '' %>>Multi-use</option>
+                                        <option value="single-use"<%= filters.quota === 'single-use' ? ' selected' : '' %>>Single-use</option>
+                                    </select>
+                                </div>
+                                <div class="flex flex-col">
+                                    <label for="sort" class="text-xs text-gray-900 dark:text-white mb-1">Sort</label>
+                                    <select id="sort" name="sort" class="rounded-md border-0 py-1.5 pl-3 pr-10 text-gray-900 dark:text-white dark:bg-white/5 ring-1 ring-inset ring-gray-300 dark:ring-white/10 focus:ring-2 focus:ring-sky-600 sm:text-sm sm:leading-6 [&_*]:text-black" aria-label="Sort by">
+                                        <option value="date"<%= sort === 'date' ? ' selected' : '' %>>Date</option>
+                                        <option value="code"<%= sort === 'code' ? ' selected' : '' %>>Code</option>
+                                        <option value="duration"<%= sort === 'duration' ? ' selected' : '' %>>Duration</option>
+                                        <option value="status"<%= sort === 'status' ? ' selected' : '' %>>Status</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+
+                    <div class="grid self-end">
+                        <span class="mb-1 text-xs text-gray-900 dark:text-white">
+                            Last Sync: <%= new Intl.DateTimeFormat('en-GB', {day: "numeric", month: "numeric", hour: "numeric", minute: "numeric", hour12: false}).format(new Date(updated)) %>
+                        </span>
                         <a href="<%= baseUrl %>/vouchers?refresh=true" id="reload-vouchers" type="button" class="w-fit justify-self-end relative inline-flex items-center gap-x-1.5 rounded-md bg-sky-700 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-sky-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sky-700">
                             <svg class="-ml-0.5 h-5 w-5" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
                                 <path fill-rule="evenodd" d="M15.312 11.424a5.5 5.5 0 0 1-9.201 2.466l-.312-.311h2.433a.75.75 0 0 0 0-1.5H3.989a.75.75 0 0 0-.75.75v4.242a.75.75 0 0 0 1.5 0v-2.43l.31.31a7 7 0 0 0 11.712-3.138.75.75 0 0 0-1.449-.39Zm1.23-3.723a.75.75 0 0 0 .219-.53V2.929a.75.75 0 0 0-1.5 0V5.36l-.31-.31A7 7 0 0 0 3.239 8.188a.75.75 0 1 0 1.448.389A5.5 5.5 0 0 1 13.89 6.11l.311.31h-2.432a.75.75 0 0 0 0 1.5h4.243a.75.75 0 0 0 .53-.219Z" clip-rule="evenodd" />
                             </svg>
                             Sync Vouchers
                         </a>
-                        <span class="mt-2 text-xs text-center italic text-gray-900 dark:text-white">
-                            Last Sync: <%= new Intl.DateTimeFormat('en-GB', {dateStyle: 'short', timeStyle: 'short', hour12: false}).format(new Date(updated)) %>
-                        </span>
                     </div>
                 </header>
 
@@ -193,7 +225,7 @@
                 <div class="absolute inset-0 overflow-hidden">
                     <div class="pointer-events-none fixed inset-y-0 right-0 flex max-w-full pl-10 sm:pl-16">
                         <div class="pointer-events-auto w-screen max-w-md">
-                            <form id="voucher-forum" class="flex h-full flex-col divide-y divide-black/5 dark:divide-white/5 bg-white dark:bg-gray-900 shadow-xl" action="<%= baseUrl %>/voucher" method="post" enctype="multipart/form-data">
+                            <form id="voucher-form" class="flex h-full flex-col divide-y divide-black/5 dark:divide-white/5 bg-white dark:bg-gray-900 shadow-xl" action="<%= baseUrl %>/voucher" method="post" enctype="multipart/form-data">
                                 <div class="h-0 flex-1 overflow-y-auto">
                                     <div class="bg-sky-700 px-4 py-6 sm:px-6">
                                         <div class="flex items-center justify-between">
@@ -357,7 +389,7 @@
             const createDialogOverlay = document.querySelector('#create-dialog-overlay');
             const detailDialog = document.querySelector('#detail-dialog');
             const emailDialog = document.querySelector('#email-dialog');
-            const createForum = document.querySelector("#voucher-forum");
+            const createForm = document.querySelector('#voucher-form');
             const voucherTypeField = document.querySelector('#voucher-type');
             const customVoucherFields = document.querySelectorAll('.custom-voucher-field');
             const createButtonHeader = document.querySelector('#create-button-header');
@@ -366,13 +398,17 @@
             const reloadButton = document.querySelector('#reload-vouchers');
             const shareButtons = document.querySelectorAll('.share-button');
             const removeButtons = document.querySelectorAll('.remove-button');
-            const spinnerCreate = document.querySelector("#spinner-create");
-            const spinnerRemove = document.querySelector("#spinner-remove");
-            const spinnerList = document.querySelector("#spinner-list");
-            const spinnerEmail = document.querySelector("#spinner-email");
-            const copyNotification = document.querySelector("#copy-notification");
+            const spinnerCreate = document.querySelector('#spinner-create');
+            const spinnerRemove = document.querySelector('#spinner-remove');
+            const spinnerList = document.querySelector('#spinner-list');
+            const spinnerEmail = document.querySelector('#spinner-email');
+            const copyNotification = document.querySelector('#copy-notification');
             const vouchers = document.querySelectorAll('.voucher');
             const vouchersEmail = document.querySelectorAll('.voucher-email');
+            const filterSortForm = document.querySelector('#filter-sort-form');
+            const statusFilter = document.querySelector('#status');
+            const quotaFilter = document.querySelector('#quota');
+            const sort = document.querySelector('#sort');
 
             const clearDetailDialog = () => {
                 document.querySelector('#close').removeEventListener('click', clearDetailDialog);
@@ -408,7 +444,7 @@
             reloadButton.addEventListener('click', () => {
                 spinnerList.style.display = '';
             });
-            createForum.addEventListener('submit', () => {
+            createForm.addEventListener('submit', () => {
                 spinnerCreate.style.display = '';
             });
             shareButtons.forEach((el) => {
@@ -467,6 +503,15 @@
                         window.location.reload();
                     }
                 });
+            });
+            statusFilter.addEventListener('change', () => {
+                filterSortForm.submit();
+            });
+            quotaFilter.addEventListener('change', () => {
+                filterSortForm.submit();
+            });
+            sort.addEventListener('change', () => {
+                filterSortForm.submit();
             });
         </script>
     </body>

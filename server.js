@@ -381,8 +381,48 @@ if(variables.serviceWeb) {
             printer_enabled: variables.printerType !== '',
             voucher_types: types(variables.voucherTypes),
             voucher_custom: variables.voucherCustom,
-            vouchers: cache.vouchers,
-            updated: cache.updated
+            vouchers: cache.vouchers.filter((item) => {
+                if(req.query.status === 'available') {
+                    return item.used === 0;
+                }
+
+                if(req.query.status === 'in-use') {
+                    return item.used > 0;
+                }
+
+                return true;
+            }).filter((item) => {
+                if(req.query.quota === 'multi-use') {
+                    return item.quota === 0;
+                }
+
+                if(req.query.quota === 'single-use') {
+                    return item.quota !== 0;
+                }
+
+                return true;
+            }).sort((a, b) => {
+                if(req.query.sort === 'code') {
+                    if (a.code > b.code) return -1;
+                    if (a.code < b.code) return 1;
+                }
+
+                if(req.query.sort === 'duration') {
+                    if (a.duration > b.duration) return -1;
+                    if (a.duration < b.duration) return 1;
+                }
+
+                if(req.query.sort === 'status') {
+                    if (a.used > b.used) return -1;
+                    if (a.used < b.used) return 1;
+                }
+            }),
+            updated: cache.updated,
+            filters: {
+                status: req.query.status,
+                quota: req.query.quota
+            },
+            sort: req.query.sort
         });
     });
     app.get('/voucher/:id', [authorization.web], async (req, res) => {
