@@ -401,6 +401,21 @@ if(variables.serviceWeb) {
                 }
 
                 return true;
+            }).sort((a, b) => {
+                if(req.query.sort === 'code') {
+                    if (a.code > b.code) return -1;
+                    if (a.code < b.code) return 1;
+                }
+
+                if(req.query.sort === 'duration') {
+                    if (a.duration > b.duration) return -1;
+                    if (a.duration < b.duration) return 1;
+                }
+
+                if(req.query.sort === 'status') {
+                    if (a.used > b.used) return -1;
+                    if (a.used < b.used) return 1;
+                }
             }),
             updated: cache.updated,
             filters: {
