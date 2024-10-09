@@ -49,7 +49,7 @@ module.exports = {
     send: (to, voucher) => {
         return new Promise(async (resolve, reject) => {
             // Create new translator
-            const t = translation('en', 'email');
+            const t = translation('email');
 
             // Attempt to send mail via SMTP transport
             const result = await transport.sendMail({

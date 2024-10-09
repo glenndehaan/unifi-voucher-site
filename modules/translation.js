@@ -6,19 +6,23 @@ const fs = require('fs');
 /**
  * Import own modules
  */
+const log = require('./log');
 const variables = require('./variables');
 
 /**
  * Translation returns translator function
  *
- * @param language
  * @param module
+ * @param language
+ * @param fallback
  * @return {(function(key: string): (string))}
  */
-module.exports = (language = 'en', module) => {
+module.exports = (module, language = 'en', fallback = 'en') => {
     // Check if translation file exists
     if(!fs.existsSync(`${__dirname}/../locales/${language}/${module}.json`)) {
-        throw new Error(`[Translation] Missing translation file: ${__dirname}/../locales/${language}/${module}.json`);
+        log.warn(`[Translation] Missing translation file: ${__dirname}/../locales/${language}/${module}.json`);
+        language = fallback;
+        log.warn(`[Translation] Using fallback: ${__dirname}/../locales/${language}/${module}.json`);
     }
 
     // Get locales mapping
@@ -34,7 +38,8 @@ module.exports = (language = 'en', module) => {
 
         // Check if key exists within translation file
         if(typeof translations[key] === 'undefined') {
-            throw new Error(`[Translation][${language}] Missing for key: ${key}`);
+            log.warn(`[Translation][${language}] Missing for key: ${key}`);
+            return `%${key}%`;
         }
 
         // Check if debugging is enabled. If enabled only return key

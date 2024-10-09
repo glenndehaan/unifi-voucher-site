@@ -6,6 +6,7 @@ const crypto = require('crypto');
 const express = require('express');
 const multer = require('multer');
 const cookieParser = require('cookie-parser');
+const locale = require('express-locale');
 
 /**
  * Import own modules
@@ -95,6 +96,14 @@ app.use(express.static(`${__dirname}/public`));
 if(!variables.authDisabled && variables.authOidcEnabled) {
     oidc.init(app);
 }
+
+/**
+ * Enable locale
+ */
+app.use(locale({
+    "priority": ["accept-language", "default"],
+    "default": "en-GB"
+}));
 
 /**
  * Enable multer
