@@ -35,6 +35,7 @@ const types = require('./utils/types');
 const time = require('./utils/time');
 const bytes = require('./utils/bytes');
 const status = require('./utils/status');
+const languages = require('./utils/languages');
 
 /**
  * Setup Express app
@@ -298,6 +299,7 @@ if(variables.serviceWeb) {
                 baseUrl: req.headers['x-ingress-path'] ? req.headers['x-ingress-path'] : '',
                 timeConvert: time,
                 bytesConvert: bytes,
+                languages,
                 voucher,
                 updated: cache.updated
             });
@@ -324,7 +326,7 @@ if(variables.serviceWeb) {
         });
 
         if(voucher) {
-            const emailResult = await mail.send(req.body.email, voucher).catch((e) => {
+            const emailResult = await mail.send(req.body.email, voucher, req.body.language).catch((e) => {
                 res.cookie('flashMessage', JSON.stringify({type: 'error', message: e}), {httpOnly: true, expires: new Date(Date.now() + 24 * 60 * 60 * 1000)}).redirect(302, `${req.headers['x-ingress-path'] ? req.headers['x-ingress-path'] : ''}/vouchers`);
             });
 

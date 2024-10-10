@@ -44,12 +44,13 @@ module.exports = {
      *
      * @param to
      * @param voucher
+     * @param language
      * @return {Promise<unknown>}
      */
-    send: (to, voucher) => {
+    send: (to, voucher, language) => {
         return new Promise(async (resolve, reject) => {
             // Create new translator
-            const t = translation('email');
+            const t = translation('email', language);
 
             // Attempt to send mail via SMTP transport
             const result = await transport.sendMail({
