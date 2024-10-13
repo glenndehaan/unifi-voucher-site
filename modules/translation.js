@@ -43,6 +43,6 @@ module.exports = (module, language = 'en', fallback = 'en') => {
         }
 
         // Check if debugging is enabled. If enabled only return key
-        return variables.translationDebug ? `%${key}%` : translations[key];
+        return variables.translationDebug ? `t('${key}')` : translations[key];
     };
 };
