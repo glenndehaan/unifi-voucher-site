@@ -5,25 +5,19 @@
         <div class="absolute inset-0 overflow-hidden">
             <div class="pointer-events-none fixed inset-y-0 right-0 flex max-w-full pl-10 sm:pl-16">
                 <div class="pointer-events-auto w-screen max-w-md">
-                    <form id="email-form" class="flex h-full flex-col divide-y divide-black/5 dark:divide-white/5 bg-white dark:bg-gray-900 shadow-xl" action="<%= baseUrl %>/voucher/<%= voucher._id %>/email" method="post" enctype="multipart/form-data">
+                    <form id="print-form" class="flex h-full flex-col divide-y divide-black/5 dark:divide-white/5 bg-white dark:bg-gray-900 shadow-xl" action="<%= baseUrl %>/voucher/<%= voucher._id %>/print" method="post" enctype="multipart/form-data">
                         <div class="h-0 flex-1 overflow-y-auto">
                             <div class="bg-sky-700 px-4 py-6 sm:px-6">
                                 <div class="flex items-center justify-between">
-                                    <h2 class="text-base font-semibold leading-6 text-white" id="slide-over-title">Email Voucher</h2>
+                                    <h2 class="text-base font-semibold leading-6 text-white" id="slide-over-title">Print Voucher</h2>
                                 </div>
                                 <div class="mt-1">
-                                    <p class="text-sm text-sky-100">Get started by filling in the information below to email the selected voucher.</p>
+                                    <p class="text-sm text-sky-100">Get started by filling in the information below to print the selected voucher.</p>
                                 </div>
                             </div>
                             <div class="flex flex-1 flex-col justify-between">
                                 <div class="divide-y divide-black/5 dark:divide-white/5 px-4 sm:px-6">
                                     <div class="space-y-6 pb-5 pt-6">
-                                        <div>
-                                            <label for="email" class="block text-sm font-medium leading-6 text-gray-900 dark:text-white">Email</label>
-                                            <div class="mt-2">
-                                                <input type="email" id="email" name="email" required class="mt-2 block w-full rounded-md border-0 py-1.5 text-gray-900 dark:text-white dark:bg-white/5 ring-1 ring-inset ring-gray-300 dark:ring-white/10 focus:ring-2 focus:ring-sky-600 sm:text-sm sm:leading-6">
-                                            </div>
-                                        </div>
                                         <div>
                                             <label for="language" class="block text-sm font-medium leading-6 text-gray-900 dark:text-white">Language</label>
                                             <div class="mt-2">
@@ -40,7 +34,7 @@
                         </div>
                         <div class="flex flex-shrink-0 justify-end px-4 py-4">
                             <button id="close" type="button" class="rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50">Cancel</button>
-                            <button type="submit" class="ml-4 inline-flex justify-center rounded-md bg-sky-700 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-sky-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sky-700">Send</button>
+                            <button type="submit" class="ml-4 inline-flex justify-center rounded-md bg-sky-700 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-sky-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sky-700">Print</button>
                         </div>
                     </form>
                 </div>

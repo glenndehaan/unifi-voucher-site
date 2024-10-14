@@ -34,3 +34,4 @@ services:
       SMTP_USERNAME: ''
       SMTP_PASSWORD: ''
       LOG_LEVEL: 'info'
+      TRANSLATION_DEBUG: 'false'

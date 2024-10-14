@@ -6,6 +6,7 @@ const crypto = require('crypto');
 const express = require('express');
 const multer = require('multer');
 const cookieParser = require('cookie-parser');
+const locale = require('express-locale');
 
 /**
  * Import own modules
@@ -34,6 +35,7 @@ const types = require('./utils/types');
 const time = require('./utils/time');
 const bytes = require('./utils/bytes');
 const status = require('./utils/status');
+const languages = require('./utils/languages');
 
 /**
  * Setup Express app
@@ -95,6 +97,14 @@ app.use(express.static(`${__dirname}/public`));
 if(!variables.authDisabled && variables.authOidcEnabled) {
     oidc.init(app);
 }
+
+/**
+ * Enable locale
+ */
+app.use(locale({
+    "priority": ["accept-language", "default"],
+    "default": "en-GB"
+}));
 
 /**
  * Enable multer
@@ -248,8 +258,32 @@ if(variables.serviceWeb) {
         });
 
         if(voucher) {
+            res.render('components/print', {
+                baseUrl: req.headers['x-ingress-path'] ? req.headers['x-ingress-path'] : '',
+                languages,
+                voucher,
+                updated: cache.updated
+            });
+        } else {
+            res.status(404);
+            res.render('404', {
+                baseUrl: req.headers['x-ingress-path'] ? req.headers['x-ingress-path'] : ''
+            });
+        }
+    });
+    app.post('/voucher/:id/print', [authorization.web], async (req, res) => {
+        if(variables.printerType === '') {
+            res.status(501).send();
+            return;
+        }
+
+        const voucher = cache.vouchers.find((e) => {
+            return e._id === req.params.id;
+        });
+
+        if(voucher) {
             if(variables.printerType === 'pdf') {
-                const buffers = await print.pdf(voucher);
+                const buffers = await print.pdf(voucher, req.body.language);
                 const pdfData = Buffer.concat(buffers);
                 res.writeHead(200, {
                     'Content-Length': Buffer.byteLength(pdfData),
@@ -259,7 +293,7 @@ if(variables.serviceWeb) {
             }
 
             if(variables.printerType === 'escpos') {
-                const printResult = await print.escpos(voucher).catch((e) => {
+                const printResult = await print.escpos(voucher, req.body.language).catch((e) => {
                     res.cookie('flashMessage', JSON.stringify({type: 'error', message: e}), {httpOnly: true, expires: new Date(Date.now() + 24 * 60 * 60 * 1000)}).redirect(302, `${req.headers['x-ingress-path'] ? req.headers['x-ingress-path'] : ''}/vouchers`);
                 });
 
@@ -287,8 +321,7 @@ if(variables.serviceWeb) {
         if(voucher) {
             res.render('components/email', {
                 baseUrl: req.headers['x-ingress-path'] ? req.headers['x-ingress-path'] : '',
-                timeConvert: time,
-                bytesConvert: bytes,
+                languages,
                 voucher,
                 updated: cache.updated
             });
@@ -315,7 +348,7 @@ if(variables.serviceWeb) {
         });
 
         if(voucher) {
-            const emailResult = await mail.send(req.body.email, voucher).catch((e) => {
+            const emailResult = await mail.send(req.body.email, voucher, req.body.language).catch((e) => {
                 res.cookie('flashMessage', JSON.stringify({type: 'error', message: e}), {httpOnly: true, expires: new Date(Date.now() + 24 * 60 * 60 * 1000)}).redirect(302, `${req.headers['x-ingress-path'] ? req.headers['x-ingress-path'] : ''}/vouchers`);
             });
 

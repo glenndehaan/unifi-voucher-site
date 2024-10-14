@@ -11,6 +11,7 @@ const PrinterTypes = require('node-thermal-printer').types;
 const variables = require('./variables');
 const log = require('./log');
 const qr = require('./qr');
+const translation = require('./translation');
 
 /**
  * Import own utils
@@ -27,10 +28,14 @@ module.exports = {
      * Generates a voucher as a PDF
      *
      * @param voucher
+     * @param language
      * @return {Promise<unknown>}
      */
-    pdf: (voucher) => {
+    pdf: (voucher, language) => {
         return new Promise(async (resolve) => {
+            // Create new translator
+            const t = translation('print', language);
+
             const doc = new PDFDocument({
                 bufferPages: true,
                 size: [226.77165354330398, size(voucher)],
@@ -54,7 +59,7 @@ module.exports = {
 
             doc.font('Helvetica-Bold')
                 .fontSize(20)
-                .text(`WiFi Voucher Code`, {
+                .text(`${t('title')}`, {
                     align: 'center'
                 });
             doc.font('Helvetica-Bold')
@@ -68,7 +73,7 @@ module.exports = {
             if(variables.unifiSsid !== '') {
                 doc.font('Helvetica')
                     .fontSize(10)
-                    .text(`Connect to: `, {
+                    .text(`${t('connect')}: `, {
                         continued: true
                     });
                 doc.font('Helvetica-Bold')
@@ -83,7 +88,7 @@ module.exports = {
                         .text(`,`);
                     doc.font('Helvetica')
                         .fontSize(10)
-                        .text(`Password: `, {
+                        .text(`${t('password')}: `, {
                             continued: true
                         });
                     doc.font('Helvetica-Bold')
@@ -93,16 +98,16 @@ module.exports = {
                         });
                     doc.font('Helvetica')
                         .fontSize(10)
-                        .text(` or,`);
+                        .text(` ${t('or')},`);
                 } else {
                     doc.font('Helvetica')
                         .fontSize(10)
-                        .text(` or,`);
+                        .text(` ${t('or')},`);
                 }
 
                 doc.font('Helvetica')
                     .fontSize(10)
-                    .text(`Scan to connect:`);
+                    .text(`${t('scan')}:`);
 
                 doc.image(await qr(), 75, variables.unifiSsidPassword !== '' ? 215 : 205, {fit: [75, 75], align: 'center', valign: 'center'});
                 doc.moveDown(6);
@@ -112,7 +117,7 @@ module.exports = {
 
             doc.font('Helvetica-Bold')
                 .fontSize(12)
-                .text(`Voucher Details`);
+                .text(`${t('details')}`);
 
             doc.font('Helvetica-Bold')
                 .fontSize(10)
@@ -120,16 +125,16 @@ module.exports = {
 
             doc.font('Helvetica-Bold')
                 .fontSize(10)
-                .text(`Type: `, {
+                .text(`${t('type')}: `, {
                     continued: true
                 });
             doc.font('Helvetica')
                 .fontSize(10)
-                .text(voucher.quota === 0 ? 'Multi-use' : 'Single-use');
+                .text(voucher.quota === 0 ? t('multiUse') : t('singleUse'));
 
             doc.font('Helvetica-Bold')
                 .fontSize(10)
-                .text(`Duration: `, {
+                .text(`${t('duration')}: `, {
                     continued: true
                 });
             doc.font('Helvetica')
@@ -139,7 +144,7 @@ module.exports = {
             if(voucher.qos_usage_quota) {
                 doc.font('Helvetica-Bold')
                     .fontSize(10)
-                    .text(`Data Limit: `, {
+                    .text(`${t('dataLimit')}: `, {
                         continued: true
                     });
                 doc.font('Helvetica')
@@ -150,7 +155,7 @@ module.exports = {
             if(voucher.qos_rate_max_down) {
                 doc.font('Helvetica-Bold')
                     .fontSize(10)
-                    .text(`Download Limit: `, {
+                    .text(`${t('downloadLimit')}: `, {
                         continued: true
                     });
                 doc.font('Helvetica')
@@ -161,7 +166,7 @@ module.exports = {
             if(voucher.qos_rate_max_up) {
                 doc.font('Helvetica-Bold')
                     .fontSize(10)
-                    .text(`Upload Limit: `, {
+                    .text(`${t('uploadLimit')}: `, {
                         continued: true
                     });
                 doc.font('Helvetica')
@@ -177,10 +182,14 @@ module.exports = {
      * Sends a print job to an ESC/POS compatible network printer
      *
      * @param voucher
+     * @param language
      * @return {Promise<unknown>}
      */
-    escpos: (voucher) => {
+    escpos: (voucher, language) => {
         return new Promise(async (resolve, reject) => {
+            // Create new translator
+            const t = translation('print', language);
+
             const printer = new ThermalPrinter({
                 type: PrinterTypes.EPSON,
                 interface: `tcp://${variables.printerIp}`
@@ -202,7 +211,7 @@ module.exports = {
             printer.alignCenter();
             printer.newLine();
             printer.setTextSize(2, 2);
-            printer.println('WiFi Voucher Code');
+            printer.println(`${t('title')}`);
             printer.setTextSize(1, 1);
             printer.println(`${voucher.code.slice(0, 5)}-${voucher.code.slice(5)}`);
             printer.setTextNormal();
@@ -213,7 +222,7 @@ module.exports = {
                 printer.newLine();
 
                 printer.alignLeft();
-                printer.print('Connect to: ');
+                printer.print(`${t('connect')}: `);
                 printer.setTypeFontB();
                 printer.setTextSize(1, 1);
                 printer.print(variables.unifiSsid);
@@ -221,18 +230,18 @@ module.exports = {
                 if(variables.unifiSsidPassword) {
                     printer.print(',');
                     printer.newLine();
-                    printer.print('Password: ');
+                    printer.print(`${t('password')}: `);
                     printer.setTypeFontB();
                     printer.setTextSize(1, 1);
                     printer.print(variables.unifiSsidPassword);
                     printer.setTextNormal();
-                    printer.print(' or,');
+                    printer.print(` ${t('or')},`);
                     printer.newLine();
                 } else {
-                    printer.print(' or,');
+                    printer.print(` ${t('or')},`);
                     printer.newLine();
                 }
-                printer.println('Scan to connect:');
+                printer.println(`${t('scan')}:`);
                 printer.alignCenter();
                 await printer.printImageBuffer(await qr(true));
             }
@@ -243,20 +252,20 @@ module.exports = {
             printer.alignLeft();
             printer.setTypeFontB();
             printer.setTextSize(1, 1);
-            printer.println('Voucher Details');
+            printer.println(`${t('details')}`);
             printer.setTextNormal();
             printer.drawLine();
 
             printer.setTextDoubleHeight();
             printer.invert(true);
-            printer.print('Type:');
+            printer.print(`${t('type')}:`);
             printer.invert(false);
-            printer.print(voucher.quota === 0 ? ' Multi-use' : ' Single-use');
+            printer.print(voucher.quota === 0 ? ` ${t('multiUse')}` : ` ${t('singleUse')}`);
             printer.newLine();
 
             printer.setTextDoubleHeight();
             printer.invert(true);
-            printer.print('Duration:');
+            printer.print(`${t('duration')}:`);
             printer.invert(false);
             printer.print(` ${time(voucher.duration)}`);
             printer.newLine();
@@ -264,7 +273,7 @@ module.exports = {
             if(voucher.qos_usage_quota) {
                 printer.setTextDoubleHeight();
                 printer.invert(true);
-                printer.print('Data Limit:');
+                printer.print(`${t('dataLimit')}:`);
                 printer.invert(false);
                 printer.print(` ${bytes(voucher.qos_usage_quota, 2)}`);
                 printer.newLine();
@@ -273,7 +282,7 @@ module.exports = {
             if(voucher.qos_rate_max_down) {
                 printer.setTextDoubleHeight();
                 printer.invert(true);
-                printer.print('Download Limit:');
+                printer.print(`${t('downloadLimit')}:`);
                 printer.invert(false);
                 printer.print(` ${bytes(voucher.qos_rate_max_down, 1, true)}`);
                 printer.newLine();
@@ -282,7 +291,7 @@ module.exports = {
             if(voucher.qos_rate_max_up) {
                 printer.setTextDoubleHeight();
                 printer.invert(true);
-                printer.print('Upload Limit:');
+                printer.print(`${t('uploadLimit')}:`);
                 printer.invert(false);
                 printer.print(` ${bytes(voucher.qos_rate_max_up, 1, true)}`);
                 printer.newLine();

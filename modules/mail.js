@@ -10,6 +10,7 @@ const nodemailer = require('nodemailer');
  */
 const variables = require('./variables');
 const log = require('./log');
+const translation = require('./translation');
 const qr = require('./qr');
 
 /**
@@ -43,16 +44,22 @@ module.exports = {
      *
      * @param to
      * @param voucher
+     * @param language
      * @return {Promise<unknown>}
      */
-    send: (to, voucher) => {
+    send: (to, voucher, language) => {
         return new Promise(async (resolve, reject) => {
+            // Create new translator
+            const t = translation('email', language);
+
+            // Attempt to send mail via SMTP transport
             const result = await transport.sendMail({
                 from: variables.smtpFrom,
                 to: to,
-                subject: 'WiFi Voucher Code',
-                text: `Hi there,\n\nSomeone generated a WiFi Voucher, please use this code when connecting:\n\n${voucher.code.slice(0, 5)}-${voucher.code.slice(5)}`,
+                subject: t('title'),
+                text: `${t('greeting')},\n\n${t('intro')}:\n\n${voucher.code.slice(0, 5)}-${voucher.code.slice(5)}`,
                 html: ejs.render(fs.readFileSync(`${__dirname}/../template/email/voucher.ejs`, 'utf-8'), {
+                    t,
                     voucher,
                     unifiSsid: variables.unifiSsid,
                     unifiSsidPassword: variables.unifiSsidPassword,
@@ -66,6 +73,7 @@ module.exports = {
                 reject(`[Mail] ${e.message}`);
             });
 
+            // Check if the email was sent successfully
             if(result) {
                 log.info(`[Mail] Sent to: ${to}`);
                 resolve(true);
