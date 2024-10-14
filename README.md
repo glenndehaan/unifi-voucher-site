@@ -17,6 +17,7 @@ UniFi Voucher Site is a web-based platform for generating and managing UniFi net
 - **Home Assistant Add-on**: Seamlessly integrate with Home Assistant for centralized management.
 - **Receipt Printing**: Supports printing vouchers with 80mm thermal printers.
 - **Email Functionality**: Automatically send vouchers via SMTP.
+- **Localized Email/Print Templates** Fully localized templates, with support for multiple languages.
 
 ## Structure
 
@@ -460,7 +461,7 @@ Once the SMTP environment variables are configured, the email feature will be av
 
 The UniFi Voucher Site supports multiple languages, and we're actively working to expand the list of available translations. To facilitate this, we use **Crowdin**, a platform that allows people from around the world to help translate and improve the localization of the project.
 
-### How You Can Help
+### How to help
 
 If you'd like to contribute by translating the UniFi Voucher Site into your language or improve existing translations, you're welcome to join our project on Crowdin. Even small contributions can make a big difference!
 
