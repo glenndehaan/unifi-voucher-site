@@ -2,7 +2,7 @@
 
 UniFi Voucher Site is a web-based platform for generating and managing UniFi network guest vouchers
 
-![GitHub last commit](https://img.shields.io/github/last-commit/glenndehaan/unifi-voucher-site) [![Docker image size](https://img.shields.io/docker/image-size/glenndehaan/unifi-voucher-site)](https://hub.docker.com/r/glenndehaan/unifi-voucher-site) [![Crowdin](https://badges.crowdin.net/unifi-voucher-site/localized.svg)](https://crowdin.com/project/unifi-voucher-site)
+[![GitHub last commit](https://img.shields.io/github/last-commit/glenndehaan/unifi-voucher-site)](https://github.com/glenndehaan/unifi-voucher-site/commits/master/) [![Docker image size](https://img.shields.io/docker/image-size/glenndehaan/unifi-voucher-site)](https://hub.docker.com/r/glenndehaan/unifi-voucher-site) [![Crowdin](https://badges.crowdin.net/unifi-voucher-site/localized.svg)](https://crowdin.com/project/unifi-voucher-site)
 
 ![Vouchers Overview - Desktop](.docs/images/desktop_1.png)
 
