@@ -1,15 +1,15 @@
 {
-  "title": "WiFi Voucher Code",
-  "connect": "Connect to",
-  "password": "Password",
-  "or": "or",
-  "scan": "Scan to connect",
-  "details": "Voucher Details",
+  "title": "WiFi Waardebon",
+  "connect": "Verbind met",
+  "password": "Wachtwoord",
+  "or": "of",
+  "scan": "Scan om te verbinden",
+  "details": "Waardebon Details",
   "type": "Type",
-  "multiUse": "Multi-use",
-  "singleUse": "Single-use",
-  "duration": "Duration",
-  "dataLimit": "Data Limit",
-  "downloadLimit": "Download Limit",
-  "uploadLimit": "Upload Limit"
+  "multiUse": "Meervoudig gebruik",
+  "singleUse": "Enkelvoudig gebruik",
+  "duration": "Duur",
+  "dataLimit": "Data Limiet",
+  "downloadLimit": "Download limiet",
+  "uploadLimit": "Upload limiet"
 }
