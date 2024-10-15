@@ -1,15 +1,15 @@
 {
-  "title": "Code du bon de réduction WiFi",
-  "connect": "Se connecter à",
-  "password": "Mot de passe",
-  "or": "ou",
-  "scan": "Scanner pour se connecter",
-  "details": "Détails du bon d'achat",
-  "type": "Type de texte",
-  "multiUse": "Multi-usages",
-  "singleUse": "Utilisation unique",
-  "duration": "Durée",
-  "dataLimit": "Limite de données",
-  "downloadLimit": "Limite de téléchargement",
-  "uploadLimit": "Limite de téléchargement"
+  "title": "WiFi Voucher Code",
+  "connect": "Connect to",
+  "password": "Password",
+  "or": "or",
+  "scan": "Scan to connect",
+  "details": "Voucher Details",
+  "type": "Type",
+  "multiUse": "Multi-use",
+  "singleUse": "Single-use",
+  "duration": "Duration",
+  "dataLimit": "Data Limit",
+  "downloadLimit": "Download Limit",
+  "uploadLimit": "Upload Limit"
 }
