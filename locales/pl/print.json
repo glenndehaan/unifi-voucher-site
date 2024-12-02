@@ -1,0 +1,15 @@
+{
+  "title": "Voucher WiFi",
+  "connect": "Połącz z",
+  "password": "Hasło",
+  "or": "lub",
+  "scan": "Zeskanuj aby połączyć",
+  "details": "Szczegóły vouchera",
+  "type": "Typ",
+  "multiUse": "Wielokrotne użycie",
+  "singleUse": "Jednorazowe użycie",
+  "duration": "Czas trwania",
+  "dataLimit": "Limit danych",
+  "downloadLimit": "Limit pobierania",
+  "uploadLimit": "Limit wysyłania"
+}
