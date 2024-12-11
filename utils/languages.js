@@ -4,6 +4,6 @@
 module.exports = {
     en: 'English',
     de: 'German',
-    fr: 'French',
-    nl: 'Dutch'
+    nl: 'Dutch',
+    pl: 'Polish'
 };
