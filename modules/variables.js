@@ -41,6 +41,7 @@ module.exports = {
     smtpUsername: config('smtp_username') || process.env.SMTP_USERNAME || '',
     smtpPassword: config('smtp_password') || process.env.SMTP_PASSWORD || '',
     logLevel: config('log_level') || process.env.LOG_LEVEL || 'info',
+    translationDefault: config('translation_default') || process.env.TRANSLATION_DEFAULT || 'en',
     translationDebug: config('translation_debug') || (process.env.TRANSLATION_DEBUG === 'true') || false,
     gitTag: process.env.GIT_TAG || 'master',
     gitBuild: fs.existsSync('/etc/unifi_voucher_site_build') ? fs.readFileSync('/etc/unifi_voucher_site_build', 'utf-8') : 'Development'

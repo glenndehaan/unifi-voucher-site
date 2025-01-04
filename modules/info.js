@@ -16,6 +16,7 @@ const array = require('../utils/array');
 const logo = require('../utils/logo');
 const types = require('../utils/types');
 const time = require('../utils/time');
+const languages = require('../utils/languages');
 
 /**
  * Output info to console
@@ -48,6 +49,13 @@ module.exports = () => {
     }
     if (fs.existsSync(`${process.cwd()}/.options.json`)) {
         log.info(`[Options] Found at ${process.cwd()}/.options.json`);
+    }
+
+    /**
+     * Check for incorrect translation default
+     */
+    if(!Object.keys(languages).includes(variables.translationDefault)) {
+        log.error(`[Translations] Default language: '${variables.translationDefault}' doesn't exist!`);
     }
 
     /**

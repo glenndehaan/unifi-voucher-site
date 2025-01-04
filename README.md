@@ -124,6 +124,8 @@ services:
       SMTP_PASSWORD: ''
       # Sets the application Log Level (Valid Options: error|warn|info|debug|trace)
       LOG_LEVEL: 'info'
+      # Sets the default translation for dropdowns
+      TRANSLATION_DEFAULT: 'en'
       # Enables/disables translation debugging, when enabled only translation keys are shown
       TRANSLATION_DEBUG: 'false'
 ```

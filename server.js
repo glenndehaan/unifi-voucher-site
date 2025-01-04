@@ -261,6 +261,7 @@ if(variables.serviceWeb) {
             res.render('components/print', {
                 baseUrl: req.headers['x-ingress-path'] ? req.headers['x-ingress-path'] : '',
                 languages,
+                defaultLanguage: variables.translationDefault,
                 voucher,
                 updated: cache.updated
             });
@@ -322,6 +323,7 @@ if(variables.serviceWeb) {
             res.render('components/email', {
                 baseUrl: req.headers['x-ingress-path'] ? req.headers['x-ingress-path'] : '',
                 languages,
+                defaultLanguage: variables.translationDefault,
                 voucher,
                 updated: cache.updated
             });
