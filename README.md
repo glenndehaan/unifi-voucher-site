@@ -128,6 +128,8 @@ services:
       TRANSLATION_DEFAULT: 'en'
       # Enables/disables translation debugging, when enabled only translation keys are shown
       TRANSLATION_DEBUG: 'false'
+      # Enables/disables a back-button next to the logo to go back 1 page in history (Could be used with multi-page kiosks)
+      UI_BACK_BUTTON: 'false'
 ```
 
 ### Home Assistant Add-on
