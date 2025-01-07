@@ -76,7 +76,7 @@ FROM alpine:3.20
 #
 
 # Install packages
-RUN apk add --no-cache dumb-init nodejs
+RUN apk add --no-cache dumb-init nodejs icu-data-full
 
 #
 # Require app
