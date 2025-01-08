@@ -18,6 +18,7 @@ UniFi Voucher Site is a web-based platform for generating and managing UniFi net
 - **Receipt Printing**: Supports printing vouchers with 80mm thermal printers.
 - **Email Functionality**: Automatically send vouchers via SMTP.
 - **Localized Email/Print Templates** Fully localized templates, with support for multiple languages.
+- **Scan to Connect QR Codes** Quickly connect users via a phone's camera. (Available within Email and Print Layouts)
 
 ## Structure
 
