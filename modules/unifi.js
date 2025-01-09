@@ -68,7 +68,7 @@ const startSession = () => {
 /**
  * UniFi module functions
  *
- * @type {{create: (function(*, number=, boolean=): Promise<*>), list: (function(boolean=): Promise<*>), remove: (function(*, boolean=): Promise<*>)}}
+ * @type {{create: (function(*, number=, null=, boolean=): Promise<*>), remove: (function(*, boolean=): Promise<*>), list: (function(boolean=): Promise<*>), guests: (function(boolean=): Promise<*>)}}
  */
 const unifiModule = {
     /**
@@ -76,13 +76,14 @@ const unifiModule = {
      *
      * @param type
      * @param amount
+     * @param note
      * @param retry
      * @return {Promise<unknown>}
      */
-    create: (type, amount = 1, retry = true) => {
+    create: (type, amount = 1, note = null, retry = true) => {
         return new Promise((resolve, reject) => {
             startSession().then(() => {
-                controller.createVouchers(type.expiration, amount, parseInt(type.usage) === 1 ? 1 : 0, null, typeof type.upload !== "undefined" ? type.upload : null, typeof type.download !== "undefined" ? type.download : null, typeof type.megabytes !== "undefined" ? type.megabytes : null).then((voucher_data) => {
+                controller.createVouchers(type.expiration, amount, parseInt(type.usage) === 1 ? 1 : 0, note, typeof type.upload !== "undefined" ? type.upload : null, typeof type.download !== "undefined" ? type.download : null, typeof type.megabytes !== "undefined" ? type.megabytes : null).then((voucher_data) => {
                     if(amount > 1) {
                         log.info(`[UniFi] Created ${amount} vouchers`);
                         resolve(true);
@@ -107,7 +108,7 @@ const unifiModule = {
                             log.info('[UniFi] Attempting re-authentication & retry...');
 
                             controller = null;
-                            unifiModule.create(type, amount, false).then((e) => {
+                            unifiModule.create(type, amount, note, false).then((e) => {
                                 resolve(e);
                             }).catch((e) => {
                                 reject(e);

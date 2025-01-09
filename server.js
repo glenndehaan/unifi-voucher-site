@@ -203,7 +203,7 @@ if(variables.serviceWeb) {
         }
 
         // Create voucher code
-        const voucherCode = await unifi.create(types(req.body['voucher-type'] === 'custom' ? `${req.body['voucher-duration']},${req.body['voucher-usage']},${req.body['voucher-upload-limit']},${req.body['voucher-download-limit']},${req.body['voucher-data-limit']};` : req.body['voucher-type'], true), parseInt(req.body['voucher-amount'])).catch((e) => {
+        const voucherCode = await unifi.create(types(req.body['voucher-type'] === 'custom' ? `${req.body['voucher-duration']},${req.body['voucher-usage']},${req.body['voucher-upload-limit']},${req.body['voucher-download-limit']},${req.body['voucher-data-limit']};` : req.body['voucher-type'], true), parseInt(req.body['voucher-amount']), req.body['voucher-note'] !== '' ? req.body['voucher-note'] : null).catch((e) => {
             res.cookie('flashMessage', JSON.stringify({type: 'error', message: e}), {httpOnly: true, expires: new Date(Date.now() + 24 * 60 * 60 * 1000)}).redirect(302, `${req.headers['x-ingress-path'] ? req.headers['x-ingress-path'] : ''}/vouchers`);
         });
 
@@ -419,11 +419,15 @@ if(variables.serviceWeb) {
             voucher_custom: variables.voucherCustom,
             vouchers: cache.vouchers.filter((item) => {
                 if(req.query.status === 'available') {
-                    return item.used === 0;
+                    return item.used === 0 && item.status !== 'EXPIRED';
                 }
 
                 if(req.query.status === 'in-use') {
-                    return item.used > 0;
+                    return item.used > 0 && item.status !== 'EXPIRED';
+                }
+
+                if(req.query.status === 'expired') {
+                    return item.status === 'EXPIRED';
                 }
 
                 return true;
@@ -441,6 +445,11 @@ if(variables.serviceWeb) {
                 if(req.query.sort === 'code') {
                     if (a.code > b.code) return -1;
                     if (a.code < b.code) return 1;
+                }
+
+                if(req.query.sort === 'note') {
+                    if ((a.note || '') > (b.note || '')) return -1;
+                    if ((a.note || '') < (b.note || '')) return 1;
                 }
 
                 if(req.query.sort === 'duration') {
@@ -498,6 +507,80 @@ if(variables.serviceWeb) {
             authDisabled: variables.authDisabled,
             status: status()
         });
+    });
+    app.get('/bulk/print', [authorization.web], async (req, res) => {
+        if(variables.printerType === '') {
+            res.status(501).send();
+            return;
+        }
+
+        res.render('components/bulk-print', {
+            baseUrl: req.headers['x-ingress-path'] ? req.headers['x-ingress-path'] : '',
+            timeConvert: time,
+            bytesConvert: bytes,
+            languages,
+            defaultLanguage: variables.translationDefault,
+            vouchers: cache.vouchers,
+            updated: cache.updated
+        });
+    });
+    app.post('/bulk/print', [authorization.web], async (req, res) => {
+        if(variables.printerType === '') {
+            res.status(501).send();
+            return;
+        }
+
+        if(!req.body.vouchers) {
+            res.cookie('flashMessage', JSON.stringify({type: 'error', message: 'No selected vouchers to print!'}), {httpOnly: true, expires: new Date(Date.now() + 24 * 60 * 60 * 1000)}).redirect(302, `${req.headers['x-ingress-path'] ? req.headers['x-ingress-path'] : ''}/vouchers`);
+            return;
+        }
+
+        // Single checkboxes get send as string so conversion is needed
+        if(typeof req.body.vouchers === 'string') {
+            req.body.vouchers = [req.body.vouchers];
+        }
+
+        const vouchers = req.body.vouchers.map((voucher) => {
+            return cache.vouchers.find((e) => {
+                return e._id === voucher;
+            });
+        });
+
+        if(!vouchers.includes(undefined)) {
+            if(variables.printerType === 'pdf') {
+                const buffers = await print.pdf(vouchers, req.body.language, true);
+                const pdfData = Buffer.concat(buffers);
+                res.writeHead(200, {
+                    'Content-Length': Buffer.byteLength(pdfData),
+                    'Content-Type': 'application/pdf',
+                    'Content-Disposition': `attachment;filename=bulk_vouchers_${new Date().getTime()}.pdf`
+                }).end(pdfData);
+            }
+
+            if(variables.printerType === 'escpos') {
+                let printSuccess = true;
+
+                for(let voucher = 0; voucher < vouchers.length; voucher++) {
+                    const printResult = await print.escpos(vouchers[voucher], req.body.language).catch((e) => {
+                        res.cookie('flashMessage', JSON.stringify({type: 'error', message: e}), {httpOnly: true, expires: new Date(Date.now() + 24 * 60 * 60 * 1000)}).redirect(302, `${req.headers['x-ingress-path'] ? req.headers['x-ingress-path'] : ''}/vouchers`);
+                    });
+
+                    if(!printResult) {
+                        printSuccess = false;
+                        break;
+                    }
+                }
+
+                if(printSuccess) {
+                    res.cookie('flashMessage', JSON.stringify({type: 'info', message: `Vouchers send to printer!`}), {httpOnly: true, expires: new Date(Date.now() + 24 * 60 * 60 * 1000)}).redirect(302, `${req.headers['x-ingress-path'] ? req.headers['x-ingress-path'] : ''}/vouchers`);
+                }
+            }
+        } else {
+            res.status(404);
+            res.render('404', {
+                baseUrl: req.headers['x-ingress-path'] ? req.headers['x-ingress-path'] : ''
+            });
+        }
     });
 }
 
@@ -564,7 +647,7 @@ if(variables.serviceApi) {
                 vouchers: cache.vouchers.map((voucher) => {
                     return {
                         code: `${voucher.code.slice(0, 5)}-${voucher.code.slice(5)}`,
-                        type: voucher.quota === 0 ? 'multi' : 'single',
+                        type: voucher.quota === 1 ? 'single' : voucher.quota === 0 ? 'multi' : 'multi',
                         duration: voucher.duration,
                         data_limit: voucher.qos_usage_quota ? voucher.qos_usage_quota : null,
                         download_limit: voucher.qos_rate_max_down ? voucher.qos_rate_max_down : null,

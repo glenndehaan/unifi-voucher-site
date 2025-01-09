@@ -26,20 +26,30 @@
                                             <div class="py-2 grid grid-cols-3 gap-4 px-0">
                                                 <dt class="text-sm font-medium leading-6 text-gray-900 dark:text-white">Status</dt>
                                                 <dd class="text-sm leading-6 text-gray-600 dark:text-gray-400 col-span-2 mt-0">
-                                                    <% if(voucher.used > 0) { %>
-                                                        <div class="rounded-full w-fit py-1 px-2 text-xs font-medium ring-1 ring-inset bg-yellow-50 text-yellow-800 ring-yellow-600/20 dark:text-yellow-400 dark:bg-yellow-400/10 dark:ring-yellow-400/20">
-                                                            In Use
+                                                    <% if (voucher.status === 'EXPIRED') { %>
+                                                        <div class="rounded-full w-fit py-1 px-2 text-xs font-medium ring-1 ring-inset bg-red-50 text-red-800 ring-red-600/20 dark:text-red-400 dark:bg-red-400/10 dark:ring-red-400/20">
+                                                            Expired
                                                         </div>
-                                                    <% } else { %>
-                                                        <div class="rounded-full w-fit py-1 px-2 text-xs font-medium ring-1 ring-inset bg-green-50 text-green-700 ring-green-600/20 dark:text-green-400 dark:bg-green-400/10 dark:ring-green-400/20">
-                                                            Available
-                                                        </div>
+                                                    <% } else {%>
+                                                        <% if(voucher.used > 0) { %>
+                                                            <div class="rounded-full w-fit py-1 px-2 text-xs font-medium ring-1 ring-inset bg-yellow-50 text-yellow-800 ring-yellow-600/20 dark:text-yellow-400 dark:bg-yellow-400/10 dark:ring-yellow-400/20">
+                                                                In Use
+                                                            </div>
+                                                        <% } else { %>
+                                                            <div class="rounded-full w-fit py-1 px-2 text-xs font-medium ring-1 ring-inset bg-green-50 text-green-700 ring-green-600/20 dark:text-green-400 dark:bg-green-400/10 dark:ring-green-400/20">
+                                                                Available
+                                                            </div>
+                                                        <% } %>
                                                     <% } %>
                                                 </dd>
                                             </div>
                                             <div class="py-2 grid grid-cols-3 gap-4 px-0">
+                                                <dt class="text-sm font-medium leading-6 text-gray-900 dark:text-white">Notes</dt>
+                                                <dd class="text-sm leading-6 text-gray-600 dark:text-gray-400 col-span-2 mt-0"><%= voucher.note ? voucher.note : '-' %></dd>
+                                            </div>
+                                            <div class="py-2 grid grid-cols-3 gap-4 px-0">
                                                 <dt class="text-sm font-medium leading-6 text-gray-900 dark:text-white">Type</dt>
-                                                <dd class="text-sm leading-6 text-gray-600 dark:text-gray-400 col-span-2 mt-0"><%= voucher.quota === 0 ? 'Multi-use' : 'Single-use' %></dd>
+                                                <dd class="text-sm leading-6 text-gray-600 dark:text-gray-400 col-span-2 mt-0"><%= voucher.quota === 1 ? 'Single-use' : voucher.quota === 0 ? 'Multi-use (Unlimited)' : `Multi-use (${voucher.quota}x)` %></dd>
                                             </div>
                                             <div class="py-2 grid grid-cols-3 gap-4 px-0">
                                                 <dt class="text-sm font-medium leading-6 text-gray-900 dark:text-white">Duration</dt>

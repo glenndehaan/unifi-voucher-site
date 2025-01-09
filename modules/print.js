@@ -27,18 +27,27 @@ module.exports = {
     /**
      * Generates a voucher as a PDF
      *
-     * @param voucher
+     * @param content
      * @param language
+     * @param multiPage
      * @return {Promise<unknown>}
      */
-    pdf: (voucher, language) => {
+    pdf: (content, language, multiPage= false) => {
         return new Promise(async (resolve) => {
             // Create new translator
             const t = translation('print', language);
 
+            // Set vouchers based on multiPage parameter
+            let vouchers = [];
+            if(multiPage) {
+                vouchers = [...content];
+            } else {
+                vouchers = [content];
+            }
+
             const doc = new PDFDocument({
                 bufferPages: true,
-                size: [226.77165354330398, size(voucher)],
+                size: [226.77165354330398, size(vouchers[0])],
                 margins : {
                     top: 20,
                     bottom: 20,
@@ -54,124 +63,148 @@ module.exports = {
                 resolve(buffers);
             });
 
-            doc.image('public/images/logo_grayscale_dark.png', 75, 15, {fit: [75, 75], align: 'center', valign: 'center'});
-            doc.moveDown(6);
+            for(let item = 0; item < vouchers.length; item++) {
+                if(item > 0) {
+                    doc.addPage({
+                        size: [226.77165354330398, size(vouchers[item])],
+                        margins : {
+                            top: 20,
+                            bottom: 20,
+                            left: 20,
+                            right: 20
+                        }
+                    });
 
-            doc.font('Helvetica-Bold')
-                .fontSize(20)
-                .text(`${t('title')}`, {
-                    align: 'center'
+                    doc.moveDown(1);
+                }
+
+                doc.image('public/images/logo_grayscale_dark.png', 75, 15, {
+                    fit: [75, 75],
+                    align: 'center',
+                    valign: 'center'
                 });
-            doc.font('Helvetica-Bold')
-                .fontSize(15)
-                .text(`${voucher.code.slice(0, 5)}-${voucher.code.slice(5)}`, {
-                    align: 'center'
-                });
+                doc.moveDown(6);
 
-            doc.moveDown(2);
-
-            if(variables.unifiSsid !== '') {
-                doc.font('Helvetica')
-                    .fontSize(10)
-                    .text(`${t('connect')}: `, {
-                        continued: true
+                doc.font('Helvetica-Bold')
+                    .fontSize(20)
+                    .text(`${t('title')}`, {
+                        align: 'center'
                     });
                 doc.font('Helvetica-Bold')
-                    .fontSize(10)
-                    .text(variables.unifiSsid, {
-                        continued: true
+                    .fontSize(15)
+                    .text(`${vouchers[item].code.slice(0, 5)}-${vouchers[item].code.slice(5)}`, {
+                        align: 'center'
                     });
 
-                if(variables.unifiSsidPassword !== '') {
+                doc.moveDown(2);
+
+                if (variables.unifiSsid !== '') {
                     doc.font('Helvetica')
                         .fontSize(10)
-                        .text(`,`);
-                    doc.font('Helvetica')
-                        .fontSize(10)
-                        .text(`${t('password')}: `, {
+                        .text(`${t('connect')}: `, {
                             continued: true
                         });
                     doc.font('Helvetica-Bold')
                         .fontSize(10)
-                        .text(variables.unifiSsidPassword, {
+                        .text(variables.unifiSsid, {
+                            continued: true
+                        });
+
+                    if (variables.unifiSsidPassword !== '') {
+                        doc.font('Helvetica')
+                            .fontSize(10)
+                            .text(`,`);
+                        doc.font('Helvetica')
+                            .fontSize(10)
+                            .text(`${t('password')}: `, {
+                                continued: true
+                            });
+                        doc.font('Helvetica-Bold')
+                            .fontSize(10)
+                            .text(variables.unifiSsidPassword, {
+                                continued: true
+                            });
+                        doc.font('Helvetica')
+                            .fontSize(10)
+                            .text(` ${t('or')},`);
+                    } else {
+                        doc.font('Helvetica')
+                            .fontSize(10)
+                            .text(` ${t('or')},`);
+                    }
+
+                    doc.font('Helvetica')
+                        .fontSize(10)
+                        .text(`${t('scan')}:`);
+
+                    doc.image(await qr(), 75, variables.unifiSsidPassword !== '' ? 215 : 205, {
+                        fit: [75, 75],
+                        align: 'center',
+                        valign: 'center'
+                    });
+                    doc.moveDown(6);
+
+                    doc.moveDown(2);
+                }
+
+                doc.font('Helvetica-Bold')
+                    .fontSize(12)
+                    .text(`${t('details')}`);
+
+                doc.font('Helvetica-Bold')
+                    .fontSize(10)
+                    .text(`--------------------------------------------------------`);
+
+                doc.font('Helvetica-Bold')
+                    .fontSize(10)
+                    .text(`${t('type')}: `, {
+                        continued: true
+                    });
+                doc.font('Helvetica')
+                    .fontSize(10)
+                    .text(vouchers[item].quota === 1 ? t('singleUse') : vouchers[item].quota === 0 ? t('multiUse') : t('multiUse'));
+
+                doc.font('Helvetica-Bold')
+                    .fontSize(10)
+                    .text(`${t('duration')}: `, {
+                        continued: true
+                    });
+                doc.font('Helvetica')
+                    .fontSize(10)
+                    .text(time(vouchers[item].duration));
+
+                if (vouchers[item].qos_usage_quota) {
+                    doc.font('Helvetica-Bold')
+                        .fontSize(10)
+                        .text(`${t('dataLimit')}: `, {
                             continued: true
                         });
                     doc.font('Helvetica')
                         .fontSize(10)
-                        .text(` ${t('or')},`);
-                } else {
-                    doc.font('Helvetica')
-                        .fontSize(10)
-                        .text(` ${t('or')},`);
+                        .text(`${bytes(vouchers[item].qos_usage_quota, 2)}`);
                 }
 
-                doc.font('Helvetica')
-                    .fontSize(10)
-                    .text(`${t('scan')}:`);
+                if (vouchers[item].qos_rate_max_down) {
+                    doc.font('Helvetica-Bold')
+                        .fontSize(10)
+                        .text(`${t('downloadLimit')}: `, {
+                            continued: true
+                        });
+                    doc.font('Helvetica')
+                        .fontSize(10)
+                        .text(`${bytes(vouchers[item].qos_rate_max_down, 1, true)}`);
+                }
 
-                doc.image(await qr(), 75, variables.unifiSsidPassword !== '' ? 215 : 205, {fit: [75, 75], align: 'center', valign: 'center'});
-                doc.moveDown(6);
-
-                doc.moveDown(2);
-            }
-
-            doc.font('Helvetica-Bold')
-                .fontSize(12)
-                .text(`${t('details')}`);
-
-            doc.font('Helvetica-Bold')
-                .fontSize(10)
-                .text(`--------------------------------------------------------`);
-
-            doc.font('Helvetica-Bold')
-                .fontSize(10)
-                .text(`${t('type')}: `, {
-                    continued: true
-                });
-            doc.font('Helvetica')
-                .fontSize(10)
-                .text(voucher.quota === 0 ? t('multiUse') : t('singleUse'));
-
-            doc.font('Helvetica-Bold')
-                .fontSize(10)
-                .text(`${t('duration')}: `, {
-                    continued: true
-                });
-            doc.font('Helvetica')
-                .fontSize(10)
-                .text(time(voucher.duration));
-
-            if(voucher.qos_usage_quota) {
-                doc.font('Helvetica-Bold')
-                    .fontSize(10)
-                    .text(`${t('dataLimit')}: `, {
-                        continued: true
-                    });
-                doc.font('Helvetica')
-                    .fontSize(10)
-                    .text(`${bytes(voucher.qos_usage_quota, 2)}`);
-            }
-
-            if(voucher.qos_rate_max_down) {
-                doc.font('Helvetica-Bold')
-                    .fontSize(10)
-                    .text(`${t('downloadLimit')}: `, {
-                        continued: true
-                    });
-                doc.font('Helvetica')
-                    .fontSize(10)
-                    .text(`${bytes(voucher.qos_rate_max_down, 1, true)}`);
-            }
-
-            if(voucher.qos_rate_max_up) {
-                doc.font('Helvetica-Bold')
-                    .fontSize(10)
-                    .text(`${t('uploadLimit')}: `, {
-                        continued: true
-                    });
-                doc.font('Helvetica')
-                    .fontSize(10)
-                    .text(`${bytes(voucher.qos_rate_max_up, 1, true)}`);
+                if (vouchers[item].qos_rate_max_up) {
+                    doc.font('Helvetica-Bold')
+                        .fontSize(10)
+                        .text(`${t('uploadLimit')}: `, {
+                            continued: true
+                        });
+                    doc.font('Helvetica')
+                        .fontSize(10)
+                        .text(`${bytes(vouchers[item].qos_rate_max_up, 1, true)}`);
+                }
             }
 
             doc.end();
@@ -260,7 +293,7 @@ module.exports = {
             printer.invert(true);
             printer.print(`${t('type')}:`);
             printer.invert(false);
-            printer.print(voucher.quota === 0 ? ` ${t('multiUse')}` : ` ${t('singleUse')}`);
+            printer.print(voucher.quota === 1 ? ` ${t('singleUse')}` : voucher.quota === 0 ? ` ${t('multiUse')}` : ` ${t('multiUse')}`);
             printer.newLine();
 
             printer.setTextDoubleHeight();
@@ -307,7 +340,11 @@ module.exports = {
             try {
                 await printer.execute();
                 log.info('[Printer] Data send to printer!');
-                resolve(true);
+
+                // Ensure cheap printers have cleared the buffer before allowing new actions
+                setTimeout(() => {
+                    resolve(true);
+                }, 1500);
             } catch (error) {
                 reject(error);
             }

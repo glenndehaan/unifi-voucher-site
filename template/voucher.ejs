@@ -66,16 +66,17 @@
             <% } %>
 
             <main class="mx-auto max-w-7xl">
-                <header class="flex items-center justify-between border-b border-black/5 dark:border-white/5 px-4 py-4 sm:px-6 sm:py-6 lg:px-8">
+                <header class="flex items-center justify-between border-b border-black/5 dark:border-white/5 px-4 py-4 md:px-6 md:py-6 lg:px-8">
                     <div class="grid">
                         <form id="filter-sort-form" action="<%= baseUrl %>/vouchers" method="get">
-                            <div class="flex flex-col sm:flex-row sm:items-end sm:space-x-4 space-y-2 sm:space-y-0">
+                            <div class="flex flex-col md:flex-row md:items-end md:space-x-4 space-y-2 md:space-y-0">
                                 <div class="flex flex-col">
                                     <label for="status" class="text-xs text-gray-900 dark:text-white mb-1">Status</label>
                                     <select id="status" name="status" class="rounded-md border-0 py-1.5 pl-3 pr-10 text-gray-900 dark:text-white dark:bg-white/5 ring-1 ring-inset ring-gray-300 dark:ring-white/10 focus:ring-2 focus:ring-sky-600 sm:text-sm sm:leading-6 [&_*]:text-black" aria-label="Filter by status">
                                         <option value="all"<%= filters.status === 'all' ? ' selected' : '' %>>All</option>
                                         <option value="available"<%= filters.status === 'available' ? ' selected' : '' %>>Available</option>
                                         <option value="in-use"<%= filters.status === 'in-use' ? ' selected' : '' %>>In Use</option>
+                                        <option value="expired"<%= filters.status === 'expired' ? ' selected' : '' %>>Expired</option>
                                     </select>
                                 </div>
                                 <div class="flex flex-col">
@@ -91,6 +92,7 @@
                                     <select id="sort" name="sort" class="rounded-md border-0 py-1.5 pl-3 pr-10 text-gray-900 dark:text-white dark:bg-white/5 ring-1 ring-inset ring-gray-300 dark:ring-white/10 focus:ring-2 focus:ring-sky-600 sm:text-sm sm:leading-6 [&_*]:text-black" aria-label="Sort by">
                                         <option value="date"<%= sort === 'date' ? ' selected' : '' %>>Date</option>
                                         <option value="code"<%= sort === 'code' ? ' selected' : '' %>>Code</option>
+                                        <option value="note"<%= sort === 'note' ? ' selected' : '' %>>Notes</option>
                                         <option value="duration"<%= sort === 'duration' ? ' selected' : '' %>>Duration</option>
                                         <option value="status"<%= sort === 'status' ? ' selected' : '' %>>Status</option>
                                     </select>
@@ -99,16 +101,29 @@
                         </form>
                     </div>
 
-                    <div class="grid self-end">
-                        <span class="mb-1 text-xs text-gray-900 dark:text-white">
-                            Last Sync: <%= new Intl.DateTimeFormat('en-GB', {day: "numeric", month: "numeric", hour: "numeric", minute: "numeric", hour12: false}).format(new Date(updated)) %>
-                        </span>
-                        <a href="<%= baseUrl %>/vouchers?refresh=true" id="reload-vouchers" type="button" class="w-fit justify-self-end relative inline-flex items-center gap-x-1.5 rounded-md bg-sky-700 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-sky-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sky-700">
-                            <svg class="-ml-0.5 h-5 w-5" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
-                                <path fill-rule="evenodd" d="M15.312 11.424a5.5 5.5 0 0 1-9.201 2.466l-.312-.311h2.433a.75.75 0 0 0 0-1.5H3.989a.75.75 0 0 0-.75.75v4.242a.75.75 0 0 0 1.5 0v-2.43l.31.31a7 7 0 0 0 11.712-3.138.75.75 0 0 0-1.449-.39Zm1.23-3.723a.75.75 0 0 0 .219-.53V2.929a.75.75 0 0 0-1.5 0V5.36l-.31-.31A7 7 0 0 0 3.239 8.188a.75.75 0 1 0 1.448.389A5.5 5.5 0 0 1 13.89 6.11l.311.31h-2.432a.75.75 0 0 0 0 1.5h4.243a.75.75 0 0 0 .53-.219Z" clip-rule="evenodd" />
-                            </svg>
-                            Sync Vouchers
-                        </a>
+                    <div class="grid md:grid-cols-2 self-end">
+                        <div class="grid mb-2 md:mb-0 md:mr-4">
+                            <span class="mb-1 text-xs text-gray-900 dark:text-white<%= !printer_enabled ? ' hidden' : '' %>">
+                                &nbsp;
+                            </span>
+                            <button id="bulk-print" class="w-fit justify-self-end relative inline-flex items-center gap-x-1.5 rounded-md bg-sky-700 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-sky-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sky-700<%= !printer_enabled ? ' hidden' : '' %>">
+                                <svg class="-ml-0.5 h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M6.72 13.829c-.24.03-.48.062-.72.096m.72-.096a42.415 42.415 0 0 1 10.56 0m-10.56 0L6.34 18m10.94-4.171c.24.03.48.062.72.096m-.72-.096L17.66 18m0 0 .229 2.523a1.125 1.125 0 0 1-1.12 1.227H7.231c-.662 0-1.18-.568-1.12-1.227L6.34 18m11.318 0h1.091A2.25 2.25 0 0 0 21 15.75V9.456c0-1.081-.768-2.015-1.837-2.175a48.055 48.055 0 0 0-1.913-.247M6.34 18H5.25A2.25 2.25 0 0 1 3 15.75V9.456c0-1.081.768-2.015 1.837-2.175a48.041 48.041 0 0 1 1.913-.247m10.5 0a48.536 48.536 0 0 0-10.5 0m10.5 0V3.375c0-.621-.504-1.125-1.125-1.125h-8.25c-.621 0-1.125.504-1.125 1.125v3.659M18 10.5h.008v.008H18V10.5Zm-3 0h.008v.008H15V10.5Z" />
+                                </svg>
+                                Bulk Print
+                            </button>
+                        </div>
+                        <div class="grid">
+                            <span class="mb-1 text-xs text-gray-900 dark:text-white">
+                                Last Sync: <%= new Intl.DateTimeFormat('en-GB', {day: "numeric", month: "numeric", hour: "numeric", minute: "numeric", hour12: false}).format(new Date(updated)) %>
+                            </span>
+                            <a href="<%= baseUrl %>/vouchers?refresh=true" id="reload-vouchers" type="button" class="w-fit justify-self-end relative inline-flex items-center gap-x-1.5 rounded-md bg-sky-700 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-sky-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sky-700">
+                                <svg class="-ml-0.5 h-5 w-5" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                                    <path fill-rule="evenodd" d="M15.312 11.424a5.5 5.5 0 0 1-9.201 2.466l-.312-.311h2.433a.75.75 0 0 0 0-1.5H3.989a.75.75 0 0 0-.75.75v4.242a.75.75 0 0 0 1.5 0v-2.43l.31.31a7 7 0 0 0 11.712-3.138.75.75 0 0 0-1.449-.39Zm1.23-3.723a.75.75 0 0 0 .219-.53V2.929a.75.75 0 0 0-1.5 0V5.36l-.31-.31A7 7 0 0 0 3.239 8.188a.75.75 0 1 0 1.448.389A5.5 5.5 0 0 1 13.89 6.11l.311.31h-2.432a.75.75 0 0 0 0 1.5h4.243a.75.75 0 0 0 .53-.219Z" clip-rule="evenodd" />
+                                </svg>
+                                Sync Vouchers
+                            </a>
+                        </div>
                     </div>
                 </header>
 
@@ -136,20 +151,31 @@
                                     <h2 class="min-w-0 text-sm font-semibold leading-6 text-gray-900 dark:text-white">
                                         <div class="flex gap-x-2">
                                             <span class="tabular-nums pointer-events-none no-underline text-inherit"><%= voucher.code.slice(0, 5) %>-<%= voucher.code.slice(5) %></span>
-                                            <% if(voucher.used > 0) { %>
-                                                <div class="rounded-full flex-none py-1 px-2 text-xs font-medium ring-1 ring-inset bg-yellow-50 text-yellow-800 ring-yellow-600/20 dark:text-yellow-400 dark:bg-yellow-400/10 dark:ring-yellow-400/20">
-                                                    In Use
+                                            <% if (voucher.status === 'EXPIRED') { %>
+                                                <div class="rounded-full w-fit py-1 px-2 text-xs font-medium ring-1 ring-inset bg-red-50 text-red-800 ring-red-600/20 dark:text-red-400 dark:bg-red-400/10 dark:ring-red-400/20">
+                                                    Expired
                                                 </div>
-                                            <% } else { %>
-                                                <div class="rounded-full flex-none py-1 px-2 text-xs font-medium ring-1 ring-inset bg-green-50 text-green-700 ring-green-600/20 dark:text-green-400 dark:bg-green-400/10 dark:ring-green-400/20">
-                                                    Available
+                                            <% } else {%>
+                                                <% if(voucher.used > 0) { %>
+                                                    <div class="rounded-full flex-none py-1 px-2 text-xs font-medium ring-1 ring-inset bg-yellow-50 text-yellow-800 ring-yellow-600/20 dark:text-yellow-400 dark:bg-yellow-400/10 dark:ring-yellow-400/20">
+                                                        In Use
+                                                    </div>
+                                                <% } else { %>
+                                                    <div class="rounded-full flex-none py-1 px-2 text-xs font-medium ring-1 ring-inset bg-green-50 text-green-700 ring-green-600/20 dark:text-green-400 dark:bg-green-400/10 dark:ring-green-400/20">
+                                                        Available
+                                                    </div>
+                                                <% } %>
+                                            <% } %>
+                                            <% if (voucher.note) { %>
+                                                <div class="hidden sm:block rounded-md flex-none py-1 px-2 text-xs font-medium ring-1 ring-inset bg-gray-50 text-gray-800 ring-gray-600/20 dark:text-gray-400 dark:bg-gray-400/10 dark:ring-gray-400/20">
+                                                    <%= voucher.note %>
                                                 </div>
                                             <% } %>
                                         </div>
                                     </h2>
                                 </div>
                                 <div class="mt-2 flex items-center gap-x-2.5 text-xs leading-5 text-gray-600 dark:text-gray-400">
-                                    <p class="whitespace-nowrap"><%= voucher.quota === 0 ? 'Multi-use' : 'Single-use' %></p>
+                                    <p class="whitespace-nowrap"><%= voucher.quota === 1 ? 'Single-use' : voucher.quota === 0 ? 'Multi-use (Unlimited)' : `Multi-use (${voucher.quota}x)` %></p>
                                     <svg viewBox="0 0 2 2" class="h-0.5 w-0.5 flex-none fill-gray-500 dark:fill-gray-300">
                                         <circle cx="1" cy="1" r="1" />
                                     </svg>
@@ -214,6 +240,7 @@
         <div id="detail-dialog"></div>
         <div id="email-dialog"></div>
         <div id="print-dialog"></div>
+        <div id="bulk-print-dialog"></div>
 
         <div id="create-dialog" class="hidden relative z-40" role="dialog" aria-modal="true">
             <div id="create-dialog-overlay" class="fixed inset-0 bg-gray-500 bg-opacity-75"></div>
@@ -252,6 +279,12 @@
                                                     <label for="voucher-amount" class="block text-sm font-medium leading-6 text-gray-900 dark:text-white">Amount</label>
                                                     <div class="mt-2">
                                                         <input type="number" min="1" step="1" value="1" id="voucher-amount" name="voucher-amount" required class="mt-2 block w-full rounded-md border-0 py-1.5 text-gray-900 dark:text-white dark:bg-white/5 ring-1 ring-inset ring-gray-300 dark:ring-white/10 focus:ring-2 focus:ring-sky-600 sm:text-sm sm:leading-6">
+                                                    </div>
+                                                </div>
+                                                <div>
+                                                    <label for="voucher-note" class="block text-sm font-medium leading-6 text-gray-900 dark:text-white">Note <em class="text-xs">(Optional)</em></label>
+                                                    <div class="mt-2">
+                                                        <input type="text" id="voucher-note" name="voucher-note" class="mt-2 block w-full rounded-md border-0 py-1.5 text-gray-900 dark:text-white dark:bg-white/5 ring-1 ring-inset ring-gray-300 dark:ring-white/10 focus:ring-2 focus:ring-sky-600 sm:text-sm sm:leading-6">
                                                     </div>
                                                 </div>
                                                 <div class="custom-voucher-field hidden border-t border-black/5 dark:border-white/25">
@@ -387,6 +420,7 @@
             const detailDialog = document.querySelector('#detail-dialog');
             const emailDialog = document.querySelector('#email-dialog');
             const printDialog = document.querySelector('#print-dialog');
+            const bulkPrintDialog = document.querySelector('#bulk-print-dialog');
             const createForm = document.querySelector('#voucher-form');
             const voucherTypeField = document.querySelector('#voucher-type');
             const customVoucherFields = document.querySelectorAll('.custom-voucher-field');
@@ -404,6 +438,7 @@
             const vouchers = document.querySelectorAll('.voucher');
             const vouchersEmail = document.querySelectorAll('.voucher-email');
             const vouchersPrint = document.querySelectorAll('.voucher-print');
+            const bulkPrint = document.querySelector('#bulk-print');
             const filterSortForm = document.querySelector('#filter-sort-form');
             const statusFilter = document.querySelector('#status');
             const quotaFilter = document.querySelector('#quota');
@@ -426,6 +461,12 @@
                 document.querySelector('#close').removeEventListener('click', clearPrintDialog);
                 document.querySelector('#overlay').removeEventListener('click', clearPrintDialog);
                 printDialog.innerHTML = '';
+            };
+
+            const clearBulkPrintDialog = () => {
+                document.querySelector('#close').removeEventListener('click', clearBulkPrintDialog);
+                document.querySelector('#overlay').removeEventListener('click', clearBulkPrintDialog);
+                bulkPrintDialog.innerHTML = '';
             };
 
             const emailSpinner = () => {
@@ -521,6 +562,17 @@
                         window.location.reload();
                     }
                 });
+            });
+            bulkPrint.addEventListener('click', async () => {
+                const htmlRes = await fetch(`<%= baseUrl %>/bulk/print`);
+
+                if(htmlRes.status === 200 && !htmlRes.redirected) {
+                    bulkPrintDialog.innerHTML = await htmlRes.text();
+                    document.querySelector('#close').addEventListener('click', clearBulkPrintDialog);
+                    document.querySelector('#overlay').addEventListener('click', clearBulkPrintDialog);
+                } else {
+                    window.location.reload();
+                }
             });
             statusFilter.addEventListener('change', () => {
                 filterSortForm.submit();

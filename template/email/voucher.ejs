@@ -140,7 +140,7 @@
                                         <% } %>
                                         <p style="font-family: sans-serif; font-size: 20px; font-weight: bold; margin: 0; margin-bottom: 15px;"><%= t('details') %></p>
                                         <hr/>
-                                        <p style="font-family: sans-serif; font-size: 14px; font-weight: normal; margin: 0;"><span style="font-weight: bold;"><%= t('type') %>:</span> <%= voucher.quota === 0 ? t('multiUse') : t('singleUse') %></p>
+                                        <p style="font-family: sans-serif; font-size: 14px; font-weight: normal; margin: 0;"><span style="font-weight: bold;"><%= t('type') %>:</span> <%= voucher.quota === 1 ? t('singleUse') : voucher.quota === 0 ? t('multiUse') : t('multiUse') %></p>
                                         <p style="font-family: sans-serif; font-size: 14px; font-weight: normal; margin: 0;"><span style="font-weight: bold;"><%= t('duration') %>:</span> <%= timeConvert(voucher.duration) %></p>
                                         <% if(voucher.qos_usage_quota) { %>
                                             <p style="font-family: sans-serif; font-size: 14px; font-weight: normal; margin: 0;"><span style="font-weight: bold;"><%= t('dataLimit') %>:</span> <%= bytesConvert(voucher.qos_usage_quota, 2) %></p>
