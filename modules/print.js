@@ -56,6 +56,10 @@ module.exports = {
                 }
             });
 
+            // Utilize custom font for custom characters
+            doc.font(__dirname + '/../public/fonts/Roboto-Regular.ttf');
+            doc.font(__dirname + '/../public/fonts/Roboto-Bold.ttf');
+
             const buffers = [];
             doc.on('data', buffers.push.bind(buffers));
             doc.on('end', () => {
@@ -85,12 +89,12 @@ module.exports = {
                 });
                 doc.moveDown(6);
 
-                doc.font('Helvetica-Bold')
+                doc.font('Roboto-Bold')
                     .fontSize(20)
                     .text(`${t('title')}`, {
                         align: 'center'
                     });
-                doc.font('Helvetica-Bold')
+                doc.font('Roboto-Bold')
                     .fontSize(15)
                     .text(`${vouchers[item].code.slice(0, 5)}-${vouchers[item].code.slice(5)}`, {
                         align: 'center'
@@ -99,41 +103,41 @@ module.exports = {
                 doc.moveDown(2);
 
                 if (variables.unifiSsid !== '') {
-                    doc.font('Helvetica')
+                    doc.font('Roboto-Regular')
                         .fontSize(10)
                         .text(`${t('connect')}: `, {
                             continued: true
                         });
-                    doc.font('Helvetica-Bold')
+                    doc.font('Roboto-Bold')
                         .fontSize(10)
                         .text(variables.unifiSsid, {
                             continued: true
                         });
 
                     if (variables.unifiSsidPassword !== '') {
-                        doc.font('Helvetica')
+                        doc.font('Roboto-Regular')
                             .fontSize(10)
                             .text(`,`);
-                        doc.font('Helvetica')
+                        doc.font('Roboto-Regular')
                             .fontSize(10)
                             .text(`${t('password')}: `, {
                                 continued: true
                             });
-                        doc.font('Helvetica-Bold')
+                        doc.font('Roboto-Bold')
                             .fontSize(10)
                             .text(variables.unifiSsidPassword, {
                                 continued: true
                             });
-                        doc.font('Helvetica')
+                        doc.font('Roboto-Regular')
                             .fontSize(10)
                             .text(` ${t('or')},`);
                     } else {
-                        doc.font('Helvetica')
+                        doc.font('Roboto-Regular')
                             .fontSize(10)
                             .text(` ${t('or')},`);
                     }
 
-                    doc.font('Helvetica')
+                    doc.font('Roboto-Regular')
                         .fontSize(10)
                         .text(`${t('scan')}:`);
 
@@ -147,61 +151,61 @@ module.exports = {
                     doc.moveDown(2);
                 }
 
-                doc.font('Helvetica-Bold')
+                doc.font('Roboto-Bold')
                     .fontSize(12)
                     .text(`${t('details')}`);
 
-                doc.font('Helvetica-Bold')
+                doc.font('Roboto-Bold')
                     .fontSize(10)
-                    .text(`--------------------------------------------------------`);
+                    .text(`------------------------------------------`);
 
-                doc.font('Helvetica-Bold')
+                doc.font('Roboto-Bold')
                     .fontSize(10)
                     .text(`${t('type')}: `, {
                         continued: true
                     });
-                doc.font('Helvetica')
+                doc.font('Roboto-Regular')
                     .fontSize(10)
                     .text(vouchers[item].quota === 1 ? t('singleUse') : vouchers[item].quota === 0 ? t('multiUse') : t('multiUse'));
 
-                doc.font('Helvetica-Bold')
+                doc.font('Roboto-Bold')
                     .fontSize(10)
                     .text(`${t('duration')}: `, {
                         continued: true
                     });
-                doc.font('Helvetica')
+                doc.font('Roboto-Regular')
                     .fontSize(10)
                     .text(time(vouchers[item].duration));
 
                 if (vouchers[item].qos_usage_quota) {
-                    doc.font('Helvetica-Bold')
+                    doc.font('Roboto-Bold')
                         .fontSize(10)
                         .text(`${t('dataLimit')}: `, {
                             continued: true
                         });
-                    doc.font('Helvetica')
+                    doc.font('Roboto-Regular')
                         .fontSize(10)
                         .text(`${bytes(vouchers[item].qos_usage_quota, 2)}`);
                 }
 
                 if (vouchers[item].qos_rate_max_down) {
-                    doc.font('Helvetica-Bold')
+                    doc.font('Roboto-Bold')
                         .fontSize(10)
                         .text(`${t('downloadLimit')}: `, {
                             continued: true
                         });
-                    doc.font('Helvetica')
+                    doc.font('Roboto-Regular')
                         .fontSize(10)
                         .text(`${bytes(vouchers[item].qos_rate_max_down, 1, true)}`);
                 }
 
                 if (vouchers[item].qos_rate_max_up) {
-                    doc.font('Helvetica-Bold')
+                    doc.font('Roboto-Bold')
                         .fontSize(10)
                         .text(`${t('uploadLimit')}: `, {
                             continued: true
                         });
-                    doc.font('Helvetica')
+                    doc.font('Roboto-Regular')
                         .fontSize(10)
                         .text(`${bytes(vouchers[item].qos_rate_max_up, 1, true)}`);
                 }
