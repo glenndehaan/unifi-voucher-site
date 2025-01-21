@@ -203,7 +203,7 @@ if(variables.serviceWeb) {
         }
 
         // Create voucher code
-        const voucherCode = await unifi.create(types(req.body['voucher-type'] === 'custom' ? `${req.body['voucher-duration']},${req.body['voucher-usage']},${req.body['voucher-upload-limit']},${req.body['voucher-download-limit']},${req.body['voucher-data-limit']};` : req.body['voucher-type'], true), parseInt(req.body['voucher-amount']), req.body['voucher-note'] !== '' ? req.body['voucher-note'] : null).catch((e) => {
+        const voucherCode = await unifi.create(types(req.body['voucher-type'] === 'custom' ? `${req.body['voucher-duration-type'] === 'day' ? (parseInt(req.body['voucher-duration']) * 24 * 60) : req.body['voucher-duration-type'] === 'hour' ? (parseInt(req.body['voucher-duration']) * 60) : parseInt(req.body['voucher-duration'])},${req.body['voucher-usage'] === '-1' ? req.body['voucher-quota'] : req.body['voucher-usage']},${req.body['voucher-upload-limit']},${req.body['voucher-download-limit']},${req.body['voucher-data-limit']};` : req.body['voucher-type'], true), parseInt(req.body['voucher-amount']), req.body['voucher-note'] !== '' ? req.body['voucher-note'] : null).catch((e) => {
             res.cookie('flashMessage', JSON.stringify({type: 'error', message: e}), {httpOnly: true, expires: new Date(Date.now() + 24 * 60 * 60 * 1000)}).redirect(302, `${req.headers['x-ingress-path'] ? req.headers['x-ingress-path'] : ''}/vouchers`);
         });
 

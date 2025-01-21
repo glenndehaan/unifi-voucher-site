@@ -83,7 +83,7 @@ const unifiModule = {
     create: (type, amount = 1, note = null, retry = true) => {
         return new Promise((resolve, reject) => {
             startSession().then(() => {
-                controller.createVouchers(type.expiration, amount, parseInt(type.usage) === 1 ? 1 : 0, note, typeof type.upload !== "undefined" ? type.upload : null, typeof type.download !== "undefined" ? type.download : null, typeof type.megabytes !== "undefined" ? type.megabytes : null).then((voucher_data) => {
+                controller.createVouchers(type.expiration, amount, parseInt(type.usage), note, typeof type.upload !== "undefined" ? type.upload : null, typeof type.download !== "undefined" ? type.download : null, typeof type.megabytes !== "undefined" ? type.megabytes : null).then((voucher_data) => {
                     if(amount > 1) {
                         log.info(`[UniFi] Created ${amount} vouchers`);
                         resolve(true);
