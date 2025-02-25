@@ -600,6 +600,60 @@ Detailed information on the changes in each release can be found on the [GitHub 
 
 When upgrading from 4.x to 5.x, the following changes need to be made:
 
+1. **Updated `/api` Endpoint Response**
+    - The `/api` endpoint now returns a structured response that includes the HTTP method for each available endpoint. Update API integrations to handle the new response structure.
+
+    **Previous Response:**
+
+    ```json
+    {
+      "error": null,
+      "data": {
+        "message": "OK",
+        "endpoints": [
+          "/api",
+          "/api/types",
+          "/api/voucher/:type",
+          "/api/vouchers"
+        ]
+      }
+    }
+    ```
+
+    **New Response:**
+
+    ```json
+    {
+      "error": null,
+      "data": {
+        "message": "OK",
+        "endpoints": [
+          { "method": "GET", "endpoint": "/api" },
+          { "method": "GET", "endpoint": "/api/types" },
+          { "method": "GET", "endpoint": "/api/languages" },
+          { "method": "GET", "endpoint": "/api/vouchers" },
+          { "method": "POST", "endpoint": "/api/voucher" }
+        ]
+      }
+    }
+    ```
+
+2. **`/api/voucher/:type` Endpoint Replacement**
+    - The **`/api/voucher/:type`** endpoint has been replaced by **`/api/voucher`**.
+    - The method has changed from **`GET`** to **`POST`**.
+    - The `:type` URL parameter is now passed in the **JSON body**.
+
+    **Example Request:**
+
+    ```http
+    POST /api/voucher
+    Content-Type: application/json
+
+    {
+      "type": "480,0,,,"
+    }
+    ```
+
 ### Migration from 3.x to 4.x
 
 When upgrading from 3.x to 4.x, the following changes need to be made:
