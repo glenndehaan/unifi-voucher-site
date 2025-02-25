@@ -35,7 +35,7 @@
                 <div class="mx-6">
                     <div class="max-w-7xl mx-auto mt-5 rounded-md bg-red-700 p-4">
                         <div class="flex">
-                            <div class="flex-shrink-0">
+                            <div class="shrink-0">
                                 <svg class="h-5 w-5 text-white" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
                                     <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.28 7.22a.75.75 0 00-1.06 1.06L8.94 10l-1.72 1.72a.75.75 0 101.06 1.06L10 11.06l1.72 1.72a.75.75 0 101.06-1.06L11.06 10l1.72-1.72a.75.75 0 00-1.06-1.06L10 8.94 8.28 7.22z" clip-rule="evenodd" />
                                 </svg>
@@ -52,7 +52,7 @@
                 <div class="mx-6">
                     <div class="max-w-7xl mx-auto mt-5 rounded-md bg-green-700 p-4">
                         <div class="flex">
-                            <div class="flex-shrink-0">
+                            <div class="shrink-0">
                                 <svg class="h-5 w-5 text-white" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
                                     <path fill-rule="evenodd" d="M10 18a8 8 0 1 0 0-16 8 8 0 0 0 0 16Zm3.857-9.809a.75.75 0 0 0-1.214-.882l-3.483 4.79-1.88-1.88a.75.75 0 1 0-1.06 1.061l2.5 2.5a.75.75 0 0 0 1.137-.089l4-5.5Z" clip-rule="evenodd" />
                                 </svg>
@@ -72,7 +72,7 @@
                             <div class="flex flex-col md:flex-row md:items-end md:space-x-4 space-y-2 md:space-y-0">
                                 <div class="flex flex-col">
                                     <label for="status" class="text-xs text-gray-900 dark:text-white mb-1">Status</label>
-                                    <select id="status" name="status" class="rounded-md border-0 py-1.5 pl-3 pr-10 text-gray-900 dark:text-white dark:bg-white/5 ring-1 ring-inset ring-gray-300 dark:ring-white/10 focus:ring-2 focus:ring-sky-600 sm:text-sm sm:leading-6 [&_*]:text-black" aria-label="Filter by status">
+                                    <select id="status" name="status" class="rounded-md border-0 py-1.5 pl-3 pr-10 text-gray-900 dark:text-white dark:bg-white/5 ring-1 ring-inset ring-gray-300 dark:ring-white/10 focus:ring-2 focus:ring-sky-600 sm:text-sm sm:leading-6 **:text-black" aria-label="Filter by status">
                                         <option value="all"<%= filters.status === 'all' ? ' selected' : '' %>>All</option>
                                         <option value="available"<%= filters.status === 'available' ? ' selected' : '' %>>Available</option>
                                         <option value="in-use"<%= filters.status === 'in-use' ? ' selected' : '' %>>In Use</option>
@@ -81,7 +81,7 @@
                                 </div>
                                 <div class="flex flex-col">
                                     <label for="quota" class="text-xs text-gray-900 dark:text-white mb-1">Quota</label>
-                                    <select id="quota" name="quota" class="rounded-md border-0 py-1.5 pl-3 pr-10 text-gray-900 dark:text-white dark:bg-white/5 ring-1 ring-inset ring-gray-300 dark:ring-white/10 focus:ring-2 focus:ring-sky-600 sm:text-sm sm:leading-6 [&_*]:text-black" aria-label="Filter by quota">
+                                    <select id="quota" name="quota" class="rounded-md border-0 py-1.5 pl-3 pr-10 text-gray-900 dark:text-white dark:bg-white/5 ring-1 ring-inset ring-gray-300 dark:ring-white/10 focus:ring-2 focus:ring-sky-600 sm:text-sm sm:leading-6 **:text-black" aria-label="Filter by quota">
                                         <option value="all"<%= filters.quota === 'all' ? ' selected' : '' %>>All</option>
                                         <option value="multi-use"<%= filters.quota === 'multi-use' ? ' selected' : '' %>>Multi-use</option>
                                         <option value="single-use"<%= filters.quota === 'single-use' ? ' selected' : '' %>>Single-use</option>
@@ -89,7 +89,7 @@
                                 </div>
                                 <div class="flex flex-col">
                                     <label for="sort" class="text-xs text-gray-900 dark:text-white mb-1">Sort</label>
-                                    <select id="sort" name="sort" class="rounded-md border-0 py-1.5 pl-3 pr-10 text-gray-900 dark:text-white dark:bg-white/5 ring-1 ring-inset ring-gray-300 dark:ring-white/10 focus:ring-2 focus:ring-sky-600 sm:text-sm sm:leading-6 [&_*]:text-black" aria-label="Sort by">
+                                    <select id="sort" name="sort" class="rounded-md border-0 py-1.5 pl-3 pr-10 text-gray-900 dark:text-white dark:bg-white/5 ring-1 ring-inset ring-gray-300 dark:ring-white/10 focus:ring-2 focus:ring-sky-600 sm:text-sm sm:leading-6 **:text-black" aria-label="Sort by">
                                         <option value="date"<%= sort === 'date' ? ' selected' : '' %>>Date</option>
                                         <option value="code"<%= sort === 'code' ? ' selected' : '' %>>Code</option>
                                         <option value="note"<%= sort === 'note' ? ' selected' : '' %>>Notes</option>
@@ -106,7 +106,7 @@
                             <span class="mb-1 text-xs text-gray-900 dark:text-white<%= !printer_enabled ? ' hidden' : '' %>">
                                 &nbsp;
                             </span>
-                            <button id="bulk-print" class="w-fit justify-self-end relative inline-flex items-center gap-x-1.5 rounded-md bg-sky-700 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-sky-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sky-700<%= !printer_enabled ? ' hidden' : '' %>">
+                            <button id="bulk-print" class="w-fit justify-self-end relative inline-flex items-center gap-x-1.5 rounded-md bg-sky-700 px-3 py-2 text-sm font-semibold text-white shadow-xs hover:bg-sky-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sky-700<%= !printer_enabled ? ' hidden' : '' %>">
                                 <svg class="-ml-0.5 h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true">
                                     <path stroke-linecap="round" stroke-linejoin="round" d="M6.72 13.829c-.24.03-.48.062-.72.096m.72-.096a42.415 42.415 0 0 1 10.56 0m-10.56 0L6.34 18m10.94-4.171c.24.03.48.062.72.096m-.72-.096L17.66 18m0 0 .229 2.523a1.125 1.125 0 0 1-1.12 1.227H7.231c-.662 0-1.18-.568-1.12-1.227L6.34 18m11.318 0h1.091A2.25 2.25 0 0 0 21 15.75V9.456c0-1.081-.768-2.015-1.837-2.175a48.055 48.055 0 0 0-1.913-.247M6.34 18H5.25A2.25 2.25 0 0 1 3 15.75V9.456c0-1.081.768-2.015 1.837-2.175a48.041 48.041 0 0 1 1.913-.247m10.5 0a48.536 48.536 0 0 0-10.5 0m10.5 0V3.375c0-.621-.504-1.125-1.125-1.125h-8.25c-.621 0-1.125.504-1.125 1.125v3.659M18 10.5h.008v.008H18V10.5Zm-3 0h.008v.008H15V10.5Z" />
                                 </svg>
@@ -117,7 +117,7 @@
                             <span class="mb-1 text-xs text-gray-900 dark:text-white">
                                 Last Sync: <%= new Intl.DateTimeFormat('en-GB', {day: "numeric", month: "numeric", hour: "numeric", minute: "numeric", hour12: false}).format(new Date(updated)) %>
                             </span>
-                            <a href="<%= baseUrl %>/vouchers?refresh=true" id="reload-vouchers" type="button" class="w-fit justify-self-end relative inline-flex items-center gap-x-1.5 rounded-md bg-sky-700 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-sky-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sky-700">
+                            <a href="<%= baseUrl %>/vouchers?refresh=true" id="reload-vouchers" type="button" class="w-fit justify-self-end relative inline-flex items-center gap-x-1.5 rounded-md bg-sky-700 px-3 py-2 text-sm font-semibold text-white shadow-xs hover:bg-sky-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sky-700">
                                 <svg class="-ml-0.5 h-5 w-5" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
                                     <path fill-rule="evenodd" d="M15.312 11.424a5.5 5.5 0 0 1-9.201 2.466l-.312-.311h2.433a.75.75 0 0 0 0-1.5H3.989a.75.75 0 0 0-.75.75v4.242a.75.75 0 0 0 1.5 0v-2.43l.31.31a7 7 0 0 0 11.712-3.138.75.75 0 0 0-1.449-.39Zm1.23-3.723a.75.75 0 0 0 .219-.53V2.929a.75.75 0 0 0-1.5 0V5.36l-.31-.31A7 7 0 0 0 3.239 8.188a.75.75 0 1 0 1.448.389A5.5 5.5 0 0 1 13.89 6.11l.311.31h-2.432a.75.75 0 0 0 0 1.5h4.243a.75.75 0 0 0 .53-.219Z" clip-rule="evenodd" />
                                 </svg>
@@ -133,7 +133,7 @@
                         <h3 class="mt-2 text-sm font-semibold text-gray-900 dark:text-white">No vouchers</h3>
                         <p class="mt-1 text-sm text-gray-600 dark:text-gray-400">Get started by creating a new voucher.</p>
                         <div class="mt-6">
-                            <button id="create-button-info" type="button" class="inline-flex items-center rounded-md bg-sky-700 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-sky-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sky-700">
+                            <button id="create-button-info" type="button" class="inline-flex items-center rounded-md bg-sky-700 px-3 py-2 text-sm font-semibold text-white shadow-xs hover:bg-sky-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sky-700">
                                 <svg class="-ml-0.5 mr-1.5 h-5 w-5" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
                                     <path d="M10.75 4.75a.75.75 0 00-1.5 0v4.5h-4.5a.75.75 0 000 1.5h4.5v4.5a.75.75 0 001.5 0v-4.5h4.5a.75.75 0 000-1.5h-4.5v-4.5z" />
                                 </svg>
@@ -243,7 +243,7 @@
         <div id="bulk-print-dialog"></div>
 
         <div id="create-dialog" class="hidden relative z-40" role="dialog" aria-modal="true">
-            <div id="create-dialog-overlay" class="fixed inset-0 bg-gray-500 bg-opacity-75"></div>
+            <div id="create-dialog-overlay" class="fixed inset-0 bg-gray-500/75"></div>
 
             <div class="fixed overflow-hidden">
                 <div class="absolute inset-0 overflow-hidden">
@@ -265,7 +265,7 @@
                                                 <div>
                                                     <label for="voucher-type" class="block text-sm font-medium leading-6 text-gray-900 dark:text-white">Preset Voucher Type</label>
                                                     <div class="mt-2">
-                                                        <select id="voucher-type" name="voucher-type" class="mt-2 block w-full rounded-md border-0 py-1.5 pl-3 pr-10 text-gray-900 dark:text-white dark:bg-white/5 ring-1 ring-inset ring-gray-300 dark:ring-white/10 focus:ring-2 focus:ring-sky-600 sm:text-sm sm:leading-6 [&_*]:text-black">
+                                                        <select id="voucher-type" name="voucher-type" class="mt-2 block w-full rounded-md border-0 py-1.5 pl-3 pr-10 text-gray-900 dark:text-white dark:bg-white/5 ring-1 ring-inset ring-gray-300 dark:ring-white/10 focus:ring-2 focus:ring-sky-600 sm:text-sm sm:leading-6 **:text-black">
                                                             <% voucher_types.forEach((type) => { %>
                                                                 <option value="<%= type.raw %>"><%= timeConvert(type.expiration) %>, <%= type.usage === '1' ? 'single-use' : type.usage === '0' ? 'multi-use (unlimited)' : `multi-use (${type.usage}x)` %><%= typeof type.upload === "undefined" && typeof type.download === "undefined" && typeof type.megabytes === "undefined" ? ', no limits' : '' %><%= typeof type.upload !== "undefined" ? `, upload bandwidth limit: ${type.upload} kb/s` : '' %><%= typeof type.download !== "undefined" ? `, download bandwidth limit: ${type.download} kb/s` : '' %><%= typeof type.megabytes !== "undefined" ? `, quota limit: ${type.megabytes} mb` : '' %></option>
                                                             <% }); %>
@@ -291,7 +291,7 @@
                                                     <label for="voucher-duration" class="mt-4 block text-sm font-medium leading-6 text-gray-900 dark:text-white">Duration</label>
                                                     <div class="mt-2 grid grid-cols-2 gap-2">
                                                         <input type="number" min="1" step="1" value="8" id="voucher-duration" name="voucher-duration" required class="block w-full rounded-md border-0 py-1.5 text-gray-900 dark:text-white dark:bg-white/5 ring-1 ring-inset ring-gray-300 dark:ring-white/10 focus:ring-2 focus:ring-sky-600 sm:text-sm sm:leading-6">
-                                                        <select id="voucher-duration-type" name="voucher-duration-type" class="block w-full rounded-md border-0 py-1.5 pl-3 pr-10 text-gray-900 dark:text-white dark:bg-white/5 ring-1 ring-inset ring-gray-300 dark:ring-white/10 focus:ring-2 focus:ring-sky-600 sm:text-sm sm:leading-6 [&_*]:text-black">
+                                                        <select id="voucher-duration-type" name="voucher-duration-type" class="block w-full rounded-md border-0 py-1.5 pl-3 pr-10 text-gray-900 dark:text-white dark:bg-white/5 ring-1 ring-inset ring-gray-300 dark:ring-white/10 focus:ring-2 focus:ring-sky-600 sm:text-sm sm:leading-6 **:text-black">
                                                             <option value="minute">Minute(s)</option>
                                                             <option value="hour" selected>Hour(s)</option>
                                                             <option value="day">Day(s)</option>
@@ -301,7 +301,7 @@
                                                 <div class="custom-voucher-field hidden">
                                                     <label for="voucher-usage" class="block text-sm font-medium leading-6 text-gray-900 dark:text-white">Voucher Usage</label>
                                                     <div class="mt-2">
-                                                        <select id="voucher-usage" name="voucher-usage" class="mt-2 block w-full rounded-md border-0 py-1.5 pl-3 pr-10 text-gray-900 dark:text-white dark:bg-white/5 ring-1 ring-inset ring-gray-300 dark:ring-white/10 focus:ring-2 focus:ring-sky-600 sm:text-sm sm:leading-6 [&_*]:text-black">
+                                                        <select id="voucher-usage" name="voucher-usage" class="mt-2 block w-full rounded-md border-0 py-1.5 pl-3 pr-10 text-gray-900 dark:text-white dark:bg-white/5 ring-1 ring-inset ring-gray-300 dark:ring-white/10 focus:ring-2 focus:ring-sky-600 sm:text-sm sm:leading-6 **:text-black">
                                                             <option value="0">Multi-use (Unlimited)</option>
                                                             <option value="-1">Multi-use (Limited/Quota)</option>
                                                             <option value="1">Single-use</option>
@@ -336,9 +336,9 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="flex flex-shrink-0 justify-end px-4 py-4">
-                                    <button id="cancel" type="button" class="rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50">Cancel</button>
-                                    <button type="submit" class="ml-4 inline-flex justify-center rounded-md bg-sky-700 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-sky-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sky-700">Create</button>
+                                <div class="flex shrink-0 justify-end px-4 py-4">
+                                    <button id="cancel" type="button" class="rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-xs ring-1 ring-inset ring-gray-300 hover:bg-gray-50">Cancel</button>
+                                    <button type="submit" class="ml-4 inline-flex justify-center rounded-md bg-sky-700 px-3 py-2 text-sm font-semibold text-white shadow-xs hover:bg-sky-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sky-700">Create</button>
                                 </div>
                             </form>
                         </div>
@@ -393,10 +393,10 @@
 
         <div aria-live="assertive" class="z-40 pointer-events-none fixed inset-0 flex items-end px-4 py-6">
             <div id="copy-notification" style="display: none;" class="flex w-full flex-col items-center space-y-4">
-                <div class="pointer-events-auto w-full max-w-sm overflow-hidden rounded-lg bg-white dark:bg-gray-800 shadow-lg ring-1 ring-black ring-opacity-5">
+                <div class="pointer-events-auto w-full max-w-sm overflow-hidden rounded-lg bg-white dark:bg-gray-800 shadow-lg ring-1 ring-black/5">
                     <div class="p-4">
                         <div class="flex items-start">
-                            <div class="flex-shrink-0">
+                            <div class="shrink-0">
                                 <svg class="h-6 w-6 text-green-400" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true">
                                     <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                                 </svg>
