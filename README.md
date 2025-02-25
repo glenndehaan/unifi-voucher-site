@@ -152,7 +152,7 @@ To install the UniFi Voucher Site add-on for Home Assistant, follow these steps:
 
 ## Development
 
-- Install Node.js 20.0 or higher.
+- Install Node.js 22.0 or higher.
 - Run `npm ci` in the root folder
 - Run `npm start` & `npm run tailwind` in the root folder
 
