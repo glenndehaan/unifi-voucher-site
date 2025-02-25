@@ -1,5 +1,5 @@
 <div class="relative z-40" role="dialog" aria-modal="true">
-    <div id="overlay" class="fixed inset-0 bg-gray-500 bg-opacity-75"></div>
+    <div id="overlay" class="fixed inset-0 bg-gray-500/75"></div>
 
     <div class="fixed overflow-hidden">
         <div class="absolute inset-0 overflow-hidden">
@@ -27,7 +27,7 @@
                                         <div>
                                             <label for="language" class="block text-sm font-medium leading-6 text-gray-900 dark:text-white">Language</label>
                                             <div class="mt-2">
-                                                <select id="language" name="language" class="mt-2 block w-full rounded-md border-0 py-1.5 pl-3 pr-10 text-gray-900 dark:text-white dark:bg-white/5 ring-1 ring-inset ring-gray-300 dark:ring-white/10 focus:ring-2 focus:ring-sky-600 sm:text-sm sm:leading-6 [&_*]:text-black">
+                                                <select id="language" name="language" class="mt-2 block w-full rounded-md border-0 py-1.5 pl-3 pr-10 text-gray-900 dark:text-white dark:bg-white/5 ring-1 ring-inset ring-gray-300 dark:ring-white/10 focus:ring-2 focus:ring-sky-600 sm:text-sm sm:leading-6 **:text-black">
                                                     <% Object.keys(languages).forEach((language) => { %>
                                                         <option value="<%= language %>"<%= language === defaultLanguage ? ' selected' : '' %>><%= languages[language] %> (<%= language %>)</option>
                                                     <% }); %>
@@ -38,9 +38,9 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="flex flex-shrink-0 justify-end px-4 py-4">
-                            <button id="close" type="button" class="rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50">Cancel</button>
-                            <button type="submit" class="ml-4 inline-flex justify-center rounded-md bg-sky-700 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-sky-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sky-700">Send</button>
+                        <div class="flex shrink-0 justify-end px-4 py-4">
+                            <button id="close" type="button" class="rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-xs ring-1 ring-inset ring-gray-300 hover:bg-gray-50">Cancel</button>
+                            <button type="submit" class="ml-4 inline-flex justify-center rounded-md bg-sky-700 px-3 py-2 text-sm font-semibold text-white shadow-xs hover:bg-sky-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sky-700">Send</button>
                         </div>
                     </form>
                 </div>

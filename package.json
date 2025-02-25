@@ -5,18 +5,19 @@
   "private": true,
   "scripts": {
     "start": "LOG_LEVEL=trace node server.js",
-    "dev": "nodemon --watch . --exec 'LOG_LEVEL=trace node server.js'",
+    "dev": "LOG_LEVEL=trace node --watch server.js",
     "tailwind": "tailwindcss -i ./css/style.css -o ./public/dist/style.css --watch",
     "build": "tailwindcss -i ./css/style.css -o ./public/dist/style.css --minify"
   },
   "engines": {
-    "node": ">=20.0.0"
+    "node": ">=22.0.0"
   },
   "author": "Glenn de Haan",
   "license": "MIT",
   "overrides": {
     "node-unifi@^2.5.1": {
-      "axios": "1.7.4"
+      "axios": "1.7.4",
+      "tough-cookie": "5.1.1"
     },
     "express-openid-connect@^2.17.1": {
       "cookie": "0.7.0"
@@ -31,15 +32,15 @@
     "js-logger": "^1.6.1",
     "jsonwebtoken": "^9.0.2",
     "multer": "^1.4.5-lts.1",
-    "node-thermal-printer": "^4.4.3",
+    "node-thermal-printer": "^4.4.4",
     "node-unifi": "^2.5.1",
-    "nodemailer": "^6.9.16",
+    "nodemailer": "^6.10.0",
     "pdfkit": "^0.16.0",
     "qrcode": "^1.5.4"
   },
   "devDependencies": {
+    "@tailwindcss/cli": "^4.0.9",
     "@tailwindcss/forms": "^0.5.10",
-    "nodemon": "^3.1.9",
-    "tailwindcss": "^3.4.17"
+    "tailwindcss": "^4.0.9"
   }
 }

@@ -1,15 +1,15 @@
-<nav class="sticky top-0 z-40 bg-white shadow-sm dark:bg-gray-800">
+<nav class="sticky top-0 z-40 bg-white shadow-xs dark:bg-gray-800">
     <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div class="flex h-16 justify-between">
             <div class="flex">
                 <% if(uiBackButton) { %>
                     <button aria-label="Back to Previous Page" onclick="window.history.go(-1);">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="text-gray-900 dark:text-white hover:text-gray-700 hover:dark:text-gray-100 w-10 h-10 mr-4" viewBox="0 0 24 24" fill="currentColor">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="text-gray-900 dark:text-white hover:text-gray-700 dark:hover:text-gray-100 w-10 h-10 mr-4" viewBox="0 0 24 24" fill="currentColor">
                             <path fill-rule="evenodd" d="M12 2.25c-5.385 0-9.75 4.365-9.75 9.75s4.365 9.75 9.75 9.75 9.75-4.365 9.75-9.75S17.385 2.25 12 2.25Zm-4.28 9.22a.75.75 0 0 0 0 1.06l3 3a.75.75 0 1 0 1.06-1.06l-1.72-1.72h5.69a.75.75 0 0 0 0-1.5h-5.69l1.72-1.72a.75.75 0 0 0-1.06-1.06l-3 3Z" clip-rule="evenodd" />
                         </svg>
                     </button>
                 <% } %>
-                <a href="<%= baseUrl %>/vouchers" class="flex flex-shrink-0 items-center">
+                <a href="<%= baseUrl %>/vouchers" class="flex shrink-0 items-center">
                     <img class="h-12 w-auto" width="48" height="48" alt="UniFi Voucher Site Logo" src="<%= baseUrl %>/images/logo.png">
                     <div class="hidden sm:block ml-4 text-2xl font-semibold leading-7 text-gray-900 dark:text-white">
                         UniFi Voucher
@@ -18,8 +18,8 @@
             </div>
             <div class="flex items-center">
                 <% if(new_voucher_button) { %>
-                    <div class="flex-shrink-0">
-                        <button id="create-button-header" type="button" class="relative inline-flex items-center gap-x-1.5 rounded-md bg-sky-700 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-sky-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sky-700">
+                    <div class="shrink-0">
+                        <button id="create-button-header" type="button" class="relative inline-flex items-center gap-x-1.5 rounded-md bg-sky-700 px-3 py-2 text-sm font-semibold text-white shadow-xs hover:bg-sky-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sky-700">
                             <svg class="-ml-0.5 h-5 w-5" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
                                 <path d="M10.75 4.75a.75.75 0 00-1.5 0v4.5h-4.5a.75.75 0 000 1.5h4.5v4.5a.75.75 0 001.5 0v-4.5h4.5a.75.75 0 000-1.5h-4.5v-4.5z" />
                             </svg>
@@ -27,9 +27,9 @@
                         </button>
                     </div>
                 <% } %>
-                <div class="ml-4 flex flex-shrink-0 items-center">
+                <div class="ml-4 flex shrink-0 items-center">
                     <div class="relative">
-                        <button id="user-menu-button" class="flex items-center focus:outline-none focus:ring-2 focus:ring-sky-600 rounded-full">
+                        <button id="user-menu-button" class="flex items-center focus:outline-hidden focus:ring-2 focus:ring-sky-600 rounded-full">
                             <span class="absolute -inset-1.5"></span>
                             <span class="sr-only">Open user menu</span>
                             <% if(userIcon !== '') { %>
@@ -40,7 +40,7 @@
                                 </svg>
                             <% } %>
                         </button>
-                        <div id="user-dropdown" class="hidden absolute bg-white dark:bg-gray-800 right-0 mt-2 w-64 rounded-md shadow-lg py-1 ring-1 ring-black ring-opacity-5">
+                        <div id="user-dropdown" class="hidden absolute bg-white dark:bg-gray-800 right-0 mt-2 w-64 rounded-md shadow-lg py-1 ring-1 ring-black/25">
                             <div class="px-4 py-2 text-sm text-gray-600 dark:text-gray-400 border-b border-black/5 dark:border-white/5">
                                 Logged in as:<br>
                                 <span class="font-medium"><%= user.email %></span>

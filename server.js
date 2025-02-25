@@ -107,6 +107,11 @@ app.use(locale({
 }));
 
 /**
+ * Enable JSON
+ */
+app.use(express.json());
+
+/**
  * Enable multer
  */
 app.use(multer().none());
@@ -591,10 +596,26 @@ if(variables.serviceApi) {
             data: {
                 message: 'OK',
                 endpoints: [
-                    '/api',
-                    '/api/types',
-                    '/api/voucher/:type',
-                    '/api/vouchers'
+                    {
+                        method: 'GET',
+                        endpoint: '/api'
+                    },
+                    {
+                        method: 'GET',
+                        endpoint: '/api/types'
+                    },
+                    {
+                        method: 'GET',
+                        endpoint: '/api/languages'
+                    },
+                    {
+                        method: 'GET',
+                        endpoint: '/api/vouchers'
+                    },
+                    {
+                        method: 'POST',
+                        endpoint: '/api/voucher'
+                    }
                 ]
             }
         });
@@ -608,36 +629,19 @@ if(variables.serviceApi) {
             }
         });
     });
-    app.get('/api/voucher/:type', [authorization.api], async (req, res) => {
-        const typeCheck = (variables.voucherTypes).split(';').includes(req.params.type);
-
-        if(!typeCheck) {
-            res.json({
-                error: 'Unknown Type!',
-                data: {}
-            });
-            return;
-        }
-
-        // Create voucher code
-        const voucherCode = await unifi.create(types(req.params.type, true)).catch((e) => {
-            res.json({
-                error: e,
-                data: {}
-            });
+    app.get('/api/languages', (req, res) => {
+        res.json({
+            error: null,
+            data: {
+                message: 'OK',
+                languages: Object.keys(languages).map(language => {
+                    return {
+                        code: language,
+                        name: languages[language]
+                    }
+                })
+            }
         });
-
-        await updateCache();
-
-        if(voucherCode) {
-            res.json({
-                error: null,
-                data: {
-                    message: 'OK',
-                    voucher: voucherCode
-                }
-            });
-        }
     });
     app.get('/api/vouchers', [authorization.api], async (req, res) => {
         res.json({
@@ -646,6 +650,7 @@ if(variables.serviceApi) {
                 message: 'OK',
                 vouchers: cache.vouchers.map((voucher) => {
                     return {
+                        id: voucher._id,
                         code: `${voucher.code.slice(0, 5)}-${voucher.code.slice(5)}`,
                         type: voucher.quota === 1 ? 'single' : voucher.quota === 0 ? 'multi' : 'multi',
                         duration: voucher.duration,
@@ -657,6 +662,119 @@ if(variables.serviceApi) {
                 updated: cache.updated
             }
         });
+    });
+    app.post('/api/voucher', [authorization.api], async (req, res) => {
+        // Verify valid body is sent
+        if(!req.body || !req.body.type) {
+            res.status(400).json({
+                error: 'Invalid Body!',
+                data: {}
+            });
+            return;
+        }
+
+        // Check if email body is set
+        if(req.body.email) {
+            // Check if email module is enabled
+            if(variables.smtpFrom === '' || variables.smtpHost === '' || variables.smtpPort === '') {
+                res.status(400).json({
+                    error: 'Email Not Configured!',
+                    data: {}
+                });
+                return;
+            }
+
+            // Check if email body is correct
+            if(!req.body.email.language || !req.body.email.address) {
+                res.status(400).json({
+                    error: 'Invalid Body!',
+                    data: {}
+                });
+                return;
+            }
+
+            // Check if language is available
+            if(!Object.keys(languages).includes(req.body.email.language)) {
+                res.status(400).json({
+                    error: 'Unknown Language!',
+                    data: {}
+                });
+                return;
+            }
+        }
+
+        // Check if type is implemented and valid
+        const typeCheck = (variables.voucherTypes).split(';').includes(req.body.type);
+        if(!typeCheck) {
+            res.status(400).json({
+                error: 'Unknown Type!',
+                data: {}
+            });
+            return;
+        }
+
+        // Create voucher code
+        const voucherCode = await unifi.create(types(req.body.type, true)).catch((e) => {
+            res.status(500).json({
+                error: e,
+                data: {}
+            });
+        });
+
+        // Update application cache
+        await updateCache();
+
+        if(voucherCode) {
+            // Locate voucher data within cache
+            const voucherData = cache.vouchers.find(voucher => voucher.code === voucherCode.replaceAll('-', ''));
+            if(!voucherData) {
+                res.status(500).json({
+                    error: 'Invalid application cache!',
+                    data: {}
+                });
+                return;
+            }
+
+            // Check if we should send and email
+            if(req.body.email) {
+                // Send mail
+                const emailResult = await mail.send(req.body.email.address, voucherData, req.body.email.language).catch((e) => {
+                    res.status(500).json({
+                        error: e,
+                        data: {}
+                    });
+                });
+
+                // Verify is the email was sent successfully
+                if(emailResult) {
+                    res.json({
+                        error: null,
+                        data: {
+                            message: 'OK',
+                            voucher: {
+                                id: voucherData._id,
+                                code: voucherCode
+                            },
+                            email: {
+                                status: 'SENT',
+                                address: req.body.email.address
+                            }
+                        }
+                    });
+                }
+            } else {
+                res.json({
+                    error: null,
+                    data: {
+                        message: 'OK',
+                        voucher: {
+                            id: voucherData._id,
+                            code: voucherCode
+                        }
+                    }
+                });
+            }
+        }
     });
 }
 

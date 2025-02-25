@@ -1,5 +1,5 @@
 <div class="relative z-40" role="dialog" aria-modal="true">
-    <div id="overlay" class="fixed inset-0 bg-gray-500 bg-opacity-75"></div>
+    <div id="overlay" class="fixed inset-0 bg-gray-500/75"></div>
 
     <div class="fixed overflow-hidden">
         <div class="absolute inset-0 overflow-hidden">
@@ -97,7 +97,7 @@
                                         <% } else { %>
                                             <% guests.forEach((guest) => { %>
                                                 <div class="lg:col-start-3 lg:row-end-1">
-                                                    <div class="rounded-lg bg-gray-50 dark:bg-gray-800 shadow-sm ring-1 ring-gray-900/5 dark:ring-gray-50/25">
+                                                    <div class="rounded-lg bg-gray-50 dark:bg-gray-800 shadow-xs ring-1 ring-gray-900/5 dark:ring-gray-50/25">
                                                         <dl class="flex flex-wrap">
                                                             <div class="flex-auto pl-6 pt-6">
                                                                 <dt class="text-sm font-semibold leading-6 text-gray-900 dark:text-white"><%= guest.mac %></dt>
@@ -158,8 +158,8 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="flex flex-shrink-0 justify-end px-4 py-4">
-                            <button id="close" type="button" class="rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50">Close</button>
+                        <div class="flex shrink-0 justify-end px-4 py-4">
+                            <button id="close" type="button" class="rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-xs ring-1 ring-inset ring-gray-300 hover:bg-gray-50">Close</button>
                         </div>
                     </div>
                 </div>

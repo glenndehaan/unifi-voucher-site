@@ -6,7 +6,7 @@ UniFi Voucher Site is a web-based platform for generating and managing UniFi net
 
 ![Vouchers Overview - Desktop](.docs/images/desktop_1.png)
 
-> Upgrading from 3.x to 4.x? Please take a look at the [migration guide](#migration-from-3x-to-4x)
+> Upgrading from 4.x to 5.x? Please take a look at the [migration guide](#migration-from-4x-to-5x)
 
 ## Features
 
@@ -152,7 +152,7 @@ To install the UniFi Voucher Site add-on for Home Assistant, follow these steps:
 
 ## Development
 
-- Install Node.js 20.0 or higher.
+- Install Node.js 22.0 or higher.
 - Run `npm ci` in the root folder
 - Run `npm start` & `npm run tailwind` in the root folder
 
@@ -181,20 +181,36 @@ the different endpoints available in the API:
     - Access: Open
     - Response Example:
 
-```json
-{
-  "error": null,
-  "data": {
-    "message": "OK",
-    "endpoints": [
-      "/api",
-      "/api/types",
-      "/api/voucher/:type",
-      "/api/vouchers"
-    ]
-  }
-}
-```
+    ```json
+    {
+      "error": null,
+      "data": {
+        "message": "OK",
+        "endpoints": [
+          {
+            "method": "GET",
+            "endpoint": "/api"
+          },
+          {
+            "method": "GET",
+            "endpoint": "/api/types"
+          },
+          {
+            "method": "GET",
+            "endpoint": "/api/languages"
+          },
+          {
+            "method": "GET",
+            "endpoint": "/api/vouchers"
+          },
+          {
+            "method": "POST",
+            "endpoint": "/api/voucher"
+          }
+        ]
+      }
+    }
+    ```
 
 2. **`/api/types`**
     - Method: GET
@@ -203,44 +219,55 @@ the different endpoints available in the API:
     - Access: Open
     - Response Example:
 
-```json
-{
-  "error": null,
-  "data": {
-    "message": "OK",
-    "types": [
-      {
-        "expiration": "480",
-        "usage": "0",
-        "raw": "480,0,,,"
+    ```json
+    {
+      "error": null,
+      "data": {
+        "message": "OK",
+        "types": [
+          {
+            "expiration": "480",
+            "usage": "0",
+            "raw": "480,0,,,"
+          }
+        ]
       }
-    ]
-  }
-}
-```
+    }
+    ```
 
-3. **`/api/voucher/:type`**
+3. **`/api/languages`**
     - Method: GET
-    - Description: Generates a voucher of the specified type.
-    - Parameters:
-        - `type` (string): The type of voucher to generate.
+    - Description: Retrieves a list of available languages supported by the system.
     - Response Format: JSON
-    - Access: Protected by Bearer Token
+    - Access: Open
     - Response Example:
 
-```json
-{
-  "error": null,
-  "data": {
-    "message": "OK",
-    "voucher": "12345-67890"
-  }
-}
-```
-
-   > This endpoint is protected by a security mechanism. To access it, users need to include a bearer token in the
-   request authorization header. The token must match the value of the `AUTH_INTERNAL_BEARER_TOKEN` environment variable. Without
-   this token, access to the endpoint will be denied.
+    ```json
+    {
+      "error": null,
+      "data": {
+        "message": "OK",
+        "languages": [
+          {
+            "code": "en",
+            "name": "English"
+          },
+          {
+            "code": "de",
+            "name": "German"
+          },
+          {
+            "code": "nl",
+            "name": "Dutch"
+          },
+          {
+            "code": "pl",
+            "name": "Polish"
+          }
+        ]
+      }
+    }
+    ```
 
 4. **`/api/vouchers`**
     - Method: GET
@@ -249,37 +276,88 @@ the different endpoints available in the API:
     - Access: Protected by Bearer Token
     - Response Example:
 
-```json
-{
-  "error": null,
-  "data": {
-    "message": "OK",
-    "vouchers": [
-      {
-        "code": "15695-53133",
-        "type": "multi",
-        "duration": 60,
-        "data_limit": "200",
-        "download_limit": "5000",
-        "upload_limit": "2000"
-      },
-      {
-        "code": "03004-59449",
-        "type": "single",
-        "duration": 480,
-        "data_limit": null,
-        "download_limit": null,
-        "upload_limit": null
+    ```json
+    {
+      "error": null,
+      "data": {
+        "message": "OK",
+        "vouchers": [
+          {
+            "id": "67bded6766f89f2a7ba6731f",
+            "code": "15695-53133",
+            "type": "multi",
+            "duration": 60,
+            "data_limit": "200",
+            "download_limit": "5000",
+            "upload_limit": "2000"
+          },
+          {
+            "id": "67bdecd166f89f2a7ba67317",
+            "code": "03004-59449",
+            "type": "single",
+            "duration": 480,
+            "data_limit": null,
+            "download_limit": null,
+            "upload_limit": null
+          }
+        ],
+        "updated": 1712934667937
       }
-    ],
-    "updated": 1712934667937
-  }
-}
-```
+    }
+    ```
 
-> This endpoint is protected by a security mechanism. To access it, users need to include a bearer token in the
-request authorization header. The token must match the value of the `AUTH_INTERNAL_BEARER_TOKEN` environment variable. Without
-this token, access to the endpoint will be denied.
+   > This endpoint is protected by a security mechanism. To access it, users need to include a bearer token in the
+   request authorization header. The token must match the value of the `AUTH_INTERNAL_BEARER_TOKEN` environment variable. Without
+   this token, access to the endpoint will be denied.
+
+5. **`/api/voucher`**
+    - Method: POST
+    - Description: Generates a voucher of the specified type. Optionally sends an email.
+    - Response Format: JSON
+    - Access: Protected by Bearer Token
+    - Body:
+      - Generate Voucher:
+
+        ```json
+        {
+          "type": "480,0,,,"
+        }
+        ```
+
+      - Generate Voucher and Send Email *(**Warning**: Email module needs to be setup!)*:
+
+        ```json
+        {
+          "type": "480,0,,,",
+          "email": {
+            "language": "en",
+            "address": "user@example.com"
+          }
+        }
+        ```
+
+    - Response Example:
+
+    ```json
+    {
+      "error": null,
+      "data": {
+        "message": "OK",
+        "voucher": {
+          "id": "67bdf77b66f89f2a7ba678f7",
+          "code": "02791-97992"
+        },
+        "email": {
+          "status": "SENT",
+          "address": "user@example.com"
+        }
+      }
+    }
+    ```
+
+   > This endpoint is protected by a security mechanism. To access it, users need to include a bearer token in the
+   request authorization header. The token must match the value of the `AUTH_INTERNAL_BEARER_TOKEN` environment variable. Without
+   this token, access to the endpoint will be denied.
 
 ## Authentication
 
@@ -517,6 +595,64 @@ Your contributions will be automatically included in the next release after revi
 Detailed information on the changes in each release can be found on the [GitHub Releases](https://github.com/glenndehaan/unifi-voucher-site/releases) page. It is highly recommended to review the release notes before updating or deploying a new version, especially if you are upgrading from a previous version.
 
 ## Migration Guide
+
+### Migration from 4.x to 5.x
+
+When upgrading from 4.x to 5.x, the following changes need to be made:
+
+1. **Updated `/api` Endpoint Response**
+    - The `/api` endpoint now returns a structured response that includes the HTTP method for each available endpoint. Update API integrations to handle the new response structure.
+
+    **Previous Response:**
+
+    ```json
+    {
+      "error": null,
+      "data": {
+        "message": "OK",
+        "endpoints": [
+          "/api",
+          "/api/types",
+          "/api/voucher/:type",
+          "/api/vouchers"
+        ]
+      }
+    }
+    ```
+
+    **New Response:**
+
+    ```json
+    {
+      "error": null,
+      "data": {
+        "message": "OK",
+        "endpoints": [
+          { "method": "GET", "endpoint": "/api" },
+          { "method": "GET", "endpoint": "/api/types" },
+          { "method": "GET", "endpoint": "/api/languages" },
+          { "method": "GET", "endpoint": "/api/vouchers" },
+          { "method": "POST", "endpoint": "/api/voucher" }
+        ]
+      }
+    }
+    ```
+
+2. **`/api/voucher/:type` Endpoint Replacement**
+    - The **`/api/voucher/:type`** endpoint has been replaced by **`/api/voucher`**.
+    - The method has changed from **`GET`** to **`POST`**.
+    - The `:type` URL parameter is now passed in the **JSON body**.
+
+    **Example Request:**
+
+    ```http
+    POST /api/voucher
+    Content-Type: application/json
+
+    {
+      "type": "480,0,,,"
+    }
+    ```
 
 ### Migration from 3.x to 4.x
 
