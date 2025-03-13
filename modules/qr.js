@@ -21,7 +21,7 @@ module.exports = (buffer = false) => {
 
     return new Promise((resolve) => {
         if(!buffer) {
-            QRCode.toDataURL(qrText, { version: 4, errorCorrectionLevel: 'Q' }, (err, url) => {
+            QRCode.toDataURL(qrText, { version: 6, errorCorrectionLevel: 'Q' }, (err, url) => {
                 if(err) {
                     log.error(`[Qr] Error while generating code!`);
                     log.error(err);
@@ -30,7 +30,7 @@ module.exports = (buffer = false) => {
                 resolve(url);
             });
         } else {
-            QRCode.toBuffer(qrText, { version: 4, errorCorrectionLevel: 'Q' }, (err, buffer) => {
+            QRCode.toBuffer(qrText, { version: 6, errorCorrectionLevel: 'Q' }, (err, buffer) => {
                 if(err) {
                     log.error(`[Qr] Error while generating code!`);
                     log.error(err);

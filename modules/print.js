@@ -141,12 +141,17 @@ module.exports = {
                         .fontSize(10)
                         .text(`${t('scan')}:`);
 
-                    doc.image(await qr(), 75, variables.unifiSsidPassword !== '' ? 215 : 205, {
+                    doc.image(await qr(), 75, variables.unifiSsidPassword !== '' ? 255 : 205, {
                         fit: [75, 75],
                         align: 'center',
                         valign: 'center'
                     });
                     doc.moveDown(6);
+
+                    // Check if we need to move the text down extra or not depending on if large SSIDs or Passwords are used
+                    if(variables.unifiSsidPassword !== '' && (variables.unifiSsidPassword.length < 16 || variables.unifiSsidPassword.length < 32)) {
+                        doc.moveDown(2);
+                    }
 
                     doc.moveDown(2);
                 }
