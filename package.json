@@ -16,7 +16,7 @@
   "license": "MIT",
   "overrides": {
     "node-unifi@^2.5.1": {
-      "axios": "1.7.4",
+      "axios": "1.8.3",
       "tough-cookie": "5.1.1"
     },
     "express-openid-connect@^2.17.1": {
@@ -39,8 +39,8 @@
     "qrcode": "^1.5.4"
   },
   "devDependencies": {
-    "@tailwindcss/cli": "^4.0.9",
+    "@tailwindcss/cli": "^4.0.14",
     "@tailwindcss/forms": "^0.5.10",
-    "tailwindcss": "^4.0.9"
+    "tailwindcss": "^4.0.14"
   }
 }
