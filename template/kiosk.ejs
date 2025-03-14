@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en" class="h-full bg-gray-100 dark:bg-gray-900">
+    <head>
+        <meta name="format-detection" content="telephone=no">
+
+        <title>Kiosk | UniFi Voucher</title>
+
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, minimal-ui">
+
+        <meta name="description" content="UniFi Voucher Site is a web-based platform for generating and managing UniFi network guest vouchers">
+        <meta name="author" content="Glenn de Haan">
+
+        <meta property="og:title" content="Kiosk | UniFi Voucher"/>
+        <meta property="og:type" content="website"/>
+        <meta property="og:description" content="UniFi Voucher Site is a web-based platform for generating and managing UniFi network guest vouchers"/>
+
+        <link rel="manifest" href="<%= baseUrl %>/manifest.json">
+        <link rel="shortcut icon" href="<%= baseUrl %>/images/favicon.ico">
+        <link rel="apple-touch-icon" href="<%= baseUrl %>/images/icon/logo_256x256.png">
+
+        <meta name="mobile-web-app-capable" content="yes">
+        <meta name="apple-mobile-web-app-capable" content="yes">
+        <meta name="theme-color" content="#139CDA">
+
+        <link rel="preload" href="<%= baseUrl %>/images/logo.png" as="image">
+        <link rel="preload" href="<%= baseUrl %>/dist/style.css" as="style">
+        <link href="<%= baseUrl %>/dist/style.css" rel="stylesheet">
+    </head>
+    <body class="min-h-screen flex flex-col items-center justify-center p-4">
+        <% if(typeof voucherCode !== 'undefined') { %>
+            <div id="timer-container" class="timer-progress bg-gray-200 dark:bg-gray-700">
+                <div id="timer-bar" class="bg-sky-600 h-full"></div>
+            </div>
+        <% } %>
+
+        <div class="fixed top-0 left-0 w-full h-full -z-20">
+            <img src="<%= baseUrl %>/images/kiosk_bg.jpg" alt="Kiosk Background" class="w-full h-full object-cover"/>
+        </div>
+        <div class="fixed top-0 left-0 w-full h-full -z-10 bg-white/70 dark:bg-black/70"></div>
+
+        <div class="w-full max-w-md bg-white dark:bg-gray-800 rounded-lg border border-black/5 dark:border-white/5 shadow-sm z-10 relative">
+            <div class="p-4 border-b border-black/5 dark:border-white/5">
+                <img class="mx-auto h-24 w-auto" width="48" height="48" alt="UniFi Voucher Site Logo" src="<%= baseUrl %>/images/logo.png">
+                <h1 class="mt-4 text-2xl font-semibold text-center text-gray-900 dark:text-white">WiFi Voucher</h1>
+
+                <% if(error) { %>
+                    <div class="mt-5 rounded-md bg-red-700 p-4">
+                        <div class="flex">
+                            <div class="shrink-0">
+                                <svg class="h-5 w-5 text-white" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.28 7.22a.75.75 0 00-1.06 1.06L8.94 10l-1.72 1.72a.75.75 0 101.06 1.06L10 11.06l1.72 1.72a.75.75 0 101.06-1.06L11.06 10l1.72-1.72a.75.75 0 00-1.06-1.06L10 8.94 8.28 7.22z" clip-rule="evenodd" />
+                                </svg>
+                            </div>
+                            <div class="ml-3">
+                                <h3 class="text-sm font-medium text-white"><%= error_text %></h3>
+                            </div>
+                        </div>
+                    </div>
+                <% } %>
+            </div>
+
+            <div class="p-4">
+                <% if(typeof voucherCode === 'undefined') { %>
+                    <div class="block">
+                        <form id="voucher-form" action="<%= baseUrl %>/kiosk" method="post">
+                            <button id="generate-button" class="w-full h-16 text-lg bg-sky-700 text-white rounded-md flex items-center justify-center font-medium hover:bg-sky-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sky-700">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M5 12.55a11 11 0 0 1 14.08 0"></path>
+                                    <path d="M1.42 9a16 16 0 0 1 21.16 0"></path>
+                                    <path d="M8.53 16.11a6 6 0 0 1 6.95 0"></path>
+                                    <line x1="12" y1="20" x2="12" y2="20"></line>
+                                </svg>
+                                Generate WiFi Voucher
+                            </button>
+                        </form>
+                        <div id="generating-button" class="hidden w-full h-16 text-lg bg-sky-600 text-white rounded-md flex items-center justify-center font-medium">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2 animate-spin" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <line x1="12" y1="2" x2="12" y2="6"></line>
+                                <line x1="12" y1="18" x2="12" y2="22"></line>
+                                <line x1="4.93" y1="4.93" x2="7.76" y2="7.76"></line>
+                                <line x1="16.24" y1="16.24" x2="19.07" y2="19.07"></line>
+                                <line x1="2" y1="12" x2="6" y2="12"></line>
+                                <line x1="18" y1="12" x2="22" y2="12"></line>
+                                <line x1="4.93" y1="19.07" x2="7.76" y2="16.24"></line>
+                                <line x1="16.24" y1="7.76" x2="19.07" y2="4.93"></line>
+                            </svg>
+                            Generating Voucher ...
+                        </div>
+                    </div>
+                <% } else { %>
+                    <div class="space-y-4">
+                        <div class="rounded-lg border-0 ring-1 ring-inset ring-gray-300 dark:ring-white/10 p-4 bg-white dark:bg-gray-900">
+                            <h2 class=" text-center text-sm mb-2 text-gray-900 dark:text-white">
+                                Use this code when connecting:
+                            </h2>
+                            <div class="text-center text-2xl font-mono tracking-wider mb-2 text-gray-900 dark:text-white">
+                                <%= voucherCode %>
+                            </div>
+                            <div class="text-center text-sm text-gray-900 dark:text-white mb-2">
+                                <% if(unifiSsidPassword !== '') { %>
+                                    Connect to: <strong><%= unifiSsid %></strong>,<br/>
+                                    Password: <strong><%= unifiSsidPassword %></strong> or,<br/>
+                                <% } else { %>
+                                    Connect to: <strong><%= unifiSsid %></strong> or,<br/>
+                                <% } %>
+                                Scan to connect:
+                            </div>
+                            <div class="flex justify-center">
+                                <img src="<%= qr %>" alt="Scan to Connect QR Code"/>
+                            </div>
+                        </div>
+
+                        <% if(email_enabled) { %>
+                            <form class="grid gap-4" id="email-form" action="<%= baseUrl %>/kiosk" method="post" enctype="multipart/form-data">
+                                <% if(typeof email === 'undefined') { %>
+                                    <div class="space-y-2">
+                                        <label for="email" class="block text-sm font-medium text-gray-700 dark:text-gray-300">
+                                            Email Voucher (optional)
+                                        </label>
+                                        <input id="email" type="email" name="email" placeholder="Enter your email address" class="block w-full rounded-md border-0 py-1.5 text-gray-900 dark:text-white bg-white dark:bg-gray-900 ring-1 ring-inset ring-gray-300 dark:ring-white/10 focus:ring-2 focus:ring-sky-600 sm:text-sm sm:leading-6" required/>
+                                    </div>
+
+                                    <input id="voucher" type="hidden" name="id" value="<%= voucherId %>"/>
+                                    <input id="voucher" type="hidden" name="code" value="<%= voucherCode %>"/>
+
+                                    <button id="email-button" type="submit" class="w-full bg-sky-700 text-white py-2 rounded-md flex items-center justify-center hover:bg-sky-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sky-700">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-2" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                            <rect x="2" y="4" width="20" height="16" rx="2"></rect>
+                                            <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"></path>
+                                        </svg>
+                                        Send Voucher
+                                    </button>
+
+                                    <div id="sending-button" class="hidden w-full bg-sky-700/80 text-white py-2 rounded-md flex items-center justify-center">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-2 animate-spin" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                            <line x1="12" y1="2" x2="12" y2="6"></line>
+                                            <line x1="12" y1="18" x2="12" y2="22"></line>
+                                            <line x1="4.93" y1="4.93" x2="7.76" y2="7.76"></line>
+                                            <line x1="16.24" y1="16.24" x2="19.07" y2="19.07"></line>
+                                            <line x1="2" y1="12" x2="6" y2="12"></line>
+                                            <line x1="18" y1="12" x2="22" y2="12"></line>
+                                            <line x1="4.93" y1="19.07" x2="7.76" y2="16.24"></line>
+                                            <line x1="16.24" y1="7.76" x2="19.07" y2="4.93"></line>
+                                        </svg>
+                                        Sending Email ...
+                                    </div>
+                                <% } else { %>
+                                    <div class="w-full bg-green-600 text-white py-2 rounded-md flex items-center justify-center">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-2" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                            <polyline points="20 6 9 17 4 12"></polyline>
+                                        </svg>
+                                        Email Sent
+                                    </div>
+                                <% } %>
+                            </form>
+                        <% } %>
+                    </div>
+                <% } %>
+            </div>
+
+            <% if(typeof voucherCode !== 'undefined') { %>
+                <div class="p-4 border-t border-black/5 dark:border-white/5 flex justify-center">
+                    <a href="<%= baseUrl %>/kiosk" class="px-4 py-2 border dark:border-gray-700 rounded-md text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 flex items-center">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-2" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <line x1="19" y1="12" x2="5" y2="12"></line>
+                            <polyline points="12 19 5 12 12 5"></polyline>
+                        </svg>
+                        Back
+                    </a>
+                </div>
+            <% } %>
+        </div>
+
+        <script type="application/javascript">
+            const voucherForm = document.querySelector('#voucher-form');
+            const emailForm = document.querySelector('#email-form');
+            const generateButton = document.querySelector('#generate-button');
+            const generatingButton = document.querySelector('#generating-button');
+            const emailButton = document.querySelector('#email-button');
+            const sendingButton = document.querySelector('#sending-button');
+
+            if(voucherForm) {
+                voucherForm.addEventListener('submit', () => {
+                    generateButton.classList.add('hidden');
+                    generatingButton.classList.remove('hidden');
+                });
+            }
+
+            if(emailForm) {
+                emailForm.addEventListener('submit', () => {
+                    emailButton.classList.add('hidden');
+                    sendingButton.classList.remove('hidden');
+                });
+            }
+        </script>
+        <% if(typeof voucherCode !== 'undefined') { %>
+            <script type="application/javascript">
+                const timerContainer = document.querySelector('#timer-container');
+                const timerBar = document.querySelector('#timer-bar');
+
+                timerBar.classList.remove('animate-countdown');
+                void timerBar.offsetWidth;
+                timerBar.classList.add('animate-countdown');
+
+                let timeLeft = 60;
+                setInterval(() => {
+                    timeLeft--;
+
+                    if (timeLeft <= 0) {
+                        window.location.href = '<%= baseUrl %>/kiosk';
+                    }
+                }, 1000);
+            </script>
+        <% } %>
+    </body>
+</html>

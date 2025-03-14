@@ -124,6 +124,11 @@ services:
       SMTP_USERNAME: ''
       # SMTP Mail password (optional)
       SMTP_PASSWORD: ''
+      # Enable/disable the kiosk page on /kiosk
+      KIOSK_ENABLED: 'false'
+      # Kiosk Voucher Type, format: expiration in minutes (required),single-use or multi-use vouchers value - '0' is for multi-use (unlimited) - '1' is for single-use - 'N' is for multi-use (Nx) (optional),upload speed limit in kbps (optional),download speed limit in kbps (optional),data transfer limit in MB (optional)
+      # To skip a parameter just but nothing in between the comma's
+      KIOSK_VOUCHER_TYPE: '480,1,,,'
       # Sets the application Log Level (Valid Options: error|warn|info|debug|trace)
       LOG_LEVEL: 'info'
       # Sets the default translation for dropdowns
@@ -540,6 +545,52 @@ Once the SMTP environment variables are configured, the email feature will be av
 ### Example Email
 
 ![Example Email](.docs/images/email_example.png)
+
+## Kiosk Functionality
+
+The UniFi Voucher Site includes a **Kiosk Mode**, allowing users to generate their own vouchers via a self-service interface. This is ideal for public areas, such as cafés, hotels, and co-working spaces, where users can obtain internet access without staff intervention.
+
+To enable the kiosk functionality, set the following environment variables:
+
+```env
+KIOSK_ENABLED: 'true'
+KIOSK_VOUCHER_TYPE: '480,1,,,'
+```
+
+### Configuration
+
+- **`KIOSK_ENABLED`**:
+    - Set to `'true'` to enable the kiosk page, making it accessible at `/kiosk`.
+    - Set to `'false'` to disable the kiosk functionality.
+
+- **`KIOSK_VOUCHER_TYPE`**: Defines the voucher properties for kiosk-generated vouchers. The format consists of the following parameters:
+
+  ```text
+  expiration_in_minutes,single_use_or_multi_use,upload_speed_limit_kbps,download_speed_limit_kbps,data_transfer_limit_MB
+  ```
+
+    - **Expiration (required)**: The validity period of the voucher in minutes. Example: `480` (8 hours).
+    - **Voucher Type (required)**: Defines if the voucher is single-use or multi-use:
+        - `'0'` → Multi-use (unlimited)
+        - `'1'` → Single-use
+        - `'N'` → Multi-use (N times) (e.g., `'3'` allows 3 uses)
+    - **Upload Speed Limit (optional)**: Maximum upload speed in Kbps. Leave empty to disable.
+    - **Download Speed Limit (optional)**: Maximum download speed in Kbps. Leave empty to disable.
+    - **Data Transfer Limit (optional)**: Total data limit in MB. Leave empty to disable.
+
+### Usage
+
+Once enabled, the kiosk page is available at:
+
+```
+http://localhost:3000/kiosk
+```
+
+Users can visit this URL and generate a voucher without administrative intervention.
+
+### Example Kiosk
+
+![Example Kiosk](.docs/images/kiosk_example.png)
 
 ## Translations
 

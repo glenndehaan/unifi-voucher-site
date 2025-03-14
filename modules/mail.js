@@ -47,7 +47,7 @@ module.exports = {
      * @param language
      * @return {Promise<unknown>}
      */
-    send: (to, voucher, language) => {
+    send: (to, voucher, language = 'en') => {
         return new Promise(async (resolve, reject) => {
             // Create new translator
             const t = translation('email', language);

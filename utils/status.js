@@ -80,6 +80,15 @@ module.exports = () => {
             info: 'https://github.com/glenndehaan/unifi-voucher-site#email-functionality',
             modules: {}
         },
+        kiosk: {
+            status: {
+                text: variables.kioskEnabled ? 'Enabled' : 'Disabled',
+                state: variables.kioskEnabled ? 'green' : 'red'
+            },
+            details: variables.kioskEnabled ? `Kiosk service enabled on http://0.0.0.0:3000/kiosk.` : 'Kiosk service not enabled.',
+            info: 'https://github.com/glenndehaan/unifi-voucher-site#kiosk-functionality',
+            modules: {}
+        },
         authentication: {
             status: {
                 text: !variables.authDisabled ? 'Enabled' : 'Disabled',

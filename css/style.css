@@ -31,3 +31,36 @@
     cursor: pointer;
   }
 }
+
+.timer-progress {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    overflow: hidden;
+    height: 6px;
+    z-index: 100;
+}
+
+.timer-bar {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    width: 100%;
+    transform-origin: right;
+}
+
+#timer-bar {
+    transform: translateX(-100%);
+}
+
+@keyframes countdown {
+    from { transform: translateX(-100%); }
+    to { transform: translateX(0); }
+}
+
+.animate-countdown {
+    animation: countdown 60s linear forwards;
+    will-change: transform;
+}

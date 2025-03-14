@@ -107,6 +107,15 @@ module.exports = () => {
     }
 
     /**
+     * Log kiosk status
+     */
+    if(variables.kioskEnabled) {
+        const kioskType = types(variables.kioskVoucherType, true);
+        log.info('[Kiosk] Enabled!');
+        log.info(`[Kiosk][Type] ${time(kioskType.expiration)}, ${kioskType.usage === '1' ? 'single-use' : kioskType.usage === '0' ? 'multi-use (unlimited)' : `multi-use (${kioskType.usage}x)`}${typeof kioskType.upload === "undefined" && typeof kioskType.download === "undefined" && typeof kioskType.megabytes === "undefined" ? ', no limits' : `${typeof kioskType.upload !== "undefined" ? `, upload bandwidth limit: ${kioskType.upload} kb/s` : ''}${typeof kioskType.download !== "undefined" ? `, download bandwidth limit: ${kioskType.download} kb/s` : ''}${typeof kioskType.megabytes !== "undefined" ? `, quota limit: ${kioskType.megabytes} mb` : ''}`}`);
+    }
+
+    /**
      * Log controller
      */
     log.info(`[UniFi] Using Controller on: ${variables.unifiIp}:${variables.unifiPort} (Site ID: ${variables.unifiSiteId}${variables.unifiSsid !== '' ? `, SSID: ${variables.unifiSsid}` : ''})`);

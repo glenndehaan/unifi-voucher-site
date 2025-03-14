@@ -20,6 +20,7 @@ const unifi = require('./modules/unifi');
 const print = require('./modules/print');
 const mail = require('./modules/mail');
 const oidc = require('./modules/oidc');
+const qr = require('./modules/qr');
 
 /**
  * Import own middlewares
@@ -139,6 +140,105 @@ app.get('/', (req, res) => {
 
 // Check if web service is enabled
 if(variables.serviceWeb) {
+    app.get('/kiosk', (req, res) => {
+        // Check if kiosk is disabled
+        if(!variables.kioskEnabled) {
+            res.status(501).send();
+            return;
+        }
+
+        res.render('kiosk', {
+            baseUrl: req.headers['x-ingress-path'] ? req.headers['x-ingress-path'] : '',
+            error: req.flashMessage.type === 'error',
+            error_text: req.flashMessage.message || ''
+        });
+    });
+    app.post('/kiosk', async (req, res) => {
+        // Check if kiosk is disabled
+        if(!variables.kioskEnabled) {
+            res.status(501).send();
+            return;
+        }
+
+        // Check if we need to generate a voucher or send an email with an existing voucher
+        if(req.body.id && req.body.code && req.body.email) {
+            // Check if email functions are enabled
+            if(variables.smtpFrom === '' || variables.smtpHost === '' || variables.smtpPort === '') {
+                res.status(501).send();
+                return;
+            }
+
+            // Get voucher from cache
+            const voucher = cache.vouchers.find((e) => {
+                return e._id === req.body.id;
+            });
+
+            if(voucher) {
+                const emailResult = await mail.send(req.body.email, voucher).catch((e) => {
+                    res.cookie('flashMessage', JSON.stringify({type: 'error', message: e}), {httpOnly: true, expires: new Date(Date.now() + 24 * 60 * 60 * 1000)}).redirect(302, `${req.headers['x-ingress-path'] ? req.headers['x-ingress-path'] : ''}/kiosk`);
+                });
+
+                if(emailResult) {
+                    res.render('kiosk', {
+                        baseUrl: req.headers['x-ingress-path'] ? req.headers['x-ingress-path'] : '',
+                        error: req.flashMessage.type === 'error',
+                        error_text: req.flashMessage.message || '',
+                        email_enabled: variables.smtpFrom !== '' && variables.smtpHost !== '' && variables.smtpPort !== '',
+                        unifiSsid: variables.unifiSsid,
+                        unifiSsidPassword: variables.unifiSsidPassword,
+                        qr: await qr(),
+                        voucherId: req.body.id,
+                        voucherCode: req.body.code,
+                        email: req.body.email
+                    });
+                }
+            } else {
+                res.status(404);
+                res.render('404', {
+                    baseUrl: req.headers['x-ingress-path'] ? req.headers['x-ingress-path'] : ''
+                });
+            }
+        } else {
+            // Create voucher code
+            const voucherCode = await unifi.create(types(variables.kioskVoucherType, true)).catch((e) => {
+                res.cookie('flashMessage', JSON.stringify({type: 'error', message: e}), {httpOnly: true, expires: new Date(Date.now() + 24 * 60 * 60 * 1000)}).redirect(302, `${req.headers['x-ingress-path'] ? req.headers['x-ingress-path'] : ''}/kiosk`);
+            });
+
+            if (voucherCode) {
+                log.info('[Cache] Requesting UniFi Vouchers...');
+
+                const vouchers = await unifi.list().catch((e) => {
+                    log.error('[Cache] Error requesting vouchers!');
+                    res.cookie('flashMessage', JSON.stringify({type: 'error', message: e}), {httpOnly: true, expires: new Date(Date.now() + 24 * 60 * 60 * 1000)}).redirect(302, `${req.headers['x-ingress-path'] ? req.headers['x-ingress-path'] : ''}/kiosk`);
+                });
+
+                if (vouchers) {
+                    cache.vouchers = vouchers;
+                    cache.updated = new Date().getTime();
+                    log.info(`[Cache] Saved ${vouchers.length} voucher(s)`);
+
+                    // Locate voucher data within cache
+                    const voucherData = cache.vouchers.find(voucher => voucher.code === voucherCode.replaceAll('-', ''));
+                    if(!voucherData) {
+                        res.cookie('flashMessage', JSON.stringify({type: 'error', message: 'Invalid application cache!'}), {httpOnly: true, expires: new Date(Date.now() + 24 * 60 * 60 * 1000)}).redirect(302, `${req.headers['x-ingress-path'] ? req.headers['x-ingress-path'] : ''}/kiosk`);
+                        return;
+                    }
+
+                    res.render('kiosk', {
+                        baseUrl: req.headers['x-ingress-path'] ? req.headers['x-ingress-path'] : '',
+                        error: req.flashMessage.type === 'error',
+                        error_text: req.flashMessage.message || '',
+                        email_enabled: variables.smtpFrom !== '' && variables.smtpHost !== '' && variables.smtpPort !== '',
+                        unifiSsid: variables.unifiSsid,
+                        unifiSsidPassword: variables.unifiSsidPassword,
+                        qr: await qr(),
+                        voucherId: voucherData._id,
+                        voucherCode
+                    });
+                }
+            }
+        }
+    });
     app.get('/login', (req, res) => {
         // Check if authentication is disabled
         if (variables.authDisabled) {
@@ -416,6 +516,7 @@ if(variables.serviceWeb) {
             error: req.flashMessage.type === 'error',
             error_text: req.flashMessage.message || '',
             uiBackButton: variables.uiBackButton,
+            kioskEnabled: variables.kioskEnabled,
             timeConvert: time,
             bytesConvert: bytes,
             email_enabled: variables.smtpFrom !== '' && variables.smtpHost !== '' && variables.smtpPort !== '',
@@ -507,6 +608,7 @@ if(variables.serviceWeb) {
             gitTag: variables.gitTag,
             gitBuild: variables.gitBuild,
             uiBackButton: variables.uiBackButton,
+            kioskEnabled: variables.kioskEnabled,
             user: user,
             userIcon: req.oidc ? crypto.createHash('sha256').update(user.email).digest('hex') : '',
             authDisabled: variables.authDisabled,
