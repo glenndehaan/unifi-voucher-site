@@ -18,29 +18,26 @@
     "node-unifi@^2.5.1": {
       "axios": "1.8.3",
       "tough-cookie": "5.1.1"
-    },
-    "express-openid-connect@^2.17.1": {
-      "cookie": "0.7.0"
     }
   },
   "dependencies": {
     "cookie-parser": "^1.4.7",
     "ejs": "^3.1.10",
-    "express": "^4.21.2",
+    "express": "^5.1.0",
     "express-locale": "^2.0.2",
-    "express-openid-connect": "^2.17.1",
+    "express-openid-connect": "^2.18.0",
     "js-logger": "^1.6.1",
     "jsonwebtoken": "^9.0.2",
-    "multer": "^1.4.5-lts.1",
-    "node-thermal-printer": "^4.4.4",
+    "multer": "^1.4.5-lts.2",
+    "node-thermal-printer": "^4.4.5",
     "node-unifi": "^2.5.1",
-    "nodemailer": "^6.10.0",
-    "pdfkit": "^0.16.0",
+    "nodemailer": "^6.10.1",
+    "pdfkit": "^0.17.0",
     "qrcode": "^1.5.4"
   },
   "devDependencies": {
-    "@tailwindcss/cli": "^4.0.14",
+    "@tailwindcss/cli": "^4.1.4",
     "@tailwindcss/forms": "^0.5.10",
-    "tailwindcss": "^4.0.14"
+    "tailwindcss": "^4.1.4"
   }
 }
