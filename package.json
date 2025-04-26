@@ -23,7 +23,7 @@
   "dependencies": {
     "cookie-parser": "^1.4.7",
     "ejs": "^3.1.10",
-    "express": "^5.1.0",
+    "express": "^4.21.2",
     "express-locale": "^2.0.2",
     "express-openid-connect": "^2.18.0",
     "js-logger": "^1.6.1",
