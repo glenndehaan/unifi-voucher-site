@@ -1,15 +1,15 @@
 {
-  "title": "WiFi Voucher Code",
-  "connect": "Connect to",
-  "password": "Password",
-  "or": "or",
-  "scan": "Scan to connect",
-  "details": "Voucher Details",
-  "type": "Type",
-  "multiUse": "Multi-use",
-  "singleUse": "Single-use",
-  "duration": "Duration",
-  "dataLimit": "Data Limit",
-  "downloadLimit": "Download Limit",
-  "uploadLimit": "Upload Limit"
+  "title": "Código del vale WiFi",
+  "connect": "Conectar a",
+  "password": "Contraseña",
+  "or": "o",
+  "scan": "Escanear para conectar",
+  "details": "Detalles del cupón",
+  "type": "Tipo",
+  "multiUse": "Multi-uso",
+  "singleUse": "Un solo uso",
+  "duration": "Duración",
+  "dataLimit": "Límite de datos",
+  "downloadLimit": "Límite de descarga",
+  "uploadLimit": "Límite de subida"
 }
