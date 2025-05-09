@@ -1,0 +1,16 @@
+{
+  "title": "Cupón WiFi",
+  "generate": "Generar cupón WiFi",
+  "generating": "Generando cupón",
+  "use": "Usar este código al conectar",
+  "connect": "Conectar a",
+  "password": "Contraseña",
+  "or": "o",
+  "scan": "Escanear para conectar",
+  "email": "Email Voucher",
+  "optional": "opcional",
+  "send": "Enviar cupón",
+  "sending": "Enviando Email",
+  "sent": "Correo enviado",
+  "back": "Atrás"
+}

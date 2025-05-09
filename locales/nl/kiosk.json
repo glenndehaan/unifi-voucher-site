@@ -1,0 +1,16 @@
+{
+  "title": "WiFi Waardebon",
+  "generate": "WiFi Waardebon Genereren",
+  "generating": "Waardebon Aanmaken",
+  "use": "Gebruik deze code bij verbinding maken",
+  "connect": "Verbind met",
+  "password": "Wachtwoord",
+  "or": "of",
+  "scan": "Scan om te verbinden",
+  "email": "Email Voucher",
+  "optional": "optioneel",
+  "send": "Waardebon Verzenden",
+  "sending": "E-mail verzenden",
+  "sent": "E-mail verzonden",
+  "back": "Terug"
+}

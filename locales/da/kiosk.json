@@ -1,0 +1,16 @@
+{
+  "title": "WiFi Rabatkupon",
+  "generate": "Generer WiFi Rabatkupon",
+  "generating": "Genererer Rabatkupon",
+  "use": "Brug denne kode ved tilslutning",
+  "connect": "Opret forbindelse til",
+  "password": "Adgangskode",
+  "or": "eller",
+  "scan": "Scan for at forbinde",
+  "email": "Email Voucher",
+  "optional": "valgfri",
+  "send": "Send Rabatkupon",
+  "sending": "Sender E-Mail",
+  "sent": "E-mail Sendt",
+  "back": "Tilbage"
+}
