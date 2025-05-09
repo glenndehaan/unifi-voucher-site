@@ -41,8 +41,20 @@
 
         <div class="w-full max-w-md bg-white dark:bg-gray-800 rounded-lg border border-black/5 dark:border-white/5 shadow-sm z-10 relative">
             <div class="p-4 border-b border-black/5 dark:border-white/5">
+                <% if(typeof voucherCode === 'undefined') { %>
+                    <div class="absolute top-2 right-2">
+                        <form id="locale-form" action="<%= baseUrl %>/kiosk" method="get">
+                            <select id="locale" name="locale" class="block w-full rounded-md border-0 py-1.5 pl-3 pr-10 text-gray-900 dark:text-white dark:bg-white/5 ring-1 ring-inset ring-gray-300 dark:ring-white/10 focus:ring-2 focus:ring-sky-600 sm:text-sm sm:leading-6 **:text-black">
+                                <% Object.keys(languages).forEach((l) => { %>
+                                    <option value="<%= l %>-<%= l %>"<%= l === language ? ' selected' : '' %>><%= languages[l] %></option>
+                                <% }); %>
+                            </select>
+                        </form>
+                    </div>
+                <% } %>
+
                 <img class="mx-auto h-24 w-auto" width="48" height="48" alt="UniFi Voucher Site Logo" src="<%= baseUrl %>/images/logo.png">
-                <h1 class="mt-4 text-2xl font-semibold text-center text-gray-900 dark:text-white">WiFi Voucher</h1>
+                <h1 class="mt-4 text-2xl font-semibold text-center text-gray-900 dark:text-white"><%= t('title') %></h1>
 
                 <% if(error) { %>
                     <div class="mt-5 rounded-md bg-red-700 p-4">
@@ -63,7 +75,7 @@
             <div class="p-4">
                 <% if(typeof voucherCode === 'undefined') { %>
                     <div class="block">
-                        <form id="voucher-form" action="<%= baseUrl %>/kiosk" method="post">
+                        <form id="voucher-form" action="<%= baseUrl %>/kiosk?locale=<%= language %>-<%= language %>" method="post">
                             <button id="generate-button" class="w-full h-16 text-lg bg-sky-700 text-white rounded-md flex items-center justify-center font-medium hover:bg-sky-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sky-700">
                                 <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                                     <path d="M5 12.55a11 11 0 0 1 14.08 0"></path>
@@ -71,7 +83,7 @@
                                     <path d="M8.53 16.11a6 6 0 0 1 6.95 0"></path>
                                     <line x1="12" y1="20" x2="12" y2="20"></line>
                                 </svg>
-                                Generate WiFi Voucher
+                                <%= t('generate') %>
                             </button>
                         </form>
                         <div id="generating-button" class="hidden w-full h-16 text-lg bg-sky-600 text-white rounded-md flex items-center justify-center font-medium">
@@ -85,26 +97,26 @@
                                 <line x1="4.93" y1="19.07" x2="7.76" y2="16.24"></line>
                                 <line x1="16.24" y1="7.76" x2="19.07" y2="4.93"></line>
                             </svg>
-                            Generating Voucher ...
+                            <%= t('generating') %> ...
                         </div>
                     </div>
                 <% } else { %>
                     <div class="space-y-4">
                         <div class="rounded-lg border-0 ring-1 ring-inset ring-gray-300 dark:ring-white/10 p-4 bg-white dark:bg-gray-900">
                             <h2 class=" text-center text-sm mb-2 text-gray-900 dark:text-white">
-                                Use this code when connecting:
+                                <%= t('use') %>:
                             </h2>
                             <div class="text-center text-2xl font-mono tracking-wider mb-2 text-gray-900 dark:text-white">
                                 <%= voucherCode %>
                             </div>
                             <div class="text-center text-sm text-gray-900 dark:text-white mb-2">
                                 <% if(unifiSsidPassword !== '') { %>
-                                    Connect to: <strong><%= unifiSsid %></strong>,<br/>
-                                    Password: <strong><%= unifiSsidPassword %></strong> or,<br/>
+                                    <%= t('connect') %>: <strong><%= unifiSsid %></strong>,<br/>
+                                    <%= t('password') %>: <strong><%= unifiSsidPassword %></strong> <%= t('or') %>,<br/>
                                 <% } else { %>
-                                    Connect to: <strong><%= unifiSsid %></strong> or,<br/>
+                                    <%= t('connect') %>: <strong><%= unifiSsid %></strong> <%= t('or') %>,<br/>
                                 <% } %>
-                                Scan to connect:
+                                <%= t('scan') %>:
                             </div>
                             <div class="flex justify-center">
                                 <img src="<%= qr %>" alt="Scan to Connect QR Code"/>
@@ -116,7 +128,7 @@
                                 <% if(typeof email === 'undefined') { %>
                                     <div class="space-y-2">
                                         <label for="email" class="block text-sm font-medium text-gray-700 dark:text-gray-300">
-                                            Email Voucher (optional)
+                                            <%= t('email') %> (<%= t('optional') %>)
                                         </label>
                                         <input id="email" type="email" name="email" placeholder="Enter your email address" class="block w-full rounded-md border-0 py-1.5 text-gray-900 dark:text-white bg-white dark:bg-gray-900 ring-1 ring-inset ring-gray-300 dark:ring-white/10 focus:ring-2 focus:ring-sky-600 sm:text-sm sm:leading-6" required/>
                                     </div>
@@ -129,7 +141,7 @@
                                             <rect x="2" y="4" width="20" height="16" rx="2"></rect>
                                             <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"></path>
                                         </svg>
-                                        Send Voucher
+                                        <%= t('send') %>
                                     </button>
 
                                     <div id="sending-button" class="hidden w-full bg-sky-700/80 text-white py-2 rounded-md flex items-center justify-center">
@@ -143,14 +155,14 @@
                                             <line x1="4.93" y1="19.07" x2="7.76" y2="16.24"></line>
                                             <line x1="16.24" y1="7.76" x2="19.07" y2="4.93"></line>
                                         </svg>
-                                        Sending Email ...
+                                        <%= t('sending') %> ...
                                     </div>
                                 <% } else { %>
                                     <div class="w-full bg-green-600 text-white py-2 rounded-md flex items-center justify-center">
                                         <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-2" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                                             <polyline points="20 6 9 17 4 12"></polyline>
                                         </svg>
-                                        Email Sent
+                                        <%= t('sent') %>
                                     </div>
                                 <% } %>
                             </form>
@@ -166,7 +178,7 @@
                             <line x1="19" y1="12" x2="5" y2="12"></line>
                             <polyline points="12 19 5 12 12 5"></polyline>
                         </svg>
-                        Back
+                        <%= t('back') %>
                     </a>
                 </div>
             <% } %>
@@ -174,11 +186,19 @@
 
         <script type="application/javascript">
             const voucherForm = document.querySelector('#voucher-form');
+            const localeForm = document.querySelector('#locale-form');
+            const localeInput = document.querySelector('#locale');
             const emailForm = document.querySelector('#email-form');
             const generateButton = document.querySelector('#generate-button');
             const generatingButton = document.querySelector('#generating-button');
             const emailButton = document.querySelector('#email-button');
             const sendingButton = document.querySelector('#sending-button');
+
+            if(localeInput) {
+                localeInput.addEventListener('change', () => {
+                    localeForm.submit();
+                });
+            }
 
             if(voucherForm) {
                 voucherForm.addEventListener('submit', () => {

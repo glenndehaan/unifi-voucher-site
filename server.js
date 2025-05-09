@@ -21,6 +21,7 @@ const print = require('./modules/print');
 const mail = require('./modules/mail');
 const oidc = require('./modules/oidc');
 const qr = require('./modules/qr');
+const translation = require('./modules/translation');
 
 /**
  * Import own middlewares
@@ -100,14 +101,6 @@ if(!variables.authDisabled && variables.authOidcEnabled) {
 }
 
 /**
- * Enable locale
- */
-app.use(locale({
-    "priority": ["accept-language", "default"],
-    "default": "en-GB"
-}));
-
-/**
  * Enable JSON
  */
 app.use(express.json());
@@ -121,6 +114,14 @@ app.use(multer().none());
  * Enable cookie-parser
  */
 app.use(cookieParser());
+
+/**
+ * Enable locale
+ */
+app.use(locale({
+    'priority': ['query', 'accept-language', 'default'],
+    'default': 'en-GB'
+}));
 
 /**
  * Enable flash-message
@@ -148,6 +149,9 @@ if(variables.serviceWeb) {
         }
 
         res.render('kiosk', {
+            t: translation('kiosk', req.locale.language),
+            languages,
+            language: req.locale.language,
             baseUrl: req.headers['x-ingress-path'] ? req.headers['x-ingress-path'] : '',
             error: req.flashMessage.type === 'error',
             error_text: req.flashMessage.message || ''
@@ -180,6 +184,9 @@ if(variables.serviceWeb) {
 
                 if(emailResult) {
                     res.render('kiosk', {
+                        t: translation('kiosk', req.locale.language),
+                        languages,
+                        language: req.locale.language,
                         baseUrl: req.headers['x-ingress-path'] ? req.headers['x-ingress-path'] : '',
                         error: req.flashMessage.type === 'error',
                         error_text: req.flashMessage.message || '',
@@ -225,6 +232,9 @@ if(variables.serviceWeb) {
                     }
 
                     res.render('kiosk', {
+                        t: translation('kiosk', req.locale.language),
+                        languages,
+                        language: req.locale.language,
                         baseUrl: req.headers['x-ingress-path'] ? req.headers['x-ingress-path'] : '',
                         error: req.flashMessage.type === 'error',
                         error_text: req.flashMessage.message || '',
