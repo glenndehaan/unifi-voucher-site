@@ -9,6 +9,7 @@
   "scan": "Scan to connect",
   "email": "Email Voucher",
   "optional": "optional",
+  "enterEmail": "Enter your email address",
   "send": "Send Voucher",
   "sending": "Sending Email",
   "sent": "Email Sent",
