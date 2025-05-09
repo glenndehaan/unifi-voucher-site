@@ -1,0 +1,16 @@
+{
+  "title": "WiFi Voucher",
+  "generate": "Generate WiFi Voucher",
+  "generating": "Generating Voucher",
+  "use": "Use this code when connecting",
+  "connect": "Connect to",
+  "password": "Password",
+  "or": "or",
+  "scan": "Scan to connect",
+  "email": "Email Voucher",
+  "optional": "optional",
+  "send": "Send Voucher",
+  "sending": "Sending Email",
+  "sent": "Email Sent",
+  "back": "Back"
+}
