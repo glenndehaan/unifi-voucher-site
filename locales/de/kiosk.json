@@ -1,16 +1,16 @@
 {
-  "title": "WiFi Voucher",
-  "generate": "Generate WiFi Voucher",
-  "generating": "Generating Voucher",
-  "use": "Use this code when connecting",
-  "connect": "Connect to",
-  "password": "Password",
-  "or": "or",
-  "scan": "Scan to connect",
+  "title": "WiFi-Gutschein",
+  "generate": "WiFi Gutschein generieren",
+  "generating": "Gutschein generieren",
+  "use": "Diesen Code beim Verbinden verwenden",
+  "connect": "Verbinden mit",
+  "password": "Passwort",
+  "or": "oder",
+  "scan": "Scan zum Verbinden",
   "email": "Email Voucher",
   "optional": "optional",
-  "send": "Send Voucher",
-  "sending": "Sending Email",
-  "sent": "Email Sent",
-  "back": "Back"
+  "send": "Gutschein senden",
+  "sending": "E-Mail wird gesendet",
+  "sent": "E-Mail gesendet",
+  "back": "Zurück"
 }
