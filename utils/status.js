@@ -47,29 +47,12 @@ module.exports = () => {
         },
         printing: {
             status: {
-                text: variables.printerType !== '' ? 'Enabled' : 'Disabled',
-                state: variables.printerType !== '' ? 'green' : 'red'
+                text: variables.printers !== '' ? 'Enabled' : 'Disabled',
+                state: variables.printers !== '' ? 'green' : 'red'
             },
-            details: variables.printerType !== '' ? 'Printing service has been configured.' : 'No printing service enabled.',
+            details: variables.printers !== '' ? `Printing service has been configured. Available printers: ${variables.printers.split(',').join(', ')}` : 'No printing service enabled.',
             info: 'https://github.com/glenndehaan/unifi-voucher-site#print-functionality',
-            modules: {
-                pdf: {
-                    status: {
-                        text: variables.printerType === 'pdf' ? 'Enabled' : 'Disabled',
-                        state: variables.printerType === 'pdf' ? 'green' : 'red'
-                    },
-                    details: variables.printerType === 'pdf' ? 'PDF Service enabled.' : 'PDF Service not enabled.',
-                    info: 'https://github.com/glenndehaan/unifi-voucher-site#pdf'
-                },
-                escpos: {
-                    status: {
-                        text: variables.printerType === 'escpos' ? 'Enabled' : 'Disabled',
-                        state: variables.printerType === 'escpos' ? 'green' : 'red'
-                    },
-                    details: variables.printerType === 'escpos' ? `ESC/POS Printing on ${variables.printerIp}.` : 'ESC/POS Service not enabled.',
-                    info: 'https://github.com/glenndehaan/unifi-voucher-site#escpos'
-                }
-            }
+            modules: {}
         },
         email: {
             status: {

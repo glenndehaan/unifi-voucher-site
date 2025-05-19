@@ -2,13 +2,6 @@
     <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div class="flex h-16 justify-between">
             <div class="flex">
-                <% if(uiBackButton) { %>
-                    <button aria-label="Back to Previous Page" onclick="window.history.go(-1);">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="text-gray-900 dark:text-white hover:text-gray-700 dark:hover:text-gray-100 w-10 h-10 mr-4" viewBox="0 0 24 24" fill="currentColor">
-                            <path fill-rule="evenodd" d="M12 2.25c-5.385 0-9.75 4.365-9.75 9.75s4.365 9.75 9.75 9.75 9.75-4.365 9.75-9.75S17.385 2.25 12 2.25Zm-4.28 9.22a.75.75 0 0 0 0 1.06l3 3a.75.75 0 1 0 1.06-1.06l-1.72-1.72h5.69a.75.75 0 0 0 0-1.5h-5.69l1.72-1.72a.75.75 0 0 0-1.06-1.06l-3 3Z" clip-rule="evenodd" />
-                        </svg>
-                    </button>
-                <% } %>
                 <a href="<%= baseUrl %>/vouchers" class="flex shrink-0 items-center">
                     <img class="h-12 w-auto" width="48" height="48" alt="UniFi Voucher Site Logo" src="<%= baseUrl %>/images/logo.png">
                     <div class="hidden sm:block ml-4 text-2xl font-semibold leading-7 text-gray-900 dark:text-white">

@@ -165,7 +165,7 @@ if(variables.serviceWeb) {
         }
 
         // Check if we need to generate a voucher or send an email with an existing voucher
-        if(req.body.id && req.body.code && req.body.email) {
+        if(req.body && req.body.id && req.body.code && req.body.email) {
             // Check if email functions are enabled
             if(variables.smtpFrom === '' || variables.smtpHost === '' || variables.smtpPort === '') {
                 res.status(501).send();
@@ -363,7 +363,7 @@ if(variables.serviceWeb) {
         }
     });
     app.get('/voucher/:id/print', [authorization.web], async (req, res) => {
-        if(variables.printerType === '') {
+        if(variables.printers === '') {
             res.status(501).send();
             return;
         }
@@ -377,6 +377,7 @@ if(variables.serviceWeb) {
                 baseUrl: req.headers['x-ingress-path'] ? req.headers['x-ingress-path'] : '',
                 languages,
                 defaultLanguage: variables.translationDefault,
+                printers: variables.printers.split(','),
                 voucher,
                 updated: cache.updated
             });
@@ -388,8 +389,13 @@ if(variables.serviceWeb) {
         }
     });
     app.post('/voucher/:id/print', [authorization.web], async (req, res) => {
-        if(variables.printerType === '') {
+        if(variables.printers === '') {
             res.status(501).send();
+            return;
+        }
+
+        if(!variables.printers.includes(req.body.printer)) {
+            res.status(400).send();
             return;
         }
 
@@ -398,7 +404,7 @@ if(variables.serviceWeb) {
         });
 
         if(voucher) {
-            if(variables.printerType === 'pdf') {
+            if(req.body.printer === 'pdf') {
                 const buffers = await print.pdf(voucher, req.body.language);
                 const pdfData = Buffer.concat(buffers);
                 res.writeHead(200, {
@@ -406,10 +412,8 @@ if(variables.serviceWeb) {
                     'Content-Type': 'application/pdf',
                     'Content-Disposition': `attachment;filename=voucher_${req.params.id}.pdf`
                 }).end(pdfData);
-            }
-
-            if(variables.printerType === 'escpos') {
-                const printResult = await print.escpos(voucher, req.body.language).catch((e) => {
+            } else {
+                const printResult = await print.escpos(voucher, req.body.language, req.body.printer).catch((e) => {
                     res.cookie('flashMessage', JSON.stringify({type: 'error', message: e}), {httpOnly: true, expires: new Date(Date.now() + 24 * 60 * 60 * 1000)}).redirect(302, `${req.headers['x-ingress-path'] ? req.headers['x-ingress-path'] : ''}/vouchers`);
                 });
 
@@ -525,12 +529,11 @@ if(variables.serviceWeb) {
             info_text: req.flashMessage.message || '',
             error: req.flashMessage.type === 'error',
             error_text: req.flashMessage.message || '',
-            uiBackButton: variables.uiBackButton,
             kioskEnabled: variables.kioskEnabled,
             timeConvert: time,
             bytesConvert: bytes,
             email_enabled: variables.smtpFrom !== '' && variables.smtpHost !== '' && variables.smtpPort !== '',
-            printer_enabled: variables.printerType !== '',
+            printer_enabled: variables.printers !== '',
             voucher_types: types(variables.voucherTypes),
             voucher_custom: variables.voucherCustom,
             vouchers: cache.vouchers.filter((item) => {
@@ -617,7 +620,6 @@ if(variables.serviceWeb) {
             baseUrl: req.headers['x-ingress-path'] ? req.headers['x-ingress-path'] : '',
             gitTag: variables.gitTag,
             gitBuild: variables.gitBuild,
-            uiBackButton: variables.uiBackButton,
             kioskEnabled: variables.kioskEnabled,
             user: user,
             userIcon: req.oidc ? crypto.createHash('sha256').update(user.email).digest('hex') : '',
@@ -626,7 +628,7 @@ if(variables.serviceWeb) {
         });
     });
     app.get('/bulk/print', [authorization.web], async (req, res) => {
-        if(variables.printerType === '') {
+        if(variables.printers === '') {
             res.status(501).send();
             return;
         }
@@ -637,13 +639,19 @@ if(variables.serviceWeb) {
             bytesConvert: bytes,
             languages,
             defaultLanguage: variables.translationDefault,
+            printers: variables.printers.split(','),
             vouchers: cache.vouchers,
             updated: cache.updated
         });
     });
     app.post('/bulk/print', [authorization.web], async (req, res) => {
-        if(variables.printerType === '') {
+        if(variables.printers === '') {
             res.status(501).send();
+            return;
+        }
+
+        if(!variables.printers.includes(req.body.printer)) {
+            res.status(400).send();
             return;
         }
 
@@ -664,7 +672,7 @@ if(variables.serviceWeb) {
         });
 
         if(!vouchers.includes(undefined)) {
-            if(variables.printerType === 'pdf') {
+            if(req.body.printer === 'pdf') {
                 const buffers = await print.pdf(vouchers, req.body.language, true);
                 const pdfData = Buffer.concat(buffers);
                 res.writeHead(200, {
@@ -672,13 +680,11 @@ if(variables.serviceWeb) {
                     'Content-Type': 'application/pdf',
                     'Content-Disposition': `attachment;filename=bulk_vouchers_${new Date().getTime()}.pdf`
                 }).end(pdfData);
-            }
-
-            if(variables.printerType === 'escpos') {
+            } else {
                 let printSuccess = true;
 
                 for(let voucher = 0; voucher < vouchers.length; voucher++) {
-                    const printResult = await print.escpos(vouchers[voucher], req.body.language).catch((e) => {
+                    const printResult = await print.escpos(vouchers[voucher], req.body.language, req.body.printer).catch((e) => {
                         res.cookie('flashMessage', JSON.stringify({type: 'error', message: e}), {httpOnly: true, expires: new Date(Date.now() + 24 * 60 * 60 * 1000)}).redirect(302, `${req.headers['x-ingress-path'] ? req.headers['x-ingress-path'] : ''}/vouchers`);
                     });
 

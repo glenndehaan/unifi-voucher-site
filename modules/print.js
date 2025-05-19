@@ -225,16 +225,17 @@ module.exports = {
      *
      * @param voucher
      * @param language
+     * @param ip
      * @return {Promise<unknown>}
      */
-    escpos: (voucher, language) => {
+    escpos: (voucher, language, ip) => {
         return new Promise(async (resolve, reject) => {
             // Create new translator
             const t = translation('print', language);
 
             const printer = new ThermalPrinter({
                 type: PrinterTypes.EPSON,
-                interface: `tcp://${variables.printerIp}`
+                interface: `tcp://${ip}`
             });
 
             const status = await printer.isPrinterConnected();

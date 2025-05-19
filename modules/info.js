@@ -95,7 +95,7 @@ module.exports = () => {
     /**
      * Log printer status
      */
-    log.info(`[Printer] ${variables.printerType !== '' ? `Enabled! Type: ${variables.printerType}${variables.printerType === 'escpos' ? `, IP: ${variables.printerIp}` : ''}` : 'Disabled!'}`);
+    log.info(`[Printers] ${variables.printers !== '' ? `Enabled! Available: ${variables.printers.split(',').join(', ')}` : 'Disabled!'}`);
 
     /**
      * Log email status

@@ -32,8 +32,7 @@ module.exports = {
     authOidcClientId: config('auth_oidc_client_id') || process.env.AUTH_OIDC_CLIENT_ID || '',
     authOidcClientSecret: config('auth_oidc_client_secret') || process.env.AUTH_OIDC_CLIENT_SECRET || '',
     authDisabled: config('auth_disable') || (process.env.AUTH_DISABLE === 'true') || false,
-    printerType: config('printer_type') || process.env.PRINTER_TYPE || '',
-    printerIp: config('printer_ip') || process.env.PRINTER_IP || '192.168.1.1',
+    printers: config('printers') || process.env.PRINTERS || '',
     smtpFrom: config('smtp_from') || process.env.SMTP_FROM || '',
     smtpHost: config('smtp_host') || process.env.SMTP_HOST || '',
     smtpPort: config('smtp_port') || process.env.SMTP_PORT || 25,
@@ -45,7 +44,6 @@ module.exports = {
     logLevel: config('log_level') || process.env.LOG_LEVEL || 'info',
     translationDefault: config('translation_default') || process.env.TRANSLATION_DEFAULT || 'en',
     translationDebug: config('translation_debug') || (process.env.TRANSLATION_DEBUG === 'true') || false,
-    uiBackButton: config('ui_back_button') || (process.env.UI_BACK_BUTTON === 'true') || false,
     gitTag: process.env.GIT_TAG || 'master',
     gitBuild: fs.existsSync('/etc/unifi_voucher_site_build') ? fs.readFileSync('/etc/unifi_voucher_site_build', 'utf-8') : 'Development'
 };

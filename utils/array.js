@@ -7,6 +7,9 @@ module.exports = {
         'DISABLE_AUTH',
         'AUTH_OIDC_CLIENT_TYPE',
         'AUTH_PASSWORD',
-        'AUTH_TOKEN'
+        'AUTH_TOKEN',
+        'UI_BACK_BUTTON',
+        'PRINTER_TYPE',
+        'PRINTER_IP'
     ]
 };

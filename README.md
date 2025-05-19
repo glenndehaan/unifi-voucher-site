@@ -6,7 +6,7 @@ UniFi Voucher Site is a web-based platform for generating and managing UniFi net
 
 ![Vouchers Overview - Desktop](.docs/images/desktop_1.png)
 
-> Upgrading from 4.x to 5.x? Please take a look at the [migration guide](#migration-from-4x-to-5x)
+> Upgrading from 5.x to 6.x? Please take a look at the [migration guide](#migration-from-5x-to-6x)
 
 ## Features
 
@@ -108,10 +108,8 @@ services:
       SERVICE_WEB: 'true'
       # Enable/disable the API
       SERVICE_API: 'false'
-      # Enable/disable the printer and set the preferred type, currently supported types: pdf, escpos
-      PRINTER_TYPE: ''
-      # IP address to your network enabled ESC/POS compatible printer (Only required when using PRINTER_TYPE: 'escpos')
-      PRINTER_IP: '192.168.1.1'
+      # Enable/disable the printers and setup available printers, currently supported: pdf,escpos ip (Example: pdf,192.168.1.10)
+      PRINTERS: ''
       # SMTP Mail from email address (optional)
       SMTP_FROM: ''
       # SMTP Mail server hostname/ip (optional)
@@ -135,8 +133,6 @@ services:
       TRANSLATION_DEFAULT: 'en'
       # Enables/disables translation debugging, when enabled only translation keys are shown
       TRANSLATION_DEBUG: 'false'
-      # Enables/disables a back-button next to the logo to go back 1 page in history (Could be used with multi-page kiosks)
-      UI_BACK_BUTTON: 'false'
 ```
 
 ### Home Assistant Add-on
@@ -468,17 +464,20 @@ The print functionality is compatible with most 80mm thermal receipt printers co
 To enable the print feature, you need to set the following environment variables:
 
 ```env
-PRINTER_TYPE: ''
-PRINTER_IP: ''
+PRINTERS: ''
 ```
 
 Here’s what each variable represents:
 
-- **`PRINTER_TYPE`**: Sets the printer type used by UniFi Voucher Site. Supported options:
+- **`PRINTERS`**: Sets the printer type used by UniFi Voucher Site. Supported options:
     - `pdf`: For generating PDF files formatted for 80mm paper width.
-    - `escpos`: For printing directly to network-enabled ESC/POS compatible printers.
+    - `escpos`: For printing directly to network-enabled ESC/POS compatible printers. Specify the IP address of the network-enabled ESC/POS printer
 
-- **`PRINTER_IP`**: Specifies the IP address of the network-enabled ESC/POS printer. This variable is only required when `PRINTER_TYPE` is set to `escpos`.
+> You can have multiple printers available at the same time.
+> Let's say you have 2 ESC/POS network printers and want to print via pdf, then define:
+> ```env
+> PRINTERS: 'pdf,192.168.1.10,192.168.1.11'
+> ```
 
 ### Usage
 
@@ -494,7 +493,7 @@ The application will automatically format the voucher for 80mm paper width, ensu
 
 #### ESC/POS
 
-For network-enabled ESC/POS compatible printers, set the `PRINTER_TYPE` to `escpos` and provide the printer's IP address in the `PRINTER_IP` variable. Once configured, you can print vouchers directly to your network printer from the UniFi Voucher Site application.
+For network-enabled ESC/POS compatible printers, provide the printer's IP address in the `PRINTERS` variable. Once configured, you can print vouchers directly to your network printer from the UniFi Voucher Site application.
 
 Just like with PDF printing, navigate to the voucher and click on the "Print" button. The application will send the print job directly to the ESC/POS printer over the network, ensuring quick and seamless voucher printing. Make sure your printer supports ESC/POS commands and is correctly configured to accept print jobs over the network.
 
@@ -646,6 +645,37 @@ Your contributions will be automatically included in the next release after revi
 Detailed information on the changes in each release can be found on the [GitHub Releases](https://github.com/glenndehaan/unifi-voucher-site/releases) page. It is highly recommended to review the release notes before updating or deploying a new version, especially if you are upgrading from a previous version.
 
 ## Migration Guide
+
+### Migration from 5.x to 6.x
+
+When upgrading from 5.x to 6.x, the following changes need to be made:
+
+1. **`UI_BACK_BUTTON` Removed**
+
+    - The `UI_BACK_BUTTON` configuration option has been **removed** in 6.x.
+    - This setting is no longer used and can be safely **removed from your environment configuration**.
+
+2. **Printer Configuration Changes**
+
+    - The legacy printer configuration options **`PRINTER_TYPE`** and **`PRINTER_IP`** have been replaced by a single setting: **`PRINTERS`**.
+    - The new format is a **comma-separated string** combining the printer type and IP address.
+
+    **Before (5.x):**
+
+    ```env
+    PRINTER_TYPE='pdf'
+    PRINTER_IP='192.168.1.10'
+    ```
+
+    **After (6.x):**
+
+    ```env
+    PRINTERS='pdf,192.168.1.10'
+    ```
+
+    - Update your configuration to use `PRINTERS` and remove the old `PRINTER_TYPE` and `PRINTER_IP` variables.
+
+> Make sure to clean up any deprecated variables and update your printer configuration to ensure compatibility with 6.x.
 
 ### Migration from 4.x to 5.x
 
