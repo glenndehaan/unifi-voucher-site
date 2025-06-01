@@ -8,5 +8,6 @@ module.exports = {
     fr: 'French',
     nl: 'Dutch',
     es: 'Spanish',
-    pl: 'Polish'
+    pl: 'Polish',
+    ru: 'Russian'
 };
