@@ -1,0 +1,19 @@
+{
+  "title": "WLAN-kuponkikoodi",
+  "preHeader": "Wifi-Tositteesi Koodi",
+  "greeting": "Hei siellä",
+  "intro": "Joku loi WiFi-kupongin, ole hyvä ja käytä tätä koodia yhdistettäessä",
+  "connect": "Yhdistä kohteeseen",
+  "password": "Salasana",
+  "or": "tai",
+  "scan": "Etsi yhdistääksesi",
+  "details": "Kupongin Tiedot",
+  "type": "Tyyppi",
+  "multiUse": "Monikäyttöinen",
+  "singleUse": "Kertakäyttöinen",
+  "duration": "Kesto",
+  "dataLimit": "Tietojen Raja",
+  "downloadLimit": "Lataa Raja",
+  "uploadLimit": "Lataa Raja",
+  "poweredBy": "Palvelun tarjoaa"
+}

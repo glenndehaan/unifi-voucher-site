@@ -1,0 +1,17 @@
+{
+  "title": "WLAN-kuponki",
+  "generate": "Luo WLAN-kuponki",
+  "generating": "Luodaan Lahjakorttia",
+  "use": "Käytä tätä koodia yhdistettäessä",
+  "connect": "Yhdistä kohteeseen",
+  "password": "Salasana",
+  "or": "tai",
+  "scan": "Etsi yhdistääksesi",
+  "email": "Email Voucher",
+  "optional": "valinnainen",
+  "enterEmail": "Syötä sähköpostiosoitteesi",
+  "send": "Lähetä Lahjakortti",
+  "sending": "Lähetetään Sähköpostia",
+  "sent": "Sähköposti Lähetetty",
+  "back": "Takaisin"
+}

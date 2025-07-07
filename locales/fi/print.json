@@ -1,0 +1,15 @@
+{
+  "title": "WLAN-kuponkikoodi",
+  "connect": "Yhdistä kohteeseen",
+  "password": "Salasana",
+  "or": "tai",
+  "scan": "Etsi yhdistääksesi",
+  "details": "Kupongin Tiedot",
+  "type": "Tyyppi",
+  "multiUse": "Monikäyttöinen",
+  "singleUse": "Kertakäyttöinen",
+  "duration": "Kesto",
+  "dataLimit": "Tietojen Raja",
+  "downloadLimit": "Lataa Raja",
+  "uploadLimit": "Lataa Raja"
+}
