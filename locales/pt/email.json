@@ -1,0 +1,19 @@
+{
+  "title": "Cupom de desconto WiFi",
+  "preHeader": "Seu cupom Wi-Fi",
+  "greeting": "Olá",
+  "intro": "Alguém gerou um cupom de WiFi, por favor, use este código ao se conectar",
+  "connect": "Conectar-se a",
+  "password": "Palavra-passe",
+  "or": "ou",
+  "scan": "Digitalize para conectar-se",
+  "details": "Detalhes do cupom",
+  "type": "tipo",
+  "multiUse": "Multiuso",
+  "singleUse": "Um-Uma-Único",
+  "duration": "Duração",
+  "dataLimit": "Limite de dados",
+  "downloadLimit": "Limite de Download",
+  "uploadLimit": "Upload Limiar",
+  "poweredBy": "Desenvolvido por"
+}
