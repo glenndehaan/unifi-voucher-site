@@ -1,5 +1,6 @@
 {
   "title": "Voucher WiFi",
+  "guestName": "Guest Name",
   "generate": "Generuj kupon WiFi",
   "generating": "Generowanie bonu",
   "use": "Użyj tego kodu podczas łączenia",
