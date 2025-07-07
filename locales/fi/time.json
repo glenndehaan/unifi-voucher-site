@@ -1,8 +1,8 @@
 {
-  "minute": "minute",
-  "minutes": "minutes",
-  "hour": "hour",
-  "hours": "hours",
-  "day": "day",
-  "days": "days"
+  "minute": "minuutti",
+  "minutes": "minuuttia",
+  "hour": "tunti",
+  "hours": "tuntia",
+  "day": "päivä",
+  "days": "päivää"
 }
