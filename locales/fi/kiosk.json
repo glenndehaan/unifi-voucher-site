@@ -1,6 +1,6 @@
 {
   "title": "WLAN-kuponki",
-  "guestName": "Guest Name",
+  "guestName": "Vieraan Nimi",
   "generate": "Luo WLAN-kuponki",
   "generating": "Luodaan Lahjakorttia",
   "use": "Käytä tätä koodia yhdistettäessä",
