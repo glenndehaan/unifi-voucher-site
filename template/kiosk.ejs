@@ -132,7 +132,7 @@
                         </div>
 
                         <% if(email_enabled) { %>
-                            <form class="grid gap-4" id="email-form" action="<%= baseUrl %>/kiosk" method="post" enctype="multipart/form-data">
+                            <form class="grid gap-4" id="email-form" action="<%= baseUrl %>/kiosk?locale=<%= language %>-<%= language %>" method="post" enctype="multipart/form-data">
                                 <% if(typeof email === 'undefined') { %>
                                     <div class="space-y-2">
                                         <label for="email" class="block text-sm font-medium text-gray-700 dark:text-gray-300">

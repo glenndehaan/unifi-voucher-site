@@ -179,7 +179,7 @@ if(variables.serviceWeb) {
             });
 
             if(voucher) {
-                const emailResult = await mail.send(req.body.email, voucher).catch((e) => {
+                const emailResult = await mail.send(req.body.email, voucher, req.locale.language).catch((e) => {
                     res.cookie('flashMessage', JSON.stringify({type: 'error', message: e}), {httpOnly: true, expires: new Date(Date.now() + 24 * 60 * 60 * 1000)}).redirect(302, `${req.headers['x-ingress-path'] ? req.headers['x-ingress-path'] : ''}/kiosk`);
                 });
 
