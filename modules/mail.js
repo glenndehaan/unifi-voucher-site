@@ -59,6 +59,7 @@ module.exports = {
                 subject: t('title'),
                 text: `${t('greeting')},\n\n${t('intro')}:\n\n${voucher.code.slice(0, 5)}-${voucher.code.slice(5)}`,
                 html: ejs.render(fs.readFileSync(`${__dirname}/../template/email/voucher.ejs`, 'utf-8'), {
+                    language,
                     t,
                     voucher,
                     unifiSsid: variables.unifiSsid,

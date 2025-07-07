@@ -127,6 +127,8 @@ services:
       # Kiosk Voucher Type, format: expiration in minutes (required),single-use or multi-use vouchers value - '0' is for multi-use (unlimited) - '1' is for single-use - 'N' is for multi-use (Nx) (optional),upload speed limit in kbps (optional),download speed limit in kbps (optional),data transfer limit in MB (optional)
       # To skip a parameter just but nothing in between the comma's
       KIOSK_VOUCHER_TYPE: '480,1,,,'
+      # Enable/disable the requirement for a guest to enter their name before generating a voucher
+      KIOSK_NAME_REQUIRED: 'false'
       # Sets the application Log Level (Valid Options: error|warn|info|debug|trace)
       LOG_LEVEL: 'info'
       # Sets the default translation for dropdowns
@@ -576,6 +578,10 @@ KIOSK_VOUCHER_TYPE: '480,1,,,'
     - **Upload Speed Limit (optional)**: Maximum upload speed in Kbps. Leave empty to disable.
     - **Download Speed Limit (optional)**: Maximum download speed in Kbps. Leave empty to disable.
     - **Data Transfer Limit (optional)**: Total data limit in MB. Leave empty to disable.
+
+- **`KIOSK_NAME_REQUIRED`**:
+    - Set to `'true'` to enable the requirement for a guest to enter their name before generating a voucher.
+    - Set to `'false'` to disable to allow generation of vouchers without a name.
 
 ### Usage
 

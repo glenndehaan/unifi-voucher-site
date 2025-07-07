@@ -154,7 +154,8 @@ if(variables.serviceWeb) {
             language: req.locale.language,
             baseUrl: req.headers['x-ingress-path'] ? req.headers['x-ingress-path'] : '',
             error: req.flashMessage.type === 'error',
-            error_text: req.flashMessage.message || ''
+            error_text: req.flashMessage.message || '',
+            kiosk_name_required: variables.kioskNameRequired
         });
     });
     app.post('/kiosk', async (req, res) => {
@@ -207,7 +208,7 @@ if(variables.serviceWeb) {
             }
         } else {
             // Create voucher code
-            const voucherCode = await unifi.create(types(variables.kioskVoucherType, true)).catch((e) => {
+            const voucherCode = await unifi.create(types(variables.kioskVoucherType, true), 1, variables.kioskNameRequired ? req.body['voucher-note'] : null).catch((e) => {
                 res.cookie('flashMessage', JSON.stringify({type: 'error', message: e}), {httpOnly: true, expires: new Date(Date.now() + 24 * 60 * 60 * 1000)}).redirect(302, `${req.headers['x-ingress-path'] ? req.headers['x-ingress-path'] : ''}/kiosk`);
             });
 

@@ -180,7 +180,7 @@ module.exports = {
                     });
                 doc.font('Roboto-Regular')
                     .fontSize(10)
-                    .text(time(vouchers[item].duration));
+                    .text(time(vouchers[item].duration, language));
 
                 if (vouchers[item].qos_usage_quota) {
                     doc.font('Roboto-Bold')
@@ -310,7 +310,7 @@ module.exports = {
             printer.invert(true);
             printer.print(`${t('duration')}:`);
             printer.invert(false);
-            printer.print(` ${time(voucher.duration)}`);
+            printer.print(` ${time(voucher.duration, language)}`);
             printer.newLine();
 
             if(voucher.qos_usage_quota) {

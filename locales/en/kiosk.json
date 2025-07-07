@@ -1,5 +1,6 @@
 {
   "title": "WiFi Voucher",
+  "guestName": "Guest Name",
   "generate": "Generate WiFi Voucher",
   "generating": "Generating Voucher",
   "use": "Use this code when connecting",

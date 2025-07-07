@@ -41,6 +41,7 @@ module.exports = {
     smtpPassword: config('smtp_password') || process.env.SMTP_PASSWORD || '',
     kioskEnabled: config('kiosk_enabled') || (process.env.KIOSK_ENABLED === 'true') || false,
     kioskVoucherType: config('kiosk_voucher_type') || process.env.KIOSK_VOUCHER_TYPE || '480,1,,,',
+    kioskNameRequired: config('kiosk_name_required') || (process.env.KIOSK_NAME_REQUIRED === 'true') || false,
     logLevel: config('log_level') || process.env.LOG_LEVEL || 'info',
     translationDefault: config('translation_default') || process.env.TRANSLATION_DEFAULT || 'en',
     translationDebug: config('translation_debug') || (process.env.TRANSLATION_DEBUG === 'true') || false,

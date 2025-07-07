@@ -33,5 +33,6 @@ services:
       SMTP_PASSWORD: ''
       KIOSK_ENABLED: 'false'
       KIOSK_VOUCHER_TYPE: '480,1,,,'
+      KIOSK_NAME_REQUIRED: 'false'
       LOG_LEVEL: 'info'
       TRANSLATION_DEBUG: 'false'
