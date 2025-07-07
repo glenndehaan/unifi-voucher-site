@@ -1,8 +1,8 @@
 {
   "minute": "minute",
   "minutes": "minutes",
-  "hour": "hour",
-  "hours": "hours",
-  "day": "day",
-  "days": "days"
+  "hour": "heure",
+  "hours": "heures",
+  "day": "jour",
+  "days": "jours"
 }
