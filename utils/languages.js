@@ -3,11 +3,13 @@
  */
 module.exports = {
     en: 'English',
-    de: 'German',
     da: 'Danish',
+    de: 'German',
+    es: 'Spanish',
+    fi: 'Finnish',
     fr: 'French',
     nl: 'Dutch',
-    es: 'Spanish',
     pl: 'Polish',
+    pt: 'Portuguese',
     ru: 'Russian'
 };
