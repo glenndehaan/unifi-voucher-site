@@ -1,5 +1,6 @@
 {
   "title": "Cupón WiFi",
+  "guestName": "Nombre de huésped",
   "generate": "Generar cupón WiFi",
   "generating": "Generando cupón",
   "use": "Usar este código al conectar",

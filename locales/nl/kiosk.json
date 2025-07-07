@@ -1,5 +1,6 @@
 {
   "title": "WiFi Waardebon",
+  "guestName": "Naam Gast",
   "generate": "WiFi Waardebon Genereren",
   "generating": "Waardebon Aanmaken",
   "use": "Gebruik deze code bij verbinding maken",
