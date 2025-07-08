@@ -1,0 +1,18 @@
+{
+  "title": "Voucher WiFi",
+  "guestName": "Nome do Visitante",
+  "generate": "Gerar Voucher de Wi-Fi",
+  "generating": "Gerando Cupom",
+  "use": "Use este código ao se conectar",
+  "connect": "Conectar-se a",
+  "password": "Palavra-passe",
+  "or": "ou",
+  "scan": "Digitalize para conectar-se",
+  "email": "Email Voucher",
+  "optional": "opcional",
+  "enterEmail": "Digite seu endereço de e-mail",
+  "send": "Enviar Comprovante",
+  "sending": "Enviando e-mail",
+  "sent": "Email enviado",
+  "back": "Anterior"
+}
