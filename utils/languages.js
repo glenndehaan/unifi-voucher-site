@@ -3,6 +3,7 @@
  */
 module.exports = {
     en: 'English',
+    br: 'Brazilian, Portuguese',
     da: 'Danish',
     de: 'German',
     es: 'Spanish',
