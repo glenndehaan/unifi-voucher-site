@@ -6,7 +6,9 @@ UniFi Voucher Site is a web-based platform for generating and managing UniFi net
 
 ![Vouchers Overview - Desktop](.docs/images/desktop_1.png)
 
-> Upgrading from 5.x to 6.x? Please take a look at the [migration guide](#migration-from-5x-to-6x)
+> Upgrading from 6.x to 7.x? Please take a look at the [migration guide](#migration-from-6x-to-7x)
+
+---
 
 ## Features
 
@@ -21,6 +23,8 @@ UniFi Voucher Site is a web-based platform for generating and managing UniFi net
 - **Localized Email/Print Templates** Fully localized templates, with support for multiple languages.
 - **Scan to Connect QR Codes** Quickly connect users via a phone's camera. (Available within Email and Print Layouts)
 
+---
+
 ## Structure
 
 - Node.js
@@ -32,6 +36,8 @@ UniFi Voucher Site is a web-based platform for generating and managing UniFi net
 - PDFKit
 - Node Thermal Printer
 - QRCode
+
+---
 
 ## Prerequisites
 
@@ -47,6 +53,8 @@ UniFi Voucher Site is a web-based platform for generating and managing UniFi net
 
 > Note: When creating a Local UniFi account ensure you give 'Full Management' access rights to the Network controller. The 'Hotspot Role' won't give access to the API and therefore the application will throw errors.
 
+---
+
 ## Installation
 
 ### Docker
@@ -59,9 +67,8 @@ You can easily run UniFi Voucher Site using Docker. We provide two release track
 **Below is an example docker-compose.yml file that can help you get started:**
 
 ```yaml
-version: '3'
 services:
-  app:
+  unifi-voucher-site:
     image: glenndehaan/unifi-voucher-site:latest
     ports:
       - "3000:3000"
@@ -124,9 +131,10 @@ services:
       SMTP_PASSWORD: ''
       # Enable/disable the kiosk page on /kiosk
       KIOSK_ENABLED: 'false'
-      # Kiosk Voucher Type, format: expiration in minutes (required),single-use or multi-use vouchers value - '0' is for multi-use (unlimited) - '1' is for single-use - 'N' is for multi-use (Nx) (optional),upload speed limit in kbps (optional),download speed limit in kbps (optional),data transfer limit in MB (optional)
+      # Kiosk Voucher Types, format: expiration in minutes (required),single-use or multi-use vouchers value - '0' is for multi-use (unlimited) - '1' is for single-use - 'N' is for multi-use (Nx) (optional),upload speed limit in kbps (optional),download speed limit in kbps (optional),data transfer limit in MB (optional)
       # To skip a parameter just but nothing in between the comma's
-      KIOSK_VOUCHER_TYPE: '480,1,,,'
+      # After a voucher type add a semicolon, after the semicolon you can start a new voucher type
+      KIOSK_VOUCHER_TYPES: '480,1,,,;'
       # Enable/disable the requirement for a guest to enter their name before generating a voucher
       KIOSK_NAME_REQUIRED: 'false'
       # Sets the application Log Level (Valid Options: error|warn|info|debug|trace)
@@ -135,6 +143,9 @@ services:
       TRANSLATION_DEFAULT: 'en'
       # Enables/disables translation debugging, when enabled only translation keys are shown
       TRANSLATION_DEBUG: 'false'
+    # Optional volume mapping to override assets
+    volumes:
+      - ./branding:/kiosk
 ```
 
 ### Home Assistant Add-on
@@ -153,6 +164,8 @@ To install the UniFi Voucher Site add-on for Home Assistant, follow these steps:
 4. Once the repository is added, you will find the "UniFi Voucher Site" add-on in the add-on store. Click on it.
 5. Click "Install" and wait for the installation to complete.
 
+---
+
 ## Development
 
 - Install Node.js 22.0 or higher.
@@ -160,6 +173,8 @@ To install the UniFi Voucher Site add-on for Home Assistant, follow these steps:
 - Run `npm start` & `npm run tailwind` in the root folder
 
 Then open up your favorite browser and go to http://localhost:3000/
+
+---
 
 ## Services
 
@@ -362,6 +377,8 @@ the different endpoints available in the API:
    request authorization header. The token must match the value of the `AUTH_INTERNAL_BEARER_TOKEN` environment variable. Without
    this token, access to the endpoint will be denied.
 
+---
+
 ## Authentication
 
 The UniFi Voucher Site provides three options for authenticating access to the web service.
@@ -453,6 +470,8 @@ AUTH_DISABLE: 'true'
 
 > Note: This disables the token based authentication on the API
 
+---
+
 ## Print Functionality
 
 The UniFi Voucher Site application includes built-in support for printing vouchers using 80mm receipt printers, offering a convenient way to distribute vouchers in physical format.
@@ -511,6 +530,8 @@ Just like with PDF printing, navigate to the voucher and click on the "Print" bu
 
 ![Example Print](.docs/images/escpos_example.jpg)
 
+---
+
 ## Email Functionality
 
 The UniFi Voucher Site includes a convenient email feature that allows you to send vouchers directly to users from the web interface. By configuring the SMTP settings, you can enable email sending and make it easy to distribute vouchers digitally.
@@ -547,6 +568,8 @@ Once the SMTP environment variables are configured, the email feature will be av
 
 ![Example Email](.docs/images/email_example.png)
 
+---
+
 ## Kiosk Functionality
 
 The UniFi Voucher Site includes a **Kiosk Mode**, allowing users to generate their own vouchers via a self-service interface. This is ideal for public areas, such as cafés, hotels, and co-working spaces, where users can obtain internet access without staff intervention.
@@ -555,7 +578,7 @@ To enable the kiosk functionality, set the following environment variables:
 
 ```env
 KIOSK_ENABLED: 'true'
-KIOSK_VOUCHER_TYPE: '480,1,,,'
+KIOSK_VOUCHER_TYPES: '480,1,,,;'
 ```
 
 ### Configuration
@@ -564,7 +587,7 @@ KIOSK_VOUCHER_TYPE: '480,1,,,'
     - Set to `'true'` to enable the kiosk page, making it accessible at `/kiosk`.
     - Set to `'false'` to disable the kiosk functionality.
 
-- **`KIOSK_VOUCHER_TYPE`**: Defines the voucher properties for kiosk-generated vouchers. The format consists of the following parameters:
+- **`KIOSK_VOUCHER_TYPES`**: Defines the voucher properties for kiosk-generated vouchers. The format consists of the following parameters:
 
   ```text
   expiration_in_minutes,single_use_or_multi_use,upload_speed_limit_kbps,download_speed_limit_kbps,data_transfer_limit_MB
@@ -579,9 +602,55 @@ KIOSK_VOUCHER_TYPE: '480,1,,,'
     - **Download Speed Limit (optional)**: Maximum download speed in Kbps. Leave empty to disable.
     - **Data Transfer Limit (optional)**: Total data limit in MB. Leave empty to disable.
 
+  > **Multiple Voucher Types:**
+  > You can define multiple voucher types by separating each configuration with a semicolon (`;`).
+  > Example:
+  >
+  > ```text
+  > 480,1,,,;1440,0,512,2048,1000
+  > ```
+  >
+  > This defines two voucher types:
+  >
+  > 1. A single-use voucher valid for 480 minutes with no speed or data limits.
+  > 2. A multi-use (unlimited) voucher valid for 1440 minutes, limited to 512 Kbps upload, 2048 Kbps download, and 1000 MB data.
+
 - **`KIOSK_NAME_REQUIRED`**:
     - Set to `'true'` to enable the requirement for a guest to enter their name before generating a voucher.
     - Set to `'false'` to disable to allow generation of vouchers without a name.
+
+### Custom Branding (Logo and Background)
+
+You can customize the appearance of the kiosk page by providing your own `logo.png` and `bg.jpg` images.
+
+To do this, use Docker volume mappings to mount your custom assets to the `/kiosk` directory inside the container. The application will use these files (if present) instead of the default ones.
+
+#### Example
+
+Suppose you have your custom images in a local directory called `branding/`:
+
+```
+branding/
+├── logo.png
+└── bg.jpg
+```
+
+You can configure this using Docker Compose:
+
+```yaml
+services:
+  unifi-voucher-site:
+    image: glenndehaan/unifi-voucher-site:latest
+    ports:
+      - "3000:3000"
+    environment:
+      KIOSK_ENABLED: 'true'
+      KIOSK_VOUCHER_TYPES: '480,1,,,;'
+    volumes:
+      - ./branding:/kiosk
+```
+
+> **Note:** Ensure `logo.png` and `bg.jpg` are valid image files. Both are optional — only override the ones you want to customize.
 
 ### Usage
 
@@ -596,6 +665,8 @@ Users can visit this URL and generate a voucher without administrative intervent
 ### Example Kiosk
 
 ![Example Kiosk](.docs/images/kiosk_example.png)
+
+---
 
 ## Translations
 
@@ -619,6 +690,8 @@ Once you're there, you can choose your language and start contributing immediate
 4. Start translating or reviewing!
 
 Your contributions will be automatically included in the next release after review.
+
+---
 
 ## Screenshots
 
@@ -646,11 +719,41 @@ Your contributions will be automatically included in the next release after revi
 ### Voucher Details (Mobile)
 ![Voucher Details - Mobile](.docs/images/mobile_3.png)
 
+---
+
 ## Release Notes
 
 Detailed information on the changes in each release can be found on the [GitHub Releases](https://github.com/glenndehaan/unifi-voucher-site/releases) page. It is highly recommended to review the release notes before updating or deploying a new version, especially if you are upgrading from a previous version.
 
+---
+
 ## Migration Guide
+
+### Migration from 6.x to 7.x
+
+When upgrading from 6.x to 7.x, the following changes need to be made:
+
+1. **`KIOSK_VOUCHER_TYPE` Renamed to `KIOSK_VOUCHER_TYPES`**
+
+    * The configuration variable **`KIOSK_VOUCHER_TYPE`** has been **renamed** to **`KIOSK_VOUCHER_TYPES`** in 7.x.
+    * This change supports multiple voucher types and enhances configurability.
+
+   **Before (6.x):**
+
+   ```env
+   KIOSK_VOUCHER_TYPE='480,1,,,'
+   ```
+
+   **After (7.x):**
+
+   ```env
+   KIOSK_VOUCHER_TYPES='480,1,,,;'
+   ```
+
+    * Update your environment configuration to use the new `KIOSK_VOUCHER_TYPES` variable.
+    * Ensure the values provided are valid and supported — refer to the [Kiosk Configuration](#configuration-3) for the complete list of accepted types and formatting rules.
+
+> Make sure to remove the deprecated `KIOSK_VOUCHER_TYPE` and follow the structure outlined in the documentation to avoid misconfiguration issues during deployment.
 
 ### Migration from 5.x to 6.x
 
@@ -788,6 +891,8 @@ No migration steps are required.
 ### Migration from Versions Prior to v1
 
 Versions before v1 do not have a direct migration path. If you are using a version earlier than v1, a fresh installation is required. Be sure to back up any important data before proceeding with a re-install.
+
+---
 
 ## License
 

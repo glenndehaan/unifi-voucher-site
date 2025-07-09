@@ -110,9 +110,10 @@ module.exports = () => {
      * Log kiosk status
      */
     if(variables.kioskEnabled) {
-        const kioskType = types(variables.kioskVoucherType, true);
         log.info(`[Kiosk] Enabled! ${variables.kioskNameRequired ? '(Guest Name Required!)' : ''}`);
-        log.info(`[Kiosk][Type] ${time(kioskType.expiration)}, ${kioskType.usage === '1' ? 'single-use' : kioskType.usage === '0' ? 'multi-use (unlimited)' : `multi-use (${kioskType.usage}x)`}${typeof kioskType.upload === "undefined" && typeof kioskType.download === "undefined" && typeof kioskType.megabytes === "undefined" ? ', no limits' : `${typeof kioskType.upload !== "undefined" ? `, upload bandwidth limit: ${kioskType.upload} kb/s` : ''}${typeof kioskType.download !== "undefined" ? `, download bandwidth limit: ${kioskType.download} kb/s` : ''}${typeof kioskType.megabytes !== "undefined" ? `, quota limit: ${kioskType.megabytes} mb` : ''}`}`);
+        types(variables.kioskVoucherTypes).forEach((type, key) => {
+            log.info(`[Kiosk][Type][${key}] ${time(type.expiration)}, ${type.usage === '1' ? 'single-use' : type.usage === '0' ? 'multi-use (unlimited)' : `multi-use (${type.usage}x)`}${typeof type.upload === "undefined" && typeof type.download === "undefined" && typeof type.megabytes === "undefined" ? ', no limits' : `${typeof type.upload !== "undefined" ? `, upload bandwidth limit: ${type.upload} kb/s` : ''}${typeof type.download !== "undefined" ? `, download bandwidth limit: ${type.download} kb/s` : ''}${typeof type.megabytes !== "undefined" ? `, quota limit: ${type.megabytes} mb` : ''}`}`);
+        });
     }
 
     /**

@@ -1,6 +1,7 @@
 /**
  * Import base packages
  */
+const fs = require('fs');
 const os = require('os');
 const crypto = require('crypto');
 const express = require('express');
@@ -89,6 +90,13 @@ app.use((req, res, next) => {
 });
 
 /**
+ * Override kiosk images dir if available
+ */
+if(fs.existsSync('/kiosk')) {
+    app.use('/images/kiosk', express.static('/kiosk'));
+}
+
+/**
  * Serve static public dir
  */
 app.use(express.static(`${__dirname}/public`));
@@ -155,6 +163,9 @@ if(variables.serviceWeb) {
             baseUrl: req.headers['x-ingress-path'] ? req.headers['x-ingress-path'] : '',
             error: req.flashMessage.type === 'error',
             error_text: req.flashMessage.message || '',
+            timeConvert: time,
+            bytesConvert: bytes,
+            voucher_types: types(variables.kioskVoucherTypes),
             kiosk_name_required: variables.kioskNameRequired
         });
     });
@@ -207,8 +218,15 @@ if(variables.serviceWeb) {
                 });
             }
         } else {
+            const typeCheck = (variables.kioskVoucherTypes).split(';').includes(req.body['voucher-type']);
+
+            if (!typeCheck) {
+                res.cookie('flashMessage', JSON.stringify({type: 'error', message: 'Unknown Type!'}), {httpOnly: true, expires: new Date(Date.now() + 24 * 60 * 60 * 1000)}).redirect(302, `${req.headers['x-ingress-path'] ? req.headers['x-ingress-path'] : ''}/kiosk`);
+                return;
+            }
+
             // Create voucher code
-            const voucherCode = await unifi.create(types(variables.kioskVoucherType, true), 1, variables.kioskNameRequired ? req.body['voucher-note'] : null).catch((e) => {
+            const voucherCode = await unifi.create(types(req.body['voucher-type'], true), 1, variables.kioskNameRequired ? req.body['voucher-note'] : null).catch((e) => {
                 res.cookie('flashMessage', JSON.stringify({type: 'error', message: e}), {httpOnly: true, expires: new Date(Date.now() + 24 * 60 * 60 * 1000)}).redirect(302, `${req.headers['x-ingress-path'] ? req.headers['x-ingress-path'] : ''}/kiosk`);
             });
 

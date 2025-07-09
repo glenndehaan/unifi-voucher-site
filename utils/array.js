@@ -10,6 +10,7 @@ module.exports = {
         'AUTH_TOKEN',
         'UI_BACK_BUTTON',
         'PRINTER_TYPE',
-        'PRINTER_IP'
+        'PRINTER_IP',
+        'KIOSK_VOUCHER_TYPE'
     ]
 };

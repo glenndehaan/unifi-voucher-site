@@ -1,5 +1,5 @@
 services:
-  app:
+  unifi-voucher-site:
     build: .
     ports:
       - "3000:3000"
@@ -32,7 +32,7 @@ services:
       SMTP_USERNAME: ''
       SMTP_PASSWORD: ''
       KIOSK_ENABLED: 'false'
-      KIOSK_VOUCHER_TYPE: '480,1,,,'
+      KIOSK_VOUCHER_TYPES: '480,1,,,;'
       KIOSK_NAME_REQUIRED: 'false'
       LOG_LEVEL: 'info'
       TRANSLATION_DEBUG: 'false'
