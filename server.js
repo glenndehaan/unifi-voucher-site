@@ -250,6 +250,12 @@ if(variables.serviceWeb) {
                         return;
                     }
 
+                    // Auto print voucher if enabled
+                    await print.escpos(voucherData, req.locale.language, variables.kioskPrinter).catch((e) => {
+                        log.error(`[Kiosk] Unable to auto-print voucher on printer: ${variables.kioskPrinter}!`);
+                        log.error(e);
+                    });
+
                     res.render('kiosk', {
                         t: translation('kiosk', req.locale.language),
                         languages,

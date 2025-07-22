@@ -34,5 +34,6 @@ services:
       KIOSK_ENABLED: 'false'
       KIOSK_VOUCHER_TYPES: '480,1,,,;'
       KIOSK_NAME_REQUIRED: 'false'
+      KIOSK_PRINTER: ''
       LOG_LEVEL: 'info'
       TRANSLATION_DEBUG: 'false'

@@ -137,6 +137,8 @@ services:
       KIOSK_VOUCHER_TYPES: '480,1,,,;'
       # Enable/disable the requirement for a guest to enter their name before generating a voucher
       KIOSK_NAME_REQUIRED: 'false'
+      # Enable/disable a printer for Kiosk Vouchers (this automatically prints vouchers), currently supported: escpos ip (Example: 192.168.1.10)
+      KIOSK_PRINTER: ''
       # Sets the application Log Level (Valid Options: error|warn|info|debug|trace)
       LOG_LEVEL: 'info'
       # Sets the default translation for dropdowns
@@ -618,6 +620,16 @@ KIOSK_VOUCHER_TYPES: '480,1,,,;'
 - **`KIOSK_NAME_REQUIRED`**:
     - Set to `'true'` to enable the requirement for a guest to enter their name before generating a voucher.
     - Set to `'false'` to disable to allow generation of vouchers without a name.
+
+* **`KIOSK_PRINTER`**:
+
+    * Set this to the IP address of an ESC/POS-compatible network printer to enable automatic voucher printing.
+    * Leave this value empty to disable printing.
+    * Example:
+
+      ```text
+      KIOSK_PRINTER=192.168.1.50
+      ```
 
 ### Custom Branding (Logo and Background)
 
