@@ -150,6 +150,77 @@ services:
       - ./branding:/kiosk
 ```
 
+**Configuration Options**
+
+By default, UniFi Voucher Site is configured using environment variables. However, you can optionally provide a configuration file named `options.json` instead. When using a config file, it will override environment variable settings.
+
+To use a config file, mount it into the container at:
+
+```
+/data/options.json
+```
+
+The structure of the file should use lowercase versions of the environment variable names.
+
+**Example `options.json`:**
+
+```json
+{
+  "unifi_ip": "192.168.1.1",
+  "unifi_port": 443,
+  "unifi_username": "admin",
+  "unifi_password": "password",
+  "unifi_site_id": "default",
+  "unifi_ssid": "",
+  "unifi_ssid_password": "",
+  "auth_internal_enabled": true,
+  "auth_internal_password": "0000",
+  "auth_internal_bearer_token": "00000000-0000-0000-0000-000000000000",
+  "auth_oidc_enabled": false,
+  "auth_oidc_issuer_base_url": "",
+  "auth_oidc_app_base_url": "",
+  "auth_oidc_client_id": "",
+  "auth_oidc_client_secret": "",
+  "auth_disable": false,
+  "voucher_types": "480,1,,,;",
+  "voucher_custom": true,
+  "service_web": true,
+  "service_api": false,
+  "printers": "",
+  "smtp_from": "",
+  "smtp_host": "",
+  "smtp_port": "",
+  "smtp_secure": false,
+  "smtp_username": "",
+  "smtp_password": "",
+  "kiosk_enabled": false,
+  "kiosk_voucher_types": "480,1,,,;",
+  "kiosk_name_required": false,
+  "kiosk_printer": "",
+  "log_level": "info",
+  "translation_default": "en",
+  "translation_debug": false
+}
+
+```
+
+> Note: Booleans (`true`/`false`) and numbers should be actual JSON types, not strings.
+
+**Below is an example `docker-compose.yml` file that can help you get started:**
+
+```yaml
+services:
+  unifi-voucher-site:
+    image: glenndehaan/unifi-voucher-site:latest
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./branding:/kiosk
+      - ./options.json:/data/options.json
+```
+
+> If both environment variables and `options.json` are provided, values from `options.json` will take precedence.
+
 ### Home Assistant Add-on
 
 For users of Home Assistant, we provide a dedicated add-on to seamlessly integrate the UniFi Voucher Site with your Home Assistant instance. This add-on simplifies the setup process and allows you to manage UniFi vouchers directly from your Home Assistant dashboard.
