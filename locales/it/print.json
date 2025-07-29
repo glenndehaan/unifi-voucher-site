@@ -1,0 +1,15 @@
+{
+  "title": "Codice Voucher WiFi",
+  "connect": "Connetti a",
+  "password": "Password",
+  "or": "o",
+  "scan": "Scansione per connettersi",
+  "details": "Dettagli Buono",
+  "type": "Tipo",
+  "multiUse": "Multi-uso",
+  "singleUse": "Singolo",
+  "duration": "Durata",
+  "dataLimit": "Limite Dati",
+  "downloadLimit": "Limite Di Download",
+  "uploadLimit": "Limite Di Caricamento"
+}
