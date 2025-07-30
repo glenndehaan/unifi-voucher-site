@@ -167,9 +167,18 @@
                                                 <% } %>
                                             <% } %>
                                             <% if (voucher.note) { %>
-                                                <div class="hidden sm:block rounded-md flex-none py-1 px-2 text-xs font-medium ring-1 ring-inset bg-gray-50 text-gray-800 ring-gray-600/20 dark:text-gray-400 dark:bg-gray-400/10 dark:ring-gray-400/20">
-                                                    <%= voucher.note %>
-                                                </div>
+                                                <% if (voucher.note.includes('|||')) { %>
+                                                    <div class="hidden sm:block rounded-md flex-none py-1 px-2 text-xs font-medium ring-1 ring-inset bg-gray-50 text-gray-800 ring-gray-600/20 dark:text-gray-400 dark:bg-gray-400/10 dark:ring-gray-400/20">
+                                                        <%= voucher.note.split('|||')[0] %>
+                                                    </div>
+                                                    <div class="hidden sm:block rounded-md flex-none py-1 px-2 text-xs font-medium ring-1 ring-inset bg-gray-50 text-gray-800 ring-gray-600/20 dark:text-gray-400 dark:bg-gray-400/10 dark:ring-gray-400/20">
+                                                        <%= voucher.note.split('|||')[1] %>
+                                                    </div>
+                                                <% } else { %>
+                                                    <div class="hidden sm:block rounded-md flex-none py-1 px-2 text-xs font-medium ring-1 ring-inset bg-gray-50 text-gray-800 ring-gray-600/20 dark:text-gray-400 dark:bg-gray-400/10 dark:ring-gray-400/20">
+                                                        <%= voucher.note %>
+                                                    </div>
+                                                <% } %>
                                             <% } %>
                                         </div>
                                     </h2>

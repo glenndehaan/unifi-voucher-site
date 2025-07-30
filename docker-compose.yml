@@ -19,6 +19,7 @@ services:
       AUTH_OIDC_APP_BASE_URL: ''
       AUTH_OIDC_CLIENT_ID: ''
       AUTH_OIDC_CLIENT_SECRET: ''
+      PIN_OIDC_USER_TO_OWN_DOMAIN: 'false'
       AUTH_DISABLE: 'false'
       VOUCHER_TYPES: '480,1,,,;'
       VOUCHER_CUSTOM: 'true'

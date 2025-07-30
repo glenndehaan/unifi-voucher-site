@@ -342,8 +342,38 @@ if(variables.serviceWeb) {
             }
         }
 
+        // --- Description und Domain kombinieren, wenn aktiviert ---
+        let voucherNote = null;
+        if (variables.pinOidcUserToOwnDomain && req.oidc) {
+            try {
+                const user = await req.oidc.fetchUserInfo();
+                if (user && user.email && user.email.includes('@')) {
+                    const domain = user.email.split('@')[1];
+                    if (req.body['voucher-note'] && req.body['voucher-note'] !== '') {
+                        voucherNote = `${req.body['voucher-note']}|||${domain}`;
+                    } else {
+                        voucherNote = domain;
+                    }
+                }
+            } catch (e) {
+                // Fehler ignorieren, falls Userinfo nicht geladen werden kann
+            }
+        } else {
+            voucherNote = req.body['voucher-note'] !== '' ? req.body['voucher-note'] : null;
+        }
+        // --- ENDE ---
+
         // Create voucher code
-        const voucherCode = await unifi.create(types(req.body['voucher-type'] === 'custom' ? `${req.body['voucher-duration-type'] === 'day' ? (parseInt(req.body['voucher-duration']) * 24 * 60) : req.body['voucher-duration-type'] === 'hour' ? (parseInt(req.body['voucher-duration']) * 60) : parseInt(req.body['voucher-duration'])},${req.body['voucher-usage'] === '-1' ? req.body['voucher-quota'] : req.body['voucher-usage']},${req.body['voucher-upload-limit']},${req.body['voucher-download-limit']},${req.body['voucher-data-limit']};` : req.body['voucher-type'], true), parseInt(req.body['voucher-amount']), req.body['voucher-note'] !== '' ? req.body['voucher-note'] : null).catch((e) => {
+        const voucherCode = await unifi.create(
+            types(
+                req.body['voucher-type'] === 'custom'
+                    ? `${req.body['voucher-duration-type'] === 'day' ? (parseInt(req.body['voucher-duration']) * 24 * 60) : req.body['voucher-duration-type'] === 'hour' ? (parseInt(req.body['voucher-duration']) * 60) : parseInt(req.body['voucher-duration'])},${req.body['voucher-usage'] === '-1' ? req.body['voucher-quota'] : req.body['voucher-usage']},${req.body['voucher-upload-limit']},${req.body['voucher-download-limit']},${req.body['voucher-data-limit']};`
+                    : req.body['voucher-type'],
+                true
+            ),
+            parseInt(req.body['voucher-amount']),
+            voucherNote
+        ).catch((e) => {
             res.cookie('flashMessage', JSON.stringify({type: 'error', message: e}), {httpOnly: true, expires: new Date(Date.now() + 24 * 60 * 60 * 1000)}).redirect(302, `${req.headers['x-ingress-path'] ? req.headers['x-ingress-path'] : ''}/vouchers`);
         });
 
@@ -543,6 +573,26 @@ if(variables.serviceWeb) {
 
         const user = req.oidc ? await req.oidc.fetchUserInfo() : { email: 'admin' };
 
+        // --- NEU: Filter nach Domain, wenn aktiviert ---
+        let filteredVouchers = cache.vouchers;
+        if (
+            variables.pinOidcUserToOwnDomain &&
+            req.oidc &&
+            user.email &&
+            user.email.includes('@')
+        ) {
+            const userDomain = user.email.split('@')[1].toLowerCase();
+            filteredVouchers = filteredVouchers.filter(v => {
+                const note = (v.note || '').toLowerCase();
+                if (note.includes('|||')) {
+                    return note.split('|||')[1] === userDomain;
+                } else {
+                    return note === userDomain;
+                }
+            });
+        }
+        // --- ENDE NEU ---
+
         res.render('voucher', {
             baseUrl: req.headers['x-ingress-path'] ? req.headers['x-ingress-path'] : '',
             gitTag: variables.gitTag,
@@ -561,7 +611,7 @@ if(variables.serviceWeb) {
             printer_enabled: variables.printers !== '',
             voucher_types: types(variables.voucherTypes),
             voucher_custom: variables.voucherCustom,
-            vouchers: cache.vouchers.filter((item) => {
+            vouchers: filteredVouchers.filter((item) => {
                 if(req.query.status === 'available') {
                     return item.used === 0 && item.status !== 'EXPIRED';
                 }
@@ -611,7 +661,8 @@ if(variables.serviceWeb) {
                 status: req.query.status,
                 quota: req.query.quota
             },
-            sort: req.query.sort
+            sort: req.query.sort,
+            pinOidcUserToOwnDomain: variables.pinOidcUserToOwnDomain
         });
     });
     app.get('/voucher/:id', [authorization.web], async (req, res) => {

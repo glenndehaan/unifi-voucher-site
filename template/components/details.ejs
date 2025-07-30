@@ -45,7 +45,14 @@
                                             </div>
                                             <div class="py-2 grid grid-cols-3 gap-4 px-0">
                                                 <dt class="text-sm font-medium leading-6 text-gray-900 dark:text-white">Notes</dt>
-                                                <dd class="text-sm leading-6 text-gray-600 dark:text-gray-400 col-span-2 mt-0"><%= voucher.note ? voucher.note : '-' %></dd>
+                                                <dd class="text-sm leading-6 text-gray-600 dark:text-gray-400 col-span-2 mt-0">
+                                                    <% if (voucher.note && voucher.note.includes('|||')) { %>
+                                                        <strong>Description:</strong> <%= voucher.note.split('|||')[0] %><br/>
+                                                        <strong>Domain:</strong> <%= voucher.note.split('|||')[1] %>
+                                                    <% } else { %>
+                                                        <%= voucher.note ? voucher.note : '-' %>
+                                                    <% } %>
+                                                </dd>
                                             </div>
                                             <div class="py-2 grid grid-cols-3 gap-4 px-0">
                                                 <dt class="text-sm font-medium leading-6 text-gray-900 dark:text-white">Type</dt>

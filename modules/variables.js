@@ -31,6 +31,7 @@ module.exports = {
     authOidcAppBaseUrl: config('auth_oidc_app_base_url') || process.env.AUTH_OIDC_APP_BASE_URL || '',
     authOidcClientId: config('auth_oidc_client_id') || process.env.AUTH_OIDC_CLIENT_ID || '',
     authOidcClientSecret: config('auth_oidc_client_secret') || process.env.AUTH_OIDC_CLIENT_SECRET || '',
+    pinOidcUserToOwnDomain: config('pin_oidc_user_to_own_domain') !== null ? config('pin_oidc_user_to_own_domain') : (process.env.PIN_OIDC_USER_TO_OWN_DOMAIN === 'true') || false,
     authDisabled: config('auth_disable') || (process.env.AUTH_DISABLE === 'true') || false,
     printers: config('printers') || process.env.PRINTERS || '',
     smtpFrom: config('smtp_from') || process.env.SMTP_FROM || '',

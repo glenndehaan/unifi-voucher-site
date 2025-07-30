@@ -103,6 +103,12 @@ services:
       AUTH_OIDC_CLIENT_ID: ''
       # OIDC client secret provided by oauth provider
       AUTH_OIDC_CLIENT_SECRET: ''
+      # In campus environments with multiple organizations sharing a single UniFi Controller instance, it may be desirable to limit voucher administrators to managing only vouchers associated with their own organization.
+      # This restriction is based on the domain part of the administrator's email address.
+      # When enabled, the system automatically assigns the administrator’s email domain as a note to each created voucher.
+      # The voucher will contain both the email domain and any user-provided note.
+      # Vouchers without a domain note will be hidden from all users.
+      PIN_OIDC_USER_TO_OWN_DOMAIN: 'false'
       # Disables the login/authentication for the portal and API
       AUTH_DISABLE: 'false'
       # Voucher Types, format: expiration in minutes (required),single-use or multi-use vouchers value - '0' is for multi-use (unlimited) - '1' is for single-use - 'N' is for multi-use (Nx) (optional),upload speed limit in kbps (optional),download speed limit in kbps (optional),data transfer limit in MB (optional)
