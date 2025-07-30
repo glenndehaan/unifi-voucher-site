@@ -571,7 +571,6 @@ if(variables.serviceWeb) {
 
         const user = req.oidc ? await req.oidc.fetchUserInfo() : { email: 'admin' };
 
-        // --- NEU: Filter nach Domain, wenn aktiviert ---
         let filteredVouchers = cache.vouchers;
         if (
             variables.pinOidcUserToOwnDomain &&
@@ -589,7 +588,6 @@ if(variables.serviceWeb) {
                 }
             });
         }
-        // --- ENDE NEU ---
 
         res.render('voucher', {
             baseUrl: req.headers['x-ingress-path'] ? req.headers['x-ingress-path'] : '',
