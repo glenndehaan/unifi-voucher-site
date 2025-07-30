@@ -342,7 +342,6 @@ if(variables.serviceWeb) {
             }
         }
 
-        // --- Description und Domain kombinieren, wenn aktiviert ---
         let voucherNote = null;
         if (variables.pinOidcUserToOwnDomain && req.oidc) {
             try {
@@ -356,12 +355,11 @@ if(variables.serviceWeb) {
                     }
                 }
             } catch (e) {
-                // Fehler ignorieren, falls Userinfo nicht geladen werden kann
+                // Ignore errors, if Userinfo can not be loaded
             }
         } else {
             voucherNote = req.body['voucher-note'] !== '' ? req.body['voucher-note'] : null;
         }
-        // --- ENDE ---
 
         // Create voucher code
         const voucherCode = await unifi.create(
