@@ -31,6 +31,7 @@ module.exports = {
     authOidcAppBaseUrl: config('auth_oidc_app_base_url') || process.env.AUTH_OIDC_APP_BASE_URL || '',
     authOidcClientId: config('auth_oidc_client_id') || process.env.AUTH_OIDC_CLIENT_ID || '',
     authOidcClientSecret: config('auth_oidc_client_secret') || process.env.AUTH_OIDC_CLIENT_SECRET || '',
+    authOidcRestrictVisibility: config('auth_oidc_restrict_visibility') !== null ? config('auth_oidc_restrict_visibility') : (process.env.AUTH_OIDC_RESTRICT_VISIBILITY === 'true') || false,
     authDisabled: config('auth_disable') || (process.env.AUTH_DISABLE === 'true') || false,
     printers: config('printers') || process.env.PRINTERS || '',
     smtpFrom: config('smtp_from') || process.env.SMTP_FROM || '',

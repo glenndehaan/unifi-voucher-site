@@ -35,6 +35,7 @@ const flashMessage = require('./middlewares/flashMessage');
  */
 const {updateCache} = require('./utils/cache');
 const types = require('./utils/types');
+const notes = require('./utils/notes');
 const time = require('./utils/time');
 const bytes = require('./utils/bytes');
 const status = require('./utils/status');
@@ -225,8 +226,15 @@ if(variables.serviceWeb) {
                 return;
             }
 
+            if(variables.kioskNameRequired && req.body['voucher-note'] !== '' && req.body['voucher-note'].includes('||;;||')) {
+                res.cookie('flashMessage', JSON.stringify({type: 'error', message: 'Invalid Notes!'}), {httpOnly: true, expires: new Date(Date.now() + 24 * 60 * 60 * 1000)}).redirect(302, `${req.headers['x-ingress-path'] ? req.headers['x-ingress-path'] : ''}/kiosk`);
+                return;
+            }
+
+            const voucherNote = `${variables.kioskNameRequired ? req.body['voucher-note'] : ''}||;;||kiosk||;;||local||;;||`;
+
             // Create voucher code
-            const voucherCode = await unifi.create(types(req.body['voucher-type'], true), 1, variables.kioskNameRequired ? req.body['voucher-note'] : null).catch((e) => {
+            const voucherCode = await unifi.create(types(req.body['voucher-type'], true), 1, voucherNote).catch((e) => {
                 res.cookie('flashMessage', JSON.stringify({type: 'error', message: e}), {httpOnly: true, expires: new Date(Date.now() + 24 * 60 * 60 * 1000)}).redirect(302, `${req.headers['x-ingress-path'] ? req.headers['x-ingress-path'] : ''}/kiosk`);
             });
 
@@ -342,8 +350,16 @@ if(variables.serviceWeb) {
             }
         }
 
+        if(req.body['voucher-note'] !== '' && req.body['voucher-note'].includes('||;;||')) {
+            res.cookie('flashMessage', JSON.stringify({type: 'error', message: 'Invalid Notes!'}), {httpOnly: true, expires: new Date(Date.now() + 24 * 60 * 60 * 1000)}).redirect(302, `${req.headers['x-ingress-path'] ? req.headers['x-ingress-path'] : ''}/vouchers`);
+            return;
+        }
+
+        const user = req.oidc ? await req.oidc.fetchUserInfo() : { email: null };
+        const voucherNote = `${req.body['voucher-note'] !== '' ? req.body['voucher-note'] : ''}||;;||web||;;||${req.oidc ? 'oidc' : 'local'}||;;||${req.oidc ? user.email.split('@')[1].toLowerCase() : ''}`;
+
         // Create voucher code
-        const voucherCode = await unifi.create(types(req.body['voucher-type'] === 'custom' ? `${req.body['voucher-duration-type'] === 'day' ? (parseInt(req.body['voucher-duration']) * 24 * 60) : req.body['voucher-duration-type'] === 'hour' ? (parseInt(req.body['voucher-duration']) * 60) : parseInt(req.body['voucher-duration'])},${req.body['voucher-usage'] === '-1' ? req.body['voucher-quota'] : req.body['voucher-usage']},${req.body['voucher-upload-limit']},${req.body['voucher-download-limit']},${req.body['voucher-data-limit']};` : req.body['voucher-type'], true), parseInt(req.body['voucher-amount']), req.body['voucher-note'] !== '' ? req.body['voucher-note'] : null).catch((e) => {
+        const voucherCode = await unifi.create(types(req.body['voucher-type'] === 'custom' ? `${req.body['voucher-duration-type'] === 'day' ? (parseInt(req.body['voucher-duration']) * 24 * 60) : req.body['voucher-duration-type'] === 'hour' ? (parseInt(req.body['voucher-duration']) * 60) : parseInt(req.body['voucher-duration'])},${req.body['voucher-usage'] === '-1' ? req.body['voucher-quota'] : req.body['voucher-usage']},${req.body['voucher-upload-limit']},${req.body['voucher-download-limit']},${req.body['voucher-data-limit']};` : req.body['voucher-type'], true), parseInt(req.body['voucher-amount']), voucherNote).catch((e) => {
             res.cookie('flashMessage', JSON.stringify({type: 'error', message: e}), {httpOnly: true, expires: new Date(Date.now() + 24 * 60 * 60 * 1000)}).redirect(302, `${req.headers['x-ingress-path'] ? req.headers['x-ingress-path'] : ''}/vouchers`);
         });
 
@@ -557,11 +573,18 @@ if(variables.serviceWeb) {
             kioskEnabled: variables.kioskEnabled,
             timeConvert: time,
             bytesConvert: bytes,
+            notesConvert: notes,
             email_enabled: variables.smtpFrom !== '' && variables.smtpHost !== '' && variables.smtpPort !== '',
             printer_enabled: variables.printers !== '',
             voucher_types: types(variables.voucherTypes),
             voucher_custom: variables.voucherCustom,
             vouchers: cache.vouchers.filter((item) => {
+                if(variables.authOidcRestrictVisibility && req.oidc) {
+                    return notes(item.note).auth_oidc_domain === user.email.split('@')[1].toLowerCase();
+                }
+
+                return true;
+            }).filter((item) => {
                 if(req.query.status === 'available') {
                     return item.used === 0 && item.status !== 'EXPIRED';
                 }
@@ -592,8 +615,8 @@ if(variables.serviceWeb) {
                 }
 
                 if(req.query.sort === 'note') {
-                    if ((a.note || '') > (b.note || '')) return -1;
-                    if ((a.note || '') < (b.note || '')) return 1;
+                    if ((notes(a.note).note || '') > (notes(b.note).note || '')) return -1;
+                    if ((notes(a.note).note || '') < (notes(b.note).note || '')) return 1;
                 }
 
                 if(req.query.sort === 'duration') {
@@ -627,6 +650,7 @@ if(variables.serviceWeb) {
                 baseUrl: req.headers['x-ingress-path'] ? req.headers['x-ingress-path'] : '',
                 timeConvert: time,
                 bytesConvert: bytes,
+                notesConvert: notes,
                 voucher,
                 guests,
                 updated: cache.updated
@@ -662,6 +686,7 @@ if(variables.serviceWeb) {
             baseUrl: req.headers['x-ingress-path'] ? req.headers['x-ingress-path'] : '',
             timeConvert: time,
             bytesConvert: bytes,
+            notesConvert: notes,
             languages,
             defaultLanguage: variables.translationDefault,
             printers: variables.printers.split(','),
@@ -857,7 +882,7 @@ if(variables.serviceApi) {
         }
 
         // Create voucher code
-        const voucherCode = await unifi.create(types(req.body.type, true)).catch((e) => {
+        const voucherCode = await unifi.create(types(req.body.type, true), 1, `||;;||api||;;||local||;;||`).catch((e) => {
             res.status(500).json({
                 error: e,
                 data: {}

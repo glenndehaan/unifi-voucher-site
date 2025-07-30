@@ -103,6 +103,9 @@ services:
       AUTH_OIDC_CLIENT_ID: ''
       # OIDC client secret provided by oauth provider
       AUTH_OIDC_CLIENT_SECRET: ''
+      # In environments with multiple organizations sharing a single UniFi Controller instance, it may be desirable to limit users to only manage vouchers associated with their own organization.
+      # This restriction is based on the domain (including subdomains and TLDs) of the users email address.
+      AUTH_OIDC_RESTRICT_VISIBILITY: 'false'
       # Disables the login/authentication for the portal and API
       AUTH_DISABLE: 'false'
       # Voucher Types, format: expiration in minutes (required),single-use or multi-use vouchers value - '0' is for multi-use (unlimited) - '1' is for single-use - 'N' is for multi-use (Nx) (optional),upload speed limit in kbps (optional),download speed limit in kbps (optional),data transfer limit in MB (optional)
@@ -181,6 +184,7 @@ The structure of the file should use lowercase versions of the environment varia
   "auth_oidc_app_base_url": "",
   "auth_oidc_client_id": "",
   "auth_oidc_client_secret": "",
+  "auth_oidc_restrict_visibility": false,
   "auth_disable": false,
   "voucher_types": "480,1,,,;",
   "voucher_custom": true,
@@ -472,7 +476,7 @@ AUTH_INTERNAL_PASSWORD: '0000'
 
 The UniFi Voucher Site allows seamless integration with OpenID Connect (OIDC), enabling users to authenticate through their preferred identity provider (IdP). Configuration is easy using environment variables to align with your existing OIDC provider.
 
-#### Configuration
+#### Required Configuration
 
 To enable OIDC authentication, set the following environment variables in your application’s environment:
 
@@ -492,6 +496,14 @@ To enable OIDC authentication, set the following environment variables in your a
   The client secret associated with your OIDC provider. This value is specific to the OIDC client created for the UniFi Voucher Site.
 
 > Ensure your idP supports **Confidential Clients** with the **Authorization Code Flow**
+
+#### Optional Configuration
+
+* **`AUTH_OIDC_RESTRICT_VISIBILITY`**:
+  Restricts user access to only vouchers created within their own organization.
+  When enabled (`true`), users can only manage vouchers tied to their organization's domain, determined by the domain of their email address (including subdomains and top-level domains).
+  This is useful in environments where multiple organizations share a single UniFi Controller instance.
+  **Default:** `false`
 
 #### Determine Supported Client Types
 
@@ -834,7 +846,7 @@ When upgrading from 6.x to 7.x, the following changes need to be made:
    ```
 
     * Update your environment configuration to use the new `KIOSK_VOUCHER_TYPES` variable.
-    * Ensure the values provided are valid and supported — refer to the [Kiosk Configuration](#configuration-3) for the complete list of accepted types and formatting rules.
+    * Ensure the values provided are valid and supported — refer to the [Kiosk Configuration](#configuration-2) for the complete list of accepted types and formatting rules.
 
 > Make sure to remove the deprecated `KIOSK_VOUCHER_TYPE` and follow the structure outlined in the documentation to avoid misconfiguration issues during deployment.
 
