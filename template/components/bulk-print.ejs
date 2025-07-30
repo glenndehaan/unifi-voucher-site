@@ -64,9 +64,9 @@
                                                                                 </div>
                                                                             <% } %>
                                                                         <% } %>
-                                                                        <% if (voucher.note) { %>
+                                                                        <% if (notesConvert(voucher.note).note) { %>
                                                                             <div class="hidden sm:block rounded-md flex-none py-1 px-2 text-xs font-medium ring-1 ring-inset bg-gray-50 text-gray-800 ring-gray-600/20 dark:text-gray-400 dark:bg-gray-400/10 dark:ring-gray-400/20">
-                                                                                <%= voucher.note %>
+                                                                                <%= notesConvert(voucher.note).note %>
                                                                             </div>
                                                                         <% } %>
                                                                     </div>

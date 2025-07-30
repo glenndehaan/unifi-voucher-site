@@ -43,17 +43,30 @@
                                                     <% } %>
                                                 </dd>
                                             </div>
-                                            <div class="py-2 grid grid-cols-3 gap-4 px-0">
-                                                <dt class="text-sm font-medium leading-6 text-gray-900 dark:text-white">Notes</dt>
-                                                <dd class="text-sm leading-6 text-gray-600 dark:text-gray-400 col-span-2 mt-0">
-                                                    <% if (voucher.note && voucher.note.includes('|||')) { %>
-                                                        <strong>Description:</strong> <%= voucher.note.split('|||')[0] %><br/>
-                                                        <strong>Domain:</strong> <%= voucher.note.split('|||')[1] %>
-                                                    <% } else { %>
-                                                        <%= voucher.note ? voucher.note : '-' %>
-                                                    <% } %>
-                                                </dd>
-                                            </div>
+                                            <% if(notesConvert(voucher.note).note) { %>
+                                                <div class="py-2 grid grid-cols-3 gap-4 px-0">
+                                                    <dt class="text-sm font-medium leading-6 text-gray-900 dark:text-white">Notes</dt>
+                                                    <dd class="text-sm leading-6 text-gray-600 dark:text-gray-400 col-span-2 mt-0"><%= notesConvert(voucher.note).note %></dd>
+                                                </div>
+                                            <% } %>
+                                            <% if(notesConvert(voucher.note).source) { %>
+                                                <div class="py-2 grid grid-cols-3 gap-4 px-0">
+                                                    <dt class="text-sm font-medium leading-6 text-gray-900 dark:text-white">Source</dt>
+                                                    <dd class="text-sm leading-6 text-gray-600 dark:text-gray-400 col-span-2 mt-0"><%= notesConvert(voucher.note).source %></dd>
+                                                </div>
+                                            <% } %>
+                                            <% if(notesConvert(voucher.note).auth_type) { %>
+                                                <div class="py-2 grid grid-cols-3 gap-4 px-0">
+                                                    <dt class="text-sm font-medium leading-6 text-gray-900 dark:text-white">Authentication</dt>
+                                                    <dd class="text-sm leading-6 text-gray-600 dark:text-gray-400 col-span-2 mt-0"><%= notesConvert(voucher.note).auth_type %></dd>
+                                                </div>
+                                            <% } %>
+                                            <% if(notesConvert(voucher.note).auth_oidc_domain) { %>
+                                                <div class="py-2 grid grid-cols-3 gap-4 px-0">
+                                                    <dt class="text-sm font-medium leading-6 text-gray-900 dark:text-white">OIDC Domain</dt>
+                                                    <dd class="text-sm leading-6 text-gray-600 dark:text-gray-400 col-span-2 mt-0"><%= notesConvert(voucher.note).auth_oidc_domain %></dd>
+                                                </div>
+                                            <% } %>
                                             <div class="py-2 grid grid-cols-3 gap-4 px-0">
                                                 <dt class="text-sm font-medium leading-6 text-gray-900 dark:text-white">Type</dt>
                                                 <dd class="text-sm leading-6 text-gray-600 dark:text-gray-400 col-span-2 mt-0"><%= voucher.quota === 1 ? 'Single-use' : voucher.quota === 0 ? 'Multi-use (Unlimited)' : `Multi-use (${voucher.quota}x)` %></dd>
