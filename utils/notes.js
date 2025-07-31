@@ -5,6 +5,15 @@
  * @returns {*}
  */
 module.exports = (string) => {
+    if(string === null) {
+        return {
+            note: null,
+            source: null,
+            auth_type: null,
+            auth_oidc_domain: null
+        };
+    }
+
     const match = string.match(/^(?:(?<note>.*?)\|\|;;\|\|(?<source>[^|]*)\|\|;;\|\|(?<auth_type>[^|]*)\|\|;;\|\|(?<auth_oidc_domain>[^|]*)|(?<note_only>.+))$/);
     const { note, source, auth_type, auth_oidc_domain, note_only } = match.groups;
 
