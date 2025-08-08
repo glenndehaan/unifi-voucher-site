@@ -9,15 +9,15 @@ const variables = require('../modules/variables');
 module.exports = (voucher) => {
     let base = variables.unifiSsid !== '' ? variables.unifiSsidPassword !== '' ? 415 : 375 : 260;
 
-    if(voucher.qos_usage_quota) {
+    if(voucher.dataUsageLimitMBytes) {
         base += 10;
     }
 
-    if(voucher.qos_rate_max_down) {
+    if(voucher.rxRateLimitKbps) {
         base += 10;
     }
 
-    if(voucher.qos_rate_max_up) {
+    if(voucher.txRateLimitKbps) {
         base += 10;
     }
 

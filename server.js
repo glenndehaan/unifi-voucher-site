@@ -187,7 +187,7 @@ if(variables.serviceWeb) {
 
             // Get voucher from cache
             const voucher = cache.vouchers.find((e) => {
-                return e._id === req.body.id;
+                return e.id === req.body.id;
             });
 
             if(voucher) {
@@ -275,7 +275,7 @@ if(variables.serviceWeb) {
                         unifiSsid: variables.unifiSsid,
                         unifiSsidPassword: variables.unifiSsidPassword,
                         qr: await qr(),
-                        voucherId: voucherData._id,
+                        voucherId: voucherData.id,
                         voucherCode
                     });
                 }
@@ -410,7 +410,7 @@ if(variables.serviceWeb) {
         }
 
         const voucher = cache.vouchers.find((e) => {
-            return e._id === req.params.id;
+            return e.id === req.params.id;
         });
 
         if(voucher) {
@@ -441,7 +441,7 @@ if(variables.serviceWeb) {
         }
 
         const voucher = cache.vouchers.find((e) => {
-            return e._id === req.params.id;
+            return e.id === req.params.id;
         });
 
         if(voucher) {
@@ -476,7 +476,7 @@ if(variables.serviceWeb) {
         }
 
         const voucher = cache.vouchers.find((e) => {
-            return e._id === req.params.id;
+            return e.id === req.params.id;
         });
 
         if(voucher) {
@@ -506,7 +506,7 @@ if(variables.serviceWeb) {
         }
 
         const voucher = cache.vouchers.find((e) => {
-            return e._id === req.params.id;
+            return e.id === req.params.id;
         });
 
         if(voucher) {
@@ -580,31 +580,31 @@ if(variables.serviceWeb) {
             voucher_custom: variables.voucherCustom,
             vouchers: cache.vouchers.filter((item) => {
                 if(variables.authOidcRestrictVisibility && req.oidc) {
-                    return notes(item.note).auth_oidc_domain === user.email.split('@')[1].toLowerCase();
+                    return item.name && notes(item.name).auth_oidc_domain === user.email.split('@')[1].toLowerCase();
                 }
 
                 return true;
             }).filter((item) => {
                 if(req.query.status === 'available') {
-                    return item.used === 0 && item.status !== 'EXPIRED';
+                    return item.authorizedGuestCount === 0 && !item.expired;
                 }
 
                 if(req.query.status === 'in-use') {
-                    return item.used > 0 && item.status !== 'EXPIRED';
+                    return item.authorizedGuestCount > 0 && !item.expired;
                 }
 
                 if(req.query.status === 'expired') {
-                    return item.status === 'EXPIRED';
+                    return item.expired;
                 }
 
                 return true;
             }).filter((item) => {
                 if(req.query.quota === 'multi-use') {
-                    return item.quota === 0;
+                    return (item.authorizedGuestLimit && item.authorizedGuestLimit > 1) || !item.authorizedGuestLimit;
                 }
 
                 if(req.query.quota === 'single-use') {
-                    return item.quota !== 0;
+                    return item.authorizedGuestLimit && item.authorizedGuestLimit === 1;
                 }
 
                 return true;
@@ -615,18 +615,18 @@ if(variables.serviceWeb) {
                 }
 
                 if(req.query.sort === 'note') {
-                    if ((notes(a.note).note || '') > (notes(b.note).note || '')) return -1;
-                    if ((notes(a.note).note || '') < (notes(b.note).note || '')) return 1;
+                    if ((notes(a.name).note || '') > (notes(b.name).note || '')) return -1;
+                    if ((notes(a.name).note || '') < (notes(b.name).note || '')) return 1;
                 }
 
                 if(req.query.sort === 'duration') {
-                    if (a.duration > b.duration) return -1;
-                    if (a.duration < b.duration) return 1;
+                    if (a.timeLimitMinutes > b.timeLimitMinutes) return -1;
+                    if (a.timeLimitMinutes < b.timeLimitMinutes) return 1;
                 }
 
                 if(req.query.sort === 'status') {
-                    if (a.used > b.used) return -1;
-                    if (a.used < b.used) return 1;
+                    if (a.authorizedGuestCount > b.authorizedGuestCount) return -1;
+                    if (a.authorizedGuestCount < b.authorizedGuestCount) return 1;
                 }
             }),
             updated: cache.updated,
@@ -639,10 +639,10 @@ if(variables.serviceWeb) {
     });
     app.get('/voucher/:id', [authorization.web], async (req, res) => {
         const voucher = cache.vouchers.find((e) => {
-            return e._id === req.params.id;
+            return e.id === req.params.id;
         });
         const guests = cache.guests.filter((e) => {
-            return e.voucher_id === req.params.id;
+            return e.voucher_code === voucher.code;
         });
 
         if(voucher) {
@@ -717,7 +717,7 @@ if(variables.serviceWeb) {
 
         const vouchers = req.body.vouchers.map((voucher) => {
             return cache.vouchers.find((e) => {
-                return e._id === voucher;
+                return e.id === voucher;
             });
         });
 
@@ -818,13 +818,13 @@ if(variables.serviceApi) {
                 message: 'OK',
                 vouchers: cache.vouchers.map((voucher) => {
                     return {
-                        id: voucher._id,
+                        id: voucher.id,
                         code: `${voucher.code.slice(0, 5)}-${voucher.code.slice(5)}`,
-                        type: voucher.quota === 1 ? 'single' : voucher.quota === 0 ? 'multi' : 'multi',
-                        duration: voucher.duration,
-                        data_limit: voucher.qos_usage_quota ? voucher.qos_usage_quota : null,
-                        download_limit: voucher.qos_rate_max_down ? voucher.qos_rate_max_down : null,
-                        upload_limit: voucher.qos_rate_max_up ? voucher.qos_rate_max_up : null
+                        type: !voucher.authorizedGuestLimit ? 'multi' : voucher.authorizedGuestLimit === 1 ? 'single' : 'multi',
+                        duration: voucher.timeLimitMinutes,
+                        data_limit: voucher.dataUsageLimitMBytes ? voucher.dataUsageLimitMBytes : null,
+                        download_limit: voucher.rxRateLimitKbps ? voucher.rxRateLimitKbps : null,
+                        upload_limit: voucher.txRateLimitKbps ? voucher.txRateLimitKbps : null
                     };
                 }),
                 updated: cache.updated
@@ -920,7 +920,7 @@ if(variables.serviceApi) {
                         data: {
                             message: 'OK',
                             voucher: {
-                                id: voucherData._id,
+                                id: voucherData.id,
                                 code: voucherCode
                             },
                             email: {
@@ -936,7 +936,7 @@ if(variables.serviceApi) {
                     data: {
                         message: 'OK',
                         voucher: {
-                            id: voucherData._id,
+                            id: voucherData.id,
                             code: voucherCode
                         }
                     }

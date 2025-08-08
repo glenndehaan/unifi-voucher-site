@@ -146,17 +146,17 @@
                 <ul role="list" class="divide-y divide-black/5 dark:divide-white/5">
                     <% vouchers.forEach((voucher) => { %>
                         <li class="relative flex items-center space-x-4 px-4 py-4 sm:px-6 lg:px-8 hover:bg-gray-200 dark:hover:bg-gray-800 cursor-pointer">
-                            <div class="voucher min-w-0 flex-auto" data-id="<%= voucher._id %>">
+                            <div class="voucher min-w-0 flex-auto" data-id="<%= voucher.id %>">
                                 <div class="flex items-center gap-x-3">
                                     <h2 class="min-w-0 text-sm font-semibold leading-6 text-gray-900 dark:text-white">
                                         <div class="flex gap-x-2">
                                             <span class="tabular-nums pointer-events-none no-underline text-inherit"><%= voucher.code.slice(0, 5) %>-<%= voucher.code.slice(5) %></span>
-                                            <% if (voucher.status === 'EXPIRED') { %>
+                                            <% if (voucher.expired) { %>
                                                 <div class="rounded-full w-fit py-1 px-2 text-xs font-medium ring-1 ring-inset bg-red-50 text-red-800 ring-red-600/20 dark:text-red-400 dark:bg-red-400/10 dark:ring-red-400/20">
                                                     Expired
                                                 </div>
                                             <% } else {%>
-                                                <% if(voucher.used > 0) { %>
+                                                <% if(voucher.authorizedGuestCount > 0) { %>
                                                     <div class="rounded-full flex-none py-1 px-2 text-xs font-medium ring-1 ring-inset bg-yellow-50 text-yellow-800 ring-yellow-600/20 dark:text-yellow-400 dark:bg-yellow-400/10 dark:ring-yellow-400/20">
                                                         In Use
                                                     </div>
@@ -166,37 +166,37 @@
                                                     </div>
                                                 <% } %>
                                             <% } %>
-                                            <% if (notesConvert(voucher.note).note) { %>
+                                            <% if (voucher.name && notesConvert(voucher.name).note) { %>
                                                 <div class="hidden sm:block rounded-md flex-none py-1 px-2 text-xs font-medium ring-1 ring-inset bg-gray-50 text-gray-800 ring-gray-600/20 dark:text-gray-400 dark:bg-gray-400/10 dark:ring-gray-400/20">
-                                                    <%= notesConvert(voucher.note).note %>
+                                                    <%= notesConvert(voucher.name).note %>
                                                 </div>
                                             <% } %>
                                         </div>
                                     </h2>
                                 </div>
                                 <div class="mt-2 flex items-center gap-x-2.5 text-xs leading-5 text-gray-600 dark:text-gray-400">
-                                    <p class="whitespace-nowrap"><%= voucher.quota === 1 ? 'Single-use' : voucher.quota === 0 ? 'Multi-use (Unlimited)' : `Multi-use (${voucher.quota}x)` %></p>
+                                    <p class="whitespace-nowrap"><%= !voucher.authorizedGuestLimit ? 'Multi-use (Unlimited)' : voucher.authorizedGuestLimit === 1 ? 'Single-use' : `Multi-use (${voucher.authorizedGuestLimit}x)` %></p>
                                     <svg viewBox="0 0 2 2" class="h-0.5 w-0.5 flex-none fill-gray-500 dark:fill-gray-300">
                                         <circle cx="1" cy="1" r="1" />
                                     </svg>
-                                    <p class="whitespace-nowrap"><%= timeConvert(voucher.duration) %></p>
-                                    <% if(voucher.qos_usage_quota) { %>
+                                    <p class="whitespace-nowrap"><%= timeConvert(voucher.timeLimitMinutes) %></p>
+                                    <% if(voucher.dataUsageLimitMBytes) { %>
                                         <svg viewBox="0 0 2 2" class="h-0.5 w-0.5 flex-none fill-gray-500 dark:fill-gray-300">
                                             <circle cx="1" cy="1" r="1" />
                                         </svg>
-                                        <p class="truncate"><%= bytesConvert(voucher.qos_usage_quota, 2) %> Data Limit</p>
+                                        <p class="truncate"><%= bytesConvert(voucher.dataUsageLimitMBytes, 2) %> Data Limit</p>
                                     <% } %>
-                                    <% if(voucher.qos_rate_max_down) { %>
+                                    <% if(voucher.rxRateLimitKbps) { %>
                                         <svg viewBox="0 0 2 2" class="h-0.5 w-0.5 flex-none fill-gray-500 dark:fill-gray-300">
                                             <circle cx="1" cy="1" r="1" />
                                         </svg>
-                                        <p class="truncate"><%= bytesConvert(voucher.qos_rate_max_down, 1, true) %> Download Limit</p>
+                                        <p class="truncate"><%= bytesConvert(voucher.rxRateLimitKbps, 1, true) %> Download Limit</p>
                                     <% } %>
-                                    <% if(voucher.qos_rate_max_up) { %>
+                                    <% if(voucher.txRateLimitKbps) { %>
                                         <svg viewBox="0 0 2 2" class="h-0.5 w-0.5 flex-none fill-gray-500 dark:fill-gray-300">
                                             <circle cx="1" cy="1" r="1" />
                                         </svg>
-                                        <p class="truncate"><%= bytesConvert(voucher.qos_rate_max_up, 1, true) %> Upload Limit</p>
+                                        <p class="truncate"><%= bytesConvert(voucher.txRateLimitKbps, 1, true) %> Upload Limit</p>
                                     <% } %>
                                 </div>
                             </div>
@@ -209,7 +209,7 @@
                                     <path d="M10.5 10.5a5.23 5.23 0 0 0-1.279-3.434 9.768 9.768 0 0 1 6.963 6.963 5.23 5.23 0 0 0-3.434-1.279h-1.875a.375.375 0 0 1-.375-.375V10.5Z" />
                                 </svg>
                             </button>
-                            <button type="button" data-id="<%= voucher._id %>" class="voucher-email relative rounded-full p-1 text-gray-500 dark:text-gray-400 hover:text-black dark:hover:text-white<%= !email_enabled ? ' hidden' : '' %>">
+                            <button type="button" data-id="<%= voucher.id %>" class="voucher-email relative rounded-full p-1 text-gray-500 dark:text-gray-400 hover:text-black dark:hover:text-white<%= !email_enabled ? ' hidden' : '' %>">
                                 <span class="absolute -inset-1.5"></span>
                                 <span class="sr-only">Email Voucher Code</span>
                                 <svg class="h-5 w-5" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
@@ -217,14 +217,14 @@
                                     <path d="M22.5 6.908V6.75a3 3 0 0 0-3-3h-15a3 3 0 0 0-3 3v.158l9.714 5.978a1.5 1.5 0 0 0 1.572 0L22.5 6.908Z" />
                                 </svg>
                             </button>
-                            <button type="button" data-id="<%= voucher._id %>" class="voucher-print relative rounded-full p-1 text-gray-500 dark:text-gray-400 hover:text-black dark:hover:text-white<%= !printer_enabled ? ' hidden' : '' %>">
+                            <button type="button" data-id="<%= voucher.id %>" class="voucher-print relative rounded-full p-1 text-gray-500 dark:text-gray-400 hover:text-black dark:hover:text-white<%= !printer_enabled ? ' hidden' : '' %>">
                                 <span class="absolute -inset-1.5"></span>
                                 <span class="sr-only">Print Voucher Code</span>
                                 <svg class="h-5 w-5" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
                                     <path fill-rule="evenodd" d="M7.875 1.5C6.839 1.5 6 2.34 6 3.375v2.99c-.426.053-.851.11-1.274.174-1.454.218-2.476 1.483-2.476 2.917v6.294a3 3 0 0 0 3 3h.27l-.155 1.705A1.875 1.875 0 0 0 7.232 22.5h9.536a1.875 1.875 0 0 0 1.867-2.045l-.155-1.705h.27a3 3 0 0 0 3-3V9.456c0-1.434-1.022-2.7-2.476-2.917A48.716 48.716 0 0 0 18 6.366V3.375c0-1.036-.84-1.875-1.875-1.875h-8.25ZM16.5 6.205v-2.83A.375.375 0 0 0 16.125 3h-8.25a.375.375 0 0 0-.375.375v2.83a49.353 49.353 0 0 1 9 0Zm-.217 8.265c.178.018.317.16.333.337l.526 5.784a.375.375 0 0 1-.374.409H7.232a.375.375 0 0 1-.374-.409l.526-5.784a.373.373 0 0 1 .333-.337 41.741 41.741 0 0 1 8.566 0Zm.967-3.97a.75.75 0 0 1 .75-.75h.008a.75.75 0 0 1 .75.75v.008a.75.75 0 0 1-.75.75H18a.75.75 0 0 1-.75-.75V10.5ZM15 9.75a.75.75 0 0 0-.75.75v.008c0 .414.336.75.75.75h.008a.75.75 0 0 0 .75-.75V10.5a.75.75 0 0 0-.75-.75H15Z" clip-rule="evenodd" />
                                 </svg>
                             </button>
-                            <a href="<%= baseUrl %>/voucher/<%= voucher._id %>/remove" type="button" class="remove-button relative rounded-full p-1 text-red-500 dark:text-red-400 hover:text-black dark:hover:text-white">
+                            <a href="<%= baseUrl %>/voucher/<%= voucher.id %>/remove" type="button" class="remove-button relative rounded-full p-1 text-red-500 dark:text-red-400 hover:text-black dark:hover:text-white">
                                 <span class="absolute -inset-1.5"></span>
                                 <span class="sr-only">Remove Voucher Code</span>
                                 <svg class="h-5 w-5" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">

@@ -16,6 +16,7 @@ module.exports = {
     unifiPort: config('unifi_port') || process.env.UNIFI_PORT || 443,
     unifiUsername: config('unifi_username') || process.env.UNIFI_USERNAME || 'admin',
     unifiPassword: config('unifi_password') || process.env.UNIFI_PASSWORD || 'password',
+    unifiToken: config('unifi_token') || process.env.UNIFI_TOKEN || '',
     unifiSiteId: config('unifi_site_id') || process.env.UNIFI_SITE_ID || 'default',
     unifiSsid: config('unifi_ssid') || process.env.UNIFI_SSID || '',
     unifiSsidPassword: config('unifi_ssid_password') || process.env.UNIFI_SSID_PASSWORD || '',
