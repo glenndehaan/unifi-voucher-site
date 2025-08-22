@@ -11,6 +11,8 @@ module.exports = {
         'UI_BACK_BUTTON',
         'PRINTER_TYPE',
         'PRINTER_IP',
-        'KIOSK_VOUCHER_TYPE'
+        'KIOSK_VOUCHER_TYPE',
+        'UNIFI_USERNAME',
+        'UNIFI_PASSWORD'
     ]
 };

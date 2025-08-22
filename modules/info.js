@@ -130,4 +130,12 @@ module.exports = () => {
     if(variables.unifiUsername.includes('@')) {
         log.error('[UniFi] Incorrect username detected! UniFi Cloud credentials are not supported!');
     }
+
+    /**
+     * Check if UniFi Token is set
+     */
+    if(variables.unifiToken === '') {
+        log.error('[UniFi] Integration API Key is not set within UNIFI_TOKEN environment variable!');
+        process.exit(1);
+    }
 };

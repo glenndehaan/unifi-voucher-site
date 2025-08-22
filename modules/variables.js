@@ -45,6 +45,7 @@ module.exports = {
     kioskVoucherTypes: config('kiosk_voucher_types') || process.env.KIOSK_VOUCHER_TYPES || '480,1,,,;',
     kioskNameRequired: config('kiosk_name_required') || (process.env.KIOSK_NAME_REQUIRED === 'true') || false,
     kioskPrinter: config('kiosk_printer') || process.env.KIOSK_PRINTER || '',
+    kioskHomepage: config('kiosk_homepage') || (process.env.KIOSK_HOMEPAGE === 'true') || false,
     logLevel: config('log_level') || process.env.LOG_LEVEL || 'info',
     translationDefault: config('translation_default') || process.env.TRANSLATION_DEFAULT || 'en',
     translationDebug: config('translation_debug') || (process.env.TRANSLATION_DEBUG === 'true') || false,

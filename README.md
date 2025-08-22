@@ -41,17 +41,16 @@ UniFi Voucher Site is a web-based platform for generating and managing UniFi net
 
 ## Prerequisites
 
-- UniFi Network Controller (Cloud Key, Dream Machine, or Controller software)
+- UniFi OS v4.2.8+
+- UniFi Network v9.1.119+ (Cloud Key, Dream Machine, or UniFi OS software)
 - UniFi Access Point (AP)
-- UniFi Local Account with 'Full Management' access
+- UniFi Integrations API Key
+
+![UniFi Integrations API Key](.docs/images/integrations_example.png)
 
 [Follow this guide to set up the Hotspot Portal](https://help.ui.com/hc/en-us/articles/115000166827-UniFi-Hotspot-Portal-and-Guest-WiFi), then continue with the installation below
 
 > Ensure voucher authentication is enabled within the Hotspot Portal
-
-> Attention!: We recommend only using Local UniFi accounts due to short token lengths provided by UniFi Cloud Accounts. Also, UniFi Cloud Accounts using 2FA are not supported!
-
-> Note: When creating a Local UniFi account ensure you give 'Full Management' access rights to the Network controller. The 'Hotspot Role' won't give access to the API and therefore the application will throw errors.
 
 ---
 
@@ -81,6 +80,8 @@ services:
       UNIFI_USERNAME: 'admin'
       # The password of a local UniFi OS account
       UNIFI_PASSWORD: 'password'
+      # The API Key created on the integrations tab within UniFi OS
+      UNIFI_TOKEN: ''
       # The UniFi Site ID
       UNIFI_SITE_ID: 'default'
       # The UniFi SSID where guests need to connect to (Used within templating and 'Scan to Connect')
@@ -142,6 +143,8 @@ services:
       KIOSK_NAME_REQUIRED: 'false'
       # Enable/disable a printer for Kiosk Vouchers (this automatically prints vouchers), currently supported: escpos ip (Example: 192.168.1.10)
       KIOSK_PRINTER: ''
+      # Enable/disable an override to redirect to the Kiosk on the / url (Also enables a link from the Kiosk back to the Admin UI)
+      KIOSK_HOMEPAGE: 'false'
       # Sets the application Log Level (Valid Options: error|warn|info|debug|trace)
       LOG_LEVEL: 'info'
       # Sets the default translation for dropdowns
@@ -173,6 +176,7 @@ The structure of the file should use lowercase versions of the environment varia
   "unifi_port": 443,
   "unifi_username": "admin",
   "unifi_password": "password",
+  "unifi_token": "",
   "unifi_site_id": "default",
   "unifi_ssid": "",
   "unifi_ssid_password": "",
@@ -201,6 +205,7 @@ The structure of the file should use lowercase versions of the environment varia
   "kiosk_voucher_types": "480,1,,,;",
   "kiosk_name_required": false,
   "kiosk_printer": "",
+  "kiosk_homepage": false,
   "log_level": "info",
   "translation_default": "en",
   "translation_debug": false
@@ -713,6 +718,10 @@ KIOSK_VOUCHER_TYPES: '480,1,,,;'
       ```text
       KIOSK_PRINTER=192.168.1.50
       ```
+
+- **`KIOSK_HOMEPAGE`**:
+    - Set to `'true'` to redirect from `/` to `/kiosk` (Instead of the Admin UI).
+    - Set to `'false'` to disable the redirect functionality.
 
 ### Custom Branding (Logo and Background)
 

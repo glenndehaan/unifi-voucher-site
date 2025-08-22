@@ -8,6 +8,7 @@ services:
       UNIFI_PORT: 443
       UNIFI_USERNAME: 'admin'
       UNIFI_PASSWORD: 'password'
+      UNIFI_TOKEN: ''
       UNIFI_SITE_ID: 'default'
       UNIFI_SSID: ''
       UNIFI_SSID_PASSWORD: ''
@@ -36,5 +37,6 @@ services:
       KIOSK_VOUCHER_TYPES: '480,1,,,;'
       KIOSK_NAME_REQUIRED: 'false'
       KIOSK_PRINTER: ''
+      KIOSK_HOMEPAGE: 'false'
       LOG_LEVEL: 'info'
       TRANSLATION_DEBUG: 'false'
