@@ -1,0 +1,19 @@
+{
+  "title": "WiFi kód poukazu",
+  "preHeader": "Váš WiFi kód poukazu",
+  "greeting": "Ahoj",
+  "intro": "Někdo vygeneroval WiFi slevový kupón, prosím použijte tento kód při připojení",
+  "connect": "Připojit k",
+  "password": "Heslo",
+  "or": "nebo",
+  "scan": "Skenovat připojení",
+  "details": "Podrobnosti slevového kupónu",
+  "type": "Typ",
+  "multiUse": "Víceúčelové",
+  "singleUse": "Jednoúčelové",
+  "duration": "Doba trvání",
+  "dataLimit": "Limit dat",
+  "downloadLimit": "Limit stahování",
+  "uploadLimit": "Limit nahrávání",
+  "poweredBy": "Běží na"
+}
