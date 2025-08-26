@@ -14,12 +14,6 @@
   },
   "author": "Glenn de Haan",
   "license": "MIT",
-  "overrides": {
-    "node-unifi@^2.5.1": {
-      "axios": "1.11.0",
-      "tough-cookie": "5.1.2"
-    }
-  },
   "dependencies": {
     "cookie-parser": "^1.4.7",
     "ejs": "^3.1.10",
@@ -30,7 +24,6 @@
     "jsonwebtoken": "^9.0.2",
     "multer": "^2.0.2",
     "node-thermal-printer": "^4.5.0",
-    "node-unifi": "^2.5.1",
     "nodemailer": "^7.0.5",
     "pdfkit": "^0.17.1",
     "qrcode": "^1.5.4",

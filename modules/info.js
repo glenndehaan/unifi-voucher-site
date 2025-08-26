@@ -135,17 +135,15 @@ module.exports = () => {
     log.info(`[UniFi] Using Controller on: ${variables.unifiIp}:${variables.unifiPort} (Site ID: ${variables.unifiSiteId}${variables.unifiSsid !== '' ? `, SSID: ${variables.unifiSsid}` : ''})`);
 
     /**
-     * Check for valid UniFi username
-     */
-    if(variables.unifiUsername.includes('@')) {
-        log.error('[UniFi] Incorrect username detected! UniFi Cloud credentials are not supported!');
-    }
-
-    /**
      * Check if UniFi Token is set
      */
     if(variables.unifiToken === '') {
         log.error('[UniFi] Integration API Key is not set within UNIFI_TOKEN environment variable!');
         process.exit(1);
     }
+
+    /**
+     * Temporary warning that guests lookup feature is unavailable
+     */
+    log.warn('[UniFi] Guests features are temporary disabled in this version of UniFi Voucher Site (Not supported in current Integrations API). Please view and upvote: https://community.ui.com/questions/Feature-Request-Network-API-Guest-Access-Voucher-ID/d3c470e2-433d-4386-8a13-211712311202')
 };

@@ -6,8 +6,6 @@ services:
     environment:
       UNIFI_IP: '192.168.1.1'
       UNIFI_PORT: 443
-      UNIFI_USERNAME: 'admin'
-      UNIFI_PASSWORD: 'password'
       UNIFI_TOKEN: ''
       UNIFI_SITE_ID: 'default'
       UNIFI_SSID: ''

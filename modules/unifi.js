@@ -1,77 +1,15 @@
 /**
- * Import vendor modules
- */
-const unifi = require('node-unifi');
-
-/**
  * Import own modules
  */
-const variables = require('./variables');
 const log = require('./log');
 const fetch = require('../utils/fetch');
 
 /**
- * UniFi Settings
- */
-const settings = {
-    ip: variables.unifiIp,
-    port: variables.unifiPort,
-    username: variables.unifiUsername,
-    password: variables.unifiPassword,
-    siteID: variables.unifiSiteId
-};
-
-/**
- * Controller session
- */
-let controller = null;
-
-/**
- * Start a UniFi controller reusable session
- *
- * @return {Promise<unknown>}
- */
-const startSession = () => {
-    return new Promise((resolve, reject) => {
-        // Check if we have a current session already
-        if(controller !== null) {
-            resolve();
-            return;
-        }
-
-        if(settings.username.includes('@')) {
-            reject('[UniFi] Incorrect username detected! UniFi Cloud credentials are not supported!');
-            return;
-        }
-
-        // Create new UniFi controller object
-        controller = new unifi.Controller({
-            host: settings.ip,
-            port: settings.port,
-            site: settings.siteID,
-            sslverify: false
-        });
-
-        // Login to UniFi Controller
-        controller.login(settings.username, settings.password).then(() => {
-            log.debug('[UniFi] Login successful!');
-            resolve();
-        }).catch((e) => {
-            // Something went wrong so clear the current controller so a user can retry
-            controller = null;
-            log.error('[UniFi] Error while logging in!');
-            log.debug(e);
-            reject('[UniFi] Error while logging in!');
-        });
-    });
-}
-
-/**
  * UniFi module functions
  *
- * @type {{create: (function(*, number=, string=): Promise<*>), remove: (function(*): Promise<*>), list: (function(): Promise<*>), guests: (function(boolean=): Promise<*>)}}
+ * @type {{create: (function(*, number=, string=): Promise<*>), remove: (function(*): Promise<*>), list: (function(): Promise<*>), guests: (function(): Promise<*>)}}
  */
-const unifiModule = {
+module.exports = {
     /**
      * Creates a new UniFi Voucher
      *
@@ -171,62 +109,24 @@ const unifiModule = {
     /**
      * Returns a list with all UniFi Guests
      *
-     * @param retry
      * @return {Promise<unknown>}
      */
-    guests: (retry = true) => {
+    guests: () => {
         return new Promise((resolve, reject) => {
             // fetch('/clients', 'GET', {
             //     filter: 'access.type.eq(\'GUEST\')',
             //     limit: 10000
             // }).then((clients) => {
-            //     console.log(clients)
+            //     console.log(clients);
+            //     log.info(`[UniFi] Found ${clients.length} guest(s)`);
             // }).catch((e) => {
-            //     log.error('[UniFi] Error while getting vouchers!');
+            //     log.error('[UniFi] Error while getting guests!');
             //     log.debug(e);
-            //     reject('[UniFi] Error while getting vouchers!');
+            //     reject('[UniFi] Error while getting guests!');
             // });
 
-            startSession().then(() => {
-                controller.getGuests().then((guests) => {
-                    log.info(`[UniFi] Found ${guests.length} guest(s)`);
-                    resolve(guests);
-                }).catch((e) => {
-                    log.error('[UniFi] Error while getting guests!');
-                    log.debug(e);
-
-                    // Check if token expired, if true attempt login then try again
-                    if (e.response) {
-                        if(e.response.status === 401 && retry) {
-                            log.info('[UniFi] Attempting re-authentication & retry...');
-
-                            controller = null;
-                            unifiModule.guests(false).then((e) => {
-                                resolve(e);
-                            }).catch((e) => {
-                                reject(e);
-                            });
-                        } else {
-                            // Something else went wrong lets clear the current controller so a user can retry
-                            log.error(`[UniFi] Unexpected ${JSON.stringify({status: e.response.status, retry})} cleanup controller...`);
-                            controller = null;
-                            reject('[UniFi] Error while getting guests!');
-                        }
-                    } else {
-                        // Something else went wrong lets clear the current controller so a user can retry
-                        log.error('[UniFi] Unexpected cleanup controller...');
-                        controller = null;
-                        reject('[UniFi] Error while getting guests!');
-                    }
-                });
-            }).catch((e) => {
-                reject(e);
-            });
+            // Currently disabled! Waiting on: https://community.ui.com/questions/Feature-Request-Network-API-Guest-Access-Voucher-ID/d3c470e2-433d-4386-8a13-211712311202
+            resolve([]);
         });
     }
 }
-
-/**
- * Exports the UniFi module functions
- */
-module.exports = unifiModule;

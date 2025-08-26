@@ -76,10 +76,6 @@ services:
       UNIFI_IP: '192.168.1.1'
       # The port of your UniFi OS Console, this could be 443 or 8443
       UNIFI_PORT: 443
-      # The username of a local UniFi OS account
-      UNIFI_USERNAME: 'admin'
-      # The password of a local UniFi OS account
-      UNIFI_PASSWORD: 'password'
       # The API Key created on the integrations tab within UniFi OS
       UNIFI_TOKEN: ''
       # The UniFi Site ID
@@ -180,8 +176,6 @@ The structure of the file should use lowercase versions of the environment varia
 {
   "unifi_ip": "192.168.1.1",
   "unifi_port": 443,
-  "unifi_username": "admin",
-  "unifi_password": "password",
   "unifi_token": "",
   "unifi_site_id": "default",
   "unifi_ssid": "",
