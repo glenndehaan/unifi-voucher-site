@@ -7,21 +7,9 @@ const {Agent} = require('undici');
 /**
  * Import own modules
  */
+const cache = require('../modules/cache');
 const variables = require('../modules/variables');
 const log = require('../modules/log');
-
-/**
- * UniFi Settings
- */
-const controller = {
-    ip: variables.unifiIp,
-    port: variables.unifiPort,
-    username: variables.unifiUsername,
-    password: variables.unifiPassword,
-    token: variables.unifiToken,
-    siteID: variables.unifiSiteId,
-    siteUUID: null
-};
 
 /**
  * Request a Controller Site UUID
@@ -30,11 +18,11 @@ const controller = {
  */
 const getSiteUUID = () => {
     return new Promise((resolve, reject) => {
-        fetch(`https://${controller.ip}:${controller.port}/proxy/network/integration/v1/sites?filter=internalReference.eq('${controller.siteID}')`, {
+        fetch(`https://${variables.unifiIp}:${variables.unifiPort}/proxy/network/integration/v1/sites?filter=internalReference.eq('${variables.unifiSiteId}')`, {
             headers: {
                 'User-Agent': 'unifi-voucher-site',
                 'Content-Type': 'application/json',
-                'X-API-KEY': controller.token
+                'X-API-KEY': variables.unifiToken
             },
             dispatcher: new Agent({
                 connect: {
@@ -61,9 +49,9 @@ const getSiteUUID = () => {
                 }
 
                 if(response.data.length < 1) {
-                    log.error(`[UniFi] Unknown site id: ${controller.siteID}.`);
+                    log.error(`[UniFi] Unknown site id: ${variables.unifiSiteId}.`);
                     log.debug(response);
-                    reject(`Unknown site id: ${controller.siteID}`);
+                    reject(`Unknown site id: ${variables.unifiSiteId}`);
                     return;
                 }
 
@@ -90,7 +78,7 @@ const getSiteUUID = () => {
 module.exports = (endpoint, method = 'GET', params = {}, data = null) => {
     return new Promise(async (resolve, reject) => {
         // Auto-resolve siteUUID if not set
-        if(controller.siteUUID === null) {
+        if(cache.unifi.siteUUID === null) {
             log.debug('[UniFi] Requesting Site UUID...');
 
             const siteUUID = await getSiteUUID().catch((err) => {
@@ -98,7 +86,7 @@ module.exports = (endpoint, method = 'GET', params = {}, data = null) => {
             });
 
             if(siteUUID) {
-                controller.siteUUID = siteUUID;
+                cache.unifi.siteUUID = siteUUID;
             } else {
                 return;
             }
@@ -110,7 +98,7 @@ module.exports = (endpoint, method = 'GET', params = {}, data = null) => {
             headers: {
                 'User-Agent': 'unifi-voucher-site',
                 'Content-Type': 'application/json',
-                'X-API-KEY': controller.token
+                'X-API-KEY': variables.unifiToken
             },
             dispatcher: new Agent({
                 connect: {
@@ -124,7 +112,7 @@ module.exports = (endpoint, method = 'GET', params = {}, data = null) => {
             request.body = JSON.stringify(data);
         }
 
-        fetch(`https://${controller.ip}:${controller.port}/proxy/network/integration/v1/sites/${controller.siteUUID}${endpoint}?${querystring.stringify(params)}`, request)
+        fetch(`https://${variables.unifiIp}:${variables.unifiPort}/proxy/network/integration/v1/sites/${cache.unifi.siteUUID}${endpoint}?${querystring.stringify(params)}`, request)
             .then((response) => {
                 return response.json();
             })
