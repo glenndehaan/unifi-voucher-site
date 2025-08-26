@@ -39,6 +39,7 @@ const vouchers = require('./controllers/vouchers');
  * Import own utils
  */
 const {updateCache} = require('./utils/cache');
+const {cleanupExpired, cleanupUnused} = require('./utils/cleanup');
 
 /**
  * Setup Express app
@@ -208,9 +209,19 @@ app.listen(3000, '0.0.0.0', async () => {
     log.info(`[App] Running on: 0.0.0.0:3000`);
     await updateCache();
 
-    // Run auto sync every 15 minutes
+    // Run tasks every 15 minutes
     setInterval(async () => {
-        log.info('[Auto Sync] Starting Sync...');
+        log.debug('[Task][Sync] Starting...');
         await updateCache();
+
+        if(variables.taskCleanupExpired) {
+            log.debug('[Task][Cleanup][Expired] Starting...');
+            await cleanupExpired();
+        }
+
+        if(variables.taskCleanupUnused) {
+            log.debug('[Task][Cleanup][Unused] Starting...');
+            await cleanupUnused();
+        }
     }, 900000);
 });

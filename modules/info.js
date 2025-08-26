@@ -7,6 +7,7 @@ const fs = require('fs');
  * Import own modules
  */
 const variables = require('./variables');
+const config = require('./config');
 const log = require('./log');
 
 /**
@@ -33,6 +34,10 @@ module.exports = () => {
     array.deprecated.forEach((item) => {
         if(typeof process.env[item] !== 'undefined') {
             log.warn(`[Deprecation] '${item}' has been deprecated! Please remove this item from the environment variables and/or follow migration guides: https://github.com/glenndehaan/unifi-voucher-site#migration-guide`);
+        }
+
+        if(config(item.toLowerCase()) !== null) {
+            log.warn(`[Deprecation] '${item.toLowerCase()}' has been deprecated! Please remove this item from the options file and/or follow migration guides: https://github.com/glenndehaan/unifi-voucher-site#migration-guide`);
         }
     });
 
@@ -91,6 +96,11 @@ module.exports = () => {
     if(variables.authOidcEnabled && (variables.authOidcIssuerBaseUrl === '' || variables.authOidcAppBaseUrl === '' || variables.authOidcClientId === '' || variables.authOidcClientSecret === '')) {
         log.error(`[OIDC] Incorrect Configuration Detected!. Verify 'AUTH_OIDC_ISSUER_BASE_URL', 'AUTH_OIDC_APP_BASE_URL', 'AUTH_OIDC_CLIENT_ID' and 'AUTH_OIDC_CLIENT_SECRET' are set! Authentication will be unstable or disabled until issue is resolved!`);
     }
+
+    /**
+     * Log translation status
+     */
+    log.info(`[Translation] Default Language: ${variables.translationDefault}${variables.translationDebug ? ', Debugger: Enabled' : ', Debugger: Disabled'}${variables.translationHiddenLanguages !== '' ? `, Hidden Languages: ${variables.translationHiddenLanguages}` : ''}`)
 
     /**
      * Log printer status

@@ -73,7 +73,7 @@
             <div class="p-4">
                 <% if(typeof voucherCode === 'undefined') { %>
                     <div class="block">
-                        <form id="locale-form" class="mb-6" action="<%= baseUrl %>/kiosk" method="get">
+                        <form id="locale-form" class="mb-6<%= Object.keys(languages).length < 2 ? ' hidden' : '' %>" action="<%= baseUrl %>/kiosk" method="get">
                             <label for="locale" class="block text-sm font-medium leading-6 text-gray-900 dark:text-white"><%= t('language') %></label>
                             <div class="mt-2">
                                 <select id="locale" name="locale" class="mt-2 block w-full rounded-md border-0 py-1.5 pl-3 pr-10 text-gray-900 dark:text-white dark:bg-white/5 ring-1 ring-inset ring-gray-300 dark:ring-white/10 focus:ring-2 focus:ring-sky-600 sm:text-sm sm:leading-6 **:text-black">

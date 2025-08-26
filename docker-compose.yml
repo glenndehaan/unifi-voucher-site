@@ -39,4 +39,8 @@ services:
       KIOSK_PRINTER: ''
       KIOSK_HOMEPAGE: 'false'
       LOG_LEVEL: 'info'
+      TRANSLATION_DEFAULT: 'en'
+      TRANSLATION_HIDDEN_LANGUAGES: ''
       TRANSLATION_DEBUG: 'false'
+      TASK_CLEANUP_EXPIRED: 'false'
+      TASK_CLEANUP_UNUSED: 'false'

@@ -48,7 +48,10 @@ module.exports = {
     kioskHomepage: config('kiosk_homepage') || (process.env.KIOSK_HOMEPAGE === 'true') || false,
     logLevel: config('log_level') || process.env.LOG_LEVEL || 'info',
     translationDefault: config('translation_default') || process.env.TRANSLATION_DEFAULT || 'en',
+    translationHiddenLanguages: config('translation_hidden_languages') || process.env.TRANSLATION_HIDDEN_LANGUAGES || '',
     translationDebug: config('translation_debug') || (process.env.TRANSLATION_DEBUG === 'true') || false,
+    taskCleanupExpired: config('task_cleanup_expired') || (process.env.TASK_CLEANUP_EXPIRED === 'true') || false,
+    taskCleanupUnused: config('task_cleanup_unused') || (process.env.TASK_CLEANUP_UNUSED === 'true') || false,
     gitTag: process.env.GIT_TAG || 'master',
     gitBuild: fs.existsSync('/etc/unifi_voucher_site_build') ? fs.readFileSync('/etc/unifi_voucher_site_build', 'utf-8') : 'Development'
 };

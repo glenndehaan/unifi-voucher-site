@@ -149,8 +149,14 @@ services:
       LOG_LEVEL: 'info'
       # Sets the default translation for dropdowns
       TRANSLATION_DEFAULT: 'en'
+      # Hides languages from the UI, example: en,nl,de
+      TRANSLATION_HIDDEN_LANGUAGES: ''
       # Enables/disables translation debugging, when enabled only translation keys are shown
       TRANSLATION_DEBUG: 'false'
+      # Enables/disables an automated task to clean up expired vouchers from UniFi
+      TASK_CLEANUP_EXPIRED: 'false'
+      # Enables/disables an automated task to clean up unused vouchers (Vouchers unused a day after creation) from UniFi
+      TASK_CLEANUP_UNUSED: 'false'
     # Optional volume mapping to override assets
     volumes:
       - ./branding:/kiosk
@@ -208,7 +214,10 @@ The structure of the file should use lowercase versions of the environment varia
   "kiosk_homepage": false,
   "log_level": "info",
   "translation_default": "en",
-  "translation_debug": false
+  "translation_hidden_languages": "",
+  "translation_debug": false,
+  "task_cleanup_expired": false,
+  "task_cleanup_unused": false
 }
 
 ```

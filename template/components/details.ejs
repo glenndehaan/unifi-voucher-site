@@ -43,6 +43,10 @@
                                                     <% } %>
                                                 </dd>
                                             </div>
+                                            <div class="py-2 grid grid-cols-3 gap-4 px-0">
+                                                <dt class="text-sm font-medium leading-6 text-gray-900 dark:text-white">Created</dt>
+                                                <dd class="text-sm leading-6 text-gray-600 dark:text-gray-400 col-span-2 mt-0 pointer-events-none no-underline text-inherit"><%= new Intl.DateTimeFormat('en-GB', {dateStyle: 'short', timeStyle: 'short', hour12: false}).format(new Date(voucher.createdAt)) %></dd>
+                                            </div>
                                             <% if(voucher.name && notesConvert(voucher.name).note) { %>
                                                 <div class="py-2 grid grid-cols-3 gap-4 px-0">
                                                     <dt class="text-sm font-medium leading-6 text-gray-900 dark:text-white">Notes</dt>
