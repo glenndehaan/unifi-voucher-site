@@ -1,0 +1,15 @@
+{
+  "title": "WiFi kód poukazu",
+  "connect": "Připojit k",
+  "password": "Heslo",
+  "or": "nebo",
+  "scan": "Skenovat připojení",
+  "details": "Podrobnosti slevového kupónu",
+  "type": "Typ",
+  "multiUse": "Víceúčelové",
+  "singleUse": "Jednoúčelové",
+  "duration": "Doba trvání",
+  "dataLimit": "Limit dat",
+  "downloadLimit": "Limit stahování",
+  "uploadLimit": "Limit nahrávání"
+}
