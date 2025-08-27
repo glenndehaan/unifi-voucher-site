@@ -6,8 +6,7 @@ services:
     environment:
       UNIFI_IP: '192.168.1.1'
       UNIFI_PORT: 443
-      UNIFI_USERNAME: 'admin'
-      UNIFI_PASSWORD: 'password'
+      UNIFI_TOKEN: ''
       UNIFI_SITE_ID: 'default'
       UNIFI_SSID: ''
       UNIFI_SSID_PASSWORD: ''
@@ -36,5 +35,10 @@ services:
       KIOSK_VOUCHER_TYPES: '480,1,,,;'
       KIOSK_NAME_REQUIRED: 'false'
       KIOSK_PRINTER: ''
+      KIOSK_HOMEPAGE: 'false'
       LOG_LEVEL: 'info'
+      TRANSLATION_DEFAULT: 'en'
+      TRANSLATION_HIDDEN_LANGUAGES: ''
       TRANSLATION_DEBUG: 'false'
+      TASK_CLEANUP_EXPIRED: 'false'
+      TASK_CLEANUP_UNUSED: 'false'

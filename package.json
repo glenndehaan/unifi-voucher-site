@@ -14,30 +14,24 @@
   },
   "author": "Glenn de Haan",
   "license": "MIT",
-  "overrides": {
-    "node-unifi@^2.5.1": {
-      "axios": "1.11.0",
-      "tough-cookie": "5.1.2"
-    }
-  },
   "dependencies": {
     "cookie-parser": "^1.4.7",
     "ejs": "^3.1.10",
     "express": "^5.1.0",
     "express-locale": "^2.0.2",
-    "express-openid-connect": "^2.18.1",
+    "express-openid-connect": "^2.19.2",
     "js-logger": "^1.6.1",
     "jsonwebtoken": "^9.0.2",
     "multer": "^2.0.2",
     "node-thermal-printer": "^4.5.0",
-    "node-unifi": "^2.5.1",
     "nodemailer": "^7.0.5",
     "pdfkit": "^0.17.1",
-    "qrcode": "^1.5.4"
+    "qrcode": "^1.5.4",
+    "undici": "^7.15.0"
   },
   "devDependencies": {
-    "@tailwindcss/cli": "^4.1.11",
+    "@tailwindcss/cli": "^4.1.12",
     "@tailwindcss/forms": "^0.5.10",
-    "tailwindcss": "^4.1.11"
+    "tailwindcss": "^4.1.12"
   }
 }

@@ -1,9 +1,12 @@
 /**
  * Internal application cache
  *
- * @type {{guests: *[], vouchers: *[], updated: number}}
+ * @type {{unifi: {siteUUID: null}, vouchers: *[], guests: *[], updated: number}}
  */
 module.exports = {
+    unifi: {
+        siteUUID: null
+    },
     vouchers: [],
     guests: [],
     updated: 0

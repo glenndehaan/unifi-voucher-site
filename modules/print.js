@@ -171,7 +171,7 @@ module.exports = {
                     });
                 doc.font('Roboto-Regular')
                     .fontSize(10)
-                    .text(vouchers[item].quota === 1 ? t('singleUse') : vouchers[item].quota === 0 ? t('multiUse') : t('multiUse'));
+                    .text(!vouchers[item].authorizedGuestLimit ? t('multiUse') : vouchers[item].authorizedGuestLimit === 1 ? t('singleUse') : t('multiUse'));
 
                 doc.font('Roboto-Bold')
                     .fontSize(10)
@@ -180,9 +180,9 @@ module.exports = {
                     });
                 doc.font('Roboto-Regular')
                     .fontSize(10)
-                    .text(time(vouchers[item].duration, language));
+                    .text(time(vouchers[item].timeLimitMinutes, language));
 
-                if (vouchers[item].qos_usage_quota) {
+                if (vouchers[item].dataUsageLimitMBytes) {
                     doc.font('Roboto-Bold')
                         .fontSize(10)
                         .text(`${t('dataLimit')}: `, {
@@ -190,10 +190,10 @@ module.exports = {
                         });
                     doc.font('Roboto-Regular')
                         .fontSize(10)
-                        .text(`${bytes(vouchers[item].qos_usage_quota, 2)}`);
+                        .text(`${bytes(vouchers[item].dataUsageLimitMBytes, 2)}`);
                 }
 
-                if (vouchers[item].qos_rate_max_down) {
+                if (vouchers[item].rxRateLimitKbps) {
                     doc.font('Roboto-Bold')
                         .fontSize(10)
                         .text(`${t('downloadLimit')}: `, {
@@ -201,10 +201,10 @@ module.exports = {
                         });
                     doc.font('Roboto-Regular')
                         .fontSize(10)
-                        .text(`${bytes(vouchers[item].qos_rate_max_down, 1, true)}`);
+                        .text(`${bytes(vouchers[item].rxRateLimitKbps, 1, true)}`);
                 }
 
-                if (vouchers[item].qos_rate_max_up) {
+                if (vouchers[item].txRateLimitKbps) {
                     doc.font('Roboto-Bold')
                         .fontSize(10)
                         .text(`${t('uploadLimit')}: `, {
@@ -212,7 +212,7 @@ module.exports = {
                         });
                     doc.font('Roboto-Regular')
                         .fontSize(10)
-                        .text(`${bytes(vouchers[item].qos_rate_max_up, 1, true)}`);
+                        .text(`${bytes(vouchers[item].txRateLimitKbps, 1, true)}`);
                 }
             }
 
@@ -303,40 +303,40 @@ module.exports = {
             printer.invert(true);
             printer.print(`${t('type')}:`);
             printer.invert(false);
-            printer.print(voucher.quota === 1 ? ` ${t('singleUse')}` : voucher.quota === 0 ? ` ${t('multiUse')}` : ` ${t('multiUse')}`);
+            printer.print(!voucher.authorizedGuestLimit ? ` ${t('multiUse')}` : voucher.authorizedGuestLimit === 1 ? ` ${t('singleUse')}` : ` ${t('multiUse')}`);
             printer.newLine();
 
             printer.setTextDoubleHeight();
             printer.invert(true);
             printer.print(`${t('duration')}:`);
             printer.invert(false);
-            printer.print(` ${time(voucher.duration, language)}`);
+            printer.print(` ${time(voucher.timeLimitMinutes, language)}`);
             printer.newLine();
 
-            if(voucher.qos_usage_quota) {
+            if(voucher.dataUsageLimitMBytes) {
                 printer.setTextDoubleHeight();
                 printer.invert(true);
                 printer.print(`${t('dataLimit')}:`);
                 printer.invert(false);
-                printer.print(` ${bytes(voucher.qos_usage_quota, 2)}`);
+                printer.print(` ${bytes(voucher.dataUsageLimitMBytes, 2)}`);
                 printer.newLine();
             }
 
-            if(voucher.qos_rate_max_down) {
+            if(voucher.rxRateLimitKbps) {
                 printer.setTextDoubleHeight();
                 printer.invert(true);
                 printer.print(`${t('downloadLimit')}:`);
                 printer.invert(false);
-                printer.print(` ${bytes(voucher.qos_rate_max_down, 1, true)}`);
+                printer.print(` ${bytes(voucher.rxRateLimitKbps, 1, true)}`);
                 printer.newLine();
             }
 
-            if(voucher.qos_rate_max_up) {
+            if(voucher.txRateLimitKbps) {
                 printer.setTextDoubleHeight();
                 printer.invert(true);
                 printer.print(`${t('uploadLimit')}:`);
                 printer.invert(false);
-                printer.print(` ${bytes(voucher.qos_rate_max_up, 1, true)}`);
+                printer.print(` ${bytes(voucher.txRateLimitKbps, 1, true)}`);
                 printer.newLine();
             }
 

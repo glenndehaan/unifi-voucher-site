@@ -7,6 +7,7 @@ const fs = require('fs');
  * Import own modules
  */
 const variables = require('./variables');
+const config = require('./config');
 const log = require('./log');
 
 /**
@@ -33,6 +34,10 @@ module.exports = () => {
     array.deprecated.forEach((item) => {
         if(typeof process.env[item] !== 'undefined') {
             log.warn(`[Deprecation] '${item}' has been deprecated! Please remove this item from the environment variables and/or follow migration guides: https://github.com/glenndehaan/unifi-voucher-site#migration-guide`);
+        }
+
+        if(config(item.toLowerCase()) !== null) {
+            log.warn(`[Deprecation] '${item.toLowerCase()}' has been deprecated! Please remove this item from the options file and/or follow migration guides: https://github.com/glenndehaan/unifi-voucher-site#migration-guide`);
         }
     });
 
@@ -93,6 +98,11 @@ module.exports = () => {
     }
 
     /**
+     * Log translation status
+     */
+    log.info(`[Translation] Default Language: ${variables.translationDefault}${variables.translationDebug ? ', Debugger: Enabled' : ', Debugger: Disabled'}${variables.translationHiddenLanguages !== '' ? `, Hidden Languages: ${variables.translationHiddenLanguages}` : ''}`)
+
+    /**
      * Log printer status
      */
     log.info(`[Printers] ${variables.printers !== '' ? `Enabled! Available: ${variables.printers.split(',').join(', ')}` : 'Disabled!'}`);
@@ -125,9 +135,15 @@ module.exports = () => {
     log.info(`[UniFi] Using Controller on: ${variables.unifiIp}:${variables.unifiPort} (Site ID: ${variables.unifiSiteId}${variables.unifiSsid !== '' ? `, SSID: ${variables.unifiSsid}` : ''})`);
 
     /**
-     * Check for valid UniFi username
+     * Check if UniFi Token is set
      */
-    if(variables.unifiUsername.includes('@')) {
-        log.error('[UniFi] Incorrect username detected! UniFi Cloud credentials are not supported!');
+    if(variables.unifiToken === '') {
+        log.error('[UniFi] Integration API Key is not set within UNIFI_TOKEN environment variable!');
+        process.exit(1);
     }
+
+    /**
+     * Temporary warning that guests lookup feature is unavailable
+     */
+    log.warn('[UniFi] Connected Guests features are temporary disabled in this version of UniFi Voucher Site (Not supported in current Integrations API). Please view and upvote: https://community.ui.com/questions/Feature-Request-Network-API-Guest-Access-Voucher-ID/d3c470e2-433d-4386-8a13-211712311202')
 };

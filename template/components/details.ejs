@@ -26,12 +26,12 @@
                                             <div class="py-2 grid grid-cols-3 gap-4 px-0">
                                                 <dt class="text-sm font-medium leading-6 text-gray-900 dark:text-white">Status</dt>
                                                 <dd class="text-sm leading-6 text-gray-600 dark:text-gray-400 col-span-2 mt-0">
-                                                    <% if (voucher.status === 'EXPIRED') { %>
+                                                    <% if (voucher.expired) { %>
                                                         <div class="rounded-full w-fit py-1 px-2 text-xs font-medium ring-1 ring-inset bg-red-50 text-red-800 ring-red-600/20 dark:text-red-400 dark:bg-red-400/10 dark:ring-red-400/20">
                                                             Expired
                                                         </div>
                                                     <% } else {%>
-                                                        <% if(voucher.used > 0) { %>
+                                                        <% if(voucher.authorizedGuestCount > 0) { %>
                                                             <div class="rounded-full w-fit py-1 px-2 text-xs font-medium ring-1 ring-inset bg-yellow-50 text-yellow-800 ring-yellow-600/20 dark:text-yellow-400 dark:bg-yellow-400/10 dark:ring-yellow-400/20">
                                                                 In Use
                                                             </div>
@@ -43,49 +43,53 @@
                                                     <% } %>
                                                 </dd>
                                             </div>
-                                            <% if(notesConvert(voucher.note).note) { %>
+                                            <div class="py-2 grid grid-cols-3 gap-4 px-0">
+                                                <dt class="text-sm font-medium leading-6 text-gray-900 dark:text-white">Created</dt>
+                                                <dd class="text-sm leading-6 text-gray-600 dark:text-gray-400 col-span-2 mt-0 pointer-events-none no-underline text-inherit"><%= new Intl.DateTimeFormat('en-GB', {dateStyle: 'short', timeStyle: 'short', hour12: false}).format(new Date(voucher.createdAt)) %></dd>
+                                            </div>
+                                            <% if(voucher.name && notesConvert(voucher.name).note) { %>
                                                 <div class="py-2 grid grid-cols-3 gap-4 px-0">
                                                     <dt class="text-sm font-medium leading-6 text-gray-900 dark:text-white">Notes</dt>
-                                                    <dd class="text-sm leading-6 text-gray-600 dark:text-gray-400 col-span-2 mt-0"><%= notesConvert(voucher.note).note %></dd>
+                                                    <dd class="text-sm leading-6 text-gray-600 dark:text-gray-400 col-span-2 mt-0"><%= notesConvert(voucher.name).note %></dd>
                                                 </div>
                                             <% } %>
-                                            <% if(notesConvert(voucher.note).source) { %>
+                                            <% if(voucher.name && notesConvert(voucher.name).source) { %>
                                                 <div class="py-2 grid grid-cols-3 gap-4 px-0">
                                                     <dt class="text-sm font-medium leading-6 text-gray-900 dark:text-white">Source</dt>
-                                                    <dd class="text-sm leading-6 text-gray-600 dark:text-gray-400 col-span-2 mt-0"><%= notesConvert(voucher.note).source %></dd>
+                                                    <dd class="text-sm leading-6 text-gray-600 dark:text-gray-400 col-span-2 mt-0"><%= notesConvert(voucher.name).source %></dd>
                                                 </div>
                                             <% } %>
-                                            <% if(notesConvert(voucher.note).auth_type) { %>
+                                            <% if(voucher.name && notesConvert(voucher.name).auth_type) { %>
                                                 <div class="py-2 grid grid-cols-3 gap-4 px-0">
                                                     <dt class="text-sm font-medium leading-6 text-gray-900 dark:text-white">Authentication</dt>
-                                                    <dd class="text-sm leading-6 text-gray-600 dark:text-gray-400 col-span-2 mt-0"><%= notesConvert(voucher.note).auth_type %></dd>
+                                                    <dd class="text-sm leading-6 text-gray-600 dark:text-gray-400 col-span-2 mt-0"><%= notesConvert(voucher.name).auth_type %></dd>
                                                 </div>
                                             <% } %>
-                                            <% if(notesConvert(voucher.note).auth_oidc_domain) { %>
+                                            <% if(voucher.name && notesConvert(voucher.name).auth_oidc_domain) { %>
                                                 <div class="py-2 grid grid-cols-3 gap-4 px-0">
                                                     <dt class="text-sm font-medium leading-6 text-gray-900 dark:text-white">OIDC Domain</dt>
-                                                    <dd class="text-sm leading-6 text-gray-600 dark:text-gray-400 col-span-2 mt-0"><%= notesConvert(voucher.note).auth_oidc_domain %></dd>
+                                                    <dd class="text-sm leading-6 text-gray-600 dark:text-gray-400 col-span-2 mt-0"><%= notesConvert(voucher.name).auth_oidc_domain %></dd>
                                                 </div>
                                             <% } %>
                                             <div class="py-2 grid grid-cols-3 gap-4 px-0">
                                                 <dt class="text-sm font-medium leading-6 text-gray-900 dark:text-white">Type</dt>
-                                                <dd class="text-sm leading-6 text-gray-600 dark:text-gray-400 col-span-2 mt-0"><%= voucher.quota === 1 ? 'Single-use' : voucher.quota === 0 ? 'Multi-use (Unlimited)' : `Multi-use (${voucher.quota}x)` %></dd>
+                                                <dd class="text-sm leading-6 text-gray-600 dark:text-gray-400 col-span-2 mt-0"><%= !voucher.authorizedGuestLimit ? 'Multi-use (Unlimited)' : voucher.authorizedGuestLimit === 1 ? 'Single-use' : `Multi-use (${voucher.authorizedGuestLimit}x)` %></dd>
                                             </div>
                                             <div class="py-2 grid grid-cols-3 gap-4 px-0">
                                                 <dt class="text-sm font-medium leading-6 text-gray-900 dark:text-white">Duration</dt>
-                                                <dd class="text-sm leading-6 text-gray-600 dark:text-gray-400 col-span-2 mt-0"><%= timeConvert(voucher.duration) %></dd>
+                                                <dd class="text-sm leading-6 text-gray-600 dark:text-gray-400 col-span-2 mt-0"><%= timeConvert(voucher.timeLimitMinutes) %></dd>
                                             </div>
                                             <div class="py-2 grid grid-cols-3 gap-4 px-0">
                                                 <dt class="text-sm font-medium leading-6 text-gray-900 dark:text-white">Data Limit</dt>
-                                                <dd class="text-sm leading-6 text-gray-600 dark:text-gray-400 col-span-2 mt-0"><%= voucher.qos_usage_quota ? bytesConvert(voucher.qos_usage_quota, 2) : 'Unlimited' %></dd>
+                                                <dd class="text-sm leading-6 text-gray-600 dark:text-gray-400 col-span-2 mt-0"><%= voucher.dataUsageLimitMBytes ? bytesConvert(voucher.dataUsageLimitMBytes, 2) : 'Unlimited' %></dd>
                                             </div>
                                             <div class="py-2 grid grid-cols-3 gap-4 px-0">
                                                 <dt class="text-sm font-medium leading-6 text-gray-900 dark:text-white">Download Limit</dt>
-                                                <dd class="text-sm leading-6 text-gray-600 dark:text-gray-400 col-span-2 mt-0"><%= voucher.qos_rate_max_down ? bytesConvert(voucher.qos_rate_max_down, 1, true) : 'Unlimited' %></dd>
+                                                <dd class="text-sm leading-6 text-gray-600 dark:text-gray-400 col-span-2 mt-0"><%= voucher.rxRateLimitKbps ? bytesConvert(voucher.rxRateLimitKbps, 1, true) : 'Unlimited' %></dd>
                                             </div>
                                             <div class="py-2 grid grid-cols-3 gap-4 px-0">
                                                 <dt class="text-sm font-medium leading-6 text-gray-900 dark:text-white">Upload Limit</dt>
-                                                <dd class="text-sm leading-6 text-gray-600 dark:text-gray-400 col-span-2 mt-0"><%= voucher.qos_rate_max_up ? bytesConvert(voucher.qos_rate_max_up, 1, true) : 'Unlimited' %></dd>
+                                                <dd class="text-sm leading-6 text-gray-600 dark:text-gray-400 col-span-2 mt-0"><%= voucher.txRateLimitKbps ? bytesConvert(voucher.txRateLimitKbps, 1, true) : 'Unlimited' %></dd>
                                             </div>
                                         </dl>
                                     </div>

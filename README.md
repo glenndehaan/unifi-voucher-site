@@ -6,7 +6,7 @@ UniFi Voucher Site is a web-based platform for generating and managing UniFi net
 
 ![Vouchers Overview - Desktop](.docs/images/desktop_1.png)
 
-> Upgrading from 6.x to 7.x? Please take a look at the [migration guide](#migration-from-6x-to-7x)
+> Upgrading from 7.x to 8.x? Please take a look at the [migration guide](#migration-from-7x-to-8x)
 
 ---
 
@@ -41,17 +41,16 @@ UniFi Voucher Site is a web-based platform for generating and managing UniFi net
 
 ## Prerequisites
 
-- UniFi Network Controller (Cloud Key, Dream Machine, or Controller software)
+- UniFi OS v4.2.8+
+- UniFi Network v9.1.119+ (Cloud Gateways, Cloud Key, or UniFi OS software)
 - UniFi Access Point (AP)
-- UniFi Local Account with 'Full Management' access
+- UniFi Integration API Key
+
+![UniFi Integration API Key](.docs/images/integrations_example.png)
 
 [Follow this guide to set up the Hotspot Portal](https://help.ui.com/hc/en-us/articles/115000166827-UniFi-Hotspot-Portal-and-Guest-WiFi), then continue with the installation below
 
 > Ensure voucher authentication is enabled within the Hotspot Portal
-
-> Attention!: We recommend only using Local UniFi accounts due to short token lengths provided by UniFi Cloud Accounts. Also, UniFi Cloud Accounts using 2FA are not supported!
-
-> Note: When creating a Local UniFi account ensure you give 'Full Management' access rights to the Network controller. The 'Hotspot Role' won't give access to the API and therefore the application will throw errors.
 
 ---
 
@@ -77,10 +76,8 @@ services:
       UNIFI_IP: '192.168.1.1'
       # The port of your UniFi OS Console, this could be 443 or 8443
       UNIFI_PORT: 443
-      # The username of a local UniFi OS account
-      UNIFI_USERNAME: 'admin'
-      # The password of a local UniFi OS account
-      UNIFI_PASSWORD: 'password'
+      # The API Key created on the integrations tab within UniFi OS
+      UNIFI_TOKEN: ''
       # The UniFi Site ID
       UNIFI_SITE_ID: 'default'
       # The UniFi SSID where guests need to connect to (Used within templating and 'Scan to Connect')
@@ -142,12 +139,20 @@ services:
       KIOSK_NAME_REQUIRED: 'false'
       # Enable/disable a printer for Kiosk Vouchers (this automatically prints vouchers), currently supported: escpos ip (Example: 192.168.1.10)
       KIOSK_PRINTER: ''
+      # Enable/disable an override to redirect to the Kiosk on the / url (Also enables a link from the Kiosk back to the Admin UI)
+      KIOSK_HOMEPAGE: 'false'
       # Sets the application Log Level (Valid Options: error|warn|info|debug|trace)
       LOG_LEVEL: 'info'
       # Sets the default translation for dropdowns
       TRANSLATION_DEFAULT: 'en'
+      # Hides languages from the UI, example: en,nl,de
+      TRANSLATION_HIDDEN_LANGUAGES: ''
       # Enables/disables translation debugging, when enabled only translation keys are shown
       TRANSLATION_DEBUG: 'false'
+      # Enables/disables an automated task to clean up expired vouchers from UniFi
+      TASK_CLEANUP_EXPIRED: 'false'
+      # Enables/disables an automated task to clean up unused vouchers (Vouchers unused a day after creation) from UniFi
+      TASK_CLEANUP_UNUSED: 'false'
     # Optional volume mapping to override assets
     volumes:
       - ./branding:/kiosk
@@ -171,8 +176,7 @@ The structure of the file should use lowercase versions of the environment varia
 {
   "unifi_ip": "192.168.1.1",
   "unifi_port": 443,
-  "unifi_username": "admin",
-  "unifi_password": "password",
+  "unifi_token": "",
   "unifi_site_id": "default",
   "unifi_ssid": "",
   "unifi_ssid_password": "",
@@ -201,9 +205,13 @@ The structure of the file should use lowercase versions of the environment varia
   "kiosk_voucher_types": "480,1,,,;",
   "kiosk_name_required": false,
   "kiosk_printer": "",
+  "kiosk_homepage": false,
   "log_level": "info",
   "translation_default": "en",
-  "translation_debug": false
+  "translation_hidden_languages": "",
+  "translation_debug": false,
+  "task_cleanup_expired": false,
+  "task_cleanup_unused": false
 }
 
 ```
@@ -714,6 +722,10 @@ KIOSK_VOUCHER_TYPES: '480,1,,,;'
       KIOSK_PRINTER=192.168.1.50
       ```
 
+- **`KIOSK_HOMEPAGE`**:
+    - Set to `'true'` to redirect from `/` to `/kiosk` (Instead of the Admin UI).
+    - Set to `'false'` to disable the redirect functionality.
+
 ### Custom Branding (Logo and Background)
 
 You can customize the appearance of the kiosk page by providing your own `logo.png` and `bg.jpg` images.
@@ -823,6 +835,41 @@ Detailed information on the changes in each release can be found on the [GitHub 
 ---
 
 ## Migration Guide
+
+### Migration from 7.x to 8.x
+
+> **Warning!** This release is only compatible with:
+> - UniFi OS v4.2.8+
+> - UniFi Network v9.1.119+ (Cloud Gateways, Cloud Key, or UniFi OS software)
+
+> **This release requires the setup of a UniFi OS Integration API Key**
+
+> **Note**: This release breaks the Connected Guests feature due to a limitation within the UniFi Integration API. Please check and upvote this issue: https://community.ui.com/questions/Feature-Request-Network-API-Guest-Access-Voucher-ID/d3c470e2-433d-4386-8a13-211712311202
+
+When upgrading from 7.x to 8.x, the following changes need to be made:
+
+1. **UniFi Authentication Changes**
+
+    * The environment variables **`UNIFI_USERNAME`** and **`UNIFI_PASSWORD`** have been **removed** in 8.x.
+    * Authentication is now handled via a single **API token**.
+
+   **Before (7.x):**
+
+   ```env
+   UNIFI_USERNAME='admin'
+   UNIFI_PASSWORD='supersecret'
+   ```
+
+   **After (8.x):**
+
+   ```env
+   UNIFI_TOKEN='your-unifi-api-token'
+   ```
+
+    * Generate a new Integration API key within your UniFi Controller’s settings.
+    * Update your environment configuration to use `UNIFI_TOKEN` and remove the old `UNIFI_USERNAME` and `UNIFI_PASSWORD` variables.
+
+   ![UniFi Integration API Key](.docs/images/integrations_example.png)
 
 ### Migration from 6.x to 7.x
 

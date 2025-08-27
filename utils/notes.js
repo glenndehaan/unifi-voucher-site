@@ -5,7 +5,7 @@
  * @returns {*}
  */
 module.exports = (string) => {
-    if(string === null) {
+    if(string === null || typeof string === 'undefined') {
         return {
             note: null,
             source: null,
