@@ -145,5 +145,5 @@ module.exports = () => {
     /**
      * Temporary warning that guests lookup feature is unavailable
      */
-    log.warn('[UniFi] Guests features are temporary disabled in this version of UniFi Voucher Site (Not supported in current Integrations API). Please view and upvote: https://community.ui.com/questions/Feature-Request-Network-API-Guest-Access-Voucher-ID/d3c470e2-433d-4386-8a13-211712311202')
+    log.warn('[UniFi] Connected Guests features are temporary disabled in this version of UniFi Voucher Site (Not supported in current Integrations API). Please view and upvote: https://community.ui.com/questions/Feature-Request-Network-API-Guest-Access-Voucher-ID/d3c470e2-433d-4386-8a13-211712311202')
 };

@@ -6,7 +6,7 @@ UniFi Voucher Site is a web-based platform for generating and managing UniFi net
 
 ![Vouchers Overview - Desktop](.docs/images/desktop_1.png)
 
-> Upgrading from 6.x to 7.x? Please take a look at the [migration guide](#migration-from-6x-to-7x)
+> Upgrading from 7.x to 8.x? Please take a look at the [migration guide](#migration-from-7x-to-8x)
 
 ---
 
@@ -42,11 +42,11 @@ UniFi Voucher Site is a web-based platform for generating and managing UniFi net
 ## Prerequisites
 
 - UniFi OS v4.2.8+
-- UniFi Network v9.1.119+ (Cloud Key, Dream Machine, or UniFi OS software)
+- UniFi Network v9.1.119+ (Cloud Gateways, Cloud Key, or UniFi OS software)
 - UniFi Access Point (AP)
-- UniFi Integrations API Key
+- UniFi Integration API Key
 
-![UniFi Integrations API Key](.docs/images/integrations_example.png)
+![UniFi Integration API Key](.docs/images/integrations_example.png)
 
 [Follow this guide to set up the Hotspot Portal](https://help.ui.com/hc/en-us/articles/115000166827-UniFi-Hotspot-Portal-and-Guest-WiFi), then continue with the installation below
 
@@ -835,6 +835,41 @@ Detailed information on the changes in each release can be found on the [GitHub 
 ---
 
 ## Migration Guide
+
+### Migration from 7.x to 8.x
+
+> **Warning!** This release is only compatible with:
+> - UniFi OS v4.2.8+
+> - UniFi Network v9.1.119+ (Cloud Gateways, Cloud Key, or UniFi OS software)
+
+> **This release requires the setup of a UniFi OS Integration API Key**
+
+> **Note**: This release breaks the Connected Guests feature due to a limitation within the UniFi Integration API. Please check and upvote this issue: https://community.ui.com/questions/Feature-Request-Network-API-Guest-Access-Voucher-ID/d3c470e2-433d-4386-8a13-211712311202
+
+When upgrading from 7.x to 8.x, the following changes need to be made:
+
+1. **UniFi Authentication Changes**
+
+    * The environment variables **`UNIFI_USERNAME`** and **`UNIFI_PASSWORD`** have been **removed** in 8.x.
+    * Authentication is now handled via a single **API token**.
+
+   **Before (7.x):**
+
+   ```env
+   UNIFI_USERNAME='admin'
+   UNIFI_PASSWORD='supersecret'
+   ```
+
+   **After (8.x):**
+
+   ```env
+   UNIFI_TOKEN='your-unifi-api-token'
+   ```
+
+    * Generate a new Integration API key within your UniFi Controller’s settings.
+    * Update your environment configuration to use `UNIFI_TOKEN` and remove the old `UNIFI_USERNAME` and `UNIFI_PASSWORD` variables.
+
+   ![UniFi Integration API Key](.docs/images/integrations_example.png)
 
 ### Migration from 6.x to 7.x
 
