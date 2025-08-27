@@ -25,6 +25,7 @@ const filterLanguages = (languages) => {
 module.exports = filterLanguages({
     en: '🇺🇸 English',
     br: '🇧🇷 Brazilian, Portuguese',
+    cs: '🇨🇿 Czech',
     da: '🇩🇰 Danish',
     de: '🇩🇪 German',
     es: '🇪🇸 Spanish',
