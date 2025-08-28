@@ -86,7 +86,7 @@ module.exports = {
                         baseUrl: req.headers['x-ingress-path'] ? req.headers['x-ingress-path'] : '',
                         error: req.flashMessage.type === 'error',
                         error_text: req.flashMessage.message || '',
-                        email_enabled: variables.smtpFrom !== '' && variables.smtpHost !== '' && variables.smtpPort !== '',
+                        email_enabled: variables.kioskEmail && variables.smtpFrom !== '' && variables.smtpHost !== '' && variables.smtpPort !== '',
                         unifiSsid: variables.unifiSsid,
                         unifiSsidPassword: variables.unifiSsidPassword,
                         qr: await qr(),
@@ -142,10 +142,12 @@ module.exports = {
                     }
 
                     // Auto print voucher if enabled
-                    await print.escpos(voucherData, req.locale.language, variables.kioskPrinter).catch((e) => {
-                        log.error(`[Kiosk] Unable to auto-print voucher on printer: ${variables.kioskPrinter}!`);
-                        log.error(e);
-                    });
+                    if(variables.kioskPrinter !== '') {
+                        await print.escpos(voucherData, req.locale.language, variables.kioskPrinter).catch((e) => {
+                            log.error(`[Kiosk] Unable to auto-print voucher on printer: ${variables.kioskPrinter}!`);
+                            log.error(e);
+                        });
+                    }
 
                     res.render('kiosk', {
                         t: translation('kiosk', req.locale.language),
@@ -154,7 +156,7 @@ module.exports = {
                         baseUrl: req.headers['x-ingress-path'] ? req.headers['x-ingress-path'] : '',
                         error: req.flashMessage.type === 'error',
                         error_text: req.flashMessage.message || '',
-                        email_enabled: variables.smtpFrom !== '' && variables.smtpHost !== '' && variables.smtpPort !== '',
+                        email_enabled: variables.kioskEmail && variables.smtpFrom !== '' && variables.smtpHost !== '' && variables.smtpPort !== '',
                         unifiSsid: variables.unifiSsid,
                         unifiSsidPassword: variables.unifiSsidPassword,
                         qr: await qr(),

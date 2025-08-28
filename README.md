@@ -39,6 +39,17 @@ UniFi Voucher Site is a web-based platform for generating and managing UniFi net
 
 ---
 
+## Version Compatibility
+
+| UniFi Voucher Site                                                                       | Cloud Gateways | Cloud Key | UniFi Network Server | UniFi OS Server | UniFi OS | UniFi Network |
+|------------------------------------------------------------------------------------------|----------------|-----------|----------------------|-----------------|----------|---------------|
+| ≥ 8.x                                                                                    | ✔️             | ✔️        | ✖️                   | ✔️              | v4.2.8+  | v9.1.119+     |
+| [≤ 7.x](https://github.com/glenndehaan/unifi-voucher-site/tree/7.2.2#unifi-voucher-site) | ✔️             | ✔️        | ✔️                   | ✔️              | -        | v5.4.9+       |
+
+> **Note**: Running the Legacy UniFi Network Server but want to upgrade to 8.x? Follow the official guide to migrate to UniFi OS Server: https://help.ui.com/hc/en-us/articles/34210126298775-Self-Hosting-UniFi
+
+---
+
 ## Prerequisites
 
 - UniFi OS v4.2.8+
@@ -137,6 +148,8 @@ services:
       KIOSK_VOUCHER_TYPES: '480,1,,,;'
       # Enable/disable the requirement for a guest to enter their name before generating a voucher
       KIOSK_NAME_REQUIRED: 'false'
+      # Enable/disable the email voucher button (Requires SMTP to be setup)
+      KIOSK_EMAIL: 'false'
       # Enable/disable a printer for Kiosk Vouchers (this automatically prints vouchers), currently supported: escpos ip (Example: 192.168.1.10)
       KIOSK_PRINTER: ''
       # Enable/disable an override to redirect to the Kiosk on the / url (Also enables a link from the Kiosk back to the Admin UI)
@@ -204,6 +217,7 @@ The structure of the file should use lowercase versions of the environment varia
   "kiosk_enabled": false,
   "kiosk_voucher_types": "480,1,,,;",
   "kiosk_name_required": false,
+  "kiosk_email": false,
   "kiosk_printer": "",
   "kiosk_homepage": false,
   "log_level": "info",
@@ -711,6 +725,12 @@ KIOSK_VOUCHER_TYPES: '480,1,,,;'
 - **`KIOSK_NAME_REQUIRED`**:
     - Set to `'true'` to enable the requirement for a guest to enter their name before generating a voucher.
     - Set to `'false'` to disable to allow generation of vouchers without a name.
+
+- **`KIOSK_EMAIL`**:
+    - Set to `'true'` to enable the email voucher form.
+    - Set to `'false'` to disable hide the email voucher form.
+
+> **Note**: SMTP needs to be setup before the email form is shown!
 
 * **`KIOSK_PRINTER`**:
 

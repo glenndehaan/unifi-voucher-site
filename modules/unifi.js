@@ -93,7 +93,7 @@ module.exports = {
             fetch('/hotspot/vouchers', 'GET', {
                 limit: 10000
             }).then((vouchers) => {
-                log.info(`[UniFi] Found ${vouchers.length} voucher(s)`);
+                log.debug(`[UniFi] Found ${vouchers.length} voucher(s)`);
                 resolve(vouchers.sort((a, b) => {
                     if (a.createdAt > b.createdAt) return -1;
                     if (a.createdAt < b.createdAt) return 1;
@@ -118,7 +118,7 @@ module.exports = {
             //     limit: 10000
             // }).then((clients) => {
             //     console.log(clients);
-            //     log.info(`[UniFi] Found ${clients.length} guest(s)`);
+            //     log.debug(`[UniFi] Found ${clients.length} guest(s)`);
             // }).catch((e) => {
             //     log.error('[UniFi] Error while getting guests!');
             //     log.debug(e);
