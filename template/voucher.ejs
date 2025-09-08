@@ -508,18 +508,22 @@
                 spinnerCreate.style.display = '';
             });
             shareButtons.forEach((el) => {
-                el.addEventListener('click', async () => {
-                    try {
-                        await navigator.clipboard.writeText(el.dataset.code);
-                        copyNotification.style.display = '';
+                if(typeof navigator.clipboard !== 'undefined') {
+                    el.addEventListener('click', async () => {
+                        try {
+                            await navigator.clipboard.writeText(el.dataset.code);
+                            copyNotification.style.display = '';
 
-                        setTimeout(() => {
-                            copyNotification.style.display = 'none';
-                        }, 5000);
-                    } catch (error) {
-                        console.error(error.message);
-                    }
-                });
+                            setTimeout(() => {
+                                copyNotification.style.display = 'none';
+                            }, 5000);
+                        } catch (error) {
+                            console.error(error.message);
+                        }
+                    });
+                } else {
+                    el.classList.add('hidden');
+                }
             });
             removeButtons.forEach((el) => {
                 el.addEventListener('click', async () => {
