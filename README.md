@@ -148,12 +148,14 @@ services:
       KIOSK_VOUCHER_TYPES: '480,1,,,;'
       # Enable/disable the requirement for a guest to enter their name before generating a voucher
       KIOSK_NAME_REQUIRED: 'false'
+      # Sets the Kiosk timeout in seconds (Returns the user back to the starting page after inactivity)
+      KIOSK_TIMEOUT: '60'
+      # Enable/disable an override to redirect to the Kiosk on the / url (Also enables a link from the Kiosk back to the Admin UI)
+      KIOSK_HOMEPAGE: 'false'
       # Enable/disable the email voucher button (Requires SMTP to be setup)
       KIOSK_EMAIL: 'false'
       # Enable/disable a printer for Kiosk Vouchers (this automatically prints vouchers), currently supported: escpos ip (Example: 192.168.1.10)
       KIOSK_PRINTER: ''
-      # Enable/disable an override to redirect to the Kiosk on the / url (Also enables a link from the Kiosk back to the Admin UI)
-      KIOSK_HOMEPAGE: 'false'
       # Sets the application Log Level (Valid Options: error|warn|info|debug|trace)
       LOG_LEVEL: 'info'
       # Sets the default translation for dropdowns
@@ -217,9 +219,10 @@ The structure of the file should use lowercase versions of the environment varia
   "kiosk_enabled": false,
   "kiosk_voucher_types": "480,1,,,;",
   "kiosk_name_required": false,
+  "kiosk_timeout": 60,
+  "kiosk_homepage": false,
   "kiosk_email": false,
   "kiosk_printer": "",
-  "kiosk_homepage": false,
   "log_level": "info",
   "translation_default": "en",
   "translation_hidden_languages": "",
@@ -726,6 +729,12 @@ KIOSK_VOUCHER_TYPES: '480,1,,,;'
     - Set to `'true'` to enable the requirement for a guest to enter their name before generating a voucher.
     - Set to `'false'` to disable to allow generation of vouchers without a name.
 
+- **`KIOSK_TIMEOUT`**: Defines the timeout timer for inactivity. The format is in seconds.
+
+- **`KIOSK_HOMEPAGE`**:
+    - Set to `'true'` to redirect from `/` to `/kiosk` (Instead of the Admin UI).
+    - Set to `'false'` to disable the redirect functionality.
+
 - **`KIOSK_EMAIL`**:
     - Set to `'true'` to enable the email voucher form.
     - Set to `'false'` to disable hide the email voucher form.
@@ -741,10 +750,6 @@ KIOSK_VOUCHER_TYPES: '480,1,,,;'
       ```text
       KIOSK_PRINTER=192.168.1.50
       ```
-
-- **`KIOSK_HOMEPAGE`**:
-    - Set to `'true'` to redirect from `/` to `/kiosk` (Instead of the Admin UI).
-    - Set to `'false'` to disable the redirect functionality.
 
 ### Custom Branding (Logo and Background)
 

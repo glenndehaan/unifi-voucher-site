@@ -59,8 +59,3 @@
     from { transform: translateX(-100%); }
     to { transform: translateX(0); }
 }
-
-.animate-countdown {
-    animation: countdown 60s linear forwards;
-    will-change: transform;
-}

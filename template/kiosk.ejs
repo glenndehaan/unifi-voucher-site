@@ -23,9 +23,18 @@
         <meta name="apple-mobile-web-app-capable" content="yes">
         <meta name="theme-color" content="#139CDA">
 
-        <link rel="preload" href="<%= baseUrl %>/images/logo.png" as="image">
+        <link rel="preload" href="<%= baseUrl %>/images/kiosk/logo.png" as="image">
+        <link rel="preload" href="<%= baseUrl %>/images/kiosk/bg.jpg" as="image">
         <link rel="preload" href="<%= baseUrl %>/dist/style.css" as="style">
         <link href="<%= baseUrl %>/dist/style.css" rel="stylesheet">
+        <% if(typeof voucherCode !== 'undefined') { %>
+            <style>
+                .animate-countdown {
+                    animation: countdown <%= timeout %>s linear forwards;
+                    will-change: transform;
+                }
+            </style>
+        <% } %>
     </head>
     <body class="min-h-screen flex flex-col items-center justify-center p-4">
         <% if(typeof voucherCode !== 'undefined') { %>
@@ -249,7 +258,7 @@
                 void timerBar.offsetWidth;
                 timerBar.classList.add('animate-countdown');
 
-                let timeLeft = 60;
+                let timeLeft = parseInt('<%= timeout %>');
                 setInterval(() => {
                     timeLeft--;
 
