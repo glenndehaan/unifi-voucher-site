@@ -34,5 +34,6 @@ module.exports = filterLanguages({
     nl: '🇳🇱 Dutch',
     pl: '🇵🇱 Polish',
     pt: '🇵🇹 Portuguese',
-    ru: '🇷🇺 Russian'
+    ru: '🇷🇺 Russian',
+    sr: '🇷🇸 Serbian'
 });
