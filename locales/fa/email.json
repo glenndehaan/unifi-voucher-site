@@ -1,0 +1,19 @@
+{
+  "title": "WiFi Voucher Code",
+  "preHeader": "Your WiFi Voucher Code",
+  "greeting": "Hi there",
+  "intro": "Someone generated a WiFi Voucher, please use this code when connecting",
+  "connect": "Connect to",
+  "password": "Password",
+  "or": "or",
+  "scan": "Scan to connect",
+  "details": "Voucher Details",
+  "type": "Type",
+  "multiUse": "Multi-use",
+  "singleUse": "Single-use",
+  "duration": "Duration",
+  "dataLimit": "Data Limit",
+  "downloadLimit": "Download Limit",
+  "uploadLimit": "Upload Limit",
+  "poweredBy": "Powered by"
+}
