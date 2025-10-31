@@ -19,6 +19,12 @@ module.exports = {
                 return;
             }
 
+            // Check if OIDC redirects are enabled
+            if (variables.authOidcEnabled && variables.authOidcRedirectLogin) {
+                res.redirect(302, `${req.headers['x-ingress-path'] ? req.headers['x-ingress-path'] : ''}/oidc/login`);
+                return;
+            }
+
             const hour = new Date().getHours();
             const timeHeader = hour < 12 ? 'Good Morning' : hour < 18 ? 'Good Afternoon' : 'Good Evening';
 

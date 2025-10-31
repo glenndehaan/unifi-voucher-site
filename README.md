@@ -111,6 +111,8 @@ services:
       AUTH_OIDC_CLIENT_ID: ''
       # OIDC client secret provided by oauth provider
       AUTH_OIDC_CLIENT_SECRET: ''
+      # Skips the internal login page, and redirects to the OIDC auth flow
+      AUTH_OIDC_REDIRECT_LOGIN: 'false'
       # In environments with multiple organizations sharing a single UniFi Controller instance, it may be desirable to limit users to only manage vouchers associated with their own organization.
       # This restriction is based on the domain (including subdomains and TLDs) of the users email address.
       AUTH_OIDC_RESTRICT_VISIBILITY: 'false'
@@ -203,6 +205,7 @@ The structure of the file should use lowercase versions of the environment varia
   "auth_oidc_app_base_url": "",
   "auth_oidc_client_id": "",
   "auth_oidc_client_secret": "",
+  "auth_oidc_redirect_login": false,
   "auth_oidc_restrict_visibility": false,
   "auth_disable": false,
   "voucher_types": "480,1,,,;",
@@ -523,6 +526,10 @@ To enable OIDC authentication, set the following environment variables in your a
 > Ensure your idP supports **Confidential Clients** with the **Authorization Code Flow**
 
 #### Optional Configuration
+
+* **`AUTH_OIDC_REDIRECT_LOGIN`**:
+  When enabled (`true`), the built-in login page is skipped entirely, and users are redirected to the OIDC auth flow.
+  **Default:** `false`
 
 * **`AUTH_OIDC_RESTRICT_VISIBILITY`**:
   Restricts user access to only vouchers created within their own organization.
