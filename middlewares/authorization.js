@@ -51,6 +51,15 @@ module.exports = {
         // Check if OIDC is enabled then verify user status
         if(variables.authOidcEnabled) {
             oidc = req.oidc.isAuthenticated();
+
+            // Retrieve user info/verify user session is still valid
+            req.user = await req.oidc.fetchUserInfo().catch(() => {
+                res.redirect(302, `${req.headers['x-ingress-path'] ? req.headers['x-ingress-path'] : ''}/login`);
+            });
+
+            if(!req.user) {
+                return;
+            }
         }
 
         // Check if user is authorized by a service

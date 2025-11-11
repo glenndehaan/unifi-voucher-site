@@ -59,7 +59,7 @@ module.exports = {
             return;
         }
 
-        const user = req.oidc ? await req.oidc.fetchUserInfo() : { email: 'admin' };
+        const user = req.oidc ? req.user : { email: 'admin' };
 
         res.render('voucher', {
             baseUrl: req.headers['x-ingress-path'] ? req.headers['x-ingress-path'] : '',

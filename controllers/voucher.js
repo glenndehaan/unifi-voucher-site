@@ -77,7 +77,7 @@ module.exports = {
                 return;
             }
 
-            const user = req.oidc ? await req.oidc.fetchUserInfo() : { email: null };
+            const user = req.oidc ? req.user : { email: null };
             const voucherNote = `${req.body['voucher-note'] !== '' ? req.body['voucher-note'] : ''}||;;||web||;;||${req.oidc ? 'oidc' : 'local'}||;;||${req.oidc ? user.email.split('@')[1].toLowerCase() : ''}`;
 
             // Create voucher code

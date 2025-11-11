@@ -21,7 +21,7 @@ module.exports = {
      * @param res
      */
     get: async (req, res) => {
-        const user = req.oidc ? await req.oidc.fetchUserInfo() : { email: 'admin' };
+        const user = req.oidc ? req.user : { email: 'admin' };
 
         res.render('status', {
             baseUrl: req.headers['x-ingress-path'] ? req.headers['x-ingress-path'] : '',
