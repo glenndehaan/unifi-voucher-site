@@ -248,7 +248,7 @@ module.exports = {
             printer.setTypeFontB();
             printer.alignCenter();
             printer.newLine();
-            await printer.printImage(`${process.cwd()}/public/images/logo_grayscale_dark.png`);
+            await printer.printImage(`${process.cwd()}/public/images/logo_bivid.png`);
             printer.newLine();
 
             printer.alignCenter();
