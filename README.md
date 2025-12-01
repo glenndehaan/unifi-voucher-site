@@ -253,6 +253,66 @@ services:
 
 > If both environment variables and `options.json` are provided, values from `options.json` will take precedence.
 
+### Using your own image from GitHub Container Registry (GHCR)
+
+If you publish a customized image to GHCR, Docker can pull it the same way it pulls from Docker Hub as long as you point to the `ghcr.io` registry and authenticate:
+
+1. Create a Personal Access Token (classic) with the `write:packages` scope for pushing and `read:packages` for pulling.
+2. Authenticate from the machine that will run Docker:
+
+```bash
+echo "$GHCR_TOKEN" | docker login ghcr.io -u <your_github_username> --password-stdin
+```
+
+3. Pull or run your image using the `ghcr.io/<owner>/<repo>:<tag>` reference. For example, if you published `ghcr.io/tuusuario/unifi-voucher-site:personalizado`:
+
+```bash
+docker pull ghcr.io/tuusuario/unifi-voucher-site:personalizado
+docker run --rm -p 3000:3000 ghcr.io/tuusuario/unifi-voucher-site:personalizado
+```
+
+#### Publishing from GitHub Actions
+
+Add a workflow (for example, `.github/workflows/build-and-push-ghcr.yml`) that logs in to GHCR, builds the Docker image from your fork, and pushes it. Set a repository secret `GHCR_TOKEN` with a PAT that has `write:packages` and `read:packages` scopes.
+
+```yaml
+name: Build and push to GHCR
+
+on:
+  push:
+    branches:
+      - main
+      - master
+
+jobs:
+  build-and-push:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Log in to GHCR
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GHCR_TOKEN }}
+
+      - name: Build and push
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          push: true
+          tags: |
+            ghcr.io/${{ github.repository }}:latest
+            ghcr.io/${{ github.repository }}:${{ github.sha }}
+```
+
+> Tip: replace `latest` with a custom tag (e.g., `personalizado`) if you want a dedicated image name for your fork. Update your `docker-compose.yml` to reference the GHCR image you pushed.
+
 ### Home Assistant Add-on
 
 For users of Home Assistant, we provide a dedicated add-on to seamlessly integrate the UniFi Voucher Site with your Home Assistant instance. This add-on simplifies the setup process and allows you to manage UniFi vouchers directly from your Home Assistant dashboard.

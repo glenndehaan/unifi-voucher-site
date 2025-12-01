@@ -31,6 +31,7 @@ const authentication = require('./controllers/authentication');
 const bulk = require('./controllers/bulk');
 const error = require('./controllers/error');
 const kiosk = require('./controllers/kiosk');
+const quickprint = require('./controllers/quickprint');
 const status = require('./controllers/status');
 const voucher = require('./controllers/voucher');
 const vouchers = require('./controllers/vouchers');
@@ -165,6 +166,9 @@ if(variables.serviceWeb) {
     app.post('/voucher/:id/print', [authorization.web], voucher.print.post);
     app.get('/voucher/:id/email', [authorization.web], voucher.email.get);
     app.post('/voucher/:id/email', [authorization.web], voucher.email.post);
+
+    app.get('/quick-print', [authorization.web], quickprint.get);
+    app.post('/quick-print', [authorization.web], quickprint.post);
 
     app.get('/vouchers', [authorization.web], vouchers.get);
     app.get('/voucher/:id', [authorization.web], voucher.voucher.get);
