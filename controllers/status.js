@@ -28,6 +28,7 @@ module.exports = {
             gitTag: variables.gitTag,
             gitBuild: variables.gitBuild,
             kioskEnabled: variables.kioskEnabled,
+            quickPrintEnabled: variables.printers !== '',
             user: user,
             userIcon: req.oidc ? crypto.createHash('sha256').update(user.email).digest('hex') : '',
             authDisabled: variables.authDisabled,
