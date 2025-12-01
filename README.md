@@ -820,7 +820,7 @@ KIOSK_VOUCHER_TYPES: '480,1,,,;'
 
 ### Custom Branding (Logo and Background)
 
-You can customize the appearance of the kiosk page by providing your own `logo.png` and `bg.jpg` images.
+You can customize the appearance of the kiosk page by providing your own `logo.png` and `bg.jpg` images. You can also override the printed voucher logo (PDF y ESC/POS) with `print_logo.png`.
 
 To do this, use Docker volume mappings to mount your custom assets to the `/kiosk` directory inside the container. The application will use these files (if present) instead of the default ones.
 
@@ -831,7 +831,8 @@ Suppose you have your custom images in a local directory called `branding/`:
 ```
 branding/
 ├── logo.png
-└── bg.jpg
+├── bg.jpg
+└── print_logo.png
 ```
 
 You can configure this using Docker Compose:
@@ -849,7 +850,7 @@ services:
       - ./branding:/kiosk
 ```
 
-> **Note:** Ensure `logo.png` and `bg.jpg` are valid image files. Both are optional — only override the ones you want to customize.
+> **Note:** Ensure `logo.png`, `bg.jpg`, and (if used) `print_logo.png` are valid image files. All are optional — only override the ones you want to customize.
 
 ### Usage
 
