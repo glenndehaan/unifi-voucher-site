@@ -266,8 +266,8 @@ module.exports = {
                 if(variables.unifiSsidPassword) {
                     //printer.print(',');
                     printer.newLine();
-                    printer.setTextNormal();
                     printer.alignLeft();
+                    printer.setTextNormal();
                     printer.print(`${t('password')}: `);
                     printer.setTypeFontB();
                     printer.setTextSize(1, 1);
@@ -305,9 +305,9 @@ module.exports = {
             printer.newLine();
             
             printer.alignLeft();
+            printer.drawLine();
             printer.setTypeFontB();
             printer.setTextSize(1, 1);
-            printer.drawLine();
             printer.println(`${t('details')}`);
             printer.setTextNormal();
             printer.drawLine();
