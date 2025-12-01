@@ -258,14 +258,16 @@ module.exports = {
 
                 printer.alignLeft();
                 printer.setTextNormal();
-                printer.print(`${t('connect')}: `);
+                printer.print(`${t('connect')}: `); //Conectar a:
                 printer.setTypeFontB();
                 printer.setTextSize(1, 1);
                 printer.print(variables.unifiSsid);
-                printer.setTextNormal();
+                
                 if(variables.unifiSsidPassword) {
-                    printer.print(',');
+                    //printer.print(',');
                     printer.newLine();
+                    printer.setTextNormal();
+                    printer.alignLeft();
                     printer.print(`${t('password')}: `);
                     printer.setTypeFontB();
                     printer.setTextSize(1, 1);
@@ -273,9 +275,12 @@ module.exports = {
                     printer.setTextNormal();
                     printer.alignCenter();
                     printer.newLine();
+                    printer.newLine();
                     printer.print(` ${t('or')},`);
                     printer.newLine();
                 } else {
+                    printer.newLine();
+                    printer.newLine();
                     printer.print(` ${t('or')},`);
                     printer.newLine();
                 }
@@ -292,7 +297,7 @@ module.exports = {
             printer.newLine();
             printer.setTextSize(2, 2);
             printer.println(`${t('title')}`);
-            printer.setTextSize(3, 3);
+            printer.setTextSize(4, 4);
             printer.println(`${voucher.code.slice(0, 5)}-${voucher.code.slice(5)}`);
             printer.setTextNormal();
 
@@ -302,6 +307,7 @@ module.exports = {
             printer.alignLeft();
             printer.setTypeFontB();
             printer.setTextSize(1, 1);
+            printer.drawLine();
             printer.println(`${t('details')}`);
             printer.setTextNormal();
             printer.drawLine();
