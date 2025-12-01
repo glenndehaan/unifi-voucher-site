@@ -282,6 +282,8 @@ module.exports = {
                 printer.setTypeFontB();
                 printer.setTextSize(1, 1);
                 printer.print(variables.unifiSsid);
+                printer.setTextNormal();
+
                 
                 if(variables.unifiSsidPassword) {
                     //printer.print(',');
@@ -304,6 +306,8 @@ module.exports = {
                     printer.print(` ${t('or')},`);
                     printer.newLine();
                 }
+
+                printer.alignLeft();
                 printer.println(`${t('scan')}:`);
                 printer.alignCenter();
                 await printer.printImageBuffer(await qr(true));
