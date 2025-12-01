@@ -52,13 +52,16 @@ module.exports = {
         if(variables.authOidcEnabled) {
             oidc = req.oidc.isAuthenticated();
 
-            // Retrieve user info/verify user session is still valid
-            req.user = await req.oidc.fetchUserInfo().catch(() => {
-                res.redirect(302, `${req.headers['x-ingress-path'] ? req.headers['x-ingress-path'] : ''}/login`);
-            });
+            // Check if OIDC is used to authenticate
+            if(oidc) {
+                // Retrieve user info/verify user session is still valid
+                req.user = await req.oidc.fetchUserInfo().catch(() => {
+                    res.redirect(302, `${req.headers['x-ingress-path'] ? req.headers['x-ingress-path'] : ''}/login`);
+                });
 
-            if(!req.user) {
-                return;
+                if (!req.user) {
+                    return;
+                }
             }
         }
 
