@@ -251,14 +251,6 @@ module.exports = {
             await printer.printImage(`${process.cwd()}/public/images/logo_bivid.png`);
             printer.newLine();
 
-            printer.alignCenter();
-            printer.newLine();
-            printer.setTextSize(2, 2);
-            printer.println(`${t('title')}`);
-            printer.setTextSize(1, 1);
-            printer.println(`${voucher.code.slice(0, 5)}-${voucher.code.slice(5)}`);
-            printer.setTextNormal();
-
             if(variables.unifiSsid) {
                 printer.newLine();
                 printer.newLine();
@@ -292,6 +284,17 @@ module.exports = {
             printer.newLine();
             printer.newLine();
 
+            printer.alignCenter();
+            printer.newLine();
+            printer.setTextSize(2, 2);
+            printer.println(`${t('title')}`);
+            printer.setTextSize(3, 3);
+            printer.println(`${voucher.code.slice(0, 5)}-${voucher.code.slice(5)}`);
+            printer.setTextNormal();
+
+            printer.newLine();
+            printer.newLine();
+            
             printer.alignLeft();
             printer.setTypeFontB();
             printer.setTextSize(1, 1);
