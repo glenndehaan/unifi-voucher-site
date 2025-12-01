@@ -258,7 +258,7 @@ module.exports = {
 
                 printer.alignLeft();
                 printer.setTextNormal();
-                printer.print(`${t('connect')}: `); //Conectar a:
+                printer.print(`${t('connect')}: `); ///Conectar a:
                 printer.setTypeFontB();
                 printer.setTextSize(1, 1);
                 printer.print(variables.unifiSsid);
