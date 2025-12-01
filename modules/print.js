@@ -284,6 +284,7 @@ module.exports = {
             printer.newLine();
             printer.newLine();
 
+            printer.setTypeFontA();
             printer.alignCenter();
             printer.newLine();
             printer.setTextSize(2, 2);
