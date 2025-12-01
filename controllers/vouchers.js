@@ -73,6 +73,7 @@ module.exports = {
             error: req.flashMessage.type === 'error',
             error_text: req.flashMessage.message || '',
             kioskEnabled: variables.kioskEnabled,
+            quickPrintEnabled: variables.printers !== '',
             timeConvert: time,
             bytesConvert: bytes,
             notesConvert: notes,

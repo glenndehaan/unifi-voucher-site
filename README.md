@@ -253,6 +253,66 @@ services:
 
 > If both environment variables and `options.json` are provided, values from `options.json` will take precedence.
 
+### Using your own image from GitHub Container Registry (GHCR)
+
+If you publish a customized image to GHCR, Docker can pull it the same way it pulls from Docker Hub as long as you point to the `ghcr.io` registry and authenticate:
+
+1. Create a Personal Access Token (classic) with the `write:packages` scope for pushing and `read:packages` for pulling.
+2. Authenticate from the machine that will run Docker:
+
+```bash
+echo "$GHCR_TOKEN" | docker login ghcr.io -u <your_github_username> --password-stdin
+```
+
+3. Pull or run your image using the `ghcr.io/<owner>/<repo>:<tag>` reference. For example, if you published `ghcr.io/tuusuario/unifi-voucher-site:personalizado`:
+
+```bash
+docker pull ghcr.io/tuusuario/unifi-voucher-site:personalizado
+docker run --rm -p 3000:3000 ghcr.io/tuusuario/unifi-voucher-site:personalizado
+```
+
+#### Publishing from GitHub Actions
+
+Add a workflow (for example, `.github/workflows/build-and-push-ghcr.yml`) that logs in to GHCR, builds the Docker image from your fork, and pushes it. Set a repository secret `GHCR_TOKEN` with a PAT that has `write:packages` and `read:packages` scopes.
+
+```yaml
+name: Build and push to GHCR
+
+on:
+  push:
+    branches:
+      - main
+      - master
+
+jobs:
+  build-and-push:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Log in to GHCR
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GHCR_TOKEN }}
+
+      - name: Build and push
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          push: true
+          tags: |
+            ghcr.io/${{ github.repository }}:latest
+            ghcr.io/${{ github.repository }}:${{ github.sha }}
+```
+
+> Tip: replace `latest` with a custom tag (e.g., `personalizado`) if you want a dedicated image name for your fork. Update your `docker-compose.yml` to reference the GHCR image you pushed.
+
 ### Home Assistant Add-on
 
 For users of Home Assistant, we provide a dedicated add-on to seamlessly integrate the UniFi Voucher Site with your Home Assistant instance. This add-on simplifies the setup process and allows you to manage UniFi vouchers directly from your Home Assistant dashboard.
@@ -760,7 +820,7 @@ KIOSK_VOUCHER_TYPES: '480,1,,,;'
 
 ### Custom Branding (Logo and Background)
 
-You can customize the appearance of the kiosk page by providing your own `logo.png` and `bg.jpg` images.
+You can customize the appearance of the kiosk page by providing your own `logo.png` and `bg.jpg` images. You can also override the printed voucher logo (PDF y ESC/POS) with `print_logo.png`.
 
 To do this, use Docker volume mappings to mount your custom assets to the `/kiosk` directory inside the container. The application will use these files (if present) instead of the default ones.
 
@@ -771,7 +831,8 @@ Suppose you have your custom images in a local directory called `branding/`:
 ```
 branding/
 ├── logo.png
-└── bg.jpg
+├── bg.jpg
+└── print_logo.png
 ```
 
 You can configure this using Docker Compose:
@@ -789,7 +850,7 @@ services:
       - ./branding:/kiosk
 ```
 
-> **Note:** Ensure `logo.png` and `bg.jpg` are valid image files. Both are optional — only override the ones you want to customize.
+> **Note:** Ensure `logo.png`, `bg.jpg`, and (if used) `print_logo.png` are valid image files. All are optional — only override the ones you want to customize.
 
 ### Usage
 
