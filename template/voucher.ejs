@@ -29,7 +29,7 @@
     </head>
     <body class="h-full">
         <div>
-            <%- include('partials/navigation', {new_voucher_button: true}) %>
+            <%- include('partials/navigation', {new_voucher_button: true, quick_print_link: quickPrintEnabled}) %>
 
             <% if(error) { %>
                 <div class="mx-6">

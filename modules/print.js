@@ -1,6 +1,8 @@
 /**
  * Import base packages
  */
+const fs = require('fs');
+const path = require('path');
 const PDFDocument = require('pdfkit');
 const ThermalPrinter = require('node-thermal-printer').printer;
 const PrinterTypes = require('node-thermal-printer').types;
@@ -24,6 +26,20 @@ const size = require('../utils/size');
  * Exports the printer module
  */
 module.exports = {
+    /**
+     * Resolve the logo used for printing (PDF and ESC/POS)
+     *
+     * @returns {string}
+     */
+    printLogoPath: () => {
+        const customLogo = '/kiosk/print_logo.png';
+        if (fs.existsSync(customLogo)) {
+            return customLogo;
+        }
+
+        return path.join(process.cwd(), 'public/images/logo_grayscale_dark.png');
+    },
+
     /**
      * Generates a voucher as a PDF
      *
@@ -56,6 +72,9 @@ module.exports = {
                 }
             });
 
+            // Resolve assets
+            const printLogoPath = module.exports.printLogoPath();
+
             // Utilize custom font for custom characters
             doc.font(__dirname + '/../public/fonts/Roboto-Regular.ttf');
             doc.font(__dirname + '/../public/fonts/Roboto-Bold.ttf');
@@ -82,7 +101,7 @@ module.exports = {
                     doc.moveDown(1);
                 }
 
-                doc.image('public/images/logo_grayscale_dark.png', 75, 15, {
+                doc.image(printLogoPath, 75, 15, {
                     fit: [75, 75],
                     align: 'center',
                     valign: 'center'
@@ -232,6 +251,7 @@ module.exports = {
         return new Promise(async (resolve, reject) => {
             // Create new translator
             const t = translation('print', language);
+            const printLogoPath = module.exports.printLogoPath();
 
             const printer = new ThermalPrinter({
                 type: PrinterTypes.EPSON,
@@ -248,7 +268,7 @@ module.exports = {
             printer.setTypeFontB();
             printer.alignCenter();
             printer.newLine();
-            await printer.printImage(`${process.cwd()}/public/images/logo_grayscale_dark.png`);
+            await printer.printImage(printLogoPath);
             printer.newLine();
 
             printer.alignCenter();
@@ -273,6 +293,7 @@ module.exports = {
                 if(variables.unifiSsidPassword) {
                     printer.print(',');
                     printer.newLine();
+                    printer.alignLeft();
                     printer.print(`${t('password')}: `);
                     printer.setTypeFontB();
                     printer.setTextSize(1, 1);
