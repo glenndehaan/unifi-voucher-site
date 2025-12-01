@@ -257,6 +257,7 @@ module.exports = {
                 printer.newLine();
 
                 printer.alignLeft();
+                printer.setTextNormal();
                 printer.print(`${t('connect')}: `);
                 printer.setTypeFontB();
                 printer.setTextSize(1, 1);
@@ -270,6 +271,8 @@ module.exports = {
                     printer.setTextSize(1, 1);
                     printer.print(variables.unifiSsidPassword);
                     printer.setTextNormal();
+                    printer.alignCenter();
+                    printer.newLine();
                     printer.print(` ${t('or')},`);
                     printer.newLine();
                 } else {
@@ -284,7 +287,7 @@ module.exports = {
             printer.newLine();
             printer.newLine();
 
-            printer.setTypeFontA();
+            printer.setTypeFontB();
             printer.alignCenter();
             printer.newLine();
             printer.setTextSize(2, 2);
