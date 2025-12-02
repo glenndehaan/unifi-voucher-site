@@ -252,6 +252,8 @@ module.exports = {
             // Create new translator
             const t = translation('print', language);
             const printLogoPath = module.exports.printLogoPath();
+            // Target a 3 cm QR on 203 dpi thermal printers (3 cm == 30 mm)
+            const escPosQrWidthPx = Math.round((30 / 25.4) * 203);
 
             const printer = new ThermalPrinter({
                 type: PrinterTypes.EPSON,
@@ -284,12 +286,10 @@ module.exports = {
                 printer.print(variables.unifiSsid);
                 printer.setTextNormal();
 
-                
                 if(variables.unifiSsidPassword) {
                     //printer.print(',');
                     printer.newLine();
                     printer.alignLeft();
-                    printer.setTextNormal();
                     printer.print(`${t('password')}: `);
                     printer.setTypeFontB();
                     printer.setTextSize(1, 1);
@@ -309,11 +309,11 @@ module.exports = {
                     printer.newLine();
                 }
 
-                printer.alignCenter();
+                printer.alignLeft();
                 printer.println(`${t('scan')}:`);
                 printer.newLine();
                 printer.alignCenter();
-                await printer.printImageBuffer(await qr(true));
+                await printer.printImageBuffer(await qr(true, { width: escPosQrWidthPx }));
             }
 
             printer.newLine();
