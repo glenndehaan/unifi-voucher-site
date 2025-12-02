@@ -291,11 +291,10 @@ module.exports = {
                     //printer.print(',');
                     printer.alignLeft();
                     printer.print(`${t('password')}: `);
-                    printer.newLine();
                     printer.setTypeFontB();
                     printer.setTextSize(1, 1);
                     printer.print(variables.unifiSsidPassword);
-                    //printer.newLine();
+                    printer.newLine();
                     //printer.newLine();
                     printer.setTextNormal();
                     printer.alignCenter();
