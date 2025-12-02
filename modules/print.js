@@ -1,6 +1,7 @@
 /**
- * Import base packages
+ * Import vendor modules
  */
+const fs = require('fs');
 const PDFDocument = require('pdfkit');
 const ThermalPrinter = require('node-thermal-printer').printer;
 const PrinterTypes = require('node-thermal-printer').types;
@@ -82,7 +83,7 @@ module.exports = {
                     doc.moveDown(1);
                 }
 
-                doc.image('public/images/logo_grayscale_dark.png', 75, 15, {
+                doc.image(fs.existsSync('/print/logo.png') ? '/print/logo.png' : `${process.cwd()}/public/images/print/logo.png`, 75, 15, {
                     fit: [75, 75],
                     align: 'center',
                     valign: 'center'
@@ -248,7 +249,7 @@ module.exports = {
             printer.setTypeFontB();
             printer.alignCenter();
             printer.newLine();
-            await printer.printImage(`${process.cwd()}/public/images/logo_grayscale_dark.png`);
+            await printer.printImage(fs.existsSync('/print/logo.png') ? '/print/logo.png' : `${process.cwd()}/public/images/logo_grayscale_dark.png`);
             printer.newLine();
 
             printer.alignCenter();

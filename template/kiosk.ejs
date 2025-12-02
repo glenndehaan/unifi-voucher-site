@@ -24,6 +24,7 @@
         <meta name="theme-color" content="#139CDA">
 
         <link rel="preload" href="<%= baseUrl %>/images/kiosk/logo.png" as="image">
+        <link rel="preload" href="<%= baseUrl %>/images/kiosk/logo_dark.png" as="image">
         <link rel="preload" href="<%= baseUrl %>/images/kiosk/bg.jpg" as="image">
         <link rel="preload" href="<%= baseUrl %>/dist/style.css" as="style">
         <link href="<%= baseUrl %>/dist/style.css" rel="stylesheet">
@@ -60,7 +61,8 @@
 
         <div class="w-full max-w-md bg-white dark:bg-gray-800 rounded-lg border border-black/5 dark:border-white/5 shadow-sm z-10 relative">
             <div class="p-4 border-b border-black/5 dark:border-white/5">
-                <img class="mx-auto h-24 w-auto" width="48" height="48" alt="UniFi Voucher Site Logo" src="<%= baseUrl %>/images/kiosk/logo.png">
+                <img class="dark:hidden block mx-auto h-24 w-auto" width="48" height="48" alt="UniFi Voucher Site Logo" src="<%= baseUrl %>/images/kiosk/logo.png">
+                <img class="dark:block hidden mx-auto h-24 w-auto" width="48" height="48" alt="UniFi Voucher Site Logo" src="<%= baseUrl %>/images/kiosk/logo_dark.png">
                 <h1 class="mt-4 text-2xl font-semibold text-center text-gray-900 dark:text-white"><%= t('title') %></h1>
 
                 <% if(error) { %>

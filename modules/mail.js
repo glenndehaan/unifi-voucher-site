@@ -75,10 +75,21 @@ module.exports = {
                     voucher,
                     unifiSsid: variables.unifiSsid,
                     unifiSsidPassword: variables.unifiSsidPassword,
-                    qr: await qr(),
                     timeConvert: time,
                     bytesConvert: bytes
-                })
+                }),
+                attachments: [
+                    {
+                        filename: 'logo.png',
+                        content: fs.existsSync('/email/logo.png') ? fs.readFileSync(`/email/logo.png`) : fs.readFileSync(`${process.cwd()}/public/images/email/logo.png`),
+                        cid: 'logo@unifi-voucher-site.com'
+                    },
+                    {
+                        filename: 'qr.png',
+                        content: await qr(true),
+                        cid: 'qr@unifi-voucher-site.com'
+                    }
+                ]
             }).catch((e) => {
                 log.error(`[Mail] Error when sending mail`);
                 log.error(e);

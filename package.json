@@ -17,7 +17,7 @@
   "dependencies": {
     "cookie-parser": "^1.4.7",
     "ejs": "^3.1.10",
-    "express": "^5.2.0",
+    "express": "^5.2.1",
     "express-locale": "^2.0.2",
     "express-openid-connect": "^2.19.3",
     "js-logger": "^1.6.1",

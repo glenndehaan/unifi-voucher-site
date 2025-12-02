@@ -617,6 +617,41 @@ Here’s what each variable represents:
 > PRINTERS: 'pdf,192.168.1.10,192.168.1.11'
 > ```
 
+### Custom Branding (Logo)
+
+You can customize the appearance of the pdf and ESC/POS print layout by providing your own branding assets, including:
+
+* `logo.png` — Logo used in the print header
+
+To do this, use Docker volume mappings to mount your custom assets into the `/print` directory inside the container.
+The application will use these files (if present) instead of the default ones.
+
+> **If you provide custom branding for printed vouchers, make sure your logo closely match the original application logo’s size, aspect ratio, and color space.** This helps ensure the layout prints correctly and avoids color shifts or misalignment in the final output.
+
+#### Example
+
+Suppose you have your custom images in a local directory called `branding/`:
+
+```
+branding/
+└── logo.png
+```
+
+You can configure this using Docker Compose:
+
+```yaml
+services:
+  unifi-voucher-site:
+    image: glenndehaan/unifi-voucher-site:latest
+    ports:
+      - "3000:3000"
+    environment:
+      KIOSK_ENABLED: 'true'
+      KIOSK_VOUCHER_TYPES: '480,1,,,;'
+    volumes:
+      - ./branding:/print
+```
+
 ### Usage
 
 #### PDF
@@ -676,6 +711,41 @@ Here’s what each variable represents:
 - **`SMTP_PASSWORD`**: The password for authenticating with your SMTP server.
 
 These settings allow the application to connect to your SMTP server and send emails on your behalf.
+
+### Custom Branding (Logo)
+
+You can customize the appearance of the email by providing your own branding assets, including:
+
+* `logo.png` — Logo used in the email header
+
+To do this, use Docker volume mappings to mount your custom assets into the `/email` directory inside the container.
+The application will use these files (if present) instead of the default ones.
+
+> We recommend to keep the logo at a maximum height of 75px, to prevent layout shifts
+
+#### Example
+
+Suppose you have your custom images in a local directory called `branding/`:
+
+```
+branding/
+└── logo.png
+```
+
+You can configure this using Docker Compose:
+
+```yaml
+services:
+  unifi-voucher-site:
+    image: glenndehaan/unifi-voucher-site:latest
+    ports:
+      - "3000:3000"
+    environment:
+      KIOSK_ENABLED: 'true'
+      KIOSK_VOUCHER_TYPES: '480,1,,,;'
+    volumes:
+      - ./branding:/email
+```
 
 ### Usage
 
@@ -760,9 +830,14 @@ KIOSK_VOUCHER_TYPES: '480,1,,,;'
 
 ### Custom Branding (Logo and Background)
 
-You can customize the appearance of the kiosk page by providing your own `logo.png` and `bg.jpg` images.
+You can customize the appearance of the kiosk page by providing your own branding assets, including:
 
-To do this, use Docker volume mappings to mount your custom assets to the `/kiosk` directory inside the container. The application will use these files (if present) instead of the default ones.
+* `logo.png` — Logo used in light mode
+* `logo_dark.png` — Logo used in dark mode
+* `bg.jpg` — Background image
+
+To do this, use Docker volume mappings to mount your custom assets into the `/kiosk` directory inside the container.
+The application will use these files (if present) instead of the default ones.
 
 #### Example
 
@@ -771,6 +846,7 @@ Suppose you have your custom images in a local directory called `branding/`:
 ```
 branding/
 ├── logo.png
+├── logo_dark.png
 └── bg.jpg
 ```
 
@@ -789,7 +865,8 @@ services:
       - ./branding:/kiosk
 ```
 
-> **Note:** Ensure `logo.png` and `bg.jpg` are valid image files. Both are optional — only override the ones you want to customize.
+> **Note:** All branding files are optional — provide only the ones you want to override.
+> Ensure `logo.png`, `logo_dark.png`, and `bg.jpg` are valid image files.
 
 ### Usage
 
