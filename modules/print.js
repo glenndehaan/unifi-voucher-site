@@ -274,8 +274,8 @@ module.exports = {
             printer.newLine();
 
             if(variables.unifiSsid) {
-                printer.newLine();
-                printer.newLine();
+                //printer.newLine();
+                //printer.newLine();
                 printer.newLine();
 
                 printer.alignLeft();
@@ -288,14 +288,14 @@ module.exports = {
 
                 if(variables.unifiSsidPassword) {
                     //printer.print(',');
-                    printer.newLine();
                     printer.alignLeft();
                     printer.print(`${t('password')}: `);
+                    printer.newLine();
                     printer.setTypeFontB();
                     printer.setTextSize(1, 1);
                     printer.print(variables.unifiSsidPassword);
-                    printer.newLine();
-                    printer.newLine();
+                    //printer.newLine();
+                    //printer.newLine();
                     printer.setTextNormal();
                     printer.alignCenter();
                     printer.newLine();
@@ -316,7 +316,7 @@ module.exports = {
                 await printer.printImageBuffer(await qr(true, { width: escPosQrWidthPx }));
             }
 
-            printer.newLine();
+            //printer.newLine();
             printer.newLine();
 
             printer.setTypeFontB();
