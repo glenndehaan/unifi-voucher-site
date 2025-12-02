@@ -273,44 +273,45 @@ module.exports = {
             await printer.printImage(printLogoPath);
             printer.newLine();
 
-            printer.alignCenter();
-            printer.newLine();
-            printer.setTextSize(2, 2);
-            printer.println(`${t('title')}`);
-            printer.setTextSize(1, 1);
-            printer.println(`${voucher.code.slice(0, 5)}-${voucher.code.slice(5)}`);
-            printer.setTextNormal();
-
             if(variables.unifiSsid) {
                 printer.newLine();
                 printer.newLine();
                 printer.newLine();
 
                 printer.alignLeft();
-                printer.print(`${t('connect')}: `);
+                printer.setTextNormal();
+                printer.print(`${t('connect')}: `); ///Conectar a:
                 printer.setTypeFontB();
                 printer.setTextSize(1, 1);
                 printer.print(variables.unifiSsid);
                 printer.setTextNormal();
 
                 if(variables.unifiSsidPassword) {
-                    printer.print(',');
+                    //printer.print(',');
                     printer.newLine();
                     printer.alignLeft();
                     printer.print(`${t('password')}: `);
                     printer.setTypeFontB();
                     printer.setTextSize(1, 1);
                     printer.print(variables.unifiSsidPassword);
+                    printer.newLine();
+                    printer.newLine();
                     printer.setTextNormal();
+                    printer.alignCenter();
+                    printer.newLine();
+                    printer.newLine();
                     printer.print(` ${t('or')},`);
                     printer.newLine();
                 } else {
+                    printer.newLine();
+                    printer.newLine();
                     printer.print(` ${t('or')},`);
                     printer.newLine();
                 }
 
                 printer.alignLeft();
                 printer.println(`${t('scan')}:`);
+                printer.newLine();
                 printer.alignCenter();
                 await printer.printImageBuffer(await qr(true, { width: escPosQrWidthPx }));
             }
@@ -318,7 +319,20 @@ module.exports = {
             printer.newLine();
             printer.newLine();
 
+            printer.setTypeFontB();
+            printer.alignCenter();
+            printer.newLine();
+            printer.setTextSize(2, 2);
+            printer.println(`${t('title')}`);
+            printer.setTextSize(4, 4);
+            printer.println(`${voucher.code.slice(0, 5)}-${voucher.code.slice(5)}`);
+            printer.setTextNormal();
+
+            printer.newLine();
+            printer.newLine();
+            
             printer.alignLeft();
+            printer.drawLine();
             printer.setTypeFontB();
             printer.setTextSize(1, 1);
             printer.println(`${t('details')}`);
