@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en" class="h-full bg-gray-100 dark:bg-gray-900">
+    <head>
+        <meta name="format-detection" content="telephone=no">
+
+        <title>Quick Print | UniFi Voucher</title>
+
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, minimal-ui">
+
+        <meta name="description" content="UniFi Voucher Site is a web-based platform for generating and managing UniFi network guest vouchers">
+        <meta name="author" content="Glenn de Haan">
+
+        <meta property="og:title" content="Quick Print | UniFi Voucher"/>
+        <meta property="og:type" content="website"/>
+        <meta property="og:description" content="UniFi Voucher Site is a web-based platform for generating and managing UniFi network guest vouchers"/>
+
+        <link rel="manifest" href="<%= baseUrl %>/manifest.json">
+        <link rel="shortcut icon" href="<%= baseUrl %>/images/favicon.ico">
+        <link rel="apple-touch-icon" href="<%= baseUrl %>/images/icon/logo_256x256.png">
+
+        <meta name="mobile-web-app-capable" content="yes">
+        <meta name="apple-mobile-web-app-capable" content="yes">
+        <meta name="theme-color" content="#139CDA">
+
+        <link rel="preload" href="<%= baseUrl %>/images/logo.png" as="image">
+        <link rel="preload" href="<%= baseUrl %>/dist/style.css" as="style">
+        <link href="<%= baseUrl %>/dist/style.css" rel="stylesheet">
+    </head>
+    <body class="h-full">
+        <div>
+            <%- include('partials/navigation', {new_voucher_button: false, quick_print_link: printers.length > 0}) %>
+
+            <% if(error) { %>
+                <div class="mx-6">
+                    <div class="max-w-4xl mx-auto mt-5 rounded-md bg-red-700 p-4">
+                        <div class="flex">
+                            <div class="shrink-0">
+                                <svg class="h-5 w-5 text-white" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.28 7.22a.75.75 0 00-1.06 1.06L8.94 10l-1.72 1.72a.75.75 0 101.06 1.06L10 11.06l1.72 1.72a.75.75 0 101.06-1.06L11.06 10l1.72-1.72a.75.75 0 00-1.06-1.06L10 8.94 8.28 7.22z" clip-rule="evenodd" />
+                                </svg>
+                            </div>
+                            <div class="ml-3">
+                                <h3 class="text-sm font-medium text-white"><%= error_text %></h3>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            <% } %>
+
+            <% if(info) { %>
+                <div class="mx-6">
+                    <div class="max-w-4xl mx-auto mt-5 rounded-md bg-green-700 p-4">
+                        <div class="flex">
+                            <div class="shrink-0">
+                                <svg class="h-5 w-5 text-white" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                                    <path fill-rule="evenodd" d="M10 18a8 8 0 1 0 0-16 8 8 0 0 0 0 16Zm3.857-9.809a.75.75 0 0 0-1.214-.882l-3.483 4.79-1.88-1.88a.75.75 0 1 0-1.06 1.061l2.5 2.5a.75.75 0 0 0 1.137-.089l4-5.5Z" clip-rule="evenodd" />
+                                </svg>
+                            </div>
+                            <div class="ml-3">
+                                <h3 class="text-sm font-medium text-white"><%= info_text %></h3>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            <% } %>
+
+            <main class="mx-auto max-w-4xl px-4 py-8 lg:px-8">
+                <div class="bg-white dark:bg-gray-800 shadow-sm rounded-lg border border-black/5 dark:border-white/5">
+                    <div class="px-6 py-6 border-b border-black/5 dark:border-white/5">
+                        <h1 class="text-2xl font-semibold text-gray-900 dark:text-white">Impresión rápida</h1>
+                        <p class="mt-2 text-sm text-gray-600 dark:text-gray-400">Pulsa el botón para crear un nuevo voucher y enviarlo directamente a la impresora seleccionada.</p>
+                    </div>
+                    <form action="<%= baseUrl %>/quick-print" method="post" class="p-6 space-y-6">
+                        <div class="grid gap-4 md:grid-cols-3">
+                            <div class="md:col-span-2">
+                                <label for="voucher-type" class="block text-sm font-medium leading-6 text-gray-900 dark:text-white">Tipo de voucher</label>
+                                <select id="voucher-type" name="voucher-type" class="mt-2 block w-full rounded-md border-0 py-2 pl-3 pr-10 text-gray-900 dark:text-white dark:bg-white/5 ring-1 ring-inset ring-gray-300 dark:ring-white/10 focus:ring-2 focus:ring-sky-600 sm:text-sm sm:leading-6 **:text-black">
+                                    <% voucher_types.forEach((type, index) => { %>
+                                        <option value="<%= type.raw %>" <%= index === 0 ? 'selected' : '' %>>
+                                            <%= timeConvert(type.expiration) %>, <%= type.usage === '1' ? 'Single-use' : type.usage === '0' ? `Multi-use (${'Unlimited'})` : `Multi-use (${type.usage}x)` %><%= typeof type.upload !== "undefined" ? `, Upload: ${bytesConvert(type.upload, 1, true)}` : '' %><%= typeof type.download !== "undefined" ? `, Download: ${bytesConvert(type.download, 1, true)}` : '' %><%= typeof type.megabytes !== "undefined" ? `, Data: ${bytesConvert(type.megabytes, 2)}` : '' %>
+                                        </option>
+                                    <% }); %>
+                                </select>
+                            </div>
+                            <div>
+                                <label for="printer" class="block text-sm font-medium leading-6 text-gray-900 dark:text-white">Impresora</label>
+                                <select id="printer" name="printer" class="mt-2 block w-full rounded-md border-0 py-2 pl-3 pr-10 text-gray-900 dark:text-white dark:bg-white/5 ring-1 ring-inset ring-gray-300 dark:ring-white/10 focus:ring-2 focus:ring-sky-600 sm:text-sm sm:leading-6 **:text-black">
+                                    <% printers.forEach((printer, index) => { %>
+                                        <option value="<%= printer %>" <%= index === 0 ? 'selected' : '' %>><%= printer === 'pdf' ? 'PDF' : printer %></option>
+                                    <% }); %>
+                                </select>
+                            </div>
+                            <div>
+                                <label for="language" class="block text-sm font-medium leading-6 text-gray-900 dark:text-white">Idioma de impresión</label>
+                                <select id="language" name="language" class="mt-2 block w-full rounded-md border-0 py-2 pl-3 pr-10 text-gray-900 dark:text-white dark:bg-white/5 ring-1 ring-inset ring-gray-300 dark:ring-white/10 focus:ring-2 focus:ring-sky-600 sm:text-sm sm:leading-6 **:text-black">
+                                    <% Object.keys(languages).forEach((lang) => { %>
+                                        <option value="<%= lang %>" <%= lang === defaultLanguage ? 'selected' : '' %>><%= languages[lang] %></option>
+                                    <% }); %>
+                                </select>
+                            </div>
+                        </div>
+                        <button type="submit" class="w-full h-28 text-2xl font-semibold bg-sky-700 text-white rounded-md flex items-center justify-center gap-3 hover:bg-sky-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sky-700">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M6 9V2h12v7" />
+                                <path d="M6 18h12v4H6z" />
+                                <path d="M6 14h12v4H6z" />
+                                <path d="M6 10h12v4H6z" />
+                                <path d="M4 10h16v6a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2z" />
+                            </svg>
+                            Generar y imprimir ahora
+                        </button>
+                        <p class="text-sm text-gray-600 dark:text-gray-400 text-center">Usa este modo de kiosko para generar e imprimir tickets individuales sin pasos adicionales.</p>
+                    </form>
+                </div>
+
+                <% if(typeof lastVoucher !== 'undefined') { %>
+                    <div class="mt-8 bg-white dark:bg-gray-800 shadow-sm rounded-lg border border-black/5 dark:border-white/5">
+                        <div class="px-6 py-4 border-b border-black/5 dark:border-white/5">
+                            <h2 class="text-lg font-semibold text-gray-900 dark:text-white">Último voucher generado</h2>
+                            <p class="text-sm text-gray-600 dark:text-gray-400">Consulta los detalles enviados a la impresora.</p>
+                        </div>
+                        <div class="px-6 py-6 space-y-4">
+                            <div class="flex items-center gap-3">
+                                <div class="text-2xl font-mono tracking-widest text-gray-900 dark:text-white"><%= lastVoucher.code.slice(0, 5) %>-<%= lastVoucher.code.slice(5) %></div>
+                                <% if (lastVoucher.authorizedGuestLimit && lastVoucher.authorizedGuestLimit === 1) { %>
+                                    <span class="rounded-full flex-none py-1 px-2 text-xs font-medium ring-1 ring-inset bg-yellow-50 text-yellow-800 ring-yellow-600/20 dark:text-yellow-400 dark:bg-yellow-400/10 dark:ring-yellow-400/20">Single-use</span>
+                                <% } else { %>
+                                    <span class="rounded-full flex-none py-1 px-2 text-xs font-medium ring-1 ring-inset bg-green-50 text-green-700 ring-green-600/20 dark:text-green-400 dark:bg-green-400/10 dark:ring-green-400/20">Multi-use</span>
+                                <% } %>
+                                <% if (lastVoucher.expired) { %>
+                                    <span class="rounded-full flex-none py-1 px-2 text-xs font-medium ring-1 ring-inset bg-red-50 text-red-800 ring-red-600/20 dark:text-red-400 dark:bg-red-400/10 dark:ring-red-400/20">Expired</span>
+                                <% } %>
+                            </div>
+                            <div class="flex flex-wrap items-center gap-2 text-sm leading-5 text-gray-700 dark:text-gray-300">
+                                <span><%= !lastVoucher.authorizedGuestLimit ? 'Multi-use (Unlimited)' : lastVoucher.authorizedGuestLimit === 1 ? 'Single-use' : `Multi-use (${lastVoucher.authorizedGuestLimit}x)` %></span>
+                                <svg viewBox="0 0 2 2" class="h-0.5 w-0.5 flex-none fill-gray-500 dark:fill-gray-300"><circle cx="1" cy="1" r="1" /></svg>
+                                <span><%= timeConvert(lastVoucher.timeLimitMinutes) %></span>
+                                <% if(lastVoucher.dataUsageLimitMBytes) { %>
+                                    <svg viewBox="0 0 2 2" class="h-0.5 w-0.5 flex-none fill-gray-500 dark:fill-gray-300"><circle cx="1" cy="1" r="1" /></svg>
+                                    <span><%= bytesConvert(lastVoucher.dataUsageLimitMBytes, 2) %> Data Limit</span>
+                                <% } %>
+                                <% if(lastVoucher.rxRateLimitKbps) { %>
+                                    <svg viewBox="0 0 2 2" class="h-0.5 w-0.5 flex-none fill-gray-500 dark:fill-gray-300"><circle cx="1" cy="1" r="1" /></svg>
+                                    <span><%= bytesConvert(lastVoucher.rxRateLimitKbps, 1, true) %> Download Limit</span>
+                                <% } %>
+                                <% if(lastVoucher.txRateLimitKbps) { %>
+                                    <svg viewBox="0 0 2 2" class="h-0.5 w-0.5 flex-none fill-gray-500 dark:fill-gray-300"><circle cx="1" cy="1" r="1" /></svg>
+                                    <span><%= bytesConvert(lastVoucher.txRateLimitKbps, 1, true) %> Upload Limit</span>
+                                <% } %>
+                            </div>
+                        </div>
+                    </div>
+                <% } %>
+            </main>
+        </div>
+    </body>
+</html>
