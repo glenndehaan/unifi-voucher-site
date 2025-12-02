@@ -284,6 +284,7 @@ module.exports = {
                 printer.setTypeFontB();
                 printer.setTextSize(1, 1);
                 printer.print(variables.unifiSsid);
+                printer.newLine();
                 printer.setTextNormal();
 
                 if(variables.unifiSsidPassword) {
@@ -309,7 +310,7 @@ module.exports = {
                     printer.newLine();
                 }
 
-                printer.alignLeft();
+                printer.alignCenter();
                 printer.println(`${t('scan')}:`);
                 printer.newLine();
                 printer.alignCenter();
@@ -380,9 +381,9 @@ module.exports = {
                 printer.newLine();
             }
 
-            printer.newLine();
-            printer.newLine();
-            printer.newLine();
+            //printer.newLine();
+            //printer.newLine();
+            //printer.newLine();
             printer.newLine();
             printer.cut();
             printer.beep(2, 2);
