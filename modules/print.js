@@ -249,7 +249,7 @@ module.exports = {
             printer.setTypeFontB();
             printer.alignCenter();
             printer.newLine();
-            await printer.printImage(fs.existsSync('/print/logo.png') ? '/print/logo.png' : `${process.cwd()}/public/images/logo_grayscale_dark.png`);
+            await printer.printImage(fs.existsSync('/print/logo.png') ? '/print/logo.png' : `${process.cwd()}/public/images/print/logo.png`);
             printer.newLine();
 
             printer.alignCenter();
