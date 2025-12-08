@@ -32,6 +32,12 @@ module.exports = {
             return;
         }
 
+        // Force redirect to default locale if locale is not set by user
+        if(!req.query.locale) {
+            res.redirect(302, `${req.headers['x-ingress-path'] ? req.headers['x-ingress-path'] : ''}/kiosk?locale=${variables.translationDefault}-${variables.translationDefault}`);
+            return;
+        }
+
         res.render('kiosk', {
             t: translation('kiosk', req.locale.language),
             languages,
