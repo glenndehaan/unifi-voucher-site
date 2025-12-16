@@ -303,6 +303,7 @@ module.exports = {
                     printer.print(` ${t('or')},`);
                     printer.newLine();
                 } else {
+                    printer.alignCenter();
                     printer.newLine();
                     printer.newLine();
                     printer.print(` ${t('or')},`);
