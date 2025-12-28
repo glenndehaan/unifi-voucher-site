@@ -180,8 +180,28 @@ module.exports = {
                 return;
             }
 
+            // Prepare optional note (sanitize to avoid breaking internal separator format)
+            let noteInput = '';
+            if(typeof req.body.note !== 'undefined' && req.body.note !== null) {
+                if(typeof req.body.note !== 'string') {
+                    res.status(400).json({
+                        error: 'Invalid Note!',
+                        data: {}
+                    });
+                    return;
+                }
+
+                // Remove any existing internal separators to prevent format breakage
+                noteInput = req.body.note.replace(/\|\|;;\|\|/g, ' ');
+                // Optionally, trim and limit length to a reasonable value (e.g. 255 chars)
+                noteInput = noteInput.trim().slice(0, 255);
+            }
+
+            // Build the note string expected by utils/notes.js
+            const finalNote = `${noteInput}||;;||api||;;||local||;;||`;
+
             // Create voucher code
-            const voucherCode = await unifi.create(types(req.body.type, true), 1, `||;;||api||;;||local||;;||`).catch((e) => {
+            const voucherCode = await unifi.create(types(req.body.type, true), 1, finalNote).catch((e) => {
                 res.status(500).json({
                     error: e,
                     data: {}
