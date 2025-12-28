@@ -12,6 +12,7 @@ const mail = require('../modules/mail');
 const {updateCache} = require('../utils/cache');
 const types = require('../utils/types');
 const languages = require('../utils/languages');
+const notes = require('../utils/notes');
 
 module.exports = {
     api: {
@@ -107,6 +108,7 @@ module.exports = {
                 data: {
                     message: 'OK',
                     vouchers: cache.vouchers.map((voucher) => {
+                        const parsedNotes = notes(voucher.name);
                         return {
                             id: voucher.id,
                             code: `${voucher.code.slice(0, 5)}-${voucher.code.slice(5)}`,
@@ -114,7 +116,8 @@ module.exports = {
                             duration: voucher.timeLimitMinutes,
                             data_limit: voucher.dataUsageLimitMBytes ? voucher.dataUsageLimitMBytes : null,
                             download_limit: voucher.rxRateLimitKbps ? voucher.rxRateLimitKbps : null,
-                            upload_limit: voucher.txRateLimitKbps ? voucher.txRateLimitKbps : null
+                            upload_limit: voucher.txRateLimitKbps ? voucher.txRateLimitKbps : null,
+                            note: parsedNotes.note
                         };
                     }),
                     updated: cache.updated
