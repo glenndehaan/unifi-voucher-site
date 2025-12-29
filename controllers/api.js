@@ -12,7 +12,6 @@ const mail = require('../modules/mail');
 const {updateCache} = require('../utils/cache');
 const types = require('../utils/types');
 const languages = require('../utils/languages');
-const notes = require('../utils/notes');
 
 module.exports = {
     api: {
@@ -108,7 +107,6 @@ module.exports = {
                 data: {
                     message: 'OK',
                     vouchers: cache.vouchers.map((voucher) => {
-                        const parsedNotes = notes(voucher.name);
                         return {
                             id: voucher.id,
                             code: `${voucher.code.slice(0, 5)}-${voucher.code.slice(5)}`,
