@@ -111,12 +111,12 @@ module.exports = {
                         return {
                             id: voucher.id,
                             code: `${voucher.code.slice(0, 5)}-${voucher.code.slice(5)}`,
+                            note: notes(voucher.name).note ? notes(voucher.name).note : null,
                             type: !voucher.authorizedGuestLimit ? 'multi' : voucher.authorizedGuestLimit === 1 ? 'single' : 'multi',
                             duration: voucher.timeLimitMinutes,
                             data_limit: voucher.dataUsageLimitMBytes ? voucher.dataUsageLimitMBytes : null,
                             download_limit: voucher.rxRateLimitKbps ? voucher.rxRateLimitKbps : null,
-                            upload_limit: voucher.txRateLimitKbps ? voucher.txRateLimitKbps : null,
-                            note: notes(voucher.name).note
+                            upload_limit: voucher.txRateLimitKbps ? voucher.txRateLimitKbps : null
                         };
                     }),
                     updated: cache.updated
@@ -182,25 +182,22 @@ module.exports = {
                 return;
             }
 
-            // Prepare optional note (sanitize to avoid breaking internal separator format)
+            // Prepare optional note
             let noteInput = '';
             if(typeof req.body.note !== 'undefined' && req.body.note !== null) {
-                if(typeof req.body.note !== 'string') {
+                if(typeof req.body.note !== 'string' && req.body.note === '' && req.body.note.includes('||;;||')) {
                     res.status(400).json({
                         error: 'Invalid Note!',
                         data: {}
                     });
                     return;
                 }
-                noteInput = req.body.note;
 
+                noteInput = req.body.note;
             }
 
-            // Build the note string expected by utils/notes.js
-            const finalNote = `${noteInput}||;;||api||;;||local||;;||`;
-
             // Create voucher code
-            const voucherCode = await unifi.create(types(req.body.type, true), 1, finalNote).catch((e) => {
+            const voucherCode = await unifi.create(types(req.body.type, true), 1, `${noteInput}||;;||api||;;||local||;;||`).catch((e) => {
                 res.status(500).json({
                     error: e,
                     data: {}
