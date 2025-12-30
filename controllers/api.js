@@ -108,7 +108,6 @@ module.exports = {
                 data: {
                     message: 'OK',
                     vouchers: cache.vouchers.map((voucher) => {
-                        const parsedNotes = notes(voucher.name);
                         return {
                             id: voucher.id,
                             code: `${voucher.code.slice(0, 5)}-${voucher.code.slice(5)}`,
@@ -117,7 +116,7 @@ module.exports = {
                             data_limit: voucher.dataUsageLimitMBytes ? voucher.dataUsageLimitMBytes : null,
                             download_limit: voucher.rxRateLimitKbps ? voucher.rxRateLimitKbps : null,
                             upload_limit: voucher.txRateLimitKbps ? voucher.txRateLimitKbps : null,
-                            note: parsedNotes.note
+                            note: notes(voucher.name).note
                         };
                     }),
                     updated: cache.updated
@@ -193,11 +192,8 @@ module.exports = {
                     });
                     return;
                 }
+                noteInput = req.body.note;
 
-                // Remove any existing internal separators to prevent format breakage
-                noteInput = req.body.note.replace(/\|\|;;\|\|/g, ' ');
-                // Optionally, trim and limit length to a reasonable value (e.g. 255 chars)
-                noteInput = noteInput.trim().slice(0, 255);
             }
 
             // Build the note string expected by utils/notes.js
