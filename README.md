@@ -408,6 +408,7 @@ the different endpoints available in the API:
           {
             "id": "67bded6766f89f2a7ba6731f",
             "code": "15695-53133",
+            "note": "Test",
             "type": "multi",
             "duration": 60,
             "data_limit": "200",
@@ -417,6 +418,7 @@ the different endpoints available in the API:
           {
             "id": "67bdecd166f89f2a7ba67317",
             "code": "03004-59449",
+            "note": null,
             "type": "single",
             "duration": 480,
             "data_limit": null,
@@ -444,6 +446,15 @@ the different endpoints available in the API:
         ```json
         {
           "type": "480,0,,,"
+        }
+        ```
+
+      - Generate Voucher and Provide note:
+
+        ```json
+        {
+          "type": "480,0,,,",
+          "note": "This is a note"
         }
         ```
 

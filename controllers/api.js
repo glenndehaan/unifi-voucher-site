@@ -12,6 +12,7 @@ const mail = require('../modules/mail');
 const {updateCache} = require('../utils/cache');
 const types = require('../utils/types');
 const languages = require('../utils/languages');
+const notes = require('../utils/notes');
 
 module.exports = {
     api: {
@@ -110,6 +111,7 @@ module.exports = {
                         return {
                             id: voucher.id,
                             code: `${voucher.code.slice(0, 5)}-${voucher.code.slice(5)}`,
+                            note: notes(voucher.name).note ? notes(voucher.name).note : null,
                             type: !voucher.authorizedGuestLimit ? 'multi' : voucher.authorizedGuestLimit === 1 ? 'single' : 'multi',
                             duration: voucher.timeLimitMinutes,
                             data_limit: voucher.dataUsageLimitMBytes ? voucher.dataUsageLimitMBytes : null,
@@ -180,8 +182,22 @@ module.exports = {
                 return;
             }
 
+            // Prepare optional note
+            let noteInput = '';
+            if(typeof req.body.note !== 'undefined' && req.body.note !== null) {
+                if(typeof req.body.note !== 'string' && req.body.note === '' && req.body.note.includes('||;;||')) {
+                    res.status(400).json({
+                        error: 'Invalid Note!',
+                        data: {}
+                    });
+                    return;
+                }
+
+                noteInput = req.body.note;
+            }
+
             // Create voucher code
-            const voucherCode = await unifi.create(types(req.body.type, true), 1, `||;;||api||;;||local||;;||`).catch((e) => {
+            const voucherCode = await unifi.create(types(req.body.type, true), 1, `${noteInput}||;;||api||;;||local||;;||`).catch((e) => {
                 res.status(500).json({
                     error: e,
                     data: {}
