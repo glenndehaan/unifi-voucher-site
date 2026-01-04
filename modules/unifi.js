@@ -22,9 +22,9 @@ module.exports = {
         return new Promise((resolve, reject) => {
             // Set base voucher data
             const data = {
-                count: amount,
+                count: typeof amount === "string" ? parseInt(amount): amount,
                 name: note,
-                timeLimitMinutes: type.expiration
+                timeLimitMinutes: parseInt(type.expiration)
             };
 
             // Set voucher limit usage if limited
@@ -34,17 +34,17 @@ module.exports = {
 
             // Set data usage limit if limited
             if(typeof type.megabytes !== "undefined") {
-                data.dataUsageLimitMBytes = type.megabytes;
+                data.dataUsageLimitMBytes = parseInt(type.megabytes);
             }
 
             // Set download speed limit if limited
             if(typeof type.download !== "undefined") {
-                data.rxRateLimitKbps = type.download;
+                data.rxRateLimitKbps = parseInt(type.download);
             }
 
             // Set upload speed limit if limited
             if(typeof type.upload !== "undefined") {
-                data.txRateLimitKbps = type.upload;
+                data.txRateLimitKbps = parseInt(type.upload);
             }
 
             fetch(`/hotspot/vouchers`, 'POST', {}, data).then((response) => {
