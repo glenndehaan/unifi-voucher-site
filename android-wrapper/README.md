@@ -1,51 +1,182 @@
-# Android wrapper (WebView + servidor local)
+# UniFi Voucher - Android App
 
-Este directorio es una plantilla para un **segundo repositorio** que empaqueta el servidor Node de UniFi Voucher dentro de un APK. El objetivo es evitar dos desarrollos paralelos: el repositorio principal sigue funcionando con Docker y variables de entorno, y este wrapper solo se encarga de empaquetar y lanzar el servidor local en Android.
+Aplicación Android nativa que ejecuta el servidor UniFi Voucher localmente usando **nodejs-mobile**.
 
-## Estructura recomendada del wrapper
-- `server/`: submódulo o artefacto del repo principal con el código del servidor. Antes de empaquetar, debe tener el CSS compilado (`npm run build`).
-- `scripts/`: utilidades para generar el bundle listo para Android.
-- `dist/`: salidas generadas (tarball del servidor) que luego se copian al proyecto Android/Cordova/Capacitor.
+## Características
 
-Si vas a mantener este wrapper en una **rama separada** del repositorio principal, conviene publicar el bundle como artefacto
-de CI (o release) para que el proyecto Android pueda descargarlo sin mezclar los historiales de ambos repos.
+- Servidor Node.js ejecutándose localmente en el dispositivo
+- No requiere servidor externo ni Docker
+- Funciona offline (solo necesita conexión al UniFi Controller)
+- Interfaz web completa via WebView
+- Configuración inicial guiada
+- Auto-inicio opcional al encender el dispositivo
 
-## Flujo de uso
-1. **Clonar como repo independiente**
-   ```bash
-   git clone <este-wrapper> android-wrapper
-   cd android-wrapper
-   git submodule add <repo-principal> server
-   ```
-2. **Preparar el servidor para empaquetar**
-   ```bash
-   pushd server
-   npm ci
-   npm run build   # genera public/dist/style.css
-   popd
-   ```
-3. **Generar el bundle**
-   ```bash
-   ./scripts/build-server-bundle.sh
-   ```
-   Obtendrás `dist/server-bundle.tar.gz` con:
-   - Código del servidor + `node_modules` en modo producción.
-   - `public/dist/style.css` generado.
-   - Soporte de configuración mediante `options.json` (sin depender de variables de entorno).
+## Requisitos
 
-4. **Consumir el bundle desde el proyecto Android**
-- Copia `dist/server-bundle.tar.gz` al proyecto nativo (assets o directorio de datos).
-- Al iniciar la app, descomprime el bundle, escribe un `options.json` con la configuración recogida desde la UI (apikey, impresoras, logo, etc.) y lanza `node server.js` apuntando a `127.0.0.1:3000`.
-- Abre un WebView a `http://127.0.0.1:3000` cuando el servidor responda.
+### Para desarrollo
+- Android Studio Arctic Fox (2020.3.1) o superior
+- JDK 17+
+- Node.js 18+ (para preparar el bundle)
+- Android SDK 24+
 
-Para mantener sincronía con el repositorio principal, actualiza el submódulo (o descarga el artefacto) desde la versión/tag
-que desees y vuelve a ejecutar el script de bundling antes de generar el APK.
+### Para el dispositivo
+- Android 7.0 (API 24) o superior
+- ~150MB de espacio libre
+- Conexión a la misma red que el UniFi Controller
 
-## Consideraciones de configuración
-- El servidor ya admite `options.json` y, si existe, tiene prioridad sobre las variables de entorno. La UI del wrapper debe leer/guardar esa configuración y regenerar el archivo cuando cambie.
-- Para branding (logo), coloca el archivo en el área de datos de la app y referencia la ruta en `options.json` (clave `logo_path`).
-- Si necesitas restaurar la configuración por defecto, borra el `options.json` generado antes de volver a arrancar el servidor.
+## Estructura del proyecto
 
-## Compatibilidad con el repo principal
-- No se modifica ningún archivo del servidor. El wrapper solo consume una copia (o submódulo) del repo principal y genera un artefacto reutilizable.
-- El pipeline de CI/CD del wrapper puede fijar una versión/tag del repo principal para builds reproducibles.
+```
+android-wrapper/
+├── app/
+│   ├── src/main/
+│   │   ├── java/com/unifi/voucher/
+│   │   │   ├── MainActivity.kt          # WebView principal
+│   │   │   ├── SetupActivity.kt         # Configuración inicial
+│   │   │   ├── SettingsActivity.kt      # Ajustes de la app
+│   │   │   ├── SplashActivity.kt        # Pantalla de carga
+│   │   │   ├── NodeService.kt           # Servicio Node.js
+│   │   │   ├── ConfigManager.kt         # Gestión de configuración
+│   │   │   ├── BootReceiver.kt          # Auto-inicio
+│   │   │   └── VoucherApplication.kt    # Application class
+│   │   ├── assets/
+│   │   │   └── nodejs-project/          # Servidor (generado)
+│   │   └── res/                         # Recursos Android
+│   └── build.gradle.kts
+├── nodejs-assets/
+│   └── nodejs-project/
+│       └── main.js                      # Entry point nodejs-mobile
+├── scripts/
+│   ├── prepare-nodejs-project.sh        # Prepara el servidor
+│   └── build-server-bundle.sh           # Bundle legacy
+├── build.gradle.kts
+├── settings.gradle.kts
+└── gradle.properties
+```
+
+## Compilación
+
+### 1. Preparar el proyecto Node.js
+
+```bash
+cd android-wrapper
+chmod +x scripts/prepare-nodejs-project.sh
+./scripts/prepare-nodejs-project.sh
+```
+
+Este script:
+- Copia el servidor desde el directorio padre
+- Instala dependencias de producción
+- Compila el CSS (Tailwind)
+- Limpia archivos innecesarios
+
+### 2. Abrir en Android Studio
+
+```bash
+# Abrir Android Studio y seleccionar la carpeta android-wrapper
+```
+
+### 3. Compilar el APK
+
+```bash
+# Debug
+./gradlew assembleDebug
+
+# Release (requiere configurar firma)
+./gradlew assembleRelease
+```
+
+### 4. Instalar en dispositivo
+
+```bash
+adb install app/build/outputs/apk/debug/app-debug.apk
+```
+
+## Configuración
+
+Al primer inicio, la app mostrará una pantalla de configuración donde debes ingresar:
+
+| Campo | Descripción | Ejemplo |
+|-------|-------------|---------|
+| Controller IP | IP del UniFi Controller | 192.168.1.1 |
+| Port | Puerto HTTPS | 443 |
+| API Token | Token de acceso local | uuid-token |
+| Site ID | ID del sitio | default |
+| WiFi SSID | Nombre de la red | Guest-WiFi |
+| Voucher Types | Tipos predefinidos | 480,1,,,;1440,1,,,; |
+
+### Obtener el API Token
+
+1. Abre la interfaz web del UniFi Controller
+2. Ve a **Settings → Control Plane → Local API Access**
+3. Genera un nuevo token de acceso local
+4. Copia el token a la configuración de la app
+
+## Arquitectura
+
+```
+┌─────────────────────────────────────────────────────────────┐
+│                      Android App (APK)                       │
+├─────────────────────────────────────────────────────────────┤
+│  ┌─────────────────┐    ┌─────────────────────────────────┐ │
+│  │   MainActivity  │    │        SetupActivity            │ │
+│  │    (WebView)    │◄───│   (Configuración inicial)       │ │
+│  │ 127.0.0.1:3000  │    └─────────────────────────────────┘ │
+│  └────────┬────────┘                                        │
+│           │                                                 │
+│           ▼                                                 │
+│  ┌─────────────────────────────────────────────────────────┐│
+│  │              nodejs-mobile Runtime                       ││
+│  │  ┌─────────────────────────────────────────────────────┐││
+│  │  │            Express Server (server.js)               │││
+│  │  │  - Puerto 3000                                      │││
+│  │  │  - API UniFi                                        │││
+│  │  │  - Generación PDF/QR                                │││
+│  │  └─────────────────────────────────────────────────────┘││
+│  └─────────────────────────────────────────────────────────┘│
+└─────────────────────────────────────────────────────────────┘
+```
+
+## Limitaciones
+
+| Funcionalidad | Estado | Notas |
+|--------------|--------|-------|
+| Crear vouchers | ✅ | Conexión directa a UniFi API |
+| Ver/eliminar vouchers | ✅ | |
+| Generar PDF | ✅ | Descarga a Downloads |
+| Impresora ESC/POS | ❌ | No soportado en Android |
+| Enviar email | ⚠️ | Depende de acceso SMTP |
+| OIDC/SSO | ❌ | No aplica en app local |
+
+## Desarrollo
+
+### Debug del servidor Node.js
+
+```bash
+adb logcat | grep -E "(NodeJS|UniFiVoucher|NodeService)"
+```
+
+### Modificar el servidor
+
+1. Haz cambios en el código del servidor (directorio padre)
+2. Ejecuta `./scripts/prepare-nodejs-project.sh`
+3. Recompila el APK
+
+## Solución de problemas
+
+### El servidor no inicia
+- Verifica que el proyecto Node.js esté en `nodejs-assets/nodejs-project/`
+- Revisa los logs: `adb logcat | grep NodeService`
+
+### No conecta al UniFi Controller
+- Verifica que el dispositivo esté en la misma red
+- Comprueba IP, puerto y token
+- El Controller debe aceptar conexiones desde la IP del dispositivo
+
+### La app se cierra inesperadamente
+- Android puede matar el servicio por falta de memoria
+- Asegúrate de que la notificación del servicio esté visible
+
+## Licencia
+
+MIT License - Igual que el proyecto principal.

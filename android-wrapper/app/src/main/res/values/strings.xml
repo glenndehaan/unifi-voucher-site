@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- App -->
+    <string name="app_name">UniFi Voucher</string>
+
+    <!-- Notification -->
+    <string name="notification_channel_name">Voucher Server</string>
+    <string name="notification_channel_description">Shows when the voucher server is running</string>
+    <string name="notification_title">UniFi Voucher Server</string>
+    <string name="notification_text">Server running on port 3000</string>
+    <string name="stop">Stop</string>
+
+    <!-- Setup -->
+    <string name="setup_title">Initial Setup</string>
+    <string name="setup_subtitle">Configure your UniFi Controller connection</string>
+    <string name="section_unifi">UniFi Controller</string>
+    <string name="section_wifi">WiFi Network</string>
+    <string name="section_vouchers">Vouchers</string>
+    <string name="section_options">Options</string>
+
+    <string name="hint_unifi_ip">Controller IP Address</string>
+    <string name="hint_unifi_port">Port</string>
+    <string name="hint_unifi_token">API Token (Local Access)</string>
+    <string name="hint_unifi_site">Site ID</string>
+    <string name="hint_ssid">WiFi SSID</string>
+    <string name="hint_ssid_password">WiFi Password (optional)</string>
+    <string name="hint_voucher_types">Voucher Types</string>
+    <string name="hint_voucher_types_help">Format: minutes,uses,up,down,mb; (e.g., 480,1,,,;1440,1,,,;)</string>
+
+    <string name="allow_custom_vouchers">Allow custom voucher creation</string>
+    <string name="auto_start_on_boot">Start server on device boot</string>
+
+    <string name="test_connection">Test Connection</string>
+    <string name="save_and_start">Save &amp; Start</string>
+    <string name="update_config">Update Configuration</string>
+    <string name="help">Help</string>
+    <string name="ok">OK</string>
+    <string name="cancel">Cancel</string>
+    <string name="reset">Reset</string>
+
+    <string name="connection_success">Connection successful!</string>
+    <string name="connection_failed">Connection failed. Check IP, port, and token.</string>
+    <string name="config_saved">Configuration saved</string>
+    <string name="error_saving_config">Error saving configuration</string>
+    <string name="error_missing_fields">Please fill in required fields</string>
+    <string name="error">Error</string>
+
+    <string name="help_title">Configuration Help</string>
+    <string name="help_message">1. UniFi Controller IP: The IP address of your UniFi Controller (e.g., 192.168.1.1 or unifi.local)\n\n2. Port: Usually 443 for HTTPS\n\n3. API Token: Generate a Local Access token in UniFi Settings → Control Plane → Local API Access\n\n4. Site ID: Usually \"default\" unless you have multiple sites\n\n5. WiFi SSID: The guest network name that will appear on vouchers\n\n6. Voucher Types: Define preset voucher options\n   Format: expiration_minutes,usage_limit,upload_kbps,download_kbps,data_mb;\n   Example: 480,1,,,; (8 hours, single use, unlimited speed)</string>
+
+    <!-- Main -->
+    <string name="starting_server">Starting server…</string>
+    <string name="server_error">Server Error</string>
+    <string name="server_error_description">Could not start the local server. Please check your configuration and try again.</string>
+    <string name="retry">Retry</string>
+    <string name="downloading">Downloading voucher…</string>
+    <string name="download_started">Download started</string>
+
+    <!-- Settings -->
+    <string name="settings_title">Settings</string>
+    <string name="current_config">Current Configuration</string>
+    <string name="unifi_controller">UniFi Controller</string>
+    <string name="site">Site</string>
+    <string name="ssid">SSID</string>
+    <string name="server_status">Server Status</string>
+    <string name="server_running">Running</string>
+    <string name="server_stopped">Stopped</string>
+    <string name="actions">Actions</string>
+
+    <string name="edit_configuration">Edit Configuration</string>
+    <string name="edit_configuration_desc">Modify UniFi Controller and voucher settings</string>
+
+    <string name="restart_server">Restart Server</string>
+    <string name="restart_server_desc">Stop and start the Node.js server</string>
+    <string name="restarting_server">Restarting server…</string>
+    <string name="server_restarted">Server restarted</string>
+
+    <string name="reset_configuration">Reset Configuration</string>
+    <string name="reset_configuration_desc">Delete all settings and start fresh</string>
+    <string name="reset_config_title">Reset Configuration?</string>
+    <string name="reset_config_message">This will delete all your settings and return to the setup screen. This action cannot be undone.</string>
+    <string name="config_reset">Configuration reset</string>
+
+    <string name="about">About</string>
+    <string name="about_desc">Version and license information</string>
+    <string name="about_title">About UniFi Voucher</string>
+    <string name="about_message">UniFi Voucher v%1$s\n\nA mobile app for generating and managing UniFi network guest vouchers.\n\nThis app runs a local Node.js server on your device to communicate with your UniFi Controller.\n\nLicense: MIT\n\nSource: github.com/sistemas-nxt/unifi-voucher-site</string>
+
+    <!-- Menu -->
+    <string name="action_settings">Settings</string>
+    <string name="action_refresh">Refresh</string>
+    <string name="action_home">Home</string>
+</resources>

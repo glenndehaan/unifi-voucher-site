@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="108dp"
+    android:height="108dp"
+    android:viewportWidth="108"
+    android:viewportHeight="108">
+    <!-- WiFi signal icon representing voucher/network access -->
+    <group android:translateX="27" android:translateY="27">
+        <path
+            android:fillColor="#FFFFFF"
+            android:pathData="M27,22.5c-7.91,0 -15.18,2.9 -20.78,7.69L27,54l20.78,-23.81C42.18,25.4 34.91,22.5 27,22.5z"/>
+        <path
+            android:fillColor="#FFFFFF"
+            android:pathData="M27,0C16.41,0 6.6,3.69 -1,9.92L1.42,12.9C6.55,8.09 13.42,5 21,4.03V16h12V4.03c7.58,0.97 14.45,4.06 19.58,8.87l2.42,-2.98C47.4,3.69 37.59,0 27,0z"/>
+    </group>
+</vector>
