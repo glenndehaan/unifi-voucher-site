@@ -29,11 +29,22 @@ class MainActivity : AppCompatActivity() {
 
     companion object {
         const val TAG = "MainActivity"
-        const val SERVER_URL = "http://${VoucherApplication.SERVER_HOST}:${VoucherApplication.SERVER_PORT}"
     }
 
     private lateinit var binding: ActivityMainBinding
     private var serverReadyReceiver: BroadcastReceiver? = null
+
+    /**
+     * Get the server URL based on the current mode
+     */
+    private fun getServerUrl(): String {
+        return when (NodeService.serverMode) {
+            NodeService.Companion.ServerMode.EMBEDDED ->
+                "http://${VoucherApplication.SERVER_HOST}:${VoucherApplication.SERVER_PORT}"
+            NodeService.Companion.ServerMode.EXTERNAL ->
+                NodeService.externalServerUrl
+        }
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -70,7 +81,7 @@ class MainActivity : AppCompatActivity() {
                 true
             }
             R.id.action_home -> {
-                binding.webView.loadUrl(SERVER_URL)
+                binding.webView.loadUrl(getServerUrl())
                 true
             }
             else -> super.onOptionsItemSelected(item)
@@ -135,9 +146,10 @@ class MainActivity : AppCompatActivity() {
                     request: WebResourceRequest?
                 ): Boolean {
                     val url = request?.url?.toString() ?: return false
+                    val serverUrl = getServerUrl()
 
-                    // Handle external links
-                    if (!url.startsWith(SERVER_URL)) {
+                    // Handle external links (not from our server)
+                    if (!url.startsWith(serverUrl) && !url.startsWith("http://127.0.0.1") && !url.startsWith("http://localhost")) {
                         val intent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
                         startActivity(intent)
                         return true
@@ -243,9 +255,11 @@ class MainActivity : AppCompatActivity() {
 
     private fun loadWebView() {
         runOnUiThread {
+            val serverUrl = getServerUrl()
+            Log.i(TAG, "Loading WebView with URL: $serverUrl")
             binding.loadingLayout.visibility = View.GONE
             binding.webViewContainer.visibility = View.VISIBLE
-            binding.webView.loadUrl(SERVER_URL)
+            binding.webView.loadUrl(serverUrl)
         }
     }
 
