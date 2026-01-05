@@ -17,21 +17,21 @@
   "dependencies": {
     "cookie-parser": "^1.4.7",
     "ejs": "^3.1.10",
-    "express": "^5.1.0",
+    "express": "^5.2.1",
     "express-locale": "^2.0.2",
-    "express-openid-connect": "^2.19.2",
+    "express-openid-connect": "^2.19.3",
     "js-logger": "^1.6.1",
-    "jsonwebtoken": "^9.0.2",
+    "jsonwebtoken": "^9.0.3",
     "multer": "^2.0.2",
     "node-thermal-printer": "^4.5.0",
-    "nodemailer": "^7.0.10",
+    "nodemailer": "^7.0.12",
     "pdfkit": "^0.17.2",
     "qrcode": "^1.5.4",
     "undici": "^7.16.0"
   },
   "devDependencies": {
-    "@tailwindcss/cli": "^4.1.16",
-    "@tailwindcss/forms": "^0.5.10",
-    "tailwindcss": "^4.1.16"
+    "@tailwindcss/cli": "^4.1.18",
+    "@tailwindcss/forms": "^0.5.11",
+    "tailwindcss": "^4.1.18"
   }
 }

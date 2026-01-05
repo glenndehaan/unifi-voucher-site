@@ -20,20 +20,31 @@ const time = require('../utils/time');
 const bytes = require('../utils/bytes');
 
 /**
- * Create nodemailer transport
+ * Base SMTP config
  */
-const transport = nodemailer.createTransport({
+const smtpConfig = {
     host: variables.smtpHost,
     port: parseInt(variables.smtpPort),
     secure: variables.smtpSecure,
     tls: {
         rejectUnauthorized: false // Skip TLS Certificate checks for Self-Hosted systems
-    },
-    auth: {
+    }
+};
+
+/**
+ * Include SMTP auth if defined
+ */
+if(variables.smtpUsername !== '' && variables.smtpPassword !== '') {
+    smtpConfig.auth = {
         user: variables.smtpUsername,
         pass: variables.smtpPassword
-    }
-});
+    };
+}
+
+/**
+ * Create nodemailer transport
+ */
+const transport = nodemailer.createTransport(smtpConfig);
 
 /**
  * Mail module functions
@@ -64,10 +75,21 @@ module.exports = {
                     voucher,
                     unifiSsid: variables.unifiSsid,
                     unifiSsidPassword: variables.unifiSsidPassword,
-                    qr: await qr(),
                     timeConvert: time,
                     bytesConvert: bytes
-                })
+                }),
+                attachments: [
+                    {
+                        filename: 'logo.png',
+                        content: fs.existsSync('/email/logo.png') ? fs.readFileSync(`/email/logo.png`) : fs.readFileSync(`${process.cwd()}/public/images/email/logo.png`),
+                        cid: 'logo@unifi-voucher-site.com'
+                    },
+                    {
+                        filename: 'qr.png',
+                        content: await qr(true),
+                        cid: 'qr@unifi-voucher-site.com'
+                    }
+                ]
             }).catch((e) => {
                 log.error(`[Mail] Error when sending mail`);
                 log.error(e);

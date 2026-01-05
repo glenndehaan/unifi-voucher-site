@@ -468,6 +468,7 @@ the different endpoints available in the API:
           {
             "id": "67bded6766f89f2a7ba6731f",
             "code": "15695-53133",
+            "note": "Test",
             "type": "multi",
             "duration": 60,
             "data_limit": "200",
@@ -477,6 +478,7 @@ the different endpoints available in the API:
           {
             "id": "67bdecd166f89f2a7ba67317",
             "code": "03004-59449",
+            "note": null,
             "type": "single",
             "duration": 480,
             "data_limit": null,
@@ -504,6 +506,15 @@ the different endpoints available in the API:
         ```json
         {
           "type": "480,0,,,"
+        }
+        ```
+
+      - Generate Voucher and Provide note:
+
+        ```json
+        {
+          "type": "480,0,,,",
+          "note": "This is a note"
         }
         ```
 
@@ -677,6 +688,41 @@ Here’s what each variable represents:
 > PRINTERS: 'pdf,192.168.1.10,192.168.1.11'
 > ```
 
+### Custom Branding (Logo)
+
+You can customize the appearance of the pdf and ESC/POS print layout by providing your own branding assets, including:
+
+* `logo.png` — Logo used in the print header
+
+To do this, use Docker volume mappings to mount your custom assets into the `/print` directory inside the container.
+The application will use these files (if present) instead of the default ones.
+
+> **If you provide custom branding for printed vouchers, make sure your logo closely match the original application logo’s size, aspect ratio, and color space.** This helps ensure the layout prints correctly and avoids color shifts or misalignment in the final output.
+
+#### Example
+
+Suppose you have your custom images in a local directory called `branding/`:
+
+```
+branding/
+└── logo.png
+```
+
+You can configure this using Docker Compose:
+
+```yaml
+services:
+  unifi-voucher-site:
+    image: glenndehaan/unifi-voucher-site:latest
+    ports:
+      - "3000:3000"
+    environment:
+      KIOSK_ENABLED: 'true'
+      KIOSK_VOUCHER_TYPES: '480,1,,,;'
+    volumes:
+      - ./branding:/print
+```
+
 ### Usage
 
 #### PDF
@@ -736,6 +782,41 @@ Here’s what each variable represents:
 - **`SMTP_PASSWORD`**: The password for authenticating with your SMTP server.
 
 These settings allow the application to connect to your SMTP server and send emails on your behalf.
+
+### Custom Branding (Logo)
+
+You can customize the appearance of the email by providing your own branding assets, including:
+
+* `logo.png` — Logo used in the email header
+
+To do this, use Docker volume mappings to mount your custom assets into the `/email` directory inside the container.
+The application will use these files (if present) instead of the default ones.
+
+> We recommend to keep the logo at a maximum height of 75px, to prevent layout shifts
+
+#### Example
+
+Suppose you have your custom images in a local directory called `branding/`:
+
+```
+branding/
+└── logo.png
+```
+
+You can configure this using Docker Compose:
+
+```yaml
+services:
+  unifi-voucher-site:
+    image: glenndehaan/unifi-voucher-site:latest
+    ports:
+      - "3000:3000"
+    environment:
+      KIOSK_ENABLED: 'true'
+      KIOSK_VOUCHER_TYPES: '480,1,,,;'
+    volumes:
+      - ./branding:/email
+```
 
 ### Usage
 
@@ -822,7 +903,8 @@ KIOSK_VOUCHER_TYPES: '480,1,,,;'
 
 You can customize the appearance of the kiosk page by providing your own `logo.png` and `bg.jpg` images. You can also override the printed voucher logo (PDF y ESC/POS) with `print_logo.png`.
 
-To do this, use Docker volume mappings to mount your custom assets to the `/kiosk` directory inside the container. The application will use these files (if present) instead of the default ones.
+To do this, use Docker volume mappings to mount your custom assets into the `/kiosk` directory inside the container.
+The application will use these files (if present) instead of the default ones.
 
 #### Example
 

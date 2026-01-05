@@ -1,5 +1,5 @@
 /**
- * Import base packages
+ * Import vendor modules
  */
 const fs = require('fs');
 const path = require('path');
