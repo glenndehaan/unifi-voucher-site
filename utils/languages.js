@@ -31,6 +31,7 @@ module.exports = filterLanguages({
     es: '🇪🇸 Spanish',
     fi: '🇫🇮 Finnish',
     fr: '🇫🇷 French',
+    it: '🇮🇹 Italian',
     nl: '🇳🇱 Dutch',
     pl: '🇵🇱 Polish',
     pt: '🇵🇹 Portuguese',
