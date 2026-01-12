@@ -25,5 +25,11 @@ module.exports = (minutes, language = 'en') => {
     }
 
     const days = hours / 24;
+
+    if (days < 365)
+    return `${days} ${(days > 1) ? t('days') : t('day')}`;
+
+
+    const years = days / 365;
     return `${days} ${(days > 1) ? t('days') : t('day')}`;
 }
