@@ -205,8 +205,8 @@ app.disable('x-powered-by');
 /**
  * Start listening on port
  */
-app.listen(3000, '0.0.0.0', async () => {
-    log.info(`[App] Running on: 0.0.0.0:3000`);
+app.listen(3000, variables.bindAddress, async () => {
+    log.info(`[App] Running on: ${variables.bindAddress}:3000`);
     await updateCache();
 
     // Run tasks every 15 minutes

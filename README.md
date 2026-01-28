@@ -158,6 +158,8 @@ services:
       KIOSK_EMAIL: 'false'
       # Enable/disable a printer for Kiosk Vouchers (this automatically prints vouchers), currently supported: escpos ip (Example: 192.168.1.10)
       KIOSK_PRINTER: ''
+      # Specifies the IP address to bind to (such as :: in IPv6 environments)
+      BIND_ADDRESS: '0.0.0.0'
       # Sets the application Log Level (Valid Options: error|warn|info|debug|trace)
       LOG_LEVEL: 'info'
       # Sets the default translation for dropdowns

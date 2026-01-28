@@ -47,6 +47,7 @@ module.exports = {
     kioskHomepage: config('kiosk_homepage') || (process.env.KIOSK_HOMEPAGE === 'true') || false,
     kioskEmail: config('kiosk_email') || (process.env.KIOSK_EMAIL === 'true') || false,
     kioskPrinter: config('kiosk_printer') || process.env.KIOSK_PRINTER || '',
+    bindAddress: config('bind_address') || process.env.BIND_ADDRESS || '0.0.0.0',
     logLevel: config('log_level') || process.env.LOG_LEVEL || 'info',
     translationDefault: config('translation_default') || process.env.TRANSLATION_DEFAULT || 'en',
     translationHiddenLanguages: config('translation_hidden_languages') || process.env.TRANSLATION_HIDDEN_LANGUAGES || '',
