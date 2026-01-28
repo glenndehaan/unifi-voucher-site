@@ -16,18 +16,18 @@
   "license": "MIT",
   "dependencies": {
     "cookie-parser": "^1.4.7",
-    "ejs": "^3.1.10",
+    "ejs": "^4.0.1",
     "express": "^5.2.1",
     "express-locale": "^2.0.2",
-    "express-openid-connect": "^2.19.3",
+    "express-openid-connect": "^2.19.4",
     "js-logger": "^1.6.1",
     "jsonwebtoken": "^9.0.3",
     "multer": "^2.0.2",
-    "node-thermal-printer": "^4.5.0",
-    "nodemailer": "^7.0.12",
+    "node-thermal-printer": "^4.6.0",
+    "nodemailer": "^7.0.13",
     "pdfkit": "^0.17.2",
     "qrcode": "^1.5.4",
-    "undici": "^7.16.0"
+    "undici": "^7.19.2"
   },
   "devDependencies": {
     "@tailwindcss/cli": "^4.1.18",

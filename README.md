@@ -228,6 +228,7 @@ The structure of the file should use lowercase versions of the environment varia
   "kiosk_homepage": false,
   "kiosk_email": false,
   "kiosk_printer": "",
+  "bind_address": "0.0.0.0",
   "log_level": "info",
   "translation_default": "en",
   "translation_hidden_languages": "",
