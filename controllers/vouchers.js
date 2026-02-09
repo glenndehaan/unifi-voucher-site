@@ -80,6 +80,7 @@ module.exports = {
             printer_enabled: variables.printers !== '',
             voucher_types: types(variables.voucherTypes),
             voucher_custom: variables.voucherCustom,
+            voucher_note_required: variables.voucherNoteRequired,
             vouchers: cache.vouchers.filter((item) => {
                 if(variables.authOidcRestrictVisibility && req.oidc) {
                     return item.name && notes(item.name).auth_oidc_domain === user.email.split('@')[1].toLowerCase();

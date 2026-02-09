@@ -20,6 +20,7 @@ module.exports = {
     unifiSsidPassword: config('unifi_ssid_password') || process.env.UNIFI_SSID_PASSWORD || '',
     voucherTypes: config('voucher_types') || process.env.VOUCHER_TYPES || '480,1,,,;',
     voucherCustom: config('voucher_custom') !== null ? config('voucher_custom') : process.env.VOUCHER_CUSTOM ? process.env.VOUCHER_CUSTOM !== 'false' : true,
+    voucherNoteRequired: config('voucher_note_required') !== null ? config('voucher_note_required') : (process.env.VOUCHER_NOTE_REQUIRED === 'true') || false,
     serviceWeb: config('service_web') !== null ? config('service_web') : process.env.SERVICE_WEB ? process.env.SERVICE_WEB !== 'false' : true,
     serviceApi: config('service_api') || (process.env.SERVICE_API === 'true') || false,
     authInternalEnabled: config('auth_internal_enabled') !== null ? config('auth_internal_enabled') : process.env.AUTH_INTERNAL_ENABLED ? process.env.AUTH_INTERNAL_ENABLED !== 'false' : true,

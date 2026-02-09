@@ -16,7 +16,7 @@ UniFi Voucher Site is a web-based platform for generating and managing UniFi net
 - **OIDC Support**: Integrates OpenID Connect for secure user authentication and single sign-on (SSO).
 - **Web and API Services**: Access the service via a web interface or integrate with other systems using a REST API.
 - **Docker Support**: Easily deploy using Docker, with customizable environment settings.
-- **Home Assistant Add-on**: Seamlessly integrate with Home Assistant for centralized management.
+- **Home Assistant App**: Seamlessly integrate with Home Assistant for centralized management.
 - **Receipt Printing**: Supports printing vouchers with 80mm thermal printers. Via compatible PDFs and/or ESC/POS enabled network printers.
 - **Bulk Printing**: Export/print multiple Vouchers in one go.
 - **Email Functionality**: Automatically send vouchers via SMTP.
@@ -124,6 +124,8 @@ services:
       VOUCHER_TYPES: '480,1,,,;'
       # Allow users to create custom vouchers types within the UI
       VOUCHER_CUSTOM: 'true'
+      # Force users to provide a note within the UI
+      VOUCHER_NOTE_REQUIRED: 'false'
       # Enable/disable the Web UI
       SERVICE_WEB: 'true'
       # Enable/disable the API
@@ -212,6 +214,7 @@ The structure of the file should use lowercase versions of the environment varia
   "auth_disable": false,
   "voucher_types": "480,1,,,;",
   "voucher_custom": true,
+  "voucher_note_required": false,
   "service_web": true,
   "service_api": false,
   "printers": "",
@@ -256,20 +259,21 @@ services:
 
 > If both environment variables and `options.json` are provided, values from `options.json` will take precedence.
 
-### Home Assistant Add-on
+### Home Assistant App
 
-For users of Home Assistant, we provide a dedicated add-on to seamlessly integrate the UniFi Voucher Site with your Home Assistant instance. This add-on simplifies the setup process and allows you to manage UniFi vouchers directly from your Home Assistant dashboard.
+For users of Home Assistant, we provide a dedicated app to seamlessly integrate the UniFi Voucher Site with your Home Assistant instance.
+This app simplifies the setup process and allows you to manage UniFi vouchers directly from your Home Assistant dashboard.
 
-[![Open your Home Assistant instance and show the add add-on repository dialog with a specific repository URL pre-filled.](https://my.home-assistant.io/badges/supervisor_add_addon_repository.svg)](https://my.home-assistant.io/redirect/supervisor_add_addon_repository/?repository_url=https%3A%2F%2Fgithub.com%2Fglenndehaan%2Fha-addons)
+[![Open your Home Assistant instance and show the add app repository dialog with a specific repository URL pre-filled.](https://my.home-assistant.io/badges/supervisor_add_addon_repository.svg)](https://my.home-assistant.io/redirect/supervisor_add_addon_repository/?repository_url=https%3A%2F%2Fgithub.com%2Fglenndehaan%2Fha-addons)
 
 #### Manual Installation
 
-To install the UniFi Voucher Site add-on for Home Assistant, follow these steps:
+To install the UniFi Voucher Site app for Home Assistant, follow these steps:
 
 1. Open the Supervisor panel in your Home Assistant instance.
-2. Navigate to the "Add-on Store."
+2. Navigate to the "App Store."
 3. Add our repository to the list of repositories by clicking the three dots in the upper-right corner, then selecting "Repositories," and entering the URL of our repository: `https://github.com/glenndehaan/ha-addons`.
-4. Once the repository is added, you will find the "UniFi Voucher Site" add-on in the add-on store. Click on it.
+4. Once the repository is added, you will find the "UniFi Voucher Site" app in the app store. Click on it.
 5. Click "Install" and wait for the installation to complete.
 
 ---

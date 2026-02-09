@@ -24,10 +24,10 @@
     "jsonwebtoken": "^9.0.3",
     "multer": "^2.0.2",
     "node-thermal-printer": "^4.6.0",
-    "nodemailer": "^7.0.13",
+    "nodemailer": "^8.0.1",
     "pdfkit": "^0.17.2",
     "qrcode": "^1.5.4",
-    "undici": "^7.19.2"
+    "undici": "^7.21.0"
   },
   "devDependencies": {
     "@tailwindcss/cli": "^4.1.18",
