@@ -172,8 +172,10 @@ services:
       TRANSLATION_DEBUG: 'false'
       # Enables/disables an automated task to clean up expired vouchers from UniFi
       TASK_CLEANUP_EXPIRED: 'false'
-      # Enables/disables an automated task to clean up unused vouchers (Vouchers unused a day after creation) from UniFi
+      # Enables/disables an automated task to clean up unused vouchers from UniFi
       TASK_CLEANUP_UNUSED: 'false'
+      # Specifies the amount of days to wait before removing the unused vouchers
+      TASK_CLEANUP_UNUSED_DAYS: '1'
     # Optional volume mapping to override assets
     volumes:
       - ./branding:/kiosk
@@ -237,7 +239,8 @@ The structure of the file should use lowercase versions of the environment varia
   "translation_hidden_languages": "",
   "translation_debug": false,
   "task_cleanup_expired": false,
-  "task_cleanup_unused": false
+  "task_cleanup_unused": false,
+  "task_cleanup_unused_days": 1
 }
 
 ```

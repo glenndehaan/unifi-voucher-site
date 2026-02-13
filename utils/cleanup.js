@@ -4,6 +4,7 @@
 const cache = require('../modules/cache');
 const log = require('../modules/log');
 const unifi = require('../modules/unifi');
+const variables = require('../modules/variables');
 
 /**
  * Import own utils
@@ -39,7 +40,7 @@ module.exports = {
     },
 
     /**
-     * Function to clean up unused voucher that are still active after a day
+     * Function to clean up unused voucher that are still active after defined day(s)
      *
      * @returns {Promise<unknown>}
      */
@@ -48,7 +49,7 @@ module.exports = {
             const vouchers = cache.vouchers.filter((voucher) => {
                 const today = new Date();
                 const voucherDate = new Date(voucher.createdAt);
-                voucherDate.setDate(voucherDate.getDate() + 1);
+                voucherDate.setDate(voucherDate.getDate() + parseInt(variables.taskCleanupUnusedDays));
 
                 return voucherDate.getTime() < today.getTime();
             });

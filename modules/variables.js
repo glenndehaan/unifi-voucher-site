@@ -55,6 +55,7 @@ module.exports = {
     translationDebug: config('translation_debug') || (process.env.TRANSLATION_DEBUG === 'true') || false,
     taskCleanupExpired: config('task_cleanup_expired') || (process.env.TASK_CLEANUP_EXPIRED === 'true') || false,
     taskCleanupUnused: config('task_cleanup_unused') || (process.env.TASK_CLEANUP_UNUSED === 'true') || false,
+    taskCleanupUnusedDays: config('task_cleanup_unused_days') || process.env.TASK_CLEANUP_UNUSED_DAYS || 1,
     gitTag: process.env.GIT_TAG || 'master',
     gitBuild: fs.existsSync('/etc/unifi_voucher_site_build') ? fs.readFileSync('/etc/unifi_voucher_site_build', 'utf-8') : 'Development'
 };
