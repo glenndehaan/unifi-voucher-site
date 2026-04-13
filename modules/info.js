@@ -103,9 +103,17 @@ module.exports = () => {
     log.info(`[Translation] Default Language: ${variables.translationDefault}${variables.translationDebug ? ', Debugger: Enabled' : ', Debugger: Disabled'}${variables.translationHiddenLanguages !== '' ? `, Hidden Languages: ${variables.translationHiddenLanguages}` : ''}`)
 
     /**
+     * Check printer layout
+     */
+    if(variables.printersLayout !== 'full' && variables.printersLayout !== 'slim_qr' && variables.printersLayout !== 'slim') {
+        log.error(`[Printers] Incorrect Configuration Detected!. Verify 'PRINTERS_LAYOUT' is correctly set!`);
+        process.exit(1);
+    }
+
+    /**
      * Log printer status
      */
-    log.info(`[Printers] ${variables.printers !== '' ? `Enabled! Available: ${variables.printers.split(',').join(', ')}` : 'Disabled!'}`);
+    log.info(`[Printers] ${variables.printers !== '' ? `Enabled! Layout: ${variables.printersLayout}, Available: ${variables.printers.split(',').join(', ')}` : 'Disabled!'}`);
 
     /**
      * Log email status

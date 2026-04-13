@@ -83,12 +83,14 @@ module.exports = {
                     doc.moveDown(1);
                 }
 
-                doc.image(fs.existsSync('/print/logo.png') ? '/print/logo.png' : `${process.cwd()}/public/images/print/logo.png`, 75, 15, {
-                    fit: [75, 75],
-                    align: 'center',
-                    valign: 'center'
-                });
-                doc.moveDown(6);
+                if(variables.printersLayout === 'full') {
+                    doc.image(fs.existsSync('/print/logo.png') ? '/print/logo.png' : `${process.cwd()}/public/images/print/logo.png`, 75, 15, {
+                        fit: [75, 75],
+                        align: 'center',
+                        valign: 'center'
+                    });
+                    doc.moveDown(6);
+                }
 
                 doc.font('Roboto-Bold')
                     .fontSize(20)
@@ -129,25 +131,31 @@ module.exports = {
                             .text(variables.unifiSsidPassword, {
                                 continued: true
                             });
-                        doc.font('Roboto-Regular')
-                            .fontSize(10)
-                            .text(` ${t('or')},`);
+                        if(variables.printersLayout === 'full' || variables.printersLayout === 'slim_qr') {
+                            doc.font('Roboto-Regular')
+                                .fontSize(10)
+                                .text(` ${t('or')},`);
+                        }
                     } else {
-                        doc.font('Roboto-Regular')
-                            .fontSize(10)
-                            .text(` ${t('or')},`);
+                        if(variables.printersLayout === 'full' || variables.printersLayout === 'slim_qr') {
+                            doc.font('Roboto-Regular')
+                                .fontSize(10)
+                                .text(` ${t('or')},`);
+                        }
                     }
 
-                    doc.font('Roboto-Regular')
-                        .fontSize(10)
-                        .text(`${t('scan')}:`);
+                    if(variables.printersLayout === 'full' || variables.printersLayout === 'slim_qr') {
+                        doc.font('Roboto-Regular')
+                            .fontSize(10)
+                            .text(`${t('scan')}:`);
 
-                    doc.image(await qr(), 75, variables.unifiSsidPassword !== '' ? 255 : 205, {
-                        fit: [75, 75],
-                        align: 'center',
-                        valign: 'center'
-                    });
-                    doc.moveDown(6);
+                        doc.image(await qr(), 75, variables.unifiSsidPassword !== '' ? variables.printersLayout === 'full' ? 255 : 174 : variables.printersLayout === 'full' ? 205 : 124, {
+                            fit: [75, 75],
+                            align: 'center',
+                            valign: 'center'
+                        });
+                        doc.moveDown(6);
+                    }
 
                     // Check if we need to move the text down extra or not depending on if large SSIDs or Passwords are used
                     if(variables.unifiSsidPassword !== '' && (variables.unifiSsidPassword.length < 16 || variables.unifiSsidPassword.length < 32)) {
@@ -247,10 +255,12 @@ module.exports = {
             }
 
             printer.setTypeFontB();
-            printer.alignCenter();
-            printer.newLine();
-            await printer.printImage(fs.existsSync('/print/logo.png') ? '/print/logo.png' : `${process.cwd()}/public/images/print/logo.png`);
-            printer.newLine();
+            if(variables.printersLayout === 'full') {
+                printer.alignCenter();
+                printer.newLine();
+                await printer.printImage(fs.existsSync('/print/logo.png') ? '/print/logo.png' : `${process.cwd()}/public/images/print/logo.png`);
+                printer.newLine();
+            }
 
             printer.alignCenter();
             printer.newLine();
@@ -279,15 +289,21 @@ module.exports = {
                     printer.setTextSize(1, 1);
                     printer.print(variables.unifiSsidPassword);
                     printer.setTextNormal();
-                    printer.print(` ${t('or')},`);
-                    printer.newLine();
+                    if(variables.printersLayout === 'full' || variables.printersLayout === 'slim_qr') {
+                        printer.print(` ${t('or')},`);
+                        printer.newLine();
+                    }
                 } else {
-                    printer.print(` ${t('or')},`);
-                    printer.newLine();
+                    if(variables.printersLayout === 'full' || variables.printersLayout === 'slim_qr') {
+                        printer.print(` ${t('or')},`);
+                        printer.newLine();
+                    }
                 }
-                printer.println(`${t('scan')}:`);
-                printer.alignCenter();
-                await printer.printImageBuffer(await qr(true));
+                if(variables.printersLayout === 'full' || variables.printersLayout === 'slim_qr') {
+                    printer.println(`${t('scan')}:`);
+                    printer.alignCenter();
+                    await printer.printImageBuffer(await qr(true));
+                }
             }
 
             printer.newLine();

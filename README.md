@@ -132,6 +132,8 @@ services:
       SERVICE_API: 'false'
       # Enable/disable the printers and setup available printers, currently supported: pdf,escpos ip (Example: pdf,192.168.1.10)
       PRINTERS: ''
+      # Set the layout to print (full, slim_qr, slim)
+      PRINTERS_LAYOUT: 'full'
       # SMTP Mail from email address (optional)
       SMTP_FROM: ''
       # SMTP Mail server hostname/ip (optional)
@@ -220,6 +222,7 @@ The structure of the file should use lowercase versions of the environment varia
   "service_web": true,
   "service_api": false,
   "printers": "",
+  "printers_layout": "full",
   "smtp_from": "",
   "smtp_host": "",
   "smtp_port": "",
@@ -624,6 +627,7 @@ To enable the print feature, you need to set the following environment variables
 
 ```env
 PRINTERS: ''
+PRINTERS_LAYOUT: 'full'
 ```
 
 Here’s what each variable represents:
@@ -637,6 +641,11 @@ Here’s what each variable represents:
 > ```env
 > PRINTERS: 'pdf,192.168.1.10,192.168.1.11'
 > ```
+
+- **`PRINTERS_LAYOUT`**: Defines the layout format used when printing vouchers. This applies to both PDF generation and ESC/POS printers. Supported options:
+  - `full`: A detailed layout including all voucher information (e.g. name, code, expiration, and QR code). Best for customer-facing prints.
+  - `slim_qr`: A compact layout that focuses on the QR code with minimal additional text and without logo. Ideal for quick scans.
+  - `slim`: A minimal text-based layout without a QR code or logo, suitable for very fast printing or low-paper usage scenarios.
 
 ### Custom Branding (Logo)
 

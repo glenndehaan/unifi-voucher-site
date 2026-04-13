@@ -35,6 +35,7 @@ module.exports = {
     authOidcRestrictVisibility: config('auth_oidc_restrict_visibility') !== null ? config('auth_oidc_restrict_visibility') : (process.env.AUTH_OIDC_RESTRICT_VISIBILITY === 'true') || false,
     authDisabled: config('auth_disable') || (process.env.AUTH_DISABLE === 'true') || false,
     printers: config('printers') || process.env.PRINTERS || '',
+    printersLayout: config('printers_layout') || process.env.PRINTERS_LAYOUT || 'full',
     smtpFrom: config('smtp_from') || process.env.SMTP_FROM || '',
     smtpHost: config('smtp_host') || process.env.SMTP_HOST || '',
     smtpPort: config('smtp_port') || process.env.SMTP_PORT || 25,
