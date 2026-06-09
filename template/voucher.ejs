@@ -224,13 +224,13 @@
                                     <path fill-rule="evenodd" d="M7.875 1.5C6.839 1.5 6 2.34 6 3.375v2.99c-.426.053-.851.11-1.274.174-1.454.218-2.476 1.483-2.476 2.917v6.294a3 3 0 0 0 3 3h.27l-.155 1.705A1.875 1.875 0 0 0 7.232 22.5h9.536a1.875 1.875 0 0 0 1.867-2.045l-.155-1.705h.27a3 3 0 0 0 3-3V9.456c0-1.434-1.022-2.7-2.476-2.917A48.716 48.716 0 0 0 18 6.366V3.375c0-1.036-.84-1.875-1.875-1.875h-8.25ZM16.5 6.205v-2.83A.375.375 0 0 0 16.125 3h-8.25a.375.375 0 0 0-.375.375v2.83a49.353 49.353 0 0 1 9 0Zm-.217 8.265c.178.018.317.16.333.337l.526 5.784a.375.375 0 0 1-.374.409H7.232a.375.375 0 0 1-.374-.409l.526-5.784a.373.373 0 0 1 .333-.337 41.741 41.741 0 0 1 8.566 0Zm.967-3.97a.75.75 0 0 1 .75-.75h.008a.75.75 0 0 1 .75.75v.008a.75.75 0 0 1-.75.75H18a.75.75 0 0 1-.75-.75V10.5ZM15 9.75a.75.75 0 0 0-.75.75v.008c0 .414.336.75.75.75h.008a.75.75 0 0 0 .75-.75V10.5a.75.75 0 0 0-.75-.75H15Z" clip-rule="evenodd" />
                                 </svg>
                             </button>
-                            <a href="<%= baseUrl %>/voucher/<%= voucher.id %>/remove" type="button" class="remove-button relative rounded-full p-1 text-red-500 dark:text-red-400 hover:text-black dark:hover:text-white">
+                            <button type="button" data-code="<%= voucher.code %>" data-href="<%= baseUrl %>/voucher/<%= voucher.id %>/remove" class="voucher-delete relative rounded-full p-1 text-red-500 dark:text-red-400 hover:text-black dark:hover:text-white">
                                 <span class="absolute -inset-1.5"></span>
                                 <span class="sr-only">Remove Voucher Code</span>
                                 <svg class="h-5 w-5" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
                                     <path fill-rule="evenodd" d="M16.5 4.478v.227a48.816 48.816 0 0 1 3.878.512.75.75 0 1 1-.256 1.478l-.209-.035-1.005 13.07a3 3 0 0 1-2.991 2.77H8.084a3 3 0 0 1-2.991-2.77L4.087 6.66l-.209.035a.75.75 0 0 1-.256-1.478A48.567 48.567 0 0 1 7.5 4.705v-.227c0-1.564 1.213-2.9 2.816-2.951a52.662 52.662 0 0 1 3.369 0c1.603.051 2.815 1.387 2.815 2.951Zm-6.136-1.452a51.196 51.196 0 0 1 3.273 0C14.39 3.05 15 3.684 15 4.478v.113a49.488 49.488 0 0 0-6 0v-.113c0-.794.609-1.428 1.364-1.452Zm-.355 5.945a.75.75 0 1 0-1.5.058l.347 9a.75.75 0 1 0 1.499-.058l-.346-9Zm5.48.058a.75.75 0 1 0-1.498-.058l-.347 9a.75.75 0 0 0 1.5.058l.345-9Z" clip-rule="evenodd" />
                                 </svg>
-                            </a>
+                            </button>
                         </li>
                     <% }); %>
                 </ul>
@@ -391,6 +391,31 @@
             <p class="w-1/2 text-center text-white">This may take a few seconds, please don't close this page.</p>
         </div>
 
+        <div id="dialog-delete" style="display: none;" class="fixed inset-0 z-45 size-auto max-h-none max-w-none overflow-y-auto bg-transparent backdrop:bg-transparent">
+            <div class="fixed inset-0 bg-gray-900/90"></div>
+            <div class="flex min-h-full items-end justify-center p-4 text-center focus:outline-none sm:items-center sm:p-0">
+                <div class="relative transform overflow-hidden rounded-lg bg-gray-800 px-4 pt-5 pb-4 text-left shadow-xl outline -outline-offset-1 outline-white/10 transition-all data-closed:translate-y-4 data-closed:opacity-0 data-enter:duration-300 data-enter:ease-out data-leave:duration-200 data-leave:ease-in sm:my-8 sm:w-full sm:max-w-lg sm:p-6 data-closed:sm:translate-y-0 data-closed:sm:scale-95">
+                    <div class="sm:flex sm:items-start">
+                        <div class="mx-auto flex size-12 shrink-0 items-center justify-center rounded-full bg-red-500/10 sm:mx-0 sm:size-10">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" data-slot="icon" aria-hidden="true" class="size-6 text-red-400">
+                                <path d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126ZM12 15.75h.007v.008H12v-.008Z" stroke-linecap="round" stroke-linejoin="round" />
+                            </svg>
+                        </div>
+                        <div class="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left">
+                            <h3 id="dialog-title" class="text-base font-semibold text-white">Delete voucher</h3>
+                            <div class="mt-2">
+                                <p class="text-sm text-gray-400">Are you sure you want to delete the voucher with code: <span id="dialog-delete-code"></span>? This action cannot be undone.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mt-5 sm:mt-4 sm:flex sm:flex-row-reverse">
+                        <a href="#" type="button" id="dialog-delete-confirm" class="remove-button inline-flex w-full justify-center rounded-md bg-red-500 px-3 py-2 text-sm font-semibold text-white hover:bg-red-400 sm:ml-3 sm:w-auto">Delete</a>
+                        <button type="button" id="dialog-delete-cancel" class="mt-3 inline-flex w-full justify-center rounded-md bg-white/10 px-3 py-2 text-sm font-semibold text-white inset-ring-1 inset-ring-white/5 hover:bg-white/20 sm:mt-0 sm:w-auto">Cancel</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <div aria-live="assertive" class="z-40 pointer-events-none fixed inset-0 flex items-end px-4 py-6">
             <div id="copy-notification" style="display: none;" class="flex w-full flex-col items-center space-y-4">
                 <div class="pointer-events-auto w-full max-w-sm overflow-hidden rounded-lg bg-white dark:bg-gray-800 shadow-lg ring-1 ring-black/5">
@@ -448,10 +473,15 @@
             const spinnerRemove = document.querySelector('#spinner-remove');
             const spinnerList = document.querySelector('#spinner-list');
             const spinnerEmail = document.querySelector('#spinner-email');
+            const dialogDelete = document.querySelector('#dialog-delete');
+            const dialogDeleteCode = document.querySelector('#dialog-delete-code');
+            const dialogDeleteConfirm = document.querySelector('#dialog-delete-confirm');
+            const dialogDeleteCancel = document.querySelector('#dialog-delete-cancel');
             const copyNotification = document.querySelector('#copy-notification');
             const vouchers = document.querySelectorAll('.voucher');
             const vouchersEmail = document.querySelectorAll('.voucher-email');
             const vouchersPrint = document.querySelectorAll('.voucher-print');
+            const vouchersDelete = document.querySelectorAll('.voucher-delete');
             const bulkPrint = document.querySelector('#bulk-print');
             const filterSortForm = document.querySelector('#filter-sort-form');
             const statusFilter = document.querySelector('#status');
@@ -506,6 +536,9 @@
             });
             createForm.addEventListener('submit', () => {
                 spinnerCreate.style.display = '';
+            });
+            dialogDeleteCancel.addEventListener('click', () => {
+                dialogDelete.style.display = 'none';
             });
             shareButtons.forEach((el) => {
                 if(typeof navigator.clipboard !== 'undefined') {
@@ -590,6 +623,13 @@
                     } else {
                         window.location.reload();
                     }
+                });
+            });
+            vouchersDelete.forEach((el) => {
+                el.addEventListener('click', async () => {
+                    dialogDelete.style.display = 'block';
+                    dialogDeleteCode.textContent = `${el.dataset.code.slice(0, 5)}-${el.dataset.code.slice(5)}`;
+                    dialogDeleteConfirm.href = el.dataset.href;
                 });
             });
             bulkPrint.addEventListener('click', async () => {

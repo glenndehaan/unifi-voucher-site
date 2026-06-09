@@ -16,22 +16,22 @@
   "license": "MIT",
   "dependencies": {
     "cookie-parser": "^1.4.7",
-    "ejs": "^5.0.2",
+    "ejs": "^6.0.1",
     "express": "^5.2.1",
     "express-locale": "^2.0.2",
-    "express-openid-connect": "^2.20.1",
+    "express-openid-connect": "^3.0.0",
     "js-logger": "^1.6.1",
     "jsonwebtoken": "^9.0.3",
     "multer": "^2.1.1",
     "node-thermal-printer": "^4.6.0",
-    "nodemailer": "^8.0.5",
-    "pdfkit": "^0.18.0",
+    "nodemailer": "^8.0.10",
+    "pdfkit": "^0.19.0",
     "qrcode": "^1.5.4",
-    "undici": "^7.25.0"
+    "undici": "^7.27.2"
   },
   "devDependencies": {
-    "@tailwindcss/cli": "^4.2.2",
+    "@tailwindcss/cli": "^4.3.0",
     "@tailwindcss/forms": "^0.5.11",
-    "tailwindcss": "^4.2.2"
+    "tailwindcss": "^4.3.0"
   }
 }
