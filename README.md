@@ -89,7 +89,7 @@ services:
       UNIFI_PORT: 443
       # The API Key created on the integrations tab within UniFi OS
       UNIFI_TOKEN: ''
-      # The console id of the site if using Unifi's Site Manager instead of local IP
+      # The console id of the site if using Unifi's Site Manager instead of local IP. LEAVE BLANK IF NOT USING SITE MANAGER.
       UNIFI_CONSOLE_ID: ''
       # The UniFi Site ID
       UNIFI_SITE_ID: 'default'
