@@ -17,6 +17,7 @@ module.exports = {
     unifiToken: config('unifi_token') || process.env.UNIFI_TOKEN || '',
     unifiConsoleId: config('unifi_console_id') || process.env.UNIFI_CONSOLE_ID || '',
     unifiSiteId: config('unifi_site_id') || process.env.UNIFI_SITE_ID || 'default',
+    unifiSiteMgr: config('unifi_site_mgr') || process.env.UNIFI_SITE_MGR || 'false',
     unifiSsid: config('unifi_ssid') || process.env.UNIFI_SSID || '',
     unifiSsidPassword: config('unifi_ssid_password') || process.env.UNIFI_SSID_PASSWORD || '',
     voucherTypes: config('voucher_types') || process.env.VOUCHER_TYPES || '480,1,,,;',
