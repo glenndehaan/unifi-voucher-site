@@ -83,14 +83,18 @@ services:
     ports:
       - "3000:3000"
     environment:
-      # The IP address to your UniFi OS Console
+      # The IP address to your UniFi OS Console. If using Unifi's Site Manager, set to api.ui.com
       UNIFI_IP: '192.168.1.1'
       # The port of your UniFi OS Console, this could be 443 or 8443
       UNIFI_PORT: 443
       # The API Key created on the integrations tab within UniFi OS
       UNIFI_TOKEN: ''
+      # The console id of the site if using Unifi's Site Manager instead of local IP
+      UNIFI_CONSOLE_ID: ''
       # The UniFi Site ID
       UNIFI_SITE_ID: 'default'
+      # Set to true if using UniFi's Site Manager instead of local IP
+      UNIFI_SITE_MGR: 'false'
       # The UniFi SSID where guests need to connect to (Used within templating and 'Scan to Connect')
       UNIFI_SSID: ''
       # The UniFi SSID WPA/WPA2/WPA3 Password (Can be ignored for 'Open' networks) (Used within templating and 'Scan to Connect')
