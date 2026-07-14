@@ -10,13 +10,16 @@ const {Agent} = require('undici');
 const cache = require('../modules/cache');
 const variables = require('../modules/variables');
 const log = require('../modules/log');
+
 let unifiUrl = `${variables.unifiIp}:${variables.unifiPort}`;
+let filterRule = `internalReference.eq('${variables.unifiSiteId}')`;
 
 /**
 * Uses Unifi Cloud for API access if Site Mgr variable is set
 */
 if (variables.unifiSiteMgr) {
     unifiUrl = `api.ui.com/v1/connector/consoles/${variables.unifiConsoleId}`
+    filterRule = `id.eq(${variables.unifiSiteId})`;
 }
 
 /**
@@ -26,7 +29,7 @@ if (variables.unifiSiteMgr) {
  */
 const getSiteUUID = () => {
     return new Promise((resolve, reject) => {
-        fetch(`https://${unifiUrl}/proxy/network/integration/v1/sites?filter=id.eq(${variables.unifiSiteId})`, {
+        fetch(`https://${unifiUrl}/proxy/network/integration/v1/sites?filter=${filterRule}`, {
             headers: {
                 'User-Agent': 'unifi-voucher-site',
                 'Content-Type': 'application/json',
