@@ -8,6 +8,8 @@ services:
       UNIFI_PORT: 443
       UNIFI_TOKEN: ''
       UNIFI_SITE_ID: 'default'
+      UNIFI_SITE_MANAGER: 'false'
+      UNIFI_SITE_MANAGER_CONSOLE_ID: ''
       UNIFI_SSID: ''
       UNIFI_SSID_PASSWORD: ''
       AUTH_INTERNAL_ENABLED: 'true'

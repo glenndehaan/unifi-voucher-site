@@ -55,9 +55,16 @@ UniFi Voucher Site is a web-based platform for generating and managing UniFi net
 - UniFi OS v4.2.8+
 - UniFi Network v9.1.119+ (Cloud Gateways, Cloud Key, or UniFi OS software)
 - UniFi Access Point (AP)
-- UniFi Integration API Key
+- UniFi Local Network API Key or Site Manager API Key
 
+**Note: These API Keys are not interchangeable.** A Site Manager API Key cannot be used for the Local Network API and vice versa. The minimum required permissions for the Site Manager API Key is the 'UniFi Applications' and 'Network Application' permission along with the specific site as shown in the 2nd picture below.
+
+Local Network API Key Creation:
 ![UniFi Integration API Key](.docs/images/integrations_example.png)
+
+Site Manager API Key Creation:
+![UniFi Site Manager API Key](.docs/images/site_manager_example.png)
+
 
 [Follow this guide to set up the Hotspot Portal](https://help.ui.com/hc/en-us/articles/115000166827-UniFi-Hotspot-Portal-and-Guest-WiFi), then continue with the installation below
 
@@ -83,7 +90,7 @@ services:
     ports:
       - "3000:3000"
     environment:
-      # The IP address to your UniFi OS Console
+      # The IP address to your UniFi OS Console.
       UNIFI_IP: '192.168.1.1'
       # The port of your UniFi OS Console, this could be 443 or 8443
       UNIFI_PORT: 443
@@ -91,6 +98,10 @@ services:
       UNIFI_TOKEN: ''
       # The UniFi Site ID
       UNIFI_SITE_ID: 'default'
+      # Set to true if using UniFi's Site Manager instead of local IP
+      UNIFI_SITE_MANAGER: 'false'
+      # The console id of the site if using Unifi's Site Manager instead of local IP
+      UNIFI_SITE_MANAGER_CONSOLE_ID: ''
       # The UniFi SSID where guests need to connect to (Used within templating and 'Scan to Connect')
       UNIFI_SSID: ''
       # The UniFi SSID WPA/WPA2/WPA3 Password (Can be ignored for 'Open' networks) (Used within templating and 'Scan to Connect')
