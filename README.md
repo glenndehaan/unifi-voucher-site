@@ -96,12 +96,12 @@ services:
       UNIFI_PORT: 443
       # The API Key created on the integrations tab within UniFi OS
       UNIFI_TOKEN: ''
-      # The console id of the site if using Unifi's Site Manager instead of local IP
-      UNIFI_CONSOLE_ID: ''
       # The UniFi Site ID
       UNIFI_SITE_ID: 'default'
       # Set to true if using UniFi's Site Manager instead of local IP
-      UNIFI_SITE_MGR: 'false'
+      UNIFI_SITE_MANAGER: 'false'
+      # The console id of the site if using Unifi's Site Manager instead of local IP
+      UNIFI_SITE_MANAGER_CONSOLE_ID: ''
       # The UniFi SSID where guests need to connect to (Used within templating and 'Scan to Connect')
       UNIFI_SSID: ''
       # The UniFi SSID WPA/WPA2/WPA3 Password (Can be ignored for 'Open' networks) (Used within templating and 'Scan to Connect')
