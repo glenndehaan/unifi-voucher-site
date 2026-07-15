@@ -18,7 +18,7 @@ let filterRule = `internalReference.eq('${variables.unifiSiteId}')`;
 * Uses Unifi Cloud for API access if Site Mgr variable is set
 */
 if (variables.unifiSiteManager) {
-    unifiUrl = `api.ui.com/v1/connector/consoles/${variables.unifiConsoleId}`
+    unifiUrl = `api.ui.com/v1/connector/consoles/${variables.unifiSiteManagerConsoleId}`
     filterRule = `id.eq(${variables.unifiSiteId})`;
 }
 
