@@ -7,7 +7,7 @@ services:
       UNIFI_IP: '192.168.1.1'
       UNIFI_PORT: 443
       UNIFI_TOKEN: ''
-      UNIFI_CONSOLE_ID: ''
+      UNIFI_SITE_MANAGER_CONSOLE_ID: ''
       UNIFI_SITE_ID: 'default'
       UNIFI_SITE_MANAGER: 'false'
       UNIFI_SSID: ''
