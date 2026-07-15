@@ -10,7 +10,7 @@
     "build": "tailwindcss -i ./css/style.css -o ./public/dist/style.css --minify"
   },
   "engines": {
-    "node": ">=22.0.0"
+    "node": ">=24.0.0"
   },
   "author": "Glenn de Haan",
   "license": "MIT",
@@ -19,19 +19,19 @@
     "ejs": "^6.0.1",
     "express": "^5.2.1",
     "express-locale": "^2.0.2",
-    "express-openid-connect": "^3.0.0",
+    "express-openid-connect": "^3.2.0",
     "js-logger": "^1.6.1",
     "jsonwebtoken": "^9.0.3",
-    "multer": "^2.1.1",
+    "multer": "^2.2.0",
     "node-thermal-printer": "^4.6.0",
-    "nodemailer": "^8.0.10",
-    "pdfkit": "^0.19.0",
+    "nodemailer": "^9.0.3",
+    "pdfkit": "^0.19.1",
     "qrcode": "^1.5.4",
-    "undici": "^7.27.2"
+    "undici": "^8.7.0"
   },
   "devDependencies": {
-    "@tailwindcss/cli": "^4.3.0",
+    "@tailwindcss/cli": "^4.3.2",
     "@tailwindcss/forms": "^0.5.11",
-    "tailwindcss": "^4.3.0"
+    "tailwindcss": "^4.3.2"
   }
 }

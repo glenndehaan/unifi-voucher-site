@@ -2,7 +2,7 @@
  * Import vendor modules
  */
 const querystring = require('node:querystring');
-const {Agent} = require('undici');
+const {fetch, Agent} = require('undici');
 
 /**
  * Import own modules
