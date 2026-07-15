@@ -90,7 +90,7 @@ services:
     ports:
       - "3000:3000"
     environment:
-      # The IP address to your UniFi OS Console.
+      # The IP address to your UniFi OS Console
       UNIFI_IP: '192.168.1.1'
       # The port of your UniFi OS Console, this could be 443 or 8443
       UNIFI_PORT: 443
@@ -214,6 +214,8 @@ The structure of the file should use lowercase versions of the environment varia
   "unifi_port": 443,
   "unifi_token": "",
   "unifi_site_id": "default",
+  "unifi_site_manager": false,
+  "unifi_site_manager_console_id": "",
   "unifi_ssid": "",
   "unifi_ssid_password": "",
   "auth_internal_enabled": true,
