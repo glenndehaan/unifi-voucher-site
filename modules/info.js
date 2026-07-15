@@ -140,13 +140,25 @@ module.exports = () => {
     /**
      * Log controller
      */
-    log.info(`[UniFi] Using Controller on: ${variables.unifiIp}:${variables.unifiPort} (Site ID: ${variables.unifiSiteId}${variables.unifiSsid !== '' ? `, SSID: ${variables.unifiSsid}` : ''})`);
+    if(!variables.unifiSiteManager) {
+        log.info(`[UniFi] Using Controller on: ${variables.unifiIp}:${variables.unifiPort} (Connection: Local, Site ID: ${variables.unifiSiteId}${variables.unifiSsid !== '' ? `, SSID: ${variables.unifiSsid}` : ''})`);
+    } else {
+        log.info(`[UniFi] Using Controller on: api.ui.com (Connection: Cloud, Console ID: ${variables.unifiSiteManagerConsoleId}, Site ID: ${variables.unifiSiteId}${variables.unifiSsid !== '' ? `, SSID: ${variables.unifiSsid}` : ''})`);
+    }
 
     /**
      * Check if UniFi Token is set
      */
     if(variables.unifiToken === '') {
         log.error('[UniFi] Integration API Key is not set within UNIFI_TOKEN environment variable!');
+        process.exit(1);
+    }
+
+    /**
+     * Check if UniFi Console ID is set
+     */
+    if(variables.unifiSiteManager && variables.unifiSiteManagerConsoleId === '') {
+        log.error('[UniFi] Console ID is not set within UNIFI_SITE_MANAGER_CONSOLE_ID environment variable!');
         process.exit(1);
     }
 
