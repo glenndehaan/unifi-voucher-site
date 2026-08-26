@@ -458,6 +458,8 @@
             const emailDialog = document.querySelector('#email-dialog');
             const printDialog = document.querySelector('#print-dialog');
             const bulkPrintDialog = document.querySelector('#bulk-print-dialog');
+            const selectAllVouchers = document.querySelector('#select-all-vouchers');
+            const voucherCheckboxes = bulkPrintDialog.querySelectorAll('input[name="vouchers"]');
             const createForm = document.querySelector('#voucher-form');
             const voucherTypeField = document.querySelector('#voucher-type');
             const voucherUsageField = document.querySelector('#voucher-usage');
@@ -487,6 +489,12 @@
             const statusFilter = document.querySelector('#status');
             const quotaFilter = document.querySelector('#quota');
             const sort = document.querySelector('#sort');
+            const test = "<p>I might be XSS</p>";
+
+            // const clearSelectAllDialog = () => {
+            //     document.querySelector('#select-all-vouchers').removeEventListener('click', clearSelectAllDialog);
+            //     //bulkPrintDialog.innerHTML = '';
+            // }
 
             const clearDetailDialog = () => {
                 document.querySelector('#close').removeEventListener('click', clearDetailDialog);
@@ -639,6 +647,23 @@
                     bulkPrintDialog.innerHTML = await htmlRes.text();
                     document.querySelector('#close').addEventListener('click', clearBulkPrintDialog);
                     document.querySelector('#overlay').addEventListener('click', clearBulkPrintDialog);
+                    const updateSelectAllVouchers = () => {
+                        const allSelected = voucherCheckboxes.length > 0 && Array.from(voucherCheckboxes).every((voucher) => voucher.checked);
+                        selectAllVouchers.textContent = allSelected ? 'Deselect All' : 'Select All';
+                    };
+
+                    selectAllVouchers.addEventListener('click', () => {
+                        const allSelected = voucherCheckboxes.length > 0 && Array.from(voucherCheckboxes).every((voucher) => voucher.checked);
+
+                        voucherCheckboxes.forEach((voucher) => {
+                            voucher.checked = !allSelected;
+                        });
+
+                        updateSelectAllVouchers();
+                    });
+                    voucherCheckboxes.forEach((voucher) => {
+                        voucher.addEventListener('change', updateSelectAllVouchers);
+                    });
                 } else {
                     window.location.reload();
                 }
