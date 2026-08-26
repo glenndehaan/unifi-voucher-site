@@ -46,7 +46,8 @@
                                             <ul role="list" class="max-h-96 h-96 overflow-y-auto mt-2 rounded-md border-0 divide-y divide-black/5 dark:divide-white/5 dark:bg-white/5 ring-1 ring-inset ring-gray-300 dark:ring-white/10">
                                                 <% vouchers.forEach((voucher) => { %>
                                                     <li class="relative flex items-center space-x-4 px-4 py-4">
-                                                        <input id="voucher-<%= voucher.id %>" aria-describedby="voucher-<%= voucher.id %>" name="vouchers" type="checkbox" value="<%= voucher.id %>" class="col-start-1 row-start-1 appearance-none rounded-sm border-0 dark:bg-white/5 ring-1 ring-inset ring-gray-300 dark:ring-white/10 focus:ring-2 focus:ring-sky-600 focus:ring-offset-0">                                                        <label for="voucher-<%= voucher.id %>" class="voucher min-w-0 flex-auto">
+                                                        <input id="voucher-<%= voucher.id %>" aria-describedby="voucher-<%= voucher.id %>" name="vouchers" type="checkbox" value="<%= voucher.id %>" class="col-start-1 row-start-1 appearance-none rounded-sm border-0 dark:bg-white/5 ring-1 ring-inset ring-gray-300 dark:ring-white/10 focus:ring-2 focus:ring-sky-600 focus:ring-offset-0">
+                                                        <label for="voucher-<%= voucher.id %>" class="voucher min-w-0 flex-auto">
                                                             <div class="flex items-center gap-x-3">
                                                                 <h2 class="min-w-0 text-sm font-semibold leading-6 text-gray-900 dark:text-white">
                                                                     <div class="flex gap-x-2">
