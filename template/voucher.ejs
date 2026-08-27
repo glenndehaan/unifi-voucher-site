@@ -639,6 +639,25 @@
                     bulkPrintDialog.innerHTML = await htmlRes.text();
                     document.querySelector('#close').addEventListener('click', clearBulkPrintDialog);
                     document.querySelector('#overlay').addEventListener('click', clearBulkPrintDialog);
+                    const selectAllVouchers = document.querySelector('#select-all-vouchers');
+                    const voucherCheckboxes = bulkPrintDialog.querySelectorAll('input[name="vouchers"]');
+                    const updateSelectAllVouchers = () => {
+                        const allSelected = voucherCheckboxes.length > 0 && Array.from(voucherCheckboxes).every((voucher) => voucher.checked);
+                        selectAllVouchers.textContent = allSelected ? 'Deselect All' : 'Select All';
+                    };
+
+                    selectAllVouchers.addEventListener('click', () => {
+                        const allSelected = voucherCheckboxes.length > 0 && Array.from(voucherCheckboxes).every((voucher) => voucher.checked);
+
+                        voucherCheckboxes.forEach((voucher) => {
+                            voucher.checked = !allSelected;
+                        });
+
+                        updateSelectAllVouchers();
+                    });
+                    voucherCheckboxes.forEach((voucher) => {
+                        voucher.addEventListener('change', updateSelectAllVouchers);
+                    });
                 } else {
                     window.location.reload();
                 }

@@ -39,7 +39,10 @@
                                             </div>
                                         </div>
                                         <div>
-                                            <span class="block text-sm font-medium leading-6 text-gray-900 dark:text-white">Vouchers</span>
+                                            <div class="flex items-center justify-between">
+                                                <span class="block text-sm font-medium leading-6 text-gray-900 dark:text-white">Vouchers</span>
+                                                <button id="select-all-vouchers" type="button" class="text-sm font-semibold text-sky-700 hover:text-sky-600 dark:text-sky-400 dark:hover:text-sky-300">Select All</button>
+                                            </div>
                                             <ul role="list" class="max-h-96 h-96 overflow-y-auto mt-2 rounded-md border-0 divide-y divide-black/5 dark:divide-white/5 dark:bg-white/5 ring-1 ring-inset ring-gray-300 dark:ring-white/10">
                                                 <% vouchers.forEach((voucher) => { %>
                                                     <li class="relative flex items-center space-x-4 px-4 py-4">
