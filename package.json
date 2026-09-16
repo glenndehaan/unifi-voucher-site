@@ -22,12 +22,12 @@
     "express-openid-connect": "^3.4.0",
     "js-logger": "^1.6.1",
     "jsonwebtoken": "^9.0.3",
-    "multer": "^2.2.0",
+    "multer": "^2.4.0",
     "node-thermal-printer": "^4.6.1",
-    "nodemailer": "^9.0.5",
-    "pdfkit": "^0.20.1",
+    "nodemailer": "^10.0.10",
+    "pdfkit": "^0.20.2",
     "qrcode": "^1.5.4",
-    "undici": "^8.10.0"
+    "undici": "^8.10.2"
   },
   "devDependencies": {
     "@tailwindcss/cli": "^4.3.3",
