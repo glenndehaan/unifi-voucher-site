@@ -80,7 +80,9 @@ module.exports = {
                         }
                     });
 
-                    doc.moveDown(1);
+                    if(variables.printersLayout === 'full') {
+                        doc.moveDown(1);
+                    }
                 }
 
                 if(variables.printersLayout === 'full') {
@@ -103,7 +105,7 @@ module.exports = {
                         align: 'center'
                     });
 
-                doc.moveDown(2);
+                doc.moveDown(1);
 
                 if (variables.unifiSsid !== '') {
                     doc.font('Roboto-Regular')
@@ -135,12 +137,20 @@ module.exports = {
                             doc.font('Roboto-Regular')
                                 .fontSize(10)
                                 .text(` ${t('or')},`);
+                        } else {
+                            doc.font('Roboto-Regular')
+                                .fontSize(10)
+                                .text('');
                         }
                     } else {
                         if(variables.printersLayout === 'full' || variables.printersLayout === 'slim_qr') {
                             doc.font('Roboto-Regular')
                                 .fontSize(10)
                                 .text(` ${t('or')},`);
+                        } else {
+                            doc.font('Roboto-Regular')
+                                .fontSize(10)
+                                .text('');
                         }
                     }
 
@@ -149,12 +159,12 @@ module.exports = {
                             .fontSize(10)
                             .text(`${t('scan')}:`);
 
-                        doc.image(await qr(), 75, variables.unifiSsidPassword !== '' ? variables.printersLayout === 'full' ? 255 : 174 : variables.printersLayout === 'full' ? 205 : 124, {
+                        doc.image(await qr(), 75, variables.unifiSsidPassword !== '' ? variables.printersLayout === 'full' ? 200 : 120 : variables.printersLayout === 'full' ? 190 : 105, {
                             fit: [75, 75],
                             align: 'center',
                             valign: 'center'
                         });
-                        doc.moveDown(6);
+                        doc.moveDown(5);
                     }
 
                     // Check if we need to move the text down extra or not depending on if large SSIDs or Passwords are used
@@ -162,7 +172,9 @@ module.exports = {
                         doc.moveDown(2);
                     }
 
-                    doc.moveDown(2);
+                    if(variables.unifiSsidPassword === '') {
+                        doc.moveDown(2);
+                    }
                 }
 
                 doc.font('Roboto-Bold')
