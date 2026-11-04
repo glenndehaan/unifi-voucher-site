@@ -83,7 +83,7 @@ module.exports = {
             }
 
             const user = req.oidc ? req.user : { email: null };
-            const voucherNote = `${req.body['voucher-note'] !== '' ? req.body['voucher-note'] : ''}||;;||web||;;||${req.oidc ? 'oidc' : 'local'}||;;||${req.oidc ? user.email.split('@')[1].toLowerCase() : ''}`;
+            const voucherNote = `${req.body['voucher-note'] !== '' ? req.body['voucher-note'] : ''}||;;||web||;;||${req.oidc ? 'oidc' : 'local'}||;;||${req.oidc ? user.email.split('@')[1].toLowerCase() : ''}||;;||${req.oidc ? user.email.toLowerCase() : ''}`;
 
             // Create voucher code
             const voucherCode = await unifi.create(types(req.body['voucher-type'] === 'custom' ? `${req.body['voucher-duration-type'] === 'day' ? (parseInt(req.body['voucher-duration']) * 24 * 60) : req.body['voucher-duration-type'] === 'hour' ? (parseInt(req.body['voucher-duration']) * 60) : parseInt(req.body['voucher-duration'])},${req.body['voucher-usage'] === '-1' ? req.body['voucher-quota'] : req.body['voucher-usage']},${req.body['voucher-upload-limit']},${req.body['voucher-download-limit']},${req.body['voucher-data-limit']};` : req.body['voucher-type'], true), parseInt(req.body['voucher-amount']), voucherNote).catch((e) => {

@@ -35,6 +35,7 @@ module.exports = {
     authOidcClientSecret: config('auth_oidc_client_secret') || process.env.AUTH_OIDC_CLIENT_SECRET || '',
     authOidcRedirectLogin: config('auth_oidc_redirect_login') !== null ? config('auth_oidc_redirect_login') : (process.env.AUTH_OIDC_REDIRECT_LOGIN === 'true') || false,
     authOidcRestrictVisibility: config('auth_oidc_restrict_visibility') !== null ? config('auth_oidc_restrict_visibility') : (process.env.AUTH_OIDC_RESTRICT_VISIBILITY === 'true') || false,
+    authOidcRestrictVisibilityUser: config('auth_oidc_restrict_visibility_user') !== null ? config('auth_oidc_restrict_visibility_user') : (process.env.AUTH_OIDC_RESTRICT_VISIBILITY_USER === 'true') || false,
     authDisabled: config('auth_disable') || (process.env.AUTH_DISABLE === 'true') || false,
     printers: config('printers') || process.env.PRINTERS || '',
     printersLayout: config('printers_layout') || process.env.PRINTERS_LAYOUT || 'full',

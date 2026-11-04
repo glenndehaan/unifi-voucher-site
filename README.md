@@ -127,6 +127,8 @@ services:
       # In environments with multiple organizations sharing a single UniFi Controller instance, it may be desirable to limit users to only manage vouchers associated with their own organization.
       # This restriction is based on the domain (including subdomains and TLDs) of the users email address.
       AUTH_OIDC_RESTRICT_VISIBILITY: 'false'
+      # This restriction is based on the users email address, this overrides the AUTH_OIDC_RESTRICT_VISIBILITY restriction.
+      AUTH_OIDC_RESTRICT_VISIBILITY_USER: 'false'
       # Disables the login/authentication for the portal and API
       AUTH_DISABLE: 'false'
       # Voucher Types, format: expiration in minutes (required),single-use or multi-use vouchers value - '0' is for multi-use (unlimited) - '1' is for single-use - 'N' is for multi-use (Nx) (optional),upload speed limit in kbps (optional),download speed limit in kbps (optional),data transfer limit in MB (optional)
@@ -228,6 +230,7 @@ The structure of the file should use lowercase versions of the environment varia
   "auth_oidc_client_secret": "",
   "auth_oidc_redirect_login": false,
   "auth_oidc_restrict_visibility": false,
+  "auth_oidc_restrict_visibility_user": false,
   "auth_disable": false,
   "voucher_types": "480,1,,,;",
   "voucher_custom": true,

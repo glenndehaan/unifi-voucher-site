@@ -71,6 +71,12 @@
                                                     <dd class="text-sm leading-6 text-gray-600 dark:text-gray-400 col-span-2 mt-0"><%= notesConvert(voucher.name).auth_oidc_domain %></dd>
                                                 </div>
                                             <% } %>
+                                            <% if(voucher.name && notesConvert(voucher.name).auth_oidc_user) { %>
+                                                <div class="py-2 grid grid-cols-3 gap-4 px-0">
+                                                    <dt class="text-sm font-medium leading-6 text-gray-900 dark:text-white">OIDC User</dt>
+                                                    <dd class="text-sm leading-6 text-gray-600 dark:text-gray-400 col-span-2 mt-0"><%= notesConvert(voucher.name).auth_oidc_user %></dd>
+                                                </div>
+                                            <% } %>
                                             <div class="py-2 grid grid-cols-3 gap-4 px-0">
                                                 <dt class="text-sm font-medium leading-6 text-gray-900 dark:text-white">Type</dt>
                                                 <dd class="text-sm leading-6 text-gray-600 dark:text-gray-400 col-span-2 mt-0"><%= !voucher.authorizedGuestLimit ? 'Multi-use (Unlimited)' : voucher.authorizedGuestLimit === 1 ? 'Single-use' : `Multi-use (${voucher.authorizedGuestLimit}x)` %></dd>
